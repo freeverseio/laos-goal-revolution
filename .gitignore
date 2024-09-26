@@ -1,0 +1,3 @@
+postgraphile/.env
+postgraphile/certs/ca-certificate_goal_rev.crt
+node_modules

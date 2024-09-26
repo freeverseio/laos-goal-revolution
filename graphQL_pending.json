@@ -1,0 +1,407 @@
+auction pending to mock
+
+query playerInfo($playerId: String!) {
+  playerByPlayerId(playerId: $playerId) {
+    teamId
+    playerId
+    name
+    countryOfBirth
+    race
+    shirtNumber
+    encodedSkills
+    teamByTeamId {
+      teamId
+      owner
+      name
+      managerName
+    }
+    auctionsByPlayerId(orderBy: VALID_UNTIL_DESC, first: 10) {
+      nodes {
+        id
+        validUntil
+        offerValidUntil
+        state
+        rnd
+        price
+        currencyId
+        paymentUrl
+        seller
+        bidsByAuctionId(orderBy: EXTRA_PRICE_DESC) {
+          nodes {
+            extraPrice
+            teamId
+            state
+            teamByTeamId {
+              teamId
+              owner
+              name
+              managerName
+            }
+            paymentUrl
+            paymentDeadline
+          }
+        }
+      }
+    }
+    offersByPlayerId(condition: { state: STARTED }, orderBy: PRICE_DESC) {
+      nodes {
+        teamByBuyerTeamId {
+          teamId
+          name
+          owner
+          managerName
+        }
+        rnd
+        price
+        validUntil
+        auctionId
+      }
+    }
+    playerHistoryGraphByPlayerId(first: 10) {
+      nodes {
+        encodedSkills
+      }
+    }
+  }
+}
+
+var:
+{"playerId":"10001"} 
+
+
+
+-----
+query playerInfo($playerId: String!) {
+  playerByPlayerId(playerId: $playerId) {
+    teamId
+    playerId
+    name
+    countryOfBirth
+    race
+    shirtNumber
+    encodedSkills
+    teamByTeamId {
+      teamId
+      owner
+      name
+      managerName
+    }
+    auctionsByPlayerId(orderBy: VALID_UNTIL_DESC, first: 10) {
+      nodes {
+        id
+        validUntil
+        offerValidUntil
+        state
+        rnd
+        price
+        currencyId
+        paymentUrl
+        seller
+        bidsByAuctionId(orderBy: EXTRA_PRICE_DESC) {
+          nodes {
+            extraPrice
+            teamId
+            state
+            teamByTeamId {
+              teamId
+              owner
+              name
+              managerName
+            }
+            paymentUrl
+            paymentDeadline
+          }
+        }
+      }
+    }
+    offersByPlayerId(condition: { state: STARTED }, orderBy: PRICE_DESC) {
+      nodes {
+        teamByBuyerTeamId {
+          teamId
+          name
+          owner
+          managerName
+        }
+        rnd
+        price
+        validUntil
+        auctionId
+      }
+    }
+    playerHistoryGraphByPlayerId(first: 10) {
+      nodes {
+        encodedSkills
+      }
+    }
+  }
+}
+
+
+var:
+{"playerId":"10001"} 
+
+
+----
+
+ALTER TABLE public.auctions ADD CONSTRAINT auctions_players_fk FOREIGN KEY (player_id) REFERENCES public.players(player_id);
+
+
+query playerInfo($playerId: String!) {
+  playerByPlayerId(playerId: $playerId) {
+    teamId
+    playerId
+    name
+    countryOfBirth
+    race
+    shirtNumber
+    encodedSkills
+    teamByTeamId {
+      teamId
+      owner
+      name
+      managerName
+    }
+    auctionsByPlayerId(orderBy: VALID_UNTIL_DESC, first: 10) {
+      nodes {
+        id
+        validUntil
+        offerValidUntil
+        state
+        rnd
+        price
+        currencyId
+        paymentUrl
+        seller
+        bidsByAuctionId(orderBy: EXTRA_PRICE_DESC) {
+          nodes {
+            extraPrice
+            teamId
+            state
+            teamByTeamId {
+              teamId
+              owner
+              name
+              managerName
+            }
+            paymentUrl
+            paymentDeadline
+          }
+        }
+      }
+    }
+    offersByPlayerId(condition: { state: STARTED }, orderBy: PRICE_DESC) {
+      nodes {
+        teamByBuyerTeamId {
+          teamId
+          name
+          owner
+          managerName
+        }
+        rnd
+        price
+        validUntil
+        auctionId
+      }
+    }
+    playerHistoryGraphByPlayerId(first: 10) {
+      nodes {
+        encodedSkills
+      }
+    }
+  }
+}
+
+
+
+var:
+{"playerId":"10001"} 
+
+
+----
+
+horizon resolver
+query getTeamPlayersFromOwner($owner: String!) {
+  allTeams(condition: { owner: $owner }) {
+    nodes {
+      teamId
+      name
+      managerName
+      rankingPoints
+      trainingPoints
+      lineupPlayers: playersByTeamId(
+        filter: { shirtNumber: { lessThan: 25 } }
+        orderBy: SHIRT_NUMBER_ASC
+      ) {
+        nodes {
+          playerId
+          name
+          countryOfBirth
+          race
+          encodedSkills
+          shirtNumber
+          auctionsByPlayerId(orderBy: VALID_UNTIL_DESC, first: 10) {
+            nodes {
+              state
+              id
+              bidsByAuctionId(orderBy: EXTRA_PRICE_DESC) {
+                nodes {
+                  teamId
+                  extraPrice
+                  state
+                  teamByTeamId {
+                    name
+                  }
+                  paymentUrl
+                  paymentDeadline
+                }
+              }
+            }
+          }
+          offersByPlayerId(condition: { state: STARTED }) {
+            nodes {
+              teamByBuyerTeamId {
+                teamId
+                name
+                owner
+                managerName
+              }
+              rnd
+              price
+              validUntil
+              auctionId
+            }
+          }
+        }
+      }
+      inTransitPlayers: playersByTeamId(
+        filter: { shirtNumber: { greaterThan: 25 } }
+        orderBy: SHIRT_NUMBER_ASC
+      ) {
+        nodes {
+          playerId
+          name
+          countryOfBirth
+          race
+          encodedSkills
+          shirtNumber
+          auctionsByPlayerId(orderBy: VALID_UNTIL_DESC, first: 10) {
+            nodes {
+              state
+              id
+              bidsByAuctionId(orderBy: EXTRA_PRICE_DESC) {
+                nodes {
+                  teamId
+                  extraPrice
+                  state
+                  teamByTeamId {
+                    name
+                  }
+                  paymentUrl
+                  paymentDeadline
+                }
+              }
+            }
+          }
+          offersByPlayerId(condition: { state: STARTED }) {
+            nodes {
+              teamByBuyerTeamId {
+                teamId
+                name
+                owner
+                managerName
+              }
+              rnd
+              price
+              validUntil
+              auctionId
+            }
+          }
+        }
+      }
+      tacticsByTeamId {
+        nodes {
+          teamId
+          tacticId
+          shirt0
+          shirt1
+          shirt2
+          shirt3
+          shirt4
+          shirt5
+          shirt6
+          shirt7
+          shirt8
+          shirt9
+          shirt10
+          substitution0Shirt
+          substitution0Target
+          substitution0Minute
+          substitution1Shirt
+          substitution1Target
+          substitution1Minute
+          substitution2Shirt
+          substitution2Target
+          substitution2Minute
+          extraAttack1
+          extraAttack2
+          extraAttack3
+          extraAttack4
+          extraAttack5
+          extraAttack6
+          extraAttack7
+          extraAttack8
+          extraAttack9
+          extraAttack10
+        }
+      }
+      trainingsByTeamId {
+        nodes {
+          specialPlayerShirt
+          goalkeepersDefence
+          goalkeepersSpeed
+          goalkeepersPass
+          goalkeepersShoot
+          goalkeepersEndurance
+          defendersDefence
+          defendersSpeed
+          defendersPass
+          defendersShoot
+          defendersEndurance
+          midfieldersDefence
+          midfieldersSpeed
+          midfieldersPass
+          midfieldersShoot
+          midfieldersEndurance
+          attackersDefence
+          attackersSpeed
+          attackersPass
+          attackersShoot
+          attackersEndurance
+          specialPlayerDefence
+          specialPlayerSpeed
+          specialPlayerPass
+          specialPlayerShoot
+          specialPlayerEndurance
+        }
+      }
+    }
+  }
+}
+
+Var:[
+  {"owner":"0x3E4eb72e44DF6A424C9Ffcb449476Cb53f106808"}
+]
+
+
+-----
+
+
+
+---
+
+getAllMessages
+
+  ---
+
+  setLastTimeLoggedIn
+
