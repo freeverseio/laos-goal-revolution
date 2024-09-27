@@ -22,10 +22,10 @@ environments:
 helmfiles:
   - path: "charts/goalrev-api/helmfile.yaml"
     values:
-      - namespace : {{ .Values.namespace }}
+      - namespace: {{ .Values.namespace }}
       - imageTag: {{ requiredEnv "CIRCLE_SHA1" }}
       - postgresUser: {{ .Values.postgresUser }}
       - postgresHost: {{ .Values.postgresHost }}
       - postgresDb: {{ .Values.postgresDb }}
-      - postgresPort: {{ .Values.postgresPort }} 
+      - postgresPort: {{ .Values.postgresPort }}
       - apiHost: {{ .Values.apiHost }}
