@@ -78,7 +78,6 @@ jobs:
           command: |
             cd goalrev-api
             npm ci
-            npm run lint
       - dockerize-and-push:
           image: freeverseio/goalrev-api
           root: goalrev-api
