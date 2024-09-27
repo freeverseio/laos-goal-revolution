@@ -7,6 +7,34 @@ const mutationsWrapperPlugin =  require("./mutation_wrapper_plugin");
 const ConnectionFilterPlugin = require("postgraphile-plugin-connection-filter");
 const config = require('dotenv').config();
 
+function obfuscatePasswordInConnectionString(connectionString) {
+  const parts = connectionString.split('@');
+  let isOfuscated = false;
+  let obfuscatedCredentials = '';
+  if (parts.length === 2) {
+    const beforeAt = parts[0];
+    const credentials = beforeAt.split(':');
+
+    if (credentials.length === 3) {
+      obfuscatedCredentials += credentials[0];
+      obfuscatedCredentials += ':';
+      obfuscatedCredentials += credentials[1];
+      obfuscatedCredentials += '***';
+      obfuscatedCredentials += `@${parts[1]}`;
+      isOfuscated = true;
+    } else {
+      console.log(`Weird db string - credentials.length: ${credentials.length}`);
+    }
+  } else {
+    console.log(`Weird db string - parts.length: ${parts.length}`);
+  }
+  if (isOfuscated) {
+    return obfuscatedCredentials;
+  }
+  // Return the original connection string if it doesn't match the expected format
+  return connectionString;
+}
+
 // Parsing command line arguments
 const db_url = process.env.DATABASE_URL
 console.log("db_url: ", db_url)
@@ -22,7 +50,7 @@ const { port, databaseUrl, enableCors } = program;
 
 console.log("--------------------------------------------------------");
 console.log("port              : ", port);
-console.log("databaseUrl       : ", databaseUrl);
+console.log("databaseUrl       : ", obfuscatePasswordInConnectionString(databaseUrl));
 console.log("enable CORS       : ", enableCors);
 console.log("--------------------------------------------------------");
 
