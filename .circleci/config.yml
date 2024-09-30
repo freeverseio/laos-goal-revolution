@@ -1,0 +1,98 @@
+version: 2.1
+
+orbs:
+  kube-orb: circleci/kubernetes@1.3.1
+  helm: circleci/helm@3.0.2
+
+commands:
+  install-helmfile:
+    description: Install helmfile
+    steps:
+      - run:
+          name: Install helmfile
+          command: ./scripts/install-helmfile.sh
+  dockerize-and-push:
+    parameters:
+      image:
+        type: string
+      root:
+        type: string
+    steps:
+      - attach_workspace:
+          at: ./
+      - run: echo $DOCKER_PASSWD | docker login -u $DOCKER_ID --password-stdin
+      - run: |          
+          cd << parameters.root >>
+          echo "Docker images for CIRCLE_SHA1 will be pushed"
+          docker build -t << parameters.image >>:$CIRCLE_SHA1 .
+          docker push << parameters.image >>:$CIRCLE_SHA1
+ 
+
+jobs:
+
+  deploy_to_cluster:
+    parameters:
+      directory:
+        type: string
+      environment:
+        type: string
+        default: development
+    description: Deploy to << parameters.environment >> environment
+    docker:
+      - image: cimg/deploy:2023.09
+    steps:
+      - checkout
+      - kube-orb/install-kubectl:
+          kubectl-version: 'v1.25.14'
+      - when:
+          condition:
+            equal: [ development, << parameters.environment >> ]
+          steps:
+            - kube-orb/install-kubeconfig:
+                kubeconfig: KUBECONFIG_DATA
+      - when:
+          condition:
+            equal: [ staging, << parameters.environment >> ]
+          steps:
+            - kube-orb/install-kubeconfig:
+                kubeconfig: KUBECONFIG_PROTOSTAR_STG_DATA
+      - helm/install_helm_client:
+          version: v3.13.0
+      - install-helmfile
+      - run:
+          name: Deploy to << parameters.environment >> environment
+          command: |
+            cd _deployments/<< parameters.directory >>
+            helmfile sync --environment << parameters.environment >>
+
+
+  node-api:
+    docker:
+      - image: cimg/node:lts
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build and Deploy Node API
+          command: |
+            cd goalrev-api
+            npm ci
+      - dockerize-and-push:
+          image: freeverseio/goalrev-api
+          root: goalrev-api
+
+
+workflows:
+  ci-workflow:
+    jobs:
+      - node-api:
+          context: dockerhub
+          filters:
+            branches:
+              only:
+                - main
+
+      
+      
+

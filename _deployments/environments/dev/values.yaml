@@ -1,0 +1,6 @@
+namespace: goalrev
+apiHost: goalrevapi.gorengine.com
+postgresHost: db-postgresql-ams3-02994-do-user-14140340-0.j.db.ondigitalocean.com
+postgresDb: defaultdb
+postgresPort: "25060"
+postgresUser: "doadmin"

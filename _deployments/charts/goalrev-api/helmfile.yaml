@@ -1,0 +1,13 @@
+releases:
+  - name: goalrev-api-release
+    namespace: "{{ .Values.namespace }}"  # Correct indentation here
+    installed: true
+    createNamespace: false
+    chart: .
+    values:
+      - imageTag: {{ .Values.imageTag }}
+      - postgresUser: {{ .Values.postgresUser }}
+      - postgresHost: {{ .Values.postgresHost }}
+      - postgresDb: {{ .Values.postgresDb }}
+      - postgresPort: {{ .Values.postgresPort }}
+      - apiHost: {{ .Values.apiHost }}
