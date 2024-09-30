@@ -9,6 +9,9 @@ const resolvers = (sql) => {
         const { text, values } = sql.compile(query);
         const result = await context.pgClient.query(text, values);
         return result.rows.map(obj => obj.player_id);
+      },
+      getNumUnreadMessages: async (_, { teamId }) => {
+        return parseInt(0);
       }
     },
     Mutation: {
