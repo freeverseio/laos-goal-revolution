@@ -27,7 +27,7 @@ module.exports = makeExtendSchemaPlugin(build => {
       
       extend type Query {
         getBestPlayers(limit: Int!): [String!]
-        getNumUnreadMessages(teamId: String!): Int
+        getNumUnreadMessages(teamId : ID!): Int!
       }`,
     resolvers: Resolvers(sql),
   }
