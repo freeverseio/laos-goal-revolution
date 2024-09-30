@@ -37,7 +37,6 @@ function obfuscatePasswordInConnectionString(connectionString) {
 
 // Parsing command line arguments
 const db_url = process.env.DATABASE_URL
-console.log("db_url: ", db_url)
 program
   .version(version)
   .option("-p, --port <port>", "server port", "4000")
