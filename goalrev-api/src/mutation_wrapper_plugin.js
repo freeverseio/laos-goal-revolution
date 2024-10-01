@@ -2,6 +2,8 @@ const { makeWrapResolversPlugin } = require("graphile-utils");
 const { checkTrainingGroup, checkTrainingSpecialPlayer } = require('./training');
 const { checkTactics2ndHalf, checkTacticsGeneric } = require("./tactics");
 
+
+
 const updateTrainingByTeamIdWrapper = propName => {
     return async (resolve, source, args, context, resolveInfo) => {
         const { teamId, trainingPatch } = args.input;
@@ -69,9 +71,29 @@ const updateTacticByTeamIdWrapper = propName => {
     };
 };
 
+const playerHistoryGraphByPlayerIdResolver = propName => {
+    return async (resolve, source, args, context, resolveInfo) => {
+        const { pgClient } = context;
+        var query = {
+            text: 'SELECT encoded_skills FROM players_histories WHERE player_id = $1 ORDER BY block_number DESC',
+            values: [source.playerId],
+        };                   
+       
+        const resulsqlResult = await pgClient.query(query);
+        let playerHistoryGraph = [];
+        for (let i = 0; i < resulsqlResult.rows.length; i++) {
+            playerHistoryGraph.push({encodedSkills: resulsqlResult.rows[i].encoded_skills});
+        }        
+        return { nodes: playerHistoryGraph };
+    };;
+};
+
 module.exports = makeWrapResolversPlugin({
     Mutation: {
         updateTrainingByTeamId: updateTrainingByTeamIdWrapper(),
         updateTacticByTeamId: updateTacticByTeamIdWrapper(),
     },
+    Player: {
+        playerHistoryGraphByPlayerId: playerHistoryGraphByPlayerIdResolver(),
+    }
 });
