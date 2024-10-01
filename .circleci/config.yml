@@ -66,7 +66,7 @@ jobs:
             helmfile sync --environment << parameters.environment >>
 
 
-  node-api:
+  build:
     docker:
       - image: cimg/node:lts
     steps:
@@ -74,7 +74,7 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
-          name: Build and Deploy Node API
+          name: Build and Push Docker Image
           command: |
             cd goalrev-api
             npm ci
@@ -86,7 +86,7 @@ jobs:
 workflows:
   ci-workflow:
     jobs:
-      - node-api:
+      - build:
           context: dockerhub
           filters:
             branches:
