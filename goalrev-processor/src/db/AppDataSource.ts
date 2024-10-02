@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-import { MatchEvent, Country, Timezone, League } from "../entity";
+import { MatchEvent, Country, Timezone, League } from "./entity";
 
 
 export const AppDataSource = new DataSource({

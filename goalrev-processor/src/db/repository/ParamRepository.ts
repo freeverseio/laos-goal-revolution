@@ -1,4 +1,4 @@
-import { AppDataSource } from "../db/AppDataSource";
+import { AppDataSource } from "../AppDataSource";
 import { Param } from "../entity/Param";
 
 export class ParamRepository {

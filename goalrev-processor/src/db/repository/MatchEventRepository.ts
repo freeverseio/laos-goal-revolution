@@ -1,5 +1,5 @@
 import { MatchEvent } from "../entity/MatchEvent";
-import { AppDataSource } from "../db/AppDataSource";
+import { AppDataSource } from "../AppDataSource";
 
 // Define the custom repository class
 export class MatchEventRepository {

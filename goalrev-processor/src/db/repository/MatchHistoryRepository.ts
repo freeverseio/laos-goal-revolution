@@ -1,4 +1,4 @@
-import { AppDataSource } from "../db/AppDataSource";
+import { AppDataSource } from "../AppDataSource";
 import { MatchHistory } from "../entity/MatchHistory";
 
 export class MatchHistoryRepository {

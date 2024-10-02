@@ -1,6 +1,6 @@
-import { ParamRepository } from "../repository/ParamRepository";
+import { ParamRepository } from "../db/repository/ParamRepository";
 import { AppDataSource } from "../db/AppDataSource";
-import { Param } from "../entity/Param";
+import { Param } from "../db/entity/Param";
 
 export class ParamController {
 

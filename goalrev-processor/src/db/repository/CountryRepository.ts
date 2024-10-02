@@ -1,7 +1,7 @@
-import { AppDataSource } from "../db/AppDataSource";
+import { AppDataSource } from "../AppDataSource";
 import { Repository } from "typeorm";
 import { Country } from "../entity/Country";
-import { NotFoundException } from "../exceptions/NotFoundException";
+import { NotFoundException } from "../../exceptions/NotFoundException";
 
 
 export class CountryCustomRepository {
