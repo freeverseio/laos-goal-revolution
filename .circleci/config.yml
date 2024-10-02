@@ -32,8 +32,6 @@ jobs:
 
   deploy_to_cluster:
     parameters:
-      directory:
-        type: string
       environment:
         type: string
         default: development
@@ -62,8 +60,26 @@ jobs:
       - run:
           name: Deploy to << parameters.environment >> environment
           command: |
-            cd _deployments/<< parameters.directory >>
+            cd _deployments
             helmfile sync --environment << parameters.environment >>
+  
+  deployment-test:
+    parameters:
+      root:
+        type: string
+        default: "" 
+    docker:
+      - image: cimg/base:2022.08
+    steps:
+      - checkout
+      - helm/install_helm_client:
+          version: v3.13.0
+      - install-helmfile
+      - run:
+          name: Test Helmfile
+          command: |
+            cd _deployments/<< parameters.root >>
+            helmfile lint
 
 
   build:
@@ -88,6 +104,30 @@ workflows:
     jobs:
       - build:
           context: dockerhub
+          filters:
+            branches:
+              only:
+                - main
+
+      - deployment-test
+
+      - approval:
+          type: approval
+          name: approve-deploy
+          requires:
+            - deployment-test
+            - build
+          filters:
+            branches:
+              only:
+                - main
+      
+      - deploy_to_cluster:
+          name: deploy-to-dev-api
+          requires:
+            - deployment-test
+            - approve-deploy
+          environment: development
           filters:
             branches:
               only:
