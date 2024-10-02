@@ -78,7 +78,7 @@ jobs:
       - run:
           name: Test Helmfile
           command: |
-            cd _deployment/<< parameters.root >>
+            cd _deployments/<< parameters.root >>
             helmfile lint
 
 
@@ -110,7 +110,7 @@ workflows:
                 - main
 
       - deployment-test
-      
+
       - approval:
           type: approval
           name: approve-deploy
