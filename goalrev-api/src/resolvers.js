@@ -63,6 +63,21 @@ const resolvers = (sql) => {
         await context.pgClient.query(text, values);
         return true;// TODO return something with sense
       },
+      setLastTimeLoggedIn: async (_, { teamId }, context) => {
+        try{ 
+          console.log("setLastTimeLoggedIn for team: ",teamId);
+          var query = {
+            text: 'INSERT INTO teams_props(team_id, last_time_logged_in) VALUES($1, CURRENT_TIMESTAMP) ON CONFLICT (team_id) DO UPDATE SET last_time_logged_in = CURRENT_TIMESTAMP',
+            values: [teamId],
+          };                   
+          await context.pgClient.query(query);
+
+          return true;
+        } catch (e) {
+          console.error("Error in setLastTimeLoggedIn",e);
+          throw e;
+        }
+      }
     }
   };
 };

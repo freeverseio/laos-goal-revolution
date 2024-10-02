@@ -23,6 +23,7 @@ module.exports = makeExtendSchemaPlugin(build => {
         deleteSpecialPlayer(
           playerId: String!
         ): Boolean
+        setLastTimeLoggedIn(teamId: ID!): Boolean
       }
       
       extend type Query {
