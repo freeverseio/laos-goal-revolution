@@ -4,6 +4,7 @@ import { MatchController } from "./controller/MatchController";
 
 const app = createExpressServer({
   controllers: [MatchController], // register controllers here
+  validation: true,
 });
 
 app.listen(3000, () => {

@@ -10,12 +10,13 @@ export class MatchController {
   }
 
   @Post("/play1stHalf")
-  play1stHalf(@Body() body: PlayInput): PlayOutput {
-    return MatchService.play1stHalf(body);
+  async play1stHalf(@Body() body: PlayInput): Promise<PlayOutput> {
+    return await MatchService.play1stHalf(body);
   }
 
   @Post("/play2ndHalf")
-  play2ndHalf(@Body() body: PlayInput): PlayOutput {
-    return MatchService.play2ndHalf(body);
+  async play2ndHalf(@Body() body: PlayInput): Promise<PlayOutput> {
+    return await MatchService.play2ndHalf(body);
   }
+
 }

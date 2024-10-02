@@ -1,10 +1,13 @@
 import { PlayInput, PlayOutput } from "../types";
+import { validate } from "class-validator";
 
 export class MatchService {
+  
   // Logic for playing the first half
-  static play1stHalf(body: PlayInput): PlayOutput {
+  static async play1stHalf(body: PlayInput): Promise<PlayOutput> {
+    // Validate the PlayInput object
     const { skills, matchLogs } = body;
-
+    
     const updatedSkills: [number[], number[]] = skills.map((teamSkills) =>
       teamSkills.map((skill) => skill + 1)
     ) as [number[], number[]];
@@ -25,7 +28,9 @@ export class MatchService {
   }
 
   // Logic for playing the second half
-  static play2ndHalf(body: PlayInput): PlayOutput {
+  static async play2ndHalf(body: PlayInput): Promise<PlayOutput> {
+    // Validate the PlayInput object
+   
     const { skills, matchLogs } = body;
 
     const updatedSkills: [number[], number[]] = skills.map((teamSkills) =>
