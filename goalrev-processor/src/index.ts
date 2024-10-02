@@ -1,7 +1,7 @@
 import express from "express";
 import { AppDataSource } from "./db/AppDataSource";
-import { MatchEvent } from "./entity/MatchEvent";
-import { countryRepository, CountryCustomRepository } from "./repository/CountryRepository";
+import { MatchEvent } from "./db/entity/MatchEvent";
+import { countryRepository, CountryCustomRepository } from "./db/repository/CountryRepository";
 
 const app = express();
 app.use(express.json());

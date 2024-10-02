@@ -1,6 +1,6 @@
 import { LessThan } from "typeorm";
 import { AppDataSource } from "../db/AppDataSource";
-import { Player } from "../entity/Player";
+import { Player } from "../db/entity/Player";
 
 export class PlayerController {
 
