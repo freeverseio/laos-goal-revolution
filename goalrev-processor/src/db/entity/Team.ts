@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn, OneToMany } from "typeorm";
+import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import { Country, League, Player, Tactics, Training } from "./"; 
 
 @Entity("teams")
@@ -31,8 +31,8 @@ export class Team {
   @OneToMany(() => Player, (player) => player.team)
   players!: Player[];
 
-  @OneToMany(() => Tactics, (tactic) => tactic.team)
-  tactics!: Tactics[];
+  @OneToOne(() => Tactics, (tactic) => tactic.team)
+  tactics!: Tactics;
 
   @OneToMany(() => Training, (training) => training.team)
   trainings!: Training[];

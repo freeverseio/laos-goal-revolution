@@ -5,8 +5,8 @@ export class MatchService {
   
   // Logic for playing the first half
   static async play1stHalf(body: PlayInput): Promise<PlayOutput> {
-    // Validate the PlayInput object
-    const { skills, matchLogs } = body;
+    const { skills, matchLogs, tactics } = body;
+    console.log(JSON.stringify(tactics));
     
     const updatedSkills: [string[], string[]] = skills.map((teamSkills) =>
       teamSkills.map((skill) => (parseInt(skill) + 1).toString())
@@ -30,7 +30,8 @@ export class MatchService {
   // Logic for playing the second half
   static async play2ndHalf(body: PlayInput): Promise<PlayOutput> {
     // Validate the PlayInput object
-    const { skills, matchLogs } = body;
+    const { skills, matchLogs, tactics } = body;
+    console.log(JSON.stringify(tactics));
 
     const updatedSkills: [string[], string[]] = skills.map((teamSkills) =>
       teamSkills.map((skill) => (parseInt(skill) + 1).toString())

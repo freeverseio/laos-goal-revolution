@@ -1,4 +1,5 @@
-import { IsArray, ArrayMinSize, ArrayMaxSize, IsString, IsNumber, IsDefined } from "class-validator";
+import { IsArray, ArrayMinSize, ArrayMaxSize, IsString, IsNumber, IsDefined, ValidateNested } from "class-validator";
+import { Type } from "class-transformer"; 
 import { PLAYERS_PER_TEAM_MAX, PLAYERS_PER_TEAM_MIN } from "../../../utils/constants";
 
 export class PlayInput {
@@ -26,7 +27,9 @@ export class PlayInput {
   @IsArray()
   @ArrayMinSize(2)
   @ArrayMaxSize(2)
-  tactics!: [number, number];
+  @ValidateNested({ each: true }) // Validate each nested TacticRequest object
+  @Type(() => TacticRequest) // Specify the class for the nested objects
+  tactics!: [TacticRequest, TacticRequest];
 
   @IsDefined()
   @IsArray()
@@ -45,4 +48,22 @@ export class PlayInput {
   @ArrayMinSize(2)
   @ArrayMaxSize(2)
   assignedTPs!: [string, string];
+}
+
+class TacticRequest {
+  @IsDefined()
+  @IsArray()
+  @ArrayMinSize(11)
+  @ArrayMaxSize(11)
+  lineup!: number[];
+
+  @IsDefined()
+  @IsArray()
+  @ArrayMaxSize(3)
+  substitutions!: { shirt: number; target: number; minute: number }[];
+
+  @IsDefined()
+  @IsArray()
+  @ArrayMaxSize(11)
+  extraAttack!: boolean[];
 }

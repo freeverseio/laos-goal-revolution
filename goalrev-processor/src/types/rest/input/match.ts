@@ -14,11 +14,17 @@ export interface PlayMatchRequest {
 
   teamIds: [number, number]
 
-  tactics: [number, number]
+  tactics: [TacticRequest, TacticRequest]
 
   matchLogs: [string, string]
 
   matchBools: [boolean, boolean, boolean, boolean, boolean]
 
   assignedTPs: [string, string]
+}
+
+export interface TacticRequest {
+  lineup: number[];
+  substitutions: { shirt: number; target: number; minute: number }[];
+  extraAttack: boolean[];
 }
