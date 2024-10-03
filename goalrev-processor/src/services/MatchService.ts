@@ -41,6 +41,7 @@ export class MatchService {
         match_day_idx: matchDay
       },
       relations: [
+        "matchEvents",
         "homeTeam", 
         "visitorTeam", 
         "homeTeam.players", 
