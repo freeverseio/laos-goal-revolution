@@ -11,10 +11,176 @@ describe("MatchService", () => {
       Array(25).fill("70"), // Team 2 skills (25 elements)
     ],
     teamIds: [1, 2],
-    tactics: [2, 2],
-    matchLogs: ["100", "200"],
+    tactics: [
+      {
+        "lineup": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "substitutions": [
+          {
+            "shirt": 1,
+            "target": 2,
+            "minute": 89
+          },
+          {
+            "shirt": 1,
+            "target": 2,
+            "minute": 89
+          },
+          {
+            "shirt": 1,
+            "target": 2,
+            "minute": 89
+          }
+        ],
+        "extraAttack": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ]
+      },
+      {
+        "lineup": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "substitutions": [
+          {
+            "shirt": 1,
+            "target": 2,
+            "minute": 89
+          },
+          {
+            "shirt": 1,
+            "target": 2,
+            "minute": 89
+          },
+          {
+            "shirt": 1,
+            "target": 2,
+            "minute": 89
+          }
+        ],
+        "extraAttack": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ]
+      }
+    ],
+    matchEvents: [],
     matchBools: [false, true, false, true, false],
-    assignedTPs: ["150", "180"],
+    trainings: [
+      {
+        "specialPlayerShirt": 1,
+        "goalkeepers": {
+          "defence": 10,
+          "speed": 10,
+          "pass": 10,
+          "shoot": 10,
+          "endurance": 10
+        },
+        "defenders": {
+          "defence": 10,
+          "speed": 10,
+          "pass": 10,
+          "shoot": 10,
+          "endurance": 10
+        },
+        "midfielders": {
+          "defence": 10,
+          "speed": 10,
+          "pass": 10,
+          "shoot": 10,
+          "endurance": 10
+        },
+        "attackers": {
+          "defence": 10,
+          "speed": 10,
+          "pass": 10,
+          "shoot": 10,
+          "endurance": 10
+        },
+        "specialPlayer": {
+          "defence": 10,
+          "speed": 10,
+          "pass": 10,
+          "shoot": 10,
+          "endurance": 10
+        }
+      },
+      {
+        "specialPlayerShirt": 1,
+        "goalkeepers": {
+          "defence": 10,
+          "speed": 10,
+          "pass": 10,
+          "shoot": 10,
+          "endurance": 10
+        },
+        "defenders": {
+          "defence": 10,
+          "speed": 10,
+          "pass": 10,
+          "shoot": 10,
+          "endurance": 10
+        },
+        "midfielders": {
+          "defence": 10,
+          "speed": 10,
+          "pass": 10,
+          "shoot": 10,
+          "endurance": 10
+        },
+        "attackers": {
+          "defence": 10,
+          "speed": 10,
+          "pass": 10,
+          "shoot": 10,
+          "endurance": 10
+        },
+        "specialPlayer": {
+          "defence": 10,
+          "speed": 10,
+          "pass": 10,
+          "shoot": 10,
+          "endurance": 10
+        }
+      }
+    ],
   };
 
 
@@ -33,7 +199,7 @@ describe("MatchService", () => {
     ]);
 
     // Check if matchLogsAndEvents has been updated with logs
-    expect(result.matchLogsAndEvents.length).toBe(5 * 4 + 2); // 2 initial logs + 5 rounds of events
+    expect(result.matchLogsAndEvents.length).toBe(5 * 4 ); // 2 initial logs + 5 rounds of events
 
     // Check if the error code is 0
     expect(result.err).toBe(0);
@@ -53,7 +219,7 @@ describe("MatchService", () => {
     ]);
 
     // Check if matchLogsAndEvents has been updated with logs
-    expect(result.matchLogsAndEvents.length).toBe(5 * 2 + 2); // 2 initial logs + 5 rounds of events
+    expect(result.matchLogsAndEvents.length).toBe(5 * 2 ); // 2 initial logs + 5 rounds of events
 
     // Check if the error code is 0
     expect(result.err).toBe(0);
