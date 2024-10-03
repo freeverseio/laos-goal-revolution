@@ -22,7 +22,7 @@ export class MatchEvent {
   @PrimaryColumn({ type: 'int' })
   match_idx!: number;
 
-  @Column({ type: 'int' })
+  @PrimaryColumn({ type: 'int' })
   minute!: number;
 
   @Column({ type: "enum", enum: ["attack", "yellow_card", "red_card", "injury_soft", "injury_hard", "substitution"] })
