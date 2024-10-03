@@ -13,7 +13,7 @@ export const AppDataSource = new DataSource({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   ssl: {
-    rejectUnauthorized: false, // If you're using an SSL connection, ensure it's configured correctly
+    rejectUnauthorized: false,
     ca: process.env.SSL_CA_CERT || "certs/ca-certificate.crt"
   },
   synchronize: false,  // Set to true if you want to automatically sync schema changes in development

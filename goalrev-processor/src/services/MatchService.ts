@@ -49,7 +49,7 @@ export class MatchService {
     
     return {
       verseSeed: match.seed,
-      matchStartTime: match.start_epoch,
+      matchStartTime: Number(match.start_epoch),
       skills: [
         this.calculateTeamSkills(match.homeTeam!.players), // Team 1 skills
         this.calculateTeamSkills(match.visitorTeam!.players) // Team 2 skills
