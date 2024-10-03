@@ -17,7 +17,7 @@ export class MatchService {
   }
 
    // Update the playMatch method to use the new buildRequestBody method
-   private async playMatch(match: Match) {
+   async playMatch(match: Match) {
     try {
       const requestBody = this.buildRequestBody(match); // Use the new method
       console.log(JSON.stringify(requestBody));
@@ -54,7 +54,7 @@ export class MatchService {
     });
   }
 
-  private buildRequestBody(match: Match): PlayMatchRequest {
+  buildRequestBody(match: Match): PlayMatchRequest {
     return {
       verseSeed: match.seed,
       matchStartTime: Number(match.start_epoch),
