@@ -6,7 +6,6 @@ export class MatchService {
   // Logic for playing the first half
   static async play1stHalf(body: PlayInput): Promise<PlayOutput> {
     const { skills, matchEvents, tactics } = body;
-    console.log(JSON.stringify(tactics));
     
     const updatedSkills: [string[], string[]] = skills.map((teamSkills) =>
       teamSkills.map((skill) => (parseInt(skill) + 1).toString())

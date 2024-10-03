@@ -36,7 +36,6 @@ export class MatchEvent {
   @PrimaryColumn({ type: 'string' })
   team_id!: string;
 
-
   @Column({ type: "enum", enum: EventType })
   type!: EventType;
 
