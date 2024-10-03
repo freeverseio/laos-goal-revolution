@@ -25,7 +25,7 @@ type TimeZoneData = {
 // - half: whether it corresponds to the first half (half = 0), or to the second half (half = 1)
 // - leagueRound: the round at which a league is (the first league played is round 0, the next league is round 1, etc.)
 // - timestamp: the Unix timestamp in UTC (seconds) corresponding to the start of the returned half of the game
-function calendarInfo(verse: number, TZForRound1: number, firstVerseTimeStamp: number): TimeZoneData {
+export const calendarInfo = (verse: number, TZForRound1: number, firstVerseTimeStamp: number): TimeZoneData => {
     const timeZoneData = nextTimeZoneToPlay(verse, TZForRound1);
     if (timeZoneData.timezone == NULL_TIMEZONE) {
         return { timezone: NULL_TIMEZONE, matchDay: null, half: null, leagueRound: null, timestamp: null };
@@ -48,7 +48,7 @@ function calendarInfo(verse: number, TZForRound1: number, firstVerseTimeStamp: n
 // - timezone: which timezone plays
 // - matchDay: what matchDay of the league it corresponds to: a number in [0, 13]
 // - half: whether it corresponds to the first half (half = 0), or to the second half (half = 1)
-function nextTimeZoneToPlay(verse: number, TZForRound1: number): { timezone: number, matchDay: number, half: number } {
+export const nextTimeZoneToPlay = (verse: number, TZForRound1: number): { timezone: number, matchDay: number, half: number } => {
     let half = verse % 4;
     const delta = 9 * 4 + half;
     let tz: number, dia: number;
@@ -75,7 +75,7 @@ function normalizeTZ(tz: number): number {
 }
 
 // Returns the round at which a league is (the first league played is round 0, the next league is round 1, etc.)
-function getCurrentRound(tz: number, TZForRound1: number, verse: number): number {
+export const getCurrentRound = (tz: number, TZForRound1: number, verse: number): number => {
     if (verse < VERSES_PER_ROUND) return 0;
     const round = Math.floor(verse / VERSES_PER_ROUND);
     const deltaN = (tz >= TZForRound1) ? (tz - TZForRound1) : ((tz + 24) - TZForRound1);
@@ -95,7 +95,7 @@ function getCurrentRound(tz: number, TZForRound1: number, verse: number): number
 // - firstVerseTimeStamp: the timestamp the very first games where played at 
 // Outputs:
 // - timeUTC: the Unix timestamp in UTC (seconds) corresponding to the start of a match's first half 
-function getMatch1stHalfUTC(tz: number, round: number, matchDay: number, TZForRound1: number, firstVerseTimeStamp: number): number {
+export const getMatch1stHalfUTC = (tz: number, round: number, matchDay: number, TZForRound1: number, firstVerseTimeStamp: number): number => {
     if (tz <= 0 || tz >= 25) {
         throw new Error("timezone out of range");
     }
@@ -112,15 +112,7 @@ function getMatch1stHalfUTC(tz: number, round: number, matchDay: number, TZForRo
     return timeUTC;
 }
 
-function getMatchHalfUTC(tz: number, round: number, matchDay: number, half: number, TZForRound1: number, firstVerseTimeStamp: number): number {
+export const getMatchHalfUTC = (tz: number, round: number, matchDay: number, half: number, TZForRound1: number, firstVerseTimeStamp: number): number => {
     const extraSeconds = half == 0 ? 0 : SECS_BETWEEN_VERSES;
     return getMatch1stHalfUTC(tz, round, matchDay, TZForRound1, firstVerseTimeStamp) + extraSeconds;
 }
-
-export {
-    calendarInfo,
-    nextTimeZoneToPlay,
-    getCurrentRound,
-    getMatch1stHalfUTC,
-    getMatchHalfUTC,
-};
