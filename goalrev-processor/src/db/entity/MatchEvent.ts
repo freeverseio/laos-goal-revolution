@@ -3,6 +3,14 @@ import { Match } from "./Match";
 import { Team } from "./Team"; // Assuming you have a Team entity
 import { Player } from "./Player"; // Assuming you have a Player entity
 
+enum EventType {
+  ATTACK = "attack",
+  YELLOW_CARD = "yellow_card",
+  RED_CARD = "red_card",
+  INJURY_SOFT = "injury_soft",
+  INJURY_HARD = "injury_hard",
+  SUBSTITUTION = "substitution"
+}
 @Entity("match_events")
 export class MatchEvent {
 
@@ -28,8 +36,9 @@ export class MatchEvent {
   @PrimaryColumn({ type: 'string' })
   team_id!: string;
 
-  @Column({ type: "enum", enum: ["attack", "yellow_card", "red_card", "injury_soft", "injury_hard", "substitution"] })
-  type!: string;
+
+  @Column({ type: "enum", enum: EventType })
+  type!: EventType;
 
   @Column()
   manage_to_shoot!: boolean;
