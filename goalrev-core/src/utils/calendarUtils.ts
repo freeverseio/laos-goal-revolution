@@ -118,9 +118,9 @@ function getMatchHalfUTC(tz: number, round: number, matchDay: number, half: numb
 }
 
 export {
+    calendarInfo,
     nextTimeZoneToPlay,
     getCurrentRound,
     getMatch1stHalfUTC,
     getMatchHalfUTC,
-    calendarInfo,
 };
