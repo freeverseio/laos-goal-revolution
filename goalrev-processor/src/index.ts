@@ -5,6 +5,9 @@ import { MatchController } from "./controller/MatchController";
 import { AppDataSource } from "./db/AppDataSource";
 import { MatchEvent } from "./db/entity/MatchEvent";
 import { countryRepository, CountryCustomRepository } from "./db/repository/CountryRepository";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = createExpressServer({
   controllers: [MatchController], // register controllers here
@@ -13,9 +16,8 @@ const app = createExpressServer({
 AppDataSource.initialize()
   .then(async () => {
    
-    const port = 3000;
-    app.listen(port, () => {
-      console.log(`Server is running on port ${port}`);
+    app.listen(process.env.APP_PORT, () => {
+      console.log(`Server is running on port ${process.env.APP_PORT}`);
     });
   })
   .catch((error) => console.log("Error: ", error));

@@ -1,5 +1,5 @@
 import { IsArray, ArrayMinSize, ArrayMaxSize, IsString, IsNumber, IsDefined } from "class-validator";
-import { PLAYERS_PER_TEAM_MAX } from "../../../utils/constants";
+import { PLAYERS_PER_TEAM_MAX, PLAYERS_PER_TEAM_MIN } from "../../../utils/constants";
 
 export class PlayInput {
   @IsDefined()
@@ -12,9 +12,9 @@ export class PlayInput {
 
   @IsDefined()
   @IsArray()
-  @ArrayMinSize(PLAYERS_PER_TEAM_MAX, { each: true })  // Each sub-array should have at least 25 elements
-  @ArrayMaxSize(PLAYERS_PER_TEAM_MAX, { each: true })  // Each sub-array should have at most 25 elements
-  skills!: [number[], number[]];
+  @ArrayMinSize(PLAYERS_PER_TEAM_MIN, { each: true })
+  @ArrayMaxSize(PLAYERS_PER_TEAM_MAX, { each: true })
+  skills!: [string[], string[]];
 
   @IsDefined()
   @IsArray()

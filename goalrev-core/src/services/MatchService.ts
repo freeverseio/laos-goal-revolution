@@ -8,9 +8,9 @@ export class MatchService {
     // Validate the PlayInput object
     const { skills, matchLogs } = body;
     
-    const updatedSkills: [number[], number[]] = skills.map((teamSkills) =>
-      teamSkills.map((skill) => skill + 1)
-    ) as [number[], number[]];
+    const updatedSkills: [string[], string[]] = skills.map((teamSkills) =>
+      teamSkills.map((skill) => (parseInt(skill) + 1).toString())
+    ) as [string[], string[]];
 
     const ROUNDS_PER_MATCH = 4; // Example constant for number of rounds in the match
     const matchLogsAndEvents: number[] = [
@@ -30,12 +30,11 @@ export class MatchService {
   // Logic for playing the second half
   static async play2ndHalf(body: PlayInput): Promise<PlayOutput> {
     // Validate the PlayInput object
-   
     const { skills, matchLogs } = body;
 
-    const updatedSkills: [number[], number[]] = skills.map((teamSkills) =>
-      teamSkills.map((skill) => skill + 1)
-    ) as [number[], number[]];
+    const updatedSkills: [string[], string[]] = skills.map((teamSkills) =>
+      teamSkills.map((skill) => (parseInt(skill) + 1).toString())
+    ) as [string[], string[]];
 
     const ROUNDS_PER_MATCH = 2; // Example constant for number of rounds in the match
     const matchLogsAndEvents: number[] = [

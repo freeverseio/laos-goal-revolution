@@ -28,11 +28,11 @@ export class Match {
   match_idx!: number;
 
   @ManyToOne(() => Team, { nullable: true })
-  @JoinColumn({ name: "home_team_id" })
+  @JoinColumn({ name: "home_team_id", referencedColumnName: "team_id" })
   homeTeam?: Team;
 
   @ManyToOne(() => Team, { nullable: true })
-  @JoinColumn({ name: "visitor_team_id" })
+  @JoinColumn({ name: "visitor_team_id", referencedColumnName: "team_id" })
   visitorTeam?: Team;
 
   @Column({ type: 'text', default: '' })

@@ -1,5 +1,5 @@
 export interface PlayOutput {
-  updatedSkills: [number[], number[]]; 
+  updatedSkills: [string[], string[]]; 
   matchLogsAndEvents: number[]; 
   err: number; // Error code
 }
