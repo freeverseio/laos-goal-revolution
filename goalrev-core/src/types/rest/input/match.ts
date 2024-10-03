@@ -1,4 +1,4 @@
-import { IsArray, ArrayMinSize, ArrayMaxSize, IsString, IsNumber, IsDefined, ValidateNested, Min } from "class-validator";
+import { IsArray, ArrayMinSize, ArrayMaxSize, IsString, IsNumber, IsDefined, ValidateNested, Min, IsOptional, IsBoolean } from "class-validator";
 import { Type } from "class-transformer"; 
 import { PLAYERS_PER_TEAM_MAX, PLAYERS_PER_TEAM_MIN } from "../../../utils/constants";
 
@@ -33,9 +33,9 @@ export class PlayInput {
 
   @IsDefined()
   @IsArray()
-  @ArrayMinSize(2)
-  @ArrayMaxSize(2)
-  matchLogs!: [string, string];
+  @ValidateNested({ each: true })
+  @Type(() => MatchEventRequest)
+  matchEvents!: MatchEventRequest[];
 
   @IsDefined()
   @IsArray()
@@ -108,4 +108,32 @@ class TrainingRequest {
 }
 
 
+class MatchEventRequest {
+  @IsOptional()
+  @IsNumber()
+  minute!: number;
 
+  @IsOptional()
+  @IsString()
+  type!: string;
+
+  @IsOptional()
+  @IsString()
+  team_id!: string;
+
+  @IsOptional()
+  @IsString()
+  primary_player_id?: string;
+  
+  @IsOptional()
+  @IsString()
+  secondary_player_id?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  manage_to_shoot!: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  is_goal!: boolean;
+}

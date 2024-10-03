@@ -25,11 +25,11 @@ export class MatchEvent {
   @PrimaryColumn({ type: 'int' })
   minute!: number;
 
+  @PrimaryColumn({ type: 'string' })
+  team_id!: string;
+
   @Column({ type: "enum", enum: ["attack", "yellow_card", "red_card", "injury_soft", "injury_hard", "substitution"] })
   type!: string;
-
-  @Column()
-  team_id!: string;
 
   @Column()
   manage_to_shoot!: boolean;

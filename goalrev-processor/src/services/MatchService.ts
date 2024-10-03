@@ -2,8 +2,8 @@ import { AppDataSource } from "../db/AppDataSource";
 import { Match, MatchState } from "../db/entity/Match";
 import axios from "axios";
 import { Player } from "../db/entity/Player";
-import { PlayMatchRequest, TacticRequest, TrainingRequest } from "../types";
-import { Tactics, Training } from "../db/entity";
+import { MatchEventRequest, PlayMatchRequest, TacticRequest, TrainingRequest } from "../types";
+import { MatchEvent, Tactics, Training } from "../db/entity";
 
 export class MatchService {
 
@@ -71,12 +71,24 @@ export class MatchService {
         this.mapTacticToRequest(match.homeTeam!.tactics),  // Home team tactics
         this.mapTacticToRequest(match.visitorTeam!.tactics) // Visitor team tactics
       ],
-      matchLogs: ["", ""],
+      matchEvents: match.matchEvents.map(this.mapMatchEventToRequest),
       matchBools: [match.state === MatchState.HALF, true, false, false, false], 
       trainings: [
         this.mapTrainingToRequest(match.homeTeam!.trainings),  // Home team training
         this.mapTrainingToRequest(match.visitorTeam!.trainings) // Visitor team training
       ]
+    };
+  }
+
+  private mapMatchEventToRequest(matchEvent: MatchEvent): MatchEventRequest {
+    return {
+      minute: matchEvent.minute,
+      type: matchEvent.type,
+      team_id: matchEvent.team_id,
+      primary_player_id: matchEvent.primary_player_id,
+      secondary_player_id: matchEvent.secondary_player_id,
+      manage_to_shoot: matchEvent.manage_to_shoot,
+      is_goal: matchEvent.is_goal
     };
   }
   

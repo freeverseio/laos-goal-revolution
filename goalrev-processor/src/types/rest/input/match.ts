@@ -16,7 +16,7 @@ export interface PlayMatchRequest {
 
   tactics: [TacticRequest, TacticRequest]
 
-  matchLogs: [string, string]
+  matchEvents: MatchEventRequest[]
 
   matchBools: [boolean, boolean, boolean, boolean, boolean]
 
@@ -66,4 +66,14 @@ export interface TrainingRequest {
     shoot: number;
     endurance: number;
   };
+}
+
+export interface MatchEventRequest {
+  minute: number;
+  type: string;
+  team_id: string;
+  primary_player_id?: string;
+  secondary_player_id?: string;
+  manage_to_shoot: boolean;
+  is_goal: boolean;
 }
