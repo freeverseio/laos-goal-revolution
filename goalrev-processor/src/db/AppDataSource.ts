@@ -1,11 +1,9 @@
 import { DataSource } from "typeorm";
-import { Match, MatchEvent, Country, Timezone, League, Team } from "./entity";
+import { Match, MatchEvent, Country, Timezone, League, Team, Player } from "./entity";
 import * as dotenv from "dotenv";
-import * as url from 'url';
-import { Player } from "./entity/Player";
 
-// Load environment variables from .env file
 dotenv.config();
+
 
 export const AppDataSource = new DataSource({
   type: "postgres",

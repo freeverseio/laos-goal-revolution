@@ -1,10 +1,7 @@
 import "reflect-metadata";
 import { createExpressServer } from "routing-controllers";
 import { MatchController } from "./controller/MatchController";
-
 import { AppDataSource } from "./db/AppDataSource";
-import { MatchEvent } from "./db/entity/MatchEvent";
-import { countryRepository, CountryCustomRepository } from "./db/repository/CountryRepository";
 import dotenv from "dotenv";
 
 dotenv.config();
