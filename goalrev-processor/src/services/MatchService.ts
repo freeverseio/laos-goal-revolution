@@ -34,14 +34,20 @@ export class MatchService {
 
   private async getMatches(timezone: number, league: number, matchDay: number) {
     const matchRepository = AppDataSource.getRepository(Match);
-    // Fetch matches based on timezone and startEpoch
     return await matchRepository.find({
       where: {
         timezone_idx: timezone,
         league_idx: league,
         match_day_idx: matchDay
       },
-      relations: ["homeTeam", "visitorTeam", "homeTeam.players", "visitorTeam.players"]  // Specify relations here
+      relations: [
+        "homeTeam", 
+        "visitorTeam", 
+        "homeTeam.players", 
+        "visitorTeam.players", 
+        "homeTeam.tactics", 
+        "visitorTeam.tactics"
+      ]  
     });
   }
 

@@ -1,7 +1,5 @@
 import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn, OneToMany } from "typeorm";
-import { Country } from "./Country"; // Assuming you have a Country entity
-import { League } from "./League";   // Assuming you have a League entity
-import { Player } from "./Player";
+import { Country, League, Player, Tactics } from "./"; 
 
 @Entity("teams")
 export class Team {
@@ -32,6 +30,9 @@ export class Team {
 
   @OneToMany(() => Player, (player) => player.team)
   players!: Player[];
+
+  @OneToMany(() => Tactics, (tactic) => tactic.team)
+  tactics!: Tactics[];
 
   @Column({ type: 'int' })
   timezone_idx!: number;
