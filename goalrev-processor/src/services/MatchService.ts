@@ -7,6 +7,12 @@ import crypto from 'crypto';
 import { PlayerService } from "./PlayerService";
 
 export class MatchService {
+  private playerService: PlayerService;
+
+  // Inject PlayerService in the constructor
+  constructor(playerService: PlayerService) {
+    this.playerService = playerService;
+  }
 
   async playMatches(timezone: number, league: number, matchDay: number) {
     // get matches for timezone and epoch
@@ -15,11 +21,11 @@ export class MatchService {
     const seed = crypto.randomBytes(32).toString('hex');
     // Process matches 
     await Promise.all(matches.map(match => this.playMatch(match, seed)));
-    return "ok"
+    return "ok";
   }
 
-   // Update the playMatch method to use the new buildRequestBody method
-   async playMatch(match: Match, seed: string) {
+  // Update the playMatch method to use the new buildRequestBody method
+  async playMatch(match: Match, seed: string) {
     try {
       const requestBody = this.buildRequestBody(match, seed); // Use the new method
       // determine if 1st or 2nd half
@@ -34,11 +40,12 @@ export class MatchService {
       // Make the POST request to the API
       const response = await axios.post(`${process.env.CORE_API_URL}/match/${endpoint}`, requestBody);
       
-      // parse response to PlayOutput
+      // Parse response to PlayOutput
       const playOutput = response.data as PlayOutput;
-      const playerService = new PlayerService();
-      await playerService.updateSkills(match.homeTeam!.tactics, playOutput.updatedSkills[0]);
-      await playerService.updateSkills(match.visitorTeam!.tactics, playOutput.updatedSkills[1]);
+      
+      // Update skills for home and visitor teams using the injected PlayerService
+      await this.playerService.updateSkills(match.homeTeam!.tactics, playOutput.updatedSkills[0]);
+      await this.playerService.updateSkills(match.visitorTeam!.tactics, playOutput.updatedSkills[1]);
 
     } catch (error) {
       console.error(`Error playing match:`, error);
@@ -98,6 +105,4 @@ export class MatchService {
       ]
     };
   }
-
-  
 }

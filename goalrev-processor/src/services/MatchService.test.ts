@@ -91,7 +91,7 @@ describe('MatchService', () => {
   let matchService: MatchService;
 
   beforeEach(() => {
-    matchService = new MatchService();
+    matchService = new MatchService(mockPlayerService);
   });
 
   describe('playMatches', () => {
