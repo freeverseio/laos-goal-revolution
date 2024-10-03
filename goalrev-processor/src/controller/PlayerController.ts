@@ -29,13 +29,7 @@ export class PlayerController {
     return await playerRepository.findOneBy({ player_id });
   }
 
-  // Get active players by team_id
-  async getActivePlayersByTeamId(team_id: string): Promise<Player[]> {
-    const playerRepository = AppDataSource.getRepository(Player); // Get repository from AppDataSource
-    return await playerRepository.find({
-      where: { team: { id: team_id }, shirt_number: LessThan(25) }, 
-    });
-  }
+
 
   // Bulk insert or update players
   async bulkInsertPlayers(players: Player[]): Promise<void> {
