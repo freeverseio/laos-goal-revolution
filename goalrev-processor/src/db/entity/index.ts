@@ -6,3 +6,4 @@ export * from "./Match";
 export * from "./Team";
 export * from "./Player";
 export * from "./Tactic";
+export * from "./Training";

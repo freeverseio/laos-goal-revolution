@@ -46,7 +46,9 @@ export class MatchService {
         "homeTeam.players", 
         "visitorTeam.players", 
         "homeTeam.tactics", 
-        "visitorTeam.tactics"
+        "visitorTeam.tactics",
+        "homeTeam.trainings",
+        "visitorTeam.trainings"
       ]  
     });
   }
