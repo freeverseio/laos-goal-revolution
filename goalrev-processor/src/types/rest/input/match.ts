@@ -20,11 +20,50 @@ export interface PlayMatchRequest {
 
   matchBools: [boolean, boolean, boolean, boolean, boolean]
 
-  assignedTPs: [string, string]
+  trainings: [TrainingRequest, TrainingRequest]
 }
 
 export interface TacticRequest {
   lineup: number[];
   substitutions: { shirt: number; target: number; minute: number }[];
   extraAttack: boolean[];
+}
+
+export interface TrainingRequest {
+  specialPlayerShirt: number;
+  goalkeepers: {
+    defence: number;
+    speed: number;
+    pass: number;
+    shoot: number;
+    endurance: number;
+  };
+  defenders: {
+    defence: number;
+    speed: number;
+    pass: number;
+    shoot: number;
+    endurance: number;
+  };
+  midfielders: {
+    defence: number;
+    speed: number;
+    pass: number;
+    shoot: number;
+    endurance: number;
+  };
+  attackers: {
+    defence: number;
+    speed: number;
+    pass: number;
+    shoot: number;
+    endurance: number;
+  };
+  specialPlayer: {
+    defence: number;
+    speed: number;
+    pass: number;
+    shoot: number;
+    endurance: number;
+  };
 }

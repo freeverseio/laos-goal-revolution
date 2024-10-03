@@ -1,4 +1,4 @@
-import { IsArray, ArrayMinSize, ArrayMaxSize, IsString, IsNumber, IsDefined, ValidateNested } from "class-validator";
+import { IsArray, ArrayMinSize, ArrayMaxSize, IsString, IsNumber, IsDefined, ValidateNested, Min } from "class-validator";
 import { Type } from "class-transformer"; 
 import { PLAYERS_PER_TEAM_MAX, PLAYERS_PER_TEAM_MIN } from "../../../utils/constants";
 
@@ -47,7 +47,7 @@ export class PlayInput {
   @IsArray()
   @ArrayMinSize(2)
   @ArrayMaxSize(2)
-  assignedTPs!: [string, string];
+  trainings!: [TrainingRequest, TrainingRequest];
 }
 
 class TacticRequest {
@@ -67,3 +67,45 @@ class TacticRequest {
   @ArrayMaxSize(11)
   extraAttack!: boolean[];
 }
+
+class TrainingRequest {
+  specialPlayerShirt?: number;
+  goalkeepers?: {
+    defence: number;
+    speed: number;
+    pass: number;
+    shoot: number;
+    endurance: number;
+  };
+  defenders?: {
+    defence: number;
+    speed: number;
+    pass: number;
+    shoot: number;
+    endurance: number;
+  };
+  midfielders?: {
+    defence: number;
+    speed: number;
+    pass: number;
+    shoot: number;
+    endurance: number;
+  };
+  attackers?: {
+    defence: number;
+    speed: number;
+    pass: number;
+    shoot: number;
+    endurance: number;
+  };
+  specialPlayer?: {
+    defence: number;
+    speed: number;
+    pass: number;
+    shoot: number;
+    endurance: number;
+  };
+}
+
+
+

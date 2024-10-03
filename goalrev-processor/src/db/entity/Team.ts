@@ -34,8 +34,8 @@ export class Team {
   @OneToOne(() => Tactics, (tactic) => tactic.team)
   tactics!: Tactics;
 
-  @OneToMany(() => Training, (training) => training.team)
-  trainings!: Training[];
+  @OneToOne(() => Training, (training) => training.team)
+  trainings!: Training;
 
   @Column({ type: 'int' })
   timezone_idx!: number;

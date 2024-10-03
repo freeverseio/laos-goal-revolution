@@ -2,8 +2,8 @@ import { AppDataSource } from "../db/AppDataSource";
 import { Match, MatchState } from "../db/entity/Match";
 import axios from "axios";
 import { Player } from "../db/entity/Player";
-import { PlayMatchRequest, TacticRequest } from "../types";
-import { Tactics } from "../db/entity";
+import { PlayMatchRequest, TacticRequest, TrainingRequest } from "../types";
+import { Tactics, Training } from "../db/entity";
 
 export class MatchService {
 
@@ -29,7 +29,6 @@ export class MatchService {
     } catch (error) {
       console.error(`Error playing match:`, error);
     }
-
     return "ok";
   }
 
@@ -73,7 +72,10 @@ export class MatchService {
       ],
       matchLogs: ["", ""],
       matchBools: [match.state === MatchState.HALF, true, false, false, false], 
-      assignedTPs: ["150", "180"]
+      trainings: [
+        this.mapTrainingToRequest(match.homeTeam!.trainings),  // Home team training
+        this.mapTrainingToRequest(match.visitorTeam!.trainings) // Visitor team training
+      ]
     };
   }
   
@@ -107,6 +109,48 @@ export class MatchService {
         tactic.extra_attack_5, tactic.extra_attack_6, tactic.extra_attack_7, tactic.extra_attack_8,
         tactic.extra_attack_9, tactic.extra_attack_10
       ]
+    };
+
+  }
+
+  private mapTrainingToRequest(training: Training): TrainingRequest {
+    return {
+      specialPlayerShirt: training.special_player_shirt,
+      goalkeepers: {
+        defence: training.goalkeepers_defence,
+        speed: training.goalkeepers_speed,
+        pass: training.goalkeepers_pass,
+        shoot: training.goalkeepers_shoot,
+        endurance: training.goalkeepers_endurance
+      },
+      defenders: {
+        defence: training.defenders_defence,
+        speed: training.defenders_speed,
+        pass: training.defenders_pass,
+        shoot: training.defenders_shoot,
+        endurance: training.defenders_endurance
+      },
+      midfielders: {
+        defence: training.midfielders_defence,
+        speed: training.midfielders_speed,
+        pass: training.midfielders_pass,
+        shoot: training.midfielders_shoot,
+        endurance: training.midfielders_endurance
+      },
+      attackers: {
+        defence: training.attackers_defence,
+        speed: training.attackers_speed,
+        pass: training.attackers_pass,
+        shoot: training.attackers_shoot,
+        endurance: training.attackers_endurance
+      },
+      specialPlayer: {
+        defence: training.special_player_defence,
+        speed: training.special_player_speed,
+        pass: training.special_player_pass,
+        shoot: training.special_player_shoot,
+        endurance: training.special_player_endurance
+      }
     };
   }
 
