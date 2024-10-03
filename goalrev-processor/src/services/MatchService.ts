@@ -2,33 +2,53 @@ import { AppDataSource } from "../db/AppDataSource";
 import { Match, MatchState } from "../db/entity/Match";
 import axios from "axios";
 import { MatchMapper } from "./mapper/MatchMapper";
-import { PlayMatchRequest } from "../types";
+import { PlayMatchRequest, PlayOutput } from "../types";
+import crypto from 'crypto';
+import { PlayerService } from "./PlayerService";
 
 export class MatchService {
 
   async playMatches(timezone: number, league: number, matchDay: number) {
     // get matches for timezone and epoch
     const matches = await this.getMatches(timezone, league, matchDay);
-    
+
+    const seed = crypto.randomBytes(32).toString('hex');
     // Process matches 
-    await Promise.all(matches.map(match => this.playMatch(match)));
+    await Promise.all(matches.map(match => this.playMatch(match, seed)));
     return "ok"
   }
 
    // Update the playMatch method to use the new buildRequestBody method
-   async playMatch(match: Match) {
+   async playMatch(match: Match, seed: string) {
     try {
-      const requestBody = this.buildRequestBody(match); // Use the new method
-      console.log(JSON.stringify(requestBody));
-      // Make the POST request to the API
-      const response = await axios.post(`${process.env.CORE_API_URL}/match/play1stHalf`, requestBody);
+      const requestBody = this.buildRequestBody(match, seed); // Use the new method
+      // determine if 1st or 2nd half
+      const is1stHalf = match.state === MatchState.BEGIN;
+      const is2ndHalf = match.state === MatchState.HALF;
+      if (!is1stHalf && !is2ndHalf) {
+        console.error(`Match ${match.match_idx} is not in the BEGIN or HALF state, skipping`);
+        return;
+      }
+      const endpoint = is1stHalf ? "play1stHalf" : "play2ndHalf";
 
-      // Handle response (if needed)
-     // console.log(`Response from play1stHalf:`, response.data);
+      // Make the POST request to the API
+      const response = await axios.post(`${process.env.CORE_API_URL}/match/${endpoint}`, requestBody);
+      
+      // parse response to PlayOutput
+      const playOutput = response.data as PlayOutput;
+      const playerService = new PlayerService();
+      await playerService.updateSkills(match.homeTeam!.tactics, playOutput.updatedSkills[0]);
+      await playerService.updateSkills(match.visitorTeam!.tactics, playOutput.updatedSkills[1]);
+
     } catch (error) {
       console.error(`Error playing match:`, error);
     }
     return "ok";
+  }
+
+  async updateMatch(match: Match) {
+    const matchRepository = AppDataSource.getRepository(Match);
+    return await matchRepository.save(match);
   }
 
   private async getMatches(timezone: number, league: number, matchDay: number) {
@@ -53,9 +73,9 @@ export class MatchService {
     });
   }
 
-  buildRequestBody(match: Match): PlayMatchRequest {
+  buildRequestBody(match: Match, seed: string): PlayMatchRequest {
     return {
-      verseSeed: match.seed,
+      verseSeed: seed,
       matchStartTime: Number(match.start_epoch),
       skills: [
         MatchMapper.calculateTeamSkills(match.homeTeam!.players), // Team 1 skills
