@@ -27,6 +27,7 @@ const mockPlayerService = {
 jest.mock('./TeamService');
 const mockTeamService = {
   updateTeamData: jest.fn(),
+  updateTeamMatchLog: jest.fn(),
 } as unknown as TeamService;
 
 jest.mock('./MatchEventService');
@@ -128,7 +129,7 @@ describe('MatchService', () => {
       const buildRequestBodySpy = jest.spyOn(matchService, 'buildRequestBody');
       const response = await matchService.playMatch(mockMatch, "test-seed");
 
-      expect(buildRequestBodySpy).toHaveBeenCalledWith(mockMatch, "test-seed");
+      expect(buildRequestBodySpy).toHaveBeenCalledWith(mockMatch, "test-seed", true);
       expect(mockedAxios.post).toHaveBeenCalledWith(
         `${process.env.CORE_API_URL}/match/play1stHalf`,
         expect.any(Object)
@@ -164,7 +165,7 @@ describe('MatchService', () => {
 
   describe('buildRequestBody', () => {
     it('should correctly build the PlayMatchRequest body', () => {
-      const result = matchService['buildRequestBody'](mockMatch, "test-seed");
+      const result = matchService['buildRequestBody'](mockMatch, "test-seed", true);
 
       expect(result.verseSeed).toBe("test-seed");
       expect(result.matchStartTime).toBe(Number(mockMatch.start_epoch));

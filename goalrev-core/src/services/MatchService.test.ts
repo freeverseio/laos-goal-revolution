@@ -33,7 +33,7 @@ describe("MatchService", () => {
         extraAttack: Array(10).fill(false),
       },
     ],
-    matchEvents: [],
+    matchLogs: [{}, {}],
     matchBools: [false, true, false, true, false],
     trainings: [
       {

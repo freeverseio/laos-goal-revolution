@@ -38,4 +38,9 @@ export class TeamService {
     // Save the updated team back to the database
     await entityManager.save(team);
   }
+
+  async updateTeamMatchLog(entityManager: EntityManager, encodedMatchLog: string, team: Team): Promise<void> {
+    team.match_log = encodedMatchLog;
+    await entityManager.save(team);
+  }
 }

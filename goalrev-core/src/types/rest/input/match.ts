@@ -34,8 +34,8 @@ export class PlayInput {
   @IsDefined()
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => MatchEventRequest)
-  matchEvents!: MatchEventRequest[];
+  @Type(() => MatchLogRequest)
+  matchLogs!: [MatchLogRequest, MatchLogRequest];
 
   @IsDefined()
   @IsArray()
@@ -107,6 +107,11 @@ class TrainingRequest {
   };
 }
 
+class MatchLogRequest {
+  @IsOptional()
+  @IsString()
+  encodedMatchLog?: string;
+}
 
 class MatchEventRequest {
   @IsOptional()

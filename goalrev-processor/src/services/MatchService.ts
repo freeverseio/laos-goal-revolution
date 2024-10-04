@@ -38,9 +38,9 @@ export class MatchService {
     try {
       await entityManager.transaction(async (transactionManager: EntityManager) => {
 
-        const requestBody = this.buildRequestBody(match, seed);
         const is1stHalf = match.state === MatchState.BEGIN;
         const is2ndHalf = match.state === MatchState.HALF;
+        const requestBody = this.buildRequestBody(match, seed, is1stHalf);
 
         if (!is1stHalf && !is2ndHalf) {
           console.error(`Match ${match.match_idx} is not in the BEGIN or HALF state, skipping`);
@@ -54,6 +54,10 @@ export class MatchService {
         await this.matchEventService.saveMatchEvents(playOutput.matchEvents, match, transactionManager);
         match.seed = seed;
         match.state = is1stHalf ? MatchState.HALF : MatchState.END;
+        
+        await this.teamService.updateTeamMatchLog(transactionManager, playOutput.matchLogs[0].encodedMatchLog, match.homeTeam!);
+        await this.teamService.updateTeamMatchLog(transactionManager, playOutput.matchLogs[1].encodedMatchLog, match.visitorTeam!);
+        
         if (is2ndHalf) {
           // Update skills, teams, and events within the transaction
           await this.playerService.updateSkills(match.homeTeam!.tactics, playOutput.updatedSkills[0], transactionManager);
@@ -102,7 +106,7 @@ export class MatchService {
     });
   }
 
-  buildRequestBody(match: Match, seed: string): PlayMatchRequest {
+  buildRequestBody(match: Match, seed: string, is1stHalf: boolean): PlayMatchRequest {
     return {
       verseSeed: seed,
       matchStartTime: Number(match.start_epoch),
@@ -119,7 +123,14 @@ export class MatchService {
         MatchMapper.mapTacticToRequest(match.homeTeam!.tactics),  // Home team tactics
         MatchMapper.mapTacticToRequest(match.visitorTeam!.tactics) // Visitor team tactics
       ],
-      matchEvents: match.matchEvents.map(MatchMapper.mapMatchEventToRequest),
+      matchLogs: is1stHalf ? [{}, {}] : [
+        {
+          encodedMatchLog: match.homeTeam!.match_log
+        },
+        {
+          encodedMatchLog: match.visitorTeam!.match_log
+        }
+      ],
       matchBools: [match.state === MatchState.HALF, true, false, false, false], 
       trainings: [
         MatchMapper.mapTrainingToRequest(match.homeTeam!.trainings),  // Home team training
