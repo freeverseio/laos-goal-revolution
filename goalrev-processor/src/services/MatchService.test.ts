@@ -122,8 +122,8 @@ describe('MatchService', () => {
   });
 
   describe('playMatch', () => {
-    it('should build request body and send a request to the external API', async () => {
-      mockedAxios.post.mockResolvedValue({ data: { updatedSkills: [[], []], matchLogsAndEvents: [], earnedTrainingPoints: 0 } });
+    it('should build request body and send a request to the external API for 1st half', async () => {
+      mockedAxios.post.mockResolvedValue({ data: { matchEvents: [], updatedSkills: [[], []], matchLogs: [{}, {}], earnedTrainingPoints: 0 } });
 
       const buildRequestBodySpy = jest.spyOn(matchService, 'buildRequestBody');
       const response = await matchService.playMatch(mockMatch, "test-seed");
@@ -133,21 +133,32 @@ describe('MatchService', () => {
         `${process.env.CORE_API_URL}/match/play1stHalf`,
         expect.any(Object)
       );
+      expect(mockEntityManager.save).toHaveBeenCalledWith(mockMatch);
       expect(response).toBe('ok');
     });
 
-    it('should call playerService, teamService, and matchEventService with EntityManager', async () => {
-      mockedAxios.post.mockResolvedValue({ data: { updatedSkills: [[], []], matchLogsAndEvents: [], earnedTrainingPoints: 0 } });
+    it('should update skills, team data, and save match when in 2nd half', async () => {
+      // Prepare mock for 2nd half
+      mockedAxios.post.mockResolvedValue({
+        data: {
+          matchEvents: [],
+          updatedSkills: [[], []],
+          matchLogs: [
+            { teamSumSkills: 150 },
+            { teamSumSkills: 140 },
+          ],
+        }
+      });
+      mockMatch.state = MatchState.HALF;
 
-      const updateSkillsSpy = jest.spyOn(mockPlayerService, 'updateSkills');
-      const updateTeamDataSpy = jest.spyOn(mockTeamService, 'updateTeamData');
-      const saveMatchEventsSpy = jest.spyOn(mockMatchEventService, 'saveMatchEvents');
+      await matchService.playMatch(mockMatch, "test-seed");
 
-      await matchService['playMatch'](mockMatch, "test-seed");
-
-      expect(updateSkillsSpy).toHaveBeenCalled();
-      expect(updateTeamDataSpy).toHaveBeenCalled();
-      expect(saveMatchEventsSpy).toHaveBeenCalled();
+      // Ensure methods are called
+      expect(mockPlayerService.updateSkills).toHaveBeenCalledTimes(2); // Both home and visitor team
+      expect(mockTeamService.updateTeamData).toHaveBeenCalledTimes(2); // Both teams
+      expect(mockMatch.home_teamsumskills).toBe(150); // Updated skill points
+      expect(mockMatch.visitor_teamsumskills).toBe(140);
+      expect(mockEntityManager.save).toHaveBeenCalledWith(mockMatch);
     });
   });
 

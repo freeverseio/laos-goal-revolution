@@ -1,6 +1,6 @@
 import { EntityManager } from "typeorm";
 import { Team } from "../db/entity/Team";
-import { MatchEventOutput } from "../types";
+import { MatchEventOutput, MatchLog } from "../types";
 
 export class TeamService {
   /**
@@ -11,7 +11,7 @@ export class TeamService {
    * @param teamId - The ID of the team to update.
    * @param entityManager - The transaction-scoped EntityManager instance.
    */
-  async updateTeamData(matchEvents: MatchEventOutput[], trainingPoints: number, teamId: string, entityManager: EntityManager): Promise<void> {
+  async updateTeamData(matchLog: MatchLog, matchEvents: MatchEventOutput[], teamId: string, entityManager: EntityManager): Promise<void> {
     // Find the team by its ID
     const team = await entityManager.findOne(Team, { where: { team_id: teamId } });
     
@@ -31,14 +31,9 @@ export class TeamService {
     });
 
     // Update training points
-    team.training_points = trainingPoints;
-
+    team.training_points = matchLog.trainingPoints;
     // Update points 
-    if (team.goals_forward > team.goals_against) {
-      team.points += 3;
-    } else if (team.goals_forward === team.goals_against) {
-      team.points += 1;
-    }
+    team.points += matchLog.gamePoints;
 
     // Save the updated team back to the database
     await entityManager.save(team);

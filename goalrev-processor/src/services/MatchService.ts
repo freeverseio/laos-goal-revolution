@@ -50,15 +50,24 @@ export class MatchService {
 
         const response = await axios.post(`${process.env.CORE_API_URL}/match/${endpoint}`, requestBody);
         const playOutput = response.data as PlayOutput;
-        
-        // Update skills, teams, and events within the transaction
-        await this.playerService.updateSkills(match.homeTeam!.tactics, playOutput.updatedSkills[0], transactionManager);
-        await this.playerService.updateSkills(match.visitorTeam!.tactics, playOutput.updatedSkills[1], transactionManager);
 
-        await this.teamService.updateTeamData(playOutput.matchLogsAndEvents, playOutput.earnedTrainingPoints, match.homeTeam!.team_id, transactionManager);
-        await this.teamService.updateTeamData(playOutput.matchLogsAndEvents, playOutput.earnedTrainingPoints, match.visitorTeam!.team_id, transactionManager);
+        await this.matchEventService.saveMatchEvents(playOutput.matchEvents, match, transactionManager);
+        match.seed = seed;
+        match.state = is1stHalf ? MatchState.HALF : MatchState.END;
+        if (is2ndHalf) {
+          // Update skills, teams, and events within the transaction
+          await this.playerService.updateSkills(match.homeTeam!.tactics, playOutput.updatedSkills[0], transactionManager);
+          await this.playerService.updateSkills(match.visitorTeam!.tactics, playOutput.updatedSkills[1], transactionManager);
 
-        await this.matchEventService.saveMatchEvents(playOutput.matchLogsAndEvents, match, transactionManager);
+          await this.teamService.updateTeamData(playOutput.matchLogs[0], playOutput.matchEvents, match.homeTeam!.team_id, transactionManager);
+          await this.teamService.updateTeamData(playOutput.matchLogs[1], playOutput.matchEvents, match.visitorTeam!.team_id, transactionManager);
+          
+          match.home_teamsumskills = playOutput.matchLogs[0].teamSumSkills;
+          match.visitor_teamsumskills = playOutput.matchLogs[1].teamSumSkills;
+        }
+
+        await transactionManager.save(match);
+
       });
 
     } catch (error) {
@@ -69,10 +78,7 @@ export class MatchService {
     return "ok";
   }
 
-  async updateMatch(match: Match) {
-    const matchRepository = AppDataSource.getRepository(Match);
-    return await matchRepository.save(match);
-  }
+
 
   private async getMatches(timezone: number, league: number, matchDay: number) {
     const matchRepository = AppDataSource.getRepository(Match);
