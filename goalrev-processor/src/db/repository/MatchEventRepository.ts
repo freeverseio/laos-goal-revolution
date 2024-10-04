@@ -63,4 +63,9 @@ export class MatchEventRepository {
     });
   }
 
+  async createMatchEvent(matchEvent: MatchEvent): Promise<MatchEvent> {
+    const repository = AppDataSource.getRepository(MatchEvent);
+    return await repository.save(matchEvent);
+  }
+
 }

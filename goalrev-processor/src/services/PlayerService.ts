@@ -1,4 +1,4 @@
-import { AppDataSource } from "../db/AppDataSource";
+import { EntityManager } from "typeorm";
 import { Player, Tactics } from "../db/entity";
 
 export interface PlayerSkill {
@@ -11,14 +11,13 @@ export interface PlayerSkill {
 }
 
 export class PlayerService {
-  private playerRepository = AppDataSource.getRepository(Player);
-
   /**
    * Updates the skills of players based on the given player skills array.
-   * @param teamId - The team ID that corresponds to the tactics
+   * @param tactics - The team tactics containing the player IDs.
    * @param playerSkills - An array of player skills, where each element corresponds to a shirt number in tactics.
+   * @param entityManager - The transaction-scoped EntityManager instance.
    */
-  async updateSkills(tactics: Tactics, playerSkills: PlayerSkill[]): Promise<void> {
+  async updateSkills(tactics: Tactics, playerSkills: PlayerSkill[], entityManager: EntityManager): Promise<void> {
    
     // The players in tactics are referenced by shirt_0 to shirt_10
     const playerIds = [
@@ -39,9 +38,12 @@ export class PlayerService {
     for (let i = 0; i < playerSkills.length; i++) {
       const playerId = playerIds[i];
       const playerSkill = playerSkills[i];
+      if (!playerId) {
+        return;
+      }
 
       // Find the player by their ID (from the shirt number in tactics)
-      const player = await this.playerRepository.findOne({
+      const player = await entityManager.findOne(Player, {
         where: { player_id: playerId.toString() },
       });
 
@@ -55,7 +57,7 @@ export class PlayerService {
         player.encoded_skills = playerSkill.encodedSkills;
 
         // Save the updated player
-        await this.playerRepository.save(player);
+        await entityManager.save(player);
       }
     }
   }

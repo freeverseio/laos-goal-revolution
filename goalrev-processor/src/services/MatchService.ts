@@ -6,15 +6,19 @@ import { PlayMatchRequest, PlayOutput } from "../types";
 import crypto from 'crypto';
 import { PlayerService } from "./PlayerService";
 import { TeamService } from "./TeamService";
+import { MatchEventService } from "./MatchEventService";
+import { EntityManager } from "typeorm";
 
 export class MatchService {
   private playerService: PlayerService;
   private teamService: TeamService;
+  private matchEventService: MatchEventService;
 
   // Inject PlayerService in the constructor
-  constructor(playerService: PlayerService, teamService: TeamService) {
+  constructor(playerService: PlayerService, teamService: TeamService, matchEventService: MatchEventService) {
     this.playerService = playerService;
     this.teamService = teamService;
+    this.matchEventService = matchEventService;
   }
 
   async playMatches(timezone: number, league: number, matchDay: number) {
@@ -29,34 +33,39 @@ export class MatchService {
 
   // Update the playMatch method to use the new buildRequestBody method
   async playMatch(match: Match, seed: string) {
+    const entityManager = AppDataSource.manager; // Use the EntityManager to handle transactions
+    
     try {
-      const requestBody = this.buildRequestBody(match, seed); // Use the new method
-      // determine if 1st or 2nd half
-      const is1stHalf = match.state === MatchState.BEGIN;
-      const is2ndHalf = match.state === MatchState.HALF;
-      if (!is1stHalf && !is2ndHalf) {
-        console.error(`Match ${match.match_idx} is not in the BEGIN or HALF state, skipping`);
-        return;
-      }
-      const endpoint = is1stHalf ? "play1stHalf" : "play2ndHalf";
+      await entityManager.transaction(async (transactionManager: EntityManager) => {
 
-      // Make the POST request to the API
-      const response = await axios.post(`${process.env.CORE_API_URL}/match/${endpoint}`, requestBody);
-      
-      // Parse response to PlayOutput
-      const playOutput = response.data as PlayOutput;
-      
-      // Update skills for home and visitor teams using the injected PlayerService
-      await this.playerService.updateSkills(match.homeTeam!.tactics, playOutput.updatedSkills[0]);
-      await this.playerService.updateSkills(match.visitorTeam!.tactics, playOutput.updatedSkills[1]);
+        const requestBody = this.buildRequestBody(match, seed);
+        const is1stHalf = match.state === MatchState.BEGIN;
+        const is2ndHalf = match.state === MatchState.HALF;
 
-      // Update team data
-      await this.teamService.updateTeamData(playOutput.matchLogsAndEvents, playOutput.earnedTrainingPoints, match.homeTeam!.team_id);
-      await this.teamService.updateTeamData(playOutput.matchLogsAndEvents, playOutput.earnedTrainingPoints, match.visitorTeam!.team_id);
+        if (!is1stHalf && !is2ndHalf) {
+          console.error(`Match ${match.match_idx} is not in the BEGIN or HALF state, skipping`);
+          return;
+        }
+        const endpoint = is1stHalf ? "play1stHalf" : "play2ndHalf";
+
+        const response = await axios.post(`${process.env.CORE_API_URL}/match/${endpoint}`, requestBody);
+        const playOutput = response.data as PlayOutput;
+        
+        // Update skills, teams, and events within the transaction
+        await this.playerService.updateSkills(match.homeTeam!.tactics, playOutput.updatedSkills[0], transactionManager);
+        await this.playerService.updateSkills(match.visitorTeam!.tactics, playOutput.updatedSkills[1], transactionManager);
+
+        await this.teamService.updateTeamData(playOutput.matchLogsAndEvents, playOutput.earnedTrainingPoints, match.homeTeam!.team_id, transactionManager);
+        await this.teamService.updateTeamData(playOutput.matchLogsAndEvents, playOutput.earnedTrainingPoints, match.visitorTeam!.team_id, transactionManager);
+
+        await this.matchEventService.saveMatchEvents(playOutput.matchLogsAndEvents, match, transactionManager);
+      });
 
     } catch (error) {
       console.error(`Error playing match:`, error);
+      throw error; // Rollback will occur automatically if an error is thrown
     }
+
     return "ok";
   }
 

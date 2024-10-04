@@ -1,23 +1,21 @@
 import { PlayerService, PlayerSkill } from './PlayerService';
-import { AppDataSource } from '../db/AppDataSource';
 import { Player, Tactics } from '../db/entity';
+import { EntityManager } from 'typeorm';
 
-// Mock the repositories
-jest.mock('../db/AppDataSource');
-
-const mockPlayerRepository = {
+// Mock the EntityManager
+const mockEntityManager = {
   findOne: jest.fn(),
   save: jest.fn(),
-};
+} as unknown as jest.Mocked<EntityManager>;
 
-(AppDataSource.getRepository as jest.Mock).mockReturnValue(mockPlayerRepository);
 
 describe('PlayerService', () => {
   let playerService: PlayerService;
 
   beforeEach(() => {
+    // Clear mocks and re-initialize the service and entity manager before each test
+    jest.clearAllMocks();
     playerService = new PlayerService();
-    jest.clearAllMocks(); // Reset mocks before each test
   });
 
   describe('updateSkills', () => {
@@ -80,14 +78,14 @@ describe('PlayerService', () => {
       };
 
       // Mock database return values
-      mockPlayerRepository.findOne.mockResolvedValueOnce(mockPlayer);
+      mockEntityManager.findOne.mockResolvedValueOnce(mockPlayer);
 
       // Call updateSkills
-      await playerService.updateSkills(tactics, [mockPlayerSkill]);
+      await playerService.updateSkills(tactics, [mockPlayerSkill], mockEntityManager);
 
       // Expect the player to be found with player_id from tactics
-      expect(mockPlayerRepository.findOne).toHaveBeenCalledWith({
-        where: { player_id: '1' }, // Expecting player_id to be called
+      expect(mockEntityManager.findOne).toHaveBeenCalledWith(Player, {
+        where: { player_id: '1' },
       });
 
       // Expect the player to be updated with new skills
@@ -99,16 +97,23 @@ describe('PlayerService', () => {
       expect(mockPlayer.encoded_skills).toBe(mockPlayerSkill.encodedSkills);
 
       // Expect the player to be saved
-      expect(mockPlayerRepository.save).toHaveBeenCalledWith(mockPlayer);
+      expect(mockEntityManager.save).toHaveBeenCalledWith({
+        player_id: '1',
+        defence: mockPlayerSkill.defence,
+        speed: mockPlayerSkill.speed,
+        pass: mockPlayerSkill.pass,
+        shoot: mockPlayerSkill.shoot,
+        endurance: mockPlayerSkill.endurance,
+        encoded_skills: mockPlayerSkill.encodedSkills,
+      });
     });
 
     it('should not save if player is not found', async () => {
-
       //spy for console error
       const spy = jest.spyOn(console, 'error');
 
       // Mock that no player is found
-      mockPlayerRepository.findOne.mockResolvedValueOnce(null);
+      mockEntityManager.findOne.mockResolvedValueOnce(null);
 
       const mockPlayerSkill: PlayerSkill = {
         defence: 80,
@@ -157,13 +162,15 @@ describe('PlayerService', () => {
       };
 
       // Call updateSkills
-      await playerService.updateSkills(tactics, [mockPlayerSkill]);
+      await playerService.updateSkills(tactics, [mockPlayerSkill], mockEntityManager);
 
       // Expect the repository findOne method to have been called
-      expect(mockPlayerRepository.findOne).toHaveBeenCalled();
+      expect(mockEntityManager.findOne).toHaveBeenCalledWith(Player, {
+        where: { player_id: '1' },
+      });
 
       // Expect the repository save method not to have been called
-      expect(mockPlayerRepository.save).not.toHaveBeenCalled();
+      expect(mockEntityManager.save).not.toHaveBeenCalled();
     });
   });
 });
