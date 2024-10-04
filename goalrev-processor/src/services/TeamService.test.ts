@@ -1,7 +1,7 @@
 import { TeamService } from './TeamService';
 import { AppDataSource } from '../db/AppDataSource';
 import { Team } from '../db/entity/Team';
-import { MatchEvent } from '../types';
+import { MatchEventOutput } from '../types';
 
 jest.mock('../db/AppDataSource');
 
@@ -31,7 +31,7 @@ describe('TeamService', () => {
 
     mockTeamRepository.findOne.mockResolvedValueOnce(mockTeam);
 
-    const matchEvents: MatchEvent[] = [
+    const matchEvents: MatchEventOutput[] = [
       { minute: 15, type: 'goal', team_id: 1, manage_to_shoot: true, is_goal: true }, // Goal by the team
       { minute: 30, type: 'goal', team_id: 2, manage_to_shoot: true, is_goal: true }, // Goal by the opponent
       { minute: 60, type: 'goal', team_id: 1, manage_to_shoot: true, is_goal: true }, // Another goal by the team
@@ -60,7 +60,7 @@ describe('TeamService', () => {
 
     mockTeamRepository.findOne.mockResolvedValueOnce(mockTeam);
 
-    const matchEvents: MatchEvent[] = [
+    const matchEvents: MatchEventOutput[] = [
       { minute: 15, type: 'goal', team_id: 1, manage_to_shoot: true, is_goal: true }, // Goal by the team
       { minute: 30, type: 'goal', team_id: 2, manage_to_shoot: true, is_goal: true }, // Goal by the opponent
     ];
@@ -88,7 +88,7 @@ describe('TeamService', () => {
 
     mockTeamRepository.findOne.mockResolvedValueOnce(mockTeam);
 
-    const matchEvents: MatchEvent[] = [
+    const matchEvents: MatchEventOutput[] = [
       { minute: 30, type: 'goal', team_id: 2, manage_to_shoot: true, is_goal: true }, // Goal by the opponent
     ];
 
@@ -107,7 +107,7 @@ describe('TeamService', () => {
   it('should throw an error if the team is not found', async () => {
     mockTeamRepository.findOne.mockResolvedValueOnce(null); // No team found
 
-    const matchEvents: MatchEvent[] = [
+    const matchEvents: MatchEventOutput[] = [
       { minute: 15, type: 'goal', team_id: 1, manage_to_shoot: true, is_goal: true },
     ];
 

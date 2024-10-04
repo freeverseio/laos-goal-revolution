@@ -1,6 +1,6 @@
 export interface PlayOutput {
   updatedSkills: [PlayerSkill[], PlayerSkill[]]; 
-  matchLogsAndEvents: MatchEvent[]; 
+  matchLogsAndEvents: MatchEventOutput[]; 
   earnedTrainingPoints: number;
   err: number; // Error code
 }
@@ -14,7 +14,7 @@ export interface PlayerSkill {
   encodedSkills: string;
 }
 
-export interface MatchEvent {
+export interface MatchEventOutput {
   minute: number;
   type: string;
   team_id: number;

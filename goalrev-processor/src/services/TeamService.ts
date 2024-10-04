@@ -1,6 +1,6 @@
 import { AppDataSource } from "../db/AppDataSource";
 import { Team } from "../db/entity/Team";
-import { MatchEvent } from "../types"; // Assuming you have a MatchEvent type defined like the one you provided
+import { MatchEventOutput } from "../types"; // Assuming you have a MatchEvent type defined like the one you provided
 
 export class TeamService {
   private teamRepository = AppDataSource.getRepository(Team);
@@ -12,7 +12,7 @@ export class TeamService {
    * @param trainingPoints - The number of training points to add to the team.
    * @param teamId - The ID of the team to update.
    */
-  async updateTeamData(matchEvents: MatchEvent[], trainingPoints: number, teamId: string): Promise<void> {
+  async updateTeamData(matchEvents: MatchEventOutput[], trainingPoints: number, teamId: string): Promise<void> {
     // Find the team by its ID
     const team = await this.teamRepository.findOne({ where: { team_id: teamId } });
     
