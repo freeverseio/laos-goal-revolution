@@ -6,6 +6,8 @@ const config: Config.InitialOptions = {
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'node'],
   testMatch: ['**/src/**/*.test.ts'],
   roots: ['src'], 
+  setupFiles: ['./jest.setup.ts'],
 };
+
 
 export default config;

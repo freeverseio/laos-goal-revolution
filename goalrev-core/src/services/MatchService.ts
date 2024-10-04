@@ -1,5 +1,4 @@
 import { MatchEvent, MatchEventType, PlayerSkill, PlayInput, PlayOutput } from "../types";
-import { validate } from "class-validator";
 
 export class MatchService {
   
@@ -73,7 +72,6 @@ export class MatchService {
   static async play2ndHalf(body: PlayInput): Promise<PlayOutput> {
     // Validate the PlayInput object
     const { skills,  tactics, teamIds } = body;
-    console.log(JSON.stringify(tactics));
 
     const updatedSkills: [PlayerSkill[], PlayerSkill[]] = skills.map((teamSkills) =>
       teamSkills.map((skill) => ({
