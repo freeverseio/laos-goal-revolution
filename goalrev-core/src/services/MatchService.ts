@@ -18,7 +18,7 @@ export class MatchService {
       }))
     ) as [PlayerSkill[], PlayerSkill[]];
 
-    const ROUNDS_PER_MATCH = 4; // Example constant for number of rounds in the match
+
     const matchLogsAndEvents: MatchEvent[] = [
       {
         minute: 4,

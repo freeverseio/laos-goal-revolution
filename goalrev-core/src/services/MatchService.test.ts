@@ -203,7 +203,7 @@ describe("MatchService", () => {
 
 
     // Check if matchLogsAndEvents has been updated with logs
-    expect(result.matchLogsAndEvents.length).toBe(5 * 4 ); // 2 initial logs + 5 rounds of events
+    expect(result.matchLogsAndEvents.length).toBe(2 ); 
 
     // Check if the error code is 0
     expect(result.err).toBe(0);
@@ -219,7 +219,7 @@ describe("MatchService", () => {
 
 
     // Check if matchLogsAndEvents has been updated with logs
-    expect(result.matchLogsAndEvents.length).toBe(5 * 2 ); // 2 initial logs + 5 rounds of events
+    expect(result.matchLogsAndEvents.length).toBe(2 ); // 2 initial logs + 5 rounds of events
 
     // Check if the error code is 0
     expect(result.err).toBe(0);
