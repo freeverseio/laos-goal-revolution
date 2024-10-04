@@ -4,6 +4,7 @@ import { Match, MatchState } from '../db/entity/Match';
 import axios from 'axios';
 import { PlayerService } from "./PlayerService";
 import { MatchEvent, Tactics, Training } from '../db/entity';
+import { TeamService } from './TeamService';
 
 // Mock axios and the repository
 jest.mock('axios');
@@ -20,6 +21,11 @@ jest.mock('./PlayerService');
 const mockPlayerService = {
   updateSkills: jest.fn(),
 } as unknown as PlayerService;
+
+jest.mock('./TeamService');
+const mockTeamService = {
+  updateTeamData: jest.fn(),
+} as unknown as TeamService;
 
 const mockMatch: Match = {
   timezone_idx: 1,
@@ -91,7 +97,9 @@ describe('MatchService', () => {
   let matchService: MatchService;
 
   beforeEach(() => {
-    matchService = new MatchService(mockPlayerService);
+    // spy on console error
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+    matchService = new MatchService(mockPlayerService, mockTeamService);
   });
 
   describe('playMatches', () => {

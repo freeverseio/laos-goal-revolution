@@ -5,13 +5,16 @@ import { MatchMapper } from "./mapper/MatchMapper";
 import { PlayMatchRequest, PlayOutput } from "../types";
 import crypto from 'crypto';
 import { PlayerService } from "./PlayerService";
+import { TeamService } from "./TeamService";
 
 export class MatchService {
   private playerService: PlayerService;
+  private teamService: TeamService;
 
   // Inject PlayerService in the constructor
-  constructor(playerService: PlayerService) {
+  constructor(playerService: PlayerService, teamService: TeamService) {
     this.playerService = playerService;
+    this.teamService = teamService;
   }
 
   async playMatches(timezone: number, league: number, matchDay: number) {
@@ -46,6 +49,10 @@ export class MatchService {
       // Update skills for home and visitor teams using the injected PlayerService
       await this.playerService.updateSkills(match.homeTeam!.tactics, playOutput.updatedSkills[0]);
       await this.playerService.updateSkills(match.visitorTeam!.tactics, playOutput.updatedSkills[1]);
+
+      // Update team data
+      await this.teamService.updateTeamData(playOutput.matchLogsAndEvents, playOutput.earnedTrainingPoints, match.homeTeam!.team_id);
+      await this.teamService.updateTeamData(playOutput.matchLogsAndEvents, playOutput.earnedTrainingPoints, match.visitorTeam!.team_id);
 
     } catch (error) {
       console.error(`Error playing match:`, error);
