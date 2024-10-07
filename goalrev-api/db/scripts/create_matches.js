@@ -52,23 +52,6 @@ const createLeagueMatches = async () => {
                 var visitorTeamId = (cm[1] + (1 + leagueIdx * 8)).toString()
                 var matchIdx = j // 0..3
                 
-
-                // const result = await db.pool.query(`
-                //     INSERT INTO matches(timezone_idx, country_idx, league_idx, match_day_idx, match_idx, home_team_id, visitor_team_id, state, start_epoch)
-                //     VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)
-                //     ;`,
-                //     [
-                //         timezoneIdx,
-                //         countryIdx,
-                //         leagueIdx,
-                //         matchDayIdx,
-                //         matchIdx,
-                //         homeTeamId,
-                //         visitorTeamId,
-                //         match_state,
-                //         startEpoch
-                //     ]
-                // )
                 console.log("INSERT INTO matches(timezone_idx, country_idx, league_idx, match_day_idx, match_idx, home_team_id, visitor_team_id, state, start_epoch) VALUES(" + timezoneIdx + ", " + countryIdx + ", " + leagueIdx + ", " + matchDayIdx + ", " + matchIdx + ", " + homeTeamId + ", " + visitorTeamId + ", '" + match_state + "', " + startEpoch + ");");
             }
         }
