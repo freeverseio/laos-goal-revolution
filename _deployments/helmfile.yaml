@@ -27,7 +27,7 @@ helmfiles:
       - postgresUser: {{ .Values.postgresUser }}
       - postgresHost: {{ .Values.postgresHost }}
       - postgresDb: {{ .Values.postgresDb }}
-      - postgresPort: {{ .Values.postgresPort }}
+      - postgresPort: {{ .Values.postgresPort | quote }}
       - apiHost: {{ .Values.apiHost }}
   - path: "charts/goalrev-processor/helmfile.yaml"
     values:
@@ -36,9 +36,9 @@ helmfiles:
       - postgresUser: {{ .Values.postgresUser }}
       - postgresHost: {{ .Values.postgresHost }}
       - postgresDb: {{ .Values.postgresDb }}
-      - postgresPort: {{ .Values.postgresPort }}
+      - postgresPort: {{ .Values.postgresPort | quote }}
       - processorHost: {{ .Values.processorHost }}
-      - processorPort: {{ .Values.processorPort }}
+      - processorPort: {{ .Values.processorPort | quote }}
       - apiInternalUrl: {{ .Values.apiInternalUrl }}
   - path: "charts/goalrev-core/helmfile.yaml"
     values:

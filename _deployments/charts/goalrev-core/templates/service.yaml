@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: goalrev-processor
+  name: goalrev-core
   labels:
-    app.kubernetes.io/app: goalrev-processor
+    app.kubernetes.io/app: goalrev-core
 spec:
   selector:
-    app.kubernetes.io/app: goalrev-processor
+    app.kubernetes.io/app: goalrev-core
   ports:
   - name: http
     protocol: TCP
-    port: {{ .Values.processorPort }}
-    targetPort: {{ .Values.processorPort }}
+    port: {{ .Values.coreAppPort }}
+    targetPort: {{ .Values.coreAppPort }}
