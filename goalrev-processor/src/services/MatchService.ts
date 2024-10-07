@@ -58,7 +58,7 @@ export class MatchService {
         const requestBody = this.buildRequestBody(match, seed, is1stHalf);
 
         if (!is1stHalf && !is2ndHalf) {
-          console.error(`Match ${match.match_idx} is not in the BEGIN or HALF state, skipping`);
+          console.warn(`Match ${match.match_idx} is not in the BEGIN or HALF state, skipping`);
           return;
         }
         const endpoint = is1stHalf ? "play1stHalf" : "play2ndHalf";
@@ -67,7 +67,9 @@ export class MatchService {
         const playOutput = response.data as PlayOutput;
 
         await this.matchEventService.saveMatchEvents(playOutput.matchEvents, match, transactionManager);
+        if (is1stHalf) {
         match.seed = seed;
+        }
         match.state = is1stHalf ? MatchState.HALF : MatchState.END;
         
         await this.teamService.updateTeamMatchLog(transactionManager, playOutput.matchLogs[0].encodedMatchLog, match.homeTeam!);
@@ -108,7 +110,6 @@ export class MatchService {
         match_day_idx: matchDay
       },
       relations: [
-        "matchEvents",
         "homeTeam", 
         "visitorTeam", 
         "homeTeam.players", 

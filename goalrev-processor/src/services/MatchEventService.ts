@@ -22,14 +22,6 @@ export class MatchEventService {
         throw new Error(`Team not found for team ID: ${event.team_id}`);
       }
 
-      const primaryPlayer = event.primary_player_id
-        ? await entityManager.findOne(Player, { where: { player_id: event.primary_player_id } })
-        : undefined;
-
-      const secondaryPlayer = event.secondary_player_id
-        ? await entityManager.findOne(Player, { where: { player_id: event.secondary_player_id } })
-        : undefined;
-
       const matchEvent = new MatchEvent();
       matchEvent.timezone_idx = matchDetails.timezone_idx;
       matchEvent.country_idx = matchDetails.country_idx;
@@ -41,14 +33,13 @@ export class MatchEventService {
       matchEvent.type = event.type as any;
       matchEvent.manage_to_shoot = event.manage_to_shoot;
       matchEvent.is_goal = event.is_goal;
-      matchEvent.primaryPlayer = primaryPlayer as Player | undefined;
-      matchEvent.secondaryPlayer = secondaryPlayer as Player | undefined;
-      matchEvent.match = matchDetails;
-      matchEvent.team = team;
-
+      matchEvent.primary_player_id = event.primary_player_id;
+      matchEvent.secondary_player_id = event.secondary_player_id;
+      matchEvent.match_idx = matchDetails.match_idx;
+      matchEvent.team_id = event.team_id.toString();
       matchEventEntities.push(matchEvent);
     }
-
     await entityManager.save(matchEventEntities);
+
   }
 }
