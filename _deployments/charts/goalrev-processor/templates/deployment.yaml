@@ -30,7 +30,7 @@ spec:
             cpu: "500m"
         imagePullPolicy: Always
         env:
-          - name: POSTGRES_PASSWORD
+          - name: DB_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: goalrev-private-config
@@ -38,7 +38,7 @@ spec:
           - name: DB_HOST
             value: {{ .Values.postgresHost }}
           - name: DB_PORT
-            value: {{ .Values.postgresPort }}
+            value: {{ .Values.postgresPort | quote }}
           - name: DB_USER
             value: {{ .Values.postgresUser }}
           - name: DB_NAME
@@ -46,7 +46,7 @@ spec:
           - name: CORE_API_URL
             value: {{ .Values.apiInternalUrl }}
           - name: APP_PORT
-            value: {{ .Values.processorPort }}
+            value: {{ .Values.processorPort | quote }}
           - name: SSL_CA_CERT
             value: "./data/ca-certificate.pem"
         ports:
