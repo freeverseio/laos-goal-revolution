@@ -2,23 +2,38 @@ import { AppDataSource } from "../db/AppDataSource";
 import { Match, MatchState } from "../db/entity/Match";
 import axios from "axios";
 import { MatchMapper } from "./mapper/MatchMapper";
-import { PlayMatchRequest, PlayOutput } from "../types";
+import { PlayMatchRequest, PlayOutput, TimeZoneData } from "../types";
 import crypto from 'crypto';
 import { PlayerService } from "./PlayerService";
 import { TeamService } from "./TeamService";
 import { MatchEventService } from "./MatchEventService";
 import { EntityManager } from "typeorm";
+import { VerseService } from "./VerseService";
+import { calendarInfo } from "../utils/calendarUtils";
 
 export class MatchService {
   private playerService: PlayerService;
   private teamService: TeamService;
   private matchEventService: MatchEventService;
+  private verseService: VerseService;
 
   // Inject PlayerService in the constructor
-  constructor(playerService: PlayerService, teamService: TeamService, matchEventService: MatchEventService) {
+  constructor(playerService: PlayerService, teamService: TeamService, matchEventService: MatchEventService, verseService: VerseService) {
     this.playerService = playerService;
     this.teamService = teamService;
     this.matchEventService = matchEventService;
+    this.verseService = verseService;
+  }
+
+  async getCalendarInfo(): Promise<TimeZoneData> {
+    const entityManager = AppDataSource.manager; 
+    const lastVerse = await this.verseService.getLastVerse(entityManager);
+    const firstVerse = await this.verseService.getInitialVerse(entityManager);
+    if (!lastVerse || !firstVerse) {
+      throw new Error("No verses found");
+    }
+    const info = calendarInfo(lastVerse!.verseId, Number(firstVerse!.timezone), firstVerse!.verseTimestamp.getTime()); // Convert timezone to number
+    return info; // Return the correct variable
   }
 
   async playMatches(timezone: number, league: number, matchDay: number) {

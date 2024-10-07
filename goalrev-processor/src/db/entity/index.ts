@@ -7,3 +7,4 @@ export * from "./Team";
 export * from "./Player";
 export * from "./Tactic";
 export * from "./Training";
+export * from "./Verse";
