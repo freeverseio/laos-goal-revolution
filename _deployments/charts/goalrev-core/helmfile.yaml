@@ -1,0 +1,9 @@
+releases:
+  - name: goalrev-core-release
+    namespace: "{{ .Values.namespace }}" 
+    installed: true
+    createNamespace: false
+    chart: .
+    values:
+      - imageTag: {{ .Values.imageTag }}
+      - coreAppPort: {{ .Values.coreAppPort }}

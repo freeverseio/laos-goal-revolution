@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: goalrev-processor
+  labels:
+    app.kubernetes.io/app: goalrev-processor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/app: goalrev-processor
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/app: goalrev-processor
+    spec:
+      containers:
+      - name: goalrev-processor
+        image: freeverseio/goalrev-processor:{{ .Values.imageTag }}
+        volumeMounts:
+        - name: db-certificate
+          mountPath: "/app/data"
+          readOnly: true
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        imagePullPolicy: Always
+        env:
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: goalrev-private-config
+                key: postgresPassword
+          - name: DB_HOST
+            value: {{ .Values.postgresHost }}
+          - name: DB_PORT
+            value: {{ .Values.postgresPort }}
+          - name: DB_USER
+            value: {{ .Values.postgresUser }}
+          - name: DB_NAME
+            value: {{ .Values.postgresDb }}
+          - name: CORE_API_URL
+            value: {{ .Values.apiInternalUrl }}
+          - name: APP_PORT
+            value: {{ .Values.processorPort }}
+          - name: SSL_CA_CERT
+            value: "./data/ca-certificate.pem"
+        ports:
+        - containerPort: {{ .Values.processorPort }}
+      volumes:
+      - name: db-certificate
+        secret:
+          secretName: db-cert
+        
+      imagePullSecrets:
+      - name: docker-secret

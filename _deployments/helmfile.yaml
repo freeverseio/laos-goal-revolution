@@ -29,3 +29,19 @@ helmfiles:
       - postgresDb: {{ .Values.postgresDb }}
       - postgresPort: {{ .Values.postgresPort }}
       - apiHost: {{ .Values.apiHost }}
+  - path: "charts/goalrev-processor/helmfile.yaml"
+    values:
+      - namespace: {{ .Values.namespace }}
+      - imageTag: {{ requiredEnv "CIRCLE_SHA1" }}
+      - postgresUser: {{ .Values.postgresUser }}
+      - postgresHost: {{ .Values.postgresHost }}
+      - postgresDb: {{ .Values.postgresDb }}
+      - postgresPort: {{ .Values.postgresPort }}
+      - processorHost: {{ .Values.processorHost }}
+      - processorPort: {{ .Values.processorPort }}
+      - apiInternalUrl: {{ .Values.apiInternalUrl }}
+  - path: "charts/goalrev-core/helmfile.yaml"
+    values:
+      - namespace: {{ .Values.namespace }}
+      - imageTag: {{ requiredEnv "CIRCLE_SHA1" }}
+      - coreAppPort: {{ .Values.coreAppPort }}
