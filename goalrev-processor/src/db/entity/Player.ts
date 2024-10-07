@@ -6,8 +6,8 @@ export class Player {
   @PrimaryColumn({ type: 'text' })
   player_id!: string;
 
-  @ManyToOne(() => Team)
-  @JoinColumn({ name: "team_id" })
+  @ManyToOne(() => Team, (team) => team.players)  // Add inverse side
+  @JoinColumn({ name: "team_id", referencedColumnName: "team_id" })
   team!: Team;
 
   @Column({ type: 'int' })

@@ -1,0 +1,15 @@
+releases:
+  - name: goalrev-processor-release
+    namespace: "{{ .Values.namespace }}" 
+    installed: true
+    createNamespace: false
+    chart: .
+    values:
+      - imageTag: {{ .Values.imageTag }}
+      - postgresUser: {{ .Values.postgresUser }}
+      - postgresHost: {{ .Values.postgresHost }}
+      - postgresDb: {{ .Values.postgresDb }}
+      - postgresPort: {{ .Values.postgresPort }}
+      - processorHost: {{ .Values.processorHost }}
+      - processorPort: {{ .Values.processorPort }}
+      - apiInternalUrl: {{ .Values.apiInternalUrl }}

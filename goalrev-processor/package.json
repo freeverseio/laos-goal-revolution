@@ -5,21 +5,29 @@
   "scripts": {
     "start": "ts-node-dev src/index.ts",
     "typeorm": "ts-node ./node_modules/typeorm/cli",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "pg": "^8.13.0",
     "reflect-metadata": "^0.2.2",
+    "routing-controllers": "^0.10.4",
     "typeorm": "^0.3.20"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
+    "@types/jest": "^29.5.13",
     "@types/node": "^22.7.2",
+    "@types/wait-on": "^5.3.4",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.6.2"
   }

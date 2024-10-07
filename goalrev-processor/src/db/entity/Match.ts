@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn } from "typeorm";
+import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn, OneToMany } from "typeorm";
 import { Team } from "./Team";
 import { League } from "./League";
+import { MatchEvent } from "./MatchEvent";
 
 export enum MatchState {
   BEGIN = "begin",
@@ -28,12 +29,15 @@ export class Match {
   match_idx!: number;
 
   @ManyToOne(() => Team, { nullable: true })
-  @JoinColumn({ name: "home_team_id" })
+  @JoinColumn({ name: "home_team_id", referencedColumnName: "team_id" })
   homeTeam?: Team;
 
   @ManyToOne(() => Team, { nullable: true })
-  @JoinColumn({ name: "visitor_team_id" })
+  @JoinColumn({ name: "visitor_team_id", referencedColumnName: "team_id" })
   visitorTeam?: Team;
+
+  @OneToMany(() => MatchEvent, (matchEvent) => matchEvent.match)
+  matchEvents!: MatchEvent[];
 
   @Column({ type: 'text', default: '' })
   seed!: string;

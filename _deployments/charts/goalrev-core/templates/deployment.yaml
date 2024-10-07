@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: goalrev-core
+  labels:
+    app.kubernetes.io/app: goalrev-core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/app: goalrev-core
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/app: goalrev-core
+    spec:
+      containers:
+      - name: goalrev-core
+        image: freeverseio/goalrev-core:{{ .Values.imageTag }}
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        imagePullPolicy: Always
+        env:
+          - name: APP_PORT
+            value: {{ .Values.coreAppPort }}
+
+        ports:
+        - containerPort: {{ .Values.coreAppPort }}

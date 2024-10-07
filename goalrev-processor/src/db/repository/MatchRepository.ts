@@ -34,8 +34,8 @@ export class MatchRepository {
       await repository.update(
         { timezone_idx: timezoneIdx, country_idx: countryIdx, league_idx: leagueIdx, match_day_idx: matchDayIdx, match_idx: matchIdx },
         {
-          homeTeam: { id: homeTeamID }, // Assuming the `Team` entity has an `id` field
-          visitorTeam: { id: visitorTeamID },
+          homeTeam: { team_id: homeTeamID }, // Assuming the `Team` entity has an `id` field
+          visitorTeam: { team_id: visitorTeamID },
           start_epoch: startTime,
         }
       );
@@ -59,6 +59,19 @@ export class MatchRepository {
     } catch (error) {
       console.error("Error setting match result:", error);
       throw new Error("Set result failed");
+    }
+  }
+
+  async getMatch(timezoneIdx: number, leagueIdx: number, matchDayIdx: number, matchIdx: number): Promise<Match | null> {
+    const repository = AppDataSource.getRepository(Match);
+    try {
+      return await repository.findOne({
+        where: { timezone_idx: timezoneIdx, league_idx: leagueIdx, match_day_idx: matchDayIdx, match_idx: matchIdx },
+        relations: ["homeTeam", "visitorTeam"]
+      });
+    } catch (error) {
+      console.error("Error getting match:", error);
+      throw new Error("Get match failed");
     }
   }
 

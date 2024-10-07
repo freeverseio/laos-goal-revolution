@@ -1,48 +1,135 @@
-import { PlayInput, PlayOutput } from "../types";
+import { MatchEvent, MatchEventType, PlayerSkill, PlayInput, PlayOutput } from "../types";
 
 export class MatchService {
+  
   // Logic for playing the first half
-  static play1stHalf(body: PlayInput): PlayOutput {
-    const { skills, matchLogs } = body;
+  static async play1stHalf(body: PlayInput): Promise<PlayOutput> {
+    const { skills,  tactics, teamIds } = body;
+    
+    const updatedSkills: [PlayerSkill[], PlayerSkill[]] = skills.map((teamSkills) =>
+      teamSkills.map((skill) => ({
+        defence: Math.floor(Math.random() * 10),
+        speed: Math.floor(Math.random() * 10),
+        pass: Math.floor(Math.random() * 10),
+        shoot: Math.floor(Math.random() * 10),
+        endurance: Math.floor(Math.random() * 10),
+        encodedSkills: skill
+      }))
+    ) as [PlayerSkill[], PlayerSkill[]];
 
-    const updatedSkills: [number[], number[]] = skills.map((teamSkills) =>
-      teamSkills.map((skill) => skill + 1)
-    ) as [number[], number[]];
 
-    const ROUNDS_PER_MATCH = 4; // Example constant for number of rounds in the match
-    const matchLogsAndEvents: number[] = [
-      ...matchLogs,   // Start with the original matchLogs
-      ...new Array(5 * ROUNDS_PER_MATCH).fill(0), // Add empty events for each round
+    const matchEvents: MatchEvent[] = [
+      {
+        minute: 4,
+        team_id: teamIds[0],
+        type: MatchEventType.ATTACK,
+        manage_to_shoot: false,
+        is_goal: false,
+      },
+      {
+        minute: 10,
+        team_id: teamIds[1],
+        type: MatchEventType.ATTACK,
+        manage_to_shoot: true,
+        is_goal: true,
+      },
+
     ];
 
     const err = 0;
 
     return {
       updatedSkills,
-      matchLogsAndEvents,
+      matchLogs: [
+        {
+          numberOfGoals: 1,
+          gamePoints: 0,
+          teamSumSkills: 10,
+          trainingPoints: 10,
+          isHomeStadium: true,
+          changesAtHalftime: true,
+          isCancelled: false,
+          encodedMatchLog: "3618502788669422116101235693605807058779801721811233097964316659973982519296",
+        },
+        {
+          numberOfGoals: 1,
+          gamePoints: 0,
+          teamSumSkills: 5,
+          trainingPoints: 5,
+          isHomeStadium: false,
+          changesAtHalftime: true,
+          isCancelled: false,
+          encodedMatchLog: "3618502788669422116101235693605807058779801721811233097964316659973982519296",
+        },
+      ],
+      matchEvents,
+      earnedTrainingPoints: 0,
       err,
     };
   }
 
   // Logic for playing the second half
-  static play2ndHalf(body: PlayInput): PlayOutput {
-    const { skills, matchLogs } = body;
+  static async play2ndHalf(body: PlayInput): Promise<PlayOutput> {
+    // Validate the PlayInput object
+    const { skills,  tactics, teamIds } = body;
 
-    const updatedSkills: [number[], number[]] = skills.map((teamSkills) =>
-      teamSkills.map((skill) => skill + 1)
-    ) as [number[], number[]];
+    const updatedSkills: [PlayerSkill[], PlayerSkill[]] = skills.map((teamSkills) =>
+      teamSkills.map((skill) => ({
+        defence: Math.floor(Math.random() * 10),
+        speed: Math.floor(Math.random() * 10),
+        pass: Math.floor(Math.random() * 10),
+        shoot: Math.floor(Math.random() * 10),
+        endurance: Math.floor(Math.random() * 10),
+        encodedSkills: skill
+      }))
+    ) as [PlayerSkill[], PlayerSkill[]];
 
-    const ROUNDS_PER_MATCH = 2; // Example constant for number of rounds in the match
-    const matchLogsAndEvents: number[] = [
-      ...matchLogs,   // Start with the original matchLogs
-      ...new Array(5 * ROUNDS_PER_MATCH).fill(0), // Add empty events for each round
+    const matchEvents: MatchEvent[] = [
+      {
+        minute: 4,
+        team_id: teamIds[0],
+        type: MatchEventType.ATTACK,
+        manage_to_shoot: false,
+        is_goal: false,
+      },
+      {
+        minute: 10,
+        team_id: teamIds[1],
+        type: MatchEventType.ATTACK,
+        manage_to_shoot: true,
+        is_goal: true,
+      },
+
     ];
 
     const err = 0;
 
     return {
       updatedSkills,
-      matchLogsAndEvents,
+      matchLogs: [
+        {
+          numberOfGoals: 1,
+          gamePoints: 0,
+          teamSumSkills: 10,
+          trainingPoints: 10,
+          isHomeStadium: true,
+          changesAtHalftime: true,
+          isCancelled: false,
+          encodedMatchLog: "3618502788669422116101235693605807058779801721811233097964316659973982519296",
+        },
+        {
+          numberOfGoals: 1,
+          gamePoints: 3,
+          teamSumSkills: 5,
+          trainingPoints: 5,
+          isHomeStadium: false,
+          changesAtHalftime: true,
+          isCancelled: false,
+          encodedMatchLog: "3618502788669422116101235693605807058779801721811233097964316659973982519296",
+        },
+      ],
+      matchEvents,
+      earnedTrainingPoints: 0,
       err,
     };
   }

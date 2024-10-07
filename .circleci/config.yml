@@ -83,6 +83,13 @@ jobs:
 
 
   build:
+    parameters:
+      root:
+        type: string
+        default: ""
+      image:
+        type: string
+        default: ""
     docker:
       - image: cimg/node:lts
     steps:
@@ -92,17 +99,38 @@ jobs:
       - run:
           name: Build and Push Docker Image
           command: |
-            cd goalrev-api
+            cd << parameters.root >>
             npm ci
       - dockerize-and-push:
-          image: freeverseio/goalrev-api
-          root: goalrev-api
+          image: << parameters.image >>
+          root: << parameters.root >>
 
 
 workflows:
   ci-workflow:
     jobs:
       - build:
+          name: build-goalrev-api
+          root: goalrev-api
+          image: freeverseio/goalrev-api
+          context: dockerhub
+          filters:
+            branches:
+              only:
+                - main
+      - build:
+          name: build-goalrev-core
+          root: goalrev-core
+          image: freeverseio/goalrev-core
+          context: dockerhub
+          filters:
+            branches:
+              only:
+                - main
+      - build:
+          name: build-goalrev-processor
+          root: goalrev-processor
+          image: freeverseio/goalrev-processor
           context: dockerhub
           filters:
             branches:
@@ -113,10 +141,32 @@ workflows:
 
       - approval:
           type: approval
-          name: approve-deploy
+          name: approve-api-deploy
           requires:
             - deployment-test
-            - build
+            - build-goalrev-api
+          filters:
+            branches:
+              only:
+                - main
+
+      - approval:
+          type: approval
+          name: approve-core-deploy
+          requires:
+            - deployment-test
+            - build-goalrev-core
+          filters:
+            branches:
+              only:
+                - main
+      
+      - approval:
+          type: approval
+          name: approve-processor-deploy
+          requires:
+            - deployment-test
+            - build-goalrev-processor
           filters:
             branches:
               only:
@@ -126,7 +176,27 @@ workflows:
           name: deploy-to-dev-api
           requires:
             - deployment-test
-            - approve-deploy
+            - approve-api-deploy
+          environment: development
+          filters:
+            branches:
+              only:
+                - main
+      - deploy_to_cluster:
+          name: deploy-to-dev-core
+          requires:
+            - deployment-test
+            - approve-core-deploy
+          environment: development
+          filters:
+            branches:
+              only:
+                - main
+      - deploy_to_cluster:
+          name: deploy-to-dev-processor
+          requires:
+            - deployment-test
+            - approve-processor-deploy
           environment: development
           filters:
             branches:
