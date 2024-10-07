@@ -27,7 +27,9 @@ spec:
         imagePullPolicy: Always
         env:
           - name: APP_PORT
-            value: {{ .Values.coreAppPort }}
-
+            value: {{ .Values.coreAppPort | quote }}
         ports:
         - containerPort: {{ .Values.coreAppPort }}
+
+      imagePullSecrets:
+      - name: docker-secret
