@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
     "start": "ts-node-dev src/index.ts",
     "typeorm": "ts-node ./node_modules/typeorm/cli",
     "test": "jest"
