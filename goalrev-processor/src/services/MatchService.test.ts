@@ -8,6 +8,7 @@ import { MatchEventService } from './MatchEventService';
 import { EntityManager } from "typeorm";
 import { Tactics } from '../db/entity/Tactic';
 import { Training } from '../db/entity/Training';
+import { VerseService } from './VerseService';
 
 // Mock axios and the repository
 jest.mock('axios');
@@ -34,6 +35,12 @@ jest.mock('./MatchEventService');
 const mockMatchEventService = {
   saveMatchEvents: jest.fn(),
 } as unknown as MatchEventService;
+
+jest.mock('./VerseService');
+const mockVerseService = {
+  getLastVerse: jest.fn(),
+  getInitialVerse: jest.fn(),
+} as unknown as VerseService;
 
 // Mock for EntityManager
 const mockEntityManager = {
@@ -89,7 +96,7 @@ describe('MatchService', () => {
 
   beforeEach(() => {
     jest.clearAllMocks(); // Clear all previous mocks
-    matchService = new MatchService(mockPlayerService, mockTeamService, mockMatchEventService);
+    matchService = new MatchService(mockPlayerService, mockTeamService, mockMatchEventService, mockVerseService);
   });
 
   describe('playMatches', () => {
@@ -98,7 +105,7 @@ describe('MatchService', () => {
       mockRepository.find.mockResolvedValue(mockMatches);
       const playMatchSpy = jest.spyOn(matchService, 'playMatch').mockResolvedValue('ok');
 
-      await matchService.playMatches(1, 1, 1);
+      await matchService.playMatches(1, 1);
 
       expect(mockRepository.find).toHaveBeenCalledWith({
         where: {

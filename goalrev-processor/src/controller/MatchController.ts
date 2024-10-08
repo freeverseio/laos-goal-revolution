@@ -4,6 +4,7 @@ import { PlayMatchesInput } from "../types";
 import { PlayerService } from "../services/PlayerService";
 import { TeamService } from "../services/TeamService";
 import { MatchEventService } from "../services/MatchEventService";
+import { VerseService } from "../services/VerseService";
 
 @JsonController("/match")
 export class MatchController {
@@ -11,16 +12,25 @@ export class MatchController {
     private playerService: PlayerService;
     private teamService: TeamService;
     private matchEventService: MatchEventService;
+    private verseService: VerseService;
 
     constructor() {
         this.playerService = new PlayerService();
         this.teamService = new TeamService();
         this.matchEventService = new MatchEventService(); 
-        this.matchService = new MatchService(this.playerService, this.teamService, this.matchEventService); // Initialize MatchService
+        this.verseService = new VerseService(); 
+        this.matchService = new MatchService(this.playerService, this.teamService, this.matchEventService, this.verseService); // Initialize MatchService
     }
 
-    @Post("/play") // Define a new POST endpoint
+    @Post("/playDay") // Define a new POST endpoint
     async playMatches(@Body() data: PlayMatchesInput) { // Accept request body
-        return await this.matchService.playMatches(data.timeZone, data.league, data.matchDay); // Call playMatches method
+        return await this.matchService.playMatches(data.timeZone,  data.matchDay); // Call playMatches method
     }
+
+    @Post("/play")
+    async playAllMatches() {
+        return await this.matchService.playMatches(null, null);
+    }
+
+
 }

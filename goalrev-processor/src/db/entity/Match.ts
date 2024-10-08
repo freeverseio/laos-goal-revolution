@@ -36,9 +36,6 @@ export class Match {
   @JoinColumn({ name: "visitor_team_id", referencedColumnName: "team_id" })
   visitorTeam?: Team;
 
-  @OneToMany(() => MatchEvent, (matchEvent) => matchEvent.match)
-  matchEvents!: MatchEvent[];
-
   @Column({ type: 'text', default: '' })
   seed!: string;
 
