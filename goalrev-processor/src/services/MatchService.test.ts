@@ -9,6 +9,7 @@ import { EntityManager } from "typeorm";
 import { Tactics } from '../db/entity/Tactic';
 import { Training } from '../db/entity/Training';
 import { VerseService } from './VerseService';
+import { Verse } from '../db/entity/Verse';
 
 // Mock axios and the repository
 jest.mock('axios');
@@ -40,6 +41,7 @@ jest.mock('./VerseService');
 const mockVerseService = {
   getLastVerse: jest.fn(),
   getInitialVerse: jest.fn(),
+  saveVerse: jest.fn(),
 } as unknown as VerseService;
 
 // Mock for EntityManager
@@ -104,17 +106,17 @@ describe('MatchService', () => {
       const mockMatches = [mockMatch, { ...mockMatch, match_idx: 2 }];
       mockRepository.find.mockResolvedValue(mockMatches);
       const playMatchSpy = jest.spyOn(matchService, 'playMatch').mockResolvedValue('ok');
-
+      const verseServiceSpy = jest.spyOn(mockVerseService, 'getInitialVerse').mockResolvedValue({ verseNumber: 0, verseTimestamp: new Date(), timezoneIdx: 1 } as Verse);
+      const lastVerseSpy = jest.spyOn(mockVerseService, 'getLastVerse').mockResolvedValue({ verseNumber: 0, verseTimestamp: new Date(), timezoneIdx: 1 } as Verse);
+      const saveVerseSpy = jest.spyOn(mockVerseService, 'saveVerse');
       await matchService.playMatches(1, 1);
 
       expect(mockRepository.find).toHaveBeenCalledWith({
         where: {
           timezone_idx: 1,
-          league_idx: 1,
           match_day_idx: 1,
         },
         relations: [
-          'matchEvents',
           'homeTeam',
           'visitorTeam',
           'homeTeam.players',
@@ -126,6 +128,8 @@ describe('MatchService', () => {
         ],
       });
       expect(playMatchSpy).toHaveBeenCalledTimes(2); // Called for each match
+      expect(saveVerseSpy).toHaveBeenCalled();
+
     });
   });
 

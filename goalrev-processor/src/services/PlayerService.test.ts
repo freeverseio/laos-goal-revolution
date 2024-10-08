@@ -85,7 +85,7 @@ describe('PlayerService', () => {
 
       // Expect the player to be found with player_id from tactics
       expect(mockEntityManager.findOne).toHaveBeenCalledWith(Player, {
-        where: { player_id: '1' },
+        where: { shirt_number: 1, team_id: 'team_1' },
       });
 
       // Expect the player to be updated with new skills
@@ -166,7 +166,10 @@ describe('PlayerService', () => {
 
       // Expect the repository findOne method to have been called
       expect(mockEntityManager.findOne).toHaveBeenCalledWith(Player, {
-        where: { player_id: '1' },
+        where: { 
+          "shirt_number": 1,
+          "team_id": "team_1",
+         },
       });
 
       // Expect the repository save method not to have been called

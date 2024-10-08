@@ -20,7 +20,7 @@ export class PlayerService {
   async updateSkills(tactics: Tactics, playerSkills: PlayerSkill[], entityManager: EntityManager): Promise<void> {
    
     // The players in tactics are referenced by shirt_0 to shirt_10
-    const playerIds = [
+    const shirtNumbers = [
       tactics.shirt_0,
       tactics.shirt_1,
       tactics.shirt_2,
@@ -36,15 +36,18 @@ export class PlayerService {
 
     // Update each player based on their player ID and corresponding PlayerSkill
     for (let i = 0; i < playerSkills.length; i++) {
-      const playerId = playerIds[i];
+      const shirtNumber = shirtNumbers[i];
       const playerSkill = playerSkills[i];
-      if (!playerId) {
+      if (!shirtNumber) {
         return;
       }
 
       // Find the player by their ID (from the shirt number in tactics)
       const player = await entityManager.findOne(Player, {
-        where: { player_id: playerId.toString() },
+        where: { 
+          team_id: tactics.team_id,
+          shirt_number: shirtNumber 
+        },
       });
 
       if (player) {
