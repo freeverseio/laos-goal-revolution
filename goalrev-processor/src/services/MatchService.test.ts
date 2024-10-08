@@ -105,7 +105,7 @@ describe('MatchService', () => {
       mockRepository.find.mockResolvedValue(mockMatches);
       const playMatchSpy = jest.spyOn(matchService, 'playMatch').mockResolvedValue('ok');
 
-      await matchService.playMatches(1, 1, 1);
+      await matchService.playMatches(1, 1);
 
       expect(mockRepository.find).toHaveBeenCalledWith({
         where: {

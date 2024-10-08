@@ -4,4 +4,5 @@ export type TimeZoneData = {
   half: number | null;
   leagueRound: number | null;
   timestamp: number | null;
+  verseNumber?: number | null;
 };

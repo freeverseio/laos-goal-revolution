@@ -22,9 +22,14 @@ export class MatchController {
         this.matchService = new MatchService(this.playerService, this.teamService, this.matchEventService, this.verseService); // Initialize MatchService
     }
 
-    @Post("/play") // Define a new POST endpoint
+    @Post("/playDay") // Define a new POST endpoint
     async playMatches(@Body() data: PlayMatchesInput) { // Accept request body
-        return await this.matchService.playMatches(data.timeZone, data.league, data.matchDay); // Call playMatches method
+        return await this.matchService.playMatches(data.timeZone,  data.matchDay); // Call playMatches method
+    }
+
+    @Post("/play")
+    async playAllMatches() {
+        return await this.matchService.playMatches(null, null);
     }
 
 

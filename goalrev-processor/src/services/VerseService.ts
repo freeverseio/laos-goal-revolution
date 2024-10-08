@@ -9,11 +9,14 @@ export class VerseService {
    * @returns The most recent Verse.
    */
   async getLastVerse(entityManager: EntityManager): Promise<Verse | null> {
-    return await entityManager.findOne(Verse, {
+    const [lastVerse] = await entityManager.find(Verse, {
       order: {
-        verseTimestamp: "DESC",
+        verseId: "DESC",
       },
+      take: 1, // This limits the result to 1 row
     });
+  
+    return lastVerse || null;
   }
 
   /**
@@ -23,11 +26,14 @@ export class VerseService {
    * @returns The first Verse.
    */
   async getInitialVerse(entityManager: EntityManager): Promise<Verse | null> {
-    return await entityManager.findOne(Verse, {
+    const [firstVerse] = await entityManager.find(Verse, {
       order: {
-        verseTimestamp: "ASC",
+        verseId: "ASC",
       },
+      take: 1, // This limits the result to 1 row
     });
+  
+    return firstVerse || null;
   }
 
   /**

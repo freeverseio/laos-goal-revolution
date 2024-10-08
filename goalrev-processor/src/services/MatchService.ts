@@ -26,30 +26,45 @@ export class MatchService {
   }
 
   async getCalendarInfo(): Promise<TimeZoneData> {
-    const entityManager = AppDataSource.manager; 
+    const entityManager = AppDataSource.manager;
     const lastVerse = await this.verseService.getLastVerse(entityManager);
     const firstVerse = await this.verseService.getInitialVerse(entityManager);
     if (!lastVerse || !firstVerse) {
       throw new Error("No verses found");
     }
-    const info = calendarInfo(lastVerse!.verseId, Number(firstVerse!.timezone), firstVerse!.verseTimestamp.getTime()); // Convert timezone to number
-    return info; // Return the correct variable
+    //  Unix Epoch timestamp in milliseconds
+    const firstVerseTimestamp = firstVerse!.verseTimestamp.getTime() / 1000;
+    const nextVerseNumber = lastVerse!.verseNumber + 1;
+    const info = calendarInfo(nextVerseNumber, Number(firstVerse!.timezoneIdx), firstVerseTimestamp); // Convert timezone to number
+    return {
+      ...info,
+      verseNumber: nextVerseNumber
+    };
   }
 
-  async playMatches(timezone: number, league: number, matchDay: number) {
-    // get matches for timezone and epoch
-    const matches = await this.getMatches(timezone, league, matchDay);
 
+
+  async playMatches(timezone: number | null, matchDay: number | null) {
+    let info = await this.getCalendarInfo();
+
+    const matches = await this.getMatches(timezone ?? info.timezone, matchDay ?? info.matchDay!);
     const seed = crypto.randomBytes(32).toString('hex');
     // Process matches 
     await Promise.all(matches.map(match => this.playMatch(match, seed)));
+    // update the verse timestamp
+    await this.verseService.saveVerse({
+      verseNumber: info.verseNumber!,
+      timezoneIdx: timezone ?? info.timezone,
+      verseTimestamp: new Date(info.timestamp! * 1000),
+    }, AppDataSource.manager);
+
     return "ok";
   }
 
   // Update the playMatch method to use the new buildRequestBody method
   async playMatch(match: Match, seed: string) {
     const entityManager = AppDataSource.manager; // Use the EntityManager to handle transactions
-    
+
     try {
       await entityManager.transaction(async (transactionManager: EntityManager) => {
 
@@ -68,13 +83,13 @@ export class MatchService {
 
         await this.matchEventService.saveMatchEvents(playOutput.matchEvents, match, transactionManager);
         if (is1stHalf) {
-        match.seed = seed;
+          match.seed = seed;
         }
         match.state = is1stHalf ? MatchState.HALF : MatchState.END;
-        
+
         await this.teamService.updateTeamMatchLog(transactionManager, playOutput.matchLogs[0].encodedMatchLog, match.homeTeam!);
         await this.teamService.updateTeamMatchLog(transactionManager, playOutput.matchLogs[1].encodedMatchLog, match.visitorTeam!);
-        
+
         if (is2ndHalf) {
           // Update skills, teams, and events within the transaction
           await this.playerService.updateSkills(match.homeTeam!.tactics, playOutput.updatedSkills[0], transactionManager);
@@ -82,7 +97,7 @@ export class MatchService {
 
           await this.teamService.updateTeamData(playOutput.matchLogs[0], playOutput.matchEvents, match.homeTeam!.team_id, transactionManager);
           await this.teamService.updateTeamData(playOutput.matchLogs[1], playOutput.matchEvents, match.visitorTeam!.team_id, transactionManager);
-          
+
           match.home_teamsumskills = playOutput.matchLogs[0].teamSumSkills;
           match.visitor_teamsumskills = playOutput.matchLogs[1].teamSumSkills;
         }
@@ -101,24 +116,24 @@ export class MatchService {
 
 
 
-  private async getMatches(timezone: number, league: number, matchDay: number) {
+  private async getMatches(timezone: number, matchDay: number) {
     const matchRepository = AppDataSource.getRepository(Match);
+
     return await matchRepository.find({
       where: {
         timezone_idx: timezone,
-        league_idx: league,
         match_day_idx: matchDay
       },
       relations: [
-        "homeTeam", 
-        "visitorTeam", 
-        "homeTeam.players", 
-        "visitorTeam.players", 
-        "homeTeam.tactics", 
+        "homeTeam",
+        "visitorTeam",
+        "homeTeam.players",
+        "visitorTeam.players",
+        "homeTeam.tactics",
         "visitorTeam.tactics",
         "homeTeam.trainings",
         "visitorTeam.trainings"
-      ]  
+      ]
     });
   }
 
@@ -147,7 +162,7 @@ export class MatchService {
           encodedMatchLog: match.visitorTeam!.match_log
         }
       ],
-      matchBools: [match.state === MatchState.HALF, true, false, false, false], 
+      matchBools: [match.state === MatchState.HALF, true, false, false, false],
       trainings: [
         MatchMapper.mapTrainingToRequest(match.homeTeam!.trainings),  // Home team training
         MatchMapper.mapTrainingToRequest(match.visitorTeam!.trainings) // Visitor team training
