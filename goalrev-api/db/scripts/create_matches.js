@@ -54,7 +54,6 @@ const createLeagueMatches = async () => {
                 
                 console.log("INSERT INTO matches(timezone_idx, country_idx, league_idx, match_day_idx, match_idx, home_team_id, visitor_team_id, state, start_epoch) VALUES(" + timezoneIdx + ", " + countryIdx + ", " + leagueIdx + ", " + matchDayIdx + ", " + matchIdx + ", " + homeTeamId + ", " + visitorTeamId + ", '" + match_state + "', " + startEpoch + ");");
             }
-            matchIdx++
         }
     }
 }
