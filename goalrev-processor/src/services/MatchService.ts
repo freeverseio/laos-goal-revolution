@@ -46,6 +46,17 @@ export class MatchService {
 
   async playMatches(timezone: number | null, matchDay: number | null) {
     let info = await this.getCalendarInfo();
+    // check if timestamp to play is in the future
+    if (info.timestamp! > Date.now() / 1000) {
+      console.log("Timestamp to play is in the future, skipping");
+      return {
+        verseNumber: info.verseNumber!,
+        timezoneIdx: timezone ?? info.timezone,
+        matchDay: info.matchDay,
+        halfTime: info.half,
+        verseTimestamp: new Date(info.timestamp! * 1000),
+      };
+    }
 
     const matches = await this.getMatches(timezone ?? info.timezone, matchDay ?? info.matchDay!);
     const seed = crypto.randomBytes(32).toString('hex');
@@ -89,7 +100,7 @@ export class MatchService {
 
         await this.matchEventService.saveMatchEvents(playOutput.matchEvents, match, transactionManager);
         const goals = this.matchEventService.getGoals(playOutput.matchEvents, match);
-        
+
         match.home_goals += goals[0];
         match.visitor_goals += goals[1];
 
