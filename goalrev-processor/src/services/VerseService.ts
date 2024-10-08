@@ -11,7 +11,7 @@ export class VerseService {
   async getLastVerse(entityManager: EntityManager): Promise<Verse | null> {
     const [lastVerse] = await entityManager.find(Verse, {
       order: {
-        verseId: "DESC",
+        verseNumber: "DESC",
       },
       take: 1, // This limits the result to 1 row
     });
@@ -28,7 +28,7 @@ export class VerseService {
   async getInitialVerse(entityManager: EntityManager): Promise<Verse | null> {
     const [firstVerse] = await entityManager.find(Verse, {
       order: {
-        verseId: "ASC",
+        verseNumber: "ASC",
       },
       take: 1, // This limits the result to 1 row
     });
