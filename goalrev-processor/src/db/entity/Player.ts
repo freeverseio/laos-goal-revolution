@@ -10,6 +10,9 @@ export class Player {
   @JoinColumn({ name: "team_id", referencedColumnName: "team_id" })
   team!: Team;
 
+  @Column({ type: 'text' })
+  team_id!: string;
+
   @Column({ type: 'int' })
   defence!: number;
 
