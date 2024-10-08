@@ -38,12 +38,12 @@ const createLeagueMatches = async () => {
     var leagueStartEpoch = 1728253800
 
     // z < 1 to create 1 league,  z < 2 for 2 leagues...
-    for (z = 0; z < 1; z++) {
+    for (z = 0; z < 4; z++) {
         var leagueIdx = z    
         //14 rounds
         for (var i = 0; i < 14; i++) {
             var startEpoch = leagueStartEpoch + 43200 * i
-            var matchDayIdx = i  // 1..14
+            var matchDayIdx = i // 0..13
             
             // 4 matches per day
             for (var j = 0; j < 4; j++) {
