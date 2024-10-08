@@ -44,8 +44,8 @@ export class MatchService {
         {
           numberOfGoals: 1,
           gamePoints: 0,
-          teamSumSkills: 10,
-          trainingPoints: 10,
+          teamSumSkills: 0,
+          trainingPoints: 0,
           isHomeStadium: true,
           changesAtHalftime: true,
           isCancelled: false,
@@ -54,8 +54,8 @@ export class MatchService {
         {
           numberOfGoals: 1,
           gamePoints: 0,
-          teamSumSkills: 5,
-          trainingPoints: 5,
+          teamSumSkills: 0,
+          trainingPoints: 0,
           isHomeStadium: false,
           changesAtHalftime: true,
           isCancelled: false,
@@ -86,14 +86,14 @@ export class MatchService {
 
     const matchEvents: MatchEvent[] = [
       {
-        minute: 4,
+        minute: 56,
         team_id: teamIds[0],
         type: MatchEventType.ATTACK,
         manage_to_shoot: false,
         is_goal: false,
       },
       {
-        minute: 10,
+        minute: 50,
         team_id: teamIds[1],
         type: MatchEventType.ATTACK,
         manage_to_shoot: true,
@@ -108,7 +108,7 @@ export class MatchService {
       updatedSkills,
       matchLogs: [
         {
-          numberOfGoals: 1,
+          numberOfGoals: 2,
           gamePoints: 0,
           teamSumSkills: 10,
           trainingPoints: 10,
@@ -118,10 +118,10 @@ export class MatchService {
           encodedMatchLog: "3618502788669422116101235693605807058779801721811233097964316659973982519296",
         },
         {
-          numberOfGoals: 1,
+          numberOfGoals: 2,
           gamePoints: 3,
-          teamSumSkills: 5,
-          trainingPoints: 5,
+          teamSumSkills: 25,
+          trainingPoints: 25,
           isHomeStadium: false,
           changesAtHalftime: true,
           isCancelled: false,
@@ -129,7 +129,7 @@ export class MatchService {
         },
       ],
       matchEvents,
-      earnedTrainingPoints: 0,
+      earnedTrainingPoints: 10,
       err,
     };
   }

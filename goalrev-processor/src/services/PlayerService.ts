@@ -43,13 +43,16 @@ export class PlayerService {
       }
 
       // Find the player by their ID (from the shirt number in tactics)
-      const player = await entityManager.findOne(Player, {
+      const [player] = await entityManager.find(Player, {
         where: { 
           team_id: tactics.team_id,
           shirt_number: shirtNumber 
         },
+        take: 1
       });
-
+      if (!player) {
+        return;
+      }
       if (player) {
         // Update the player's skills
         player.defence = playerSkill.defence;

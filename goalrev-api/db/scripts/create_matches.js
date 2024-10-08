@@ -35,7 +35,7 @@ const createLeagueMatches = async () => {
     var timezoneIdx = 10
     var countryIdx = 0
     var match_state = "begin"
-    var leagueStartEpoch = 1727740800
+    var leagueStartEpoch = 1728253800
 
     // z < 1 to create 1 league,  z < 2 for 2 leagues...
     for (z = 0; z < 1; z++) {
@@ -43,7 +43,7 @@ const createLeagueMatches = async () => {
         //14 rounds
         for (var i = 0; i < 14; i++) {
             var startEpoch = leagueStartEpoch + 43200 * i
-            var matchDayIdx = i + 1 // 1..14
+            var matchDayIdx = i  // 1..14
             
             // 4 matches per day
             for (var j = 0; j < 4; j++) {
@@ -54,6 +54,7 @@ const createLeagueMatches = async () => {
                 
                 console.log("INSERT INTO matches(timezone_idx, country_idx, league_idx, match_day_idx, match_idx, home_team_id, visitor_team_id, state, start_epoch) VALUES(" + timezoneIdx + ", " + countryIdx + ", " + leagueIdx + ", " + matchDayIdx + ", " + matchIdx + ", " + homeTeamId + ", " + visitorTeamId + ", '" + match_state + "', " + startEpoch + ");");
             }
+            matchIdx++
         }
     }
 }

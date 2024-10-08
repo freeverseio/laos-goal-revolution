@@ -5,6 +5,7 @@ import { EntityManager } from 'typeorm';
 // Mock the EntityManager
 const mockEntityManager = {
   findOne: jest.fn(),
+  find: jest.fn(),
   save: jest.fn(),
 } as unknown as jest.Mocked<EntityManager>;
 
@@ -78,14 +79,15 @@ describe('PlayerService', () => {
       };
 
       // Mock database return values
-      mockEntityManager.findOne.mockResolvedValueOnce(mockPlayer);
+      mockEntityManager.find.mockResolvedValueOnce([mockPlayer]);
 
       // Call updateSkills
       await playerService.updateSkills(tactics, [mockPlayerSkill], mockEntityManager);
 
       // Expect the player to be found with player_id from tactics
-      expect(mockEntityManager.findOne).toHaveBeenCalledWith(Player, {
+      expect(mockEntityManager.find).toHaveBeenCalledWith(Player, {
         where: { shirt_number: 1, team_id: 'team_1' },
+        take: 1,
       });
 
       // Expect the player to be updated with new skills
@@ -113,7 +115,7 @@ describe('PlayerService', () => {
       const spy = jest.spyOn(console, 'error');
 
       // Mock that no player is found
-      mockEntityManager.findOne.mockResolvedValueOnce(null);
+      mockEntityManager.find.mockResolvedValueOnce([]);
 
       const mockPlayerSkill: PlayerSkill = {
         defence: 80,
@@ -165,11 +167,12 @@ describe('PlayerService', () => {
       await playerService.updateSkills(tactics, [mockPlayerSkill], mockEntityManager);
 
       // Expect the repository findOne method to have been called
-      expect(mockEntityManager.findOne).toHaveBeenCalledWith(Player, {
-        where: { 
+      expect(mockEntityManager.find).toHaveBeenCalledWith(Player, {
+        where: {
           "shirt_number": 1,
           "team_id": "team_1",
-         },
+        },
+        take: 1,
       });
 
       // Expect the repository save method not to have been called

@@ -40,6 +40,23 @@ export class MatchEventService {
       matchEventEntities.push(matchEvent);
     }
     await entityManager.save(matchEventEntities);
+  }
 
+  getGoals(matchEvents: MatchEventOutput[], match: Match): [number, number] {
+    let homeGoals = 0;
+    let visitorGoals = 0;
+
+    // Iterate over match events and update goals
+    matchEvents.forEach((event) => {
+      if (event.is_goal) {
+        if (event.team_id === Number(match.homeTeam!.team_id)) {
+          homeGoals += 1;
+        } else {
+          visitorGoals += 1;
+        }
+      }
+    });
+
+    return [homeGoals, visitorGoals];
   }
 }
