@@ -35,6 +35,7 @@ const mockTeamService = {
 jest.mock('./MatchEventService');
 const mockMatchEventService = {
   saveMatchEvents: jest.fn(),
+  getGoals: jest.fn(),
 } as unknown as MatchEventService;
 
 jest.mock('./VerseService');
@@ -136,7 +137,7 @@ describe('MatchService', () => {
   describe('playMatch', () => {
     it('should build request body and send a request to the external API for 1st half', async () => {
       mockedAxios.post.mockResolvedValue({ data: { matchEvents: [], updatedSkills: [[], []], matchLogs: [{}, {}], earnedTrainingPoints: 0 } });
-
+      jest.spyOn(mockMatchEventService, 'getGoals').mockReturnValue([0, 0]);
       const buildRequestBodySpy = jest.spyOn(matchService, 'buildRequestBody');
       const response = await matchService.playMatch(mockMatch, "test-seed");
 
@@ -150,6 +151,8 @@ describe('MatchService', () => {
     });
 
     it('should update skills, team data, and save match when in 2nd half', async () => {
+      // mock getGoals
+      jest.spyOn(mockMatchEventService, 'getGoals').mockReturnValue([0, 0]);
       // Prepare mock for 2nd half
       mockedAxios.post.mockResolvedValue({
         data: {

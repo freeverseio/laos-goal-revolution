@@ -58,7 +58,13 @@ export class MatchService {
       verseTimestamp: new Date(info.timestamp! * 1000),
     }, AppDataSource.manager);
 
-    return "ok";
+    return {
+      verseNumber: info.verseNumber!,
+      timezoneIdx: timezone ?? info.timezone,
+      matchDay: info.matchDay,
+      halfTime: info.half,
+      verseTimestamp: new Date(info.timestamp! * 1000),
+    };
   }
 
   // Update the playMatch method to use the new buildRequestBody method
@@ -82,6 +88,11 @@ export class MatchService {
         const playOutput = response.data as PlayOutput;
 
         await this.matchEventService.saveMatchEvents(playOutput.matchEvents, match, transactionManager);
+        const goals = this.matchEventService.getGoals(playOutput.matchEvents, match);
+        
+        match.home_goals += goals[0];
+        match.visitor_goals += goals[1];
+
         if (is1stHalf) {
           match.seed = seed;
         }
@@ -107,6 +118,7 @@ export class MatchService {
       });
 
     } catch (error) {
+      console.log("match", match);
       console.error(`Error playing match:`, error);
       throw error; // Rollback will occur automatically if an error is thrown
     }

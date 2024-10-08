@@ -6,7 +6,7 @@ describe('CalendarInfo Tests', () => {
 
     test('Basic cases for calendarInfo', () => {
         let info;
-
+       
         info = calendarInfo(0, 1, 0);
         expect(info).toEqual({ timezone: 1, matchDay: 0, half: 0, leagueRound: 0, timestamp: 0 });
 
@@ -68,6 +68,8 @@ describe('CalendarInfo Tests', () => {
         
         // If we deploy exactly at midnight, we need to wait half an hour
         info1 = initMatchtimeAndTimezone(0);
+
+        info1 = initMatchtimeAndTimezone(600);
         expect(info1).toEqual({ "TZForRound1": 24, "firstVerseTimeStamp": 1800 });
 
         info2 = calendarInfo(0, 15, info1.firstVerseTimeStamp);
