@@ -1,52 +1,45 @@
-import { AppDataSource } from "../db/AppDataSource";
 import { Match, MatchState } from "../db/entity/Match";
+import { MatchRepository } from "../db/repository/MatchRepository";
 import axios from "axios";
 import { MatchMapper } from "./mapper/MatchMapper";
-import { PlayMatchRequest, PlayOutput, TimeZoneData } from "../types";
+import { PlayMatchRequest, PlayOutput } from "../types";
 import crypto from 'crypto';
 import { PlayerService } from "./PlayerService";
 import { TeamService } from "./TeamService";
 import { MatchEventService } from "./MatchEventService";
 import { EntityManager } from "typeorm";
-import { VerseService } from "./VerseService";
-import { calendarInfo } from "../utils/calendarUtils";
+import { CalendarService } from "./CalendarService";
+import { AppDataSource } from "../db/AppDataSource";
+import { VerseRepository } from "../db/repository/VerseRepository";
 
 export class MatchService {
   private playerService: PlayerService;
   private teamService: TeamService;
   private matchEventService: MatchEventService;
-  private verseService: VerseService;
+  private calendarService: CalendarService;
+  private verseRepository: VerseRepository;
+  private matchRepository: MatchRepository;  // Inject the repository
 
-  // Inject PlayerService in the constructor
-  constructor(playerService: PlayerService, teamService: TeamService, matchEventService: MatchEventService, verseService: VerseService) {
+  constructor(
+    playerService: PlayerService,
+    teamService: TeamService,
+    matchEventService: MatchEventService,
+    calendarService: CalendarService,
+    verseRepository: VerseRepository,
+    matchRepository: MatchRepository // Add repository as a dependency
+  ) {
     this.playerService = playerService;
     this.teamService = teamService;
     this.matchEventService = matchEventService;
-    this.verseService = verseService;
+    this.calendarService = calendarService;
+    this.verseRepository = verseRepository;
+    this.matchRepository = matchRepository; // Initialize it
   }
-
-  async getCalendarInfo(): Promise<TimeZoneData> {
-    const entityManager = AppDataSource.manager;
-    const lastVerse = await this.verseService.getLastVerse(entityManager);
-    const firstVerse = await this.verseService.getInitialVerse(entityManager);
-    if (!lastVerse || !firstVerse) {
-      throw new Error("No verses found");
-    }
-    //  Unix Epoch timestamp in milliseconds
-    const firstVerseTimestamp = firstVerse!.verseTimestamp.getTime() / 1000;
-    const nextVerseNumber = lastVerse!.verseNumber + 1;
-    const info = calendarInfo(nextVerseNumber, Number(firstVerse!.timezoneIdx), firstVerseTimestamp); // Convert timezone to number
-    return {
-      ...info,
-      verseNumber: nextVerseNumber
-    };
-  }
-
-
 
   async playMatches(timezone: number | null, matchDay: number | null) {
-    let info = await this.getCalendarInfo();
-    // check if timestamp to play is in the future
+    const info = await this.calendarService.getCalendarInfo();
+
+    // Check if timestamp to play is in the future
     if (info.timestamp! > Date.now() / 1000) {
       console.log("Timestamp to play is in the future, skipping");
       return {
@@ -58,12 +51,15 @@ export class MatchService {
       };
     }
 
-    const matches = await this.getMatches(timezone ?? info.timezone, matchDay ?? info.matchDay!);
+    // Use repository to fetch matches
+    const matches = await this.matchRepository.getAllMatches(timezone ?? info.timezone, matchDay ?? info.matchDay!);
     const seed = crypto.randomBytes(32).toString('hex');
-    // Process matches 
+
+    // Process matches
     await Promise.all(matches.map(match => this.playMatch(match, seed)));
-    // update the verse timestamp
-    await this.verseService.saveVerse({
+
+    // Update the verse timestamp using verseService
+    await this.verseRepository.saveVerse({
       verseNumber: info.verseNumber!,
       timezoneIdx: timezone ?? info.timezone,
       verseTimestamp: new Date(info.timestamp! * 1000),
@@ -78,13 +74,10 @@ export class MatchService {
     };
   }
 
-  // Update the playMatch method to use the new buildRequestBody method
   async playMatch(match: Match, seed: string) {
-    const entityManager = AppDataSource.manager; // Use the EntityManager to handle transactions
-
+    const entityManager = AppDataSource.manager; // Use EntityManager for transactions
     try {
       await entityManager.transaction(async (transactionManager: EntityManager) => {
-
         const is1stHalf = match.state === MatchState.BEGIN;
         const is2ndHalf = match.state === MatchState.HALF;
         const requestBody = this.buildRequestBody(match, seed, is1stHalf);
@@ -93,8 +86,8 @@ export class MatchService {
           console.warn(`Match ${match.match_idx} is not in the BEGIN or HALF state, skipping`);
           return;
         }
-        const endpoint = is1stHalf ? "play1stHalf" : "play2ndHalf";
 
+        const endpoint = is1stHalf ? "play1stHalf" : "play2ndHalf";
         const response = await axios.post(`${process.env.CORE_API_URL}/match/${endpoint}`, requestBody);
         const playOutput = response.data as PlayOutput;
 
@@ -124,40 +117,16 @@ export class MatchService {
           match.visitor_teamsumskills = playOutput.matchLogs[1].teamSumSkills;
         }
 
-        await transactionManager.save(match);
-
+        // Save the match using the repository
+        await this.matchRepository.saveMatch(match, transactionManager);
       });
-
     } catch (error) {
       console.log("match", match);
-      console.error(`Error playing match:`, error);
+      console.error("Error playing match:", error);
       throw error; // Rollback will occur automatically if an error is thrown
     }
 
     return "ok";
-  }
-
-
-
-  private async getMatches(timezone: number, matchDay: number) {
-    const matchRepository = AppDataSource.getRepository(Match);
-
-    return await matchRepository.find({
-      where: {
-        timezone_idx: timezone,
-        match_day_idx: matchDay
-      },
-      relations: [
-        "homeTeam",
-        "visitorTeam",
-        "homeTeam.players",
-        "visitorTeam.players",
-        "homeTeam.tactics",
-        "visitorTeam.tactics",
-        "homeTeam.trainings",
-        "visitorTeam.trainings"
-      ]
-    });
   }
 
   buildRequestBody(match: Match, seed: string, is1stHalf: boolean): PlayMatchRequest {
@@ -172,18 +141,13 @@ export class MatchService {
         Number(match.homeTeam!.team_id),
         Number(match.visitorTeam!.team_id)
       ],
-      // Use tactics for both teams
       tactics: [
         MatchMapper.mapTacticToRequest(match.homeTeam!.tactics),  // Home team tactics
         MatchMapper.mapTacticToRequest(match.visitorTeam!.tactics) // Visitor team tactics
       ],
       matchLogs: is1stHalf ? [{}, {}] : [
-        {
-          encodedMatchLog: match.homeTeam!.match_log
-        },
-        {
-          encodedMatchLog: match.visitorTeam!.match_log
-        }
+        { encodedMatchLog: match.homeTeam!.match_log },
+        { encodedMatchLog: match.visitorTeam!.match_log }
       ],
       matchBools: [match.state === MatchState.HALF, true, false, false, false],
       trainings: [

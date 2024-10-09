@@ -28,6 +28,12 @@ export class Match {
   @PrimaryColumn({ type: 'int' })
   match_idx!: number;
 
+  @Column({ type: 'text' })
+  home_team_id!: string;
+
+  @Column({ type: 'text' })
+  visitor_team_id!: string;
+
   @ManyToOne(() => Team, { nullable: true })
   @JoinColumn({ name: "home_team_id", referencedColumnName: "team_id" })
   homeTeam?: Team;

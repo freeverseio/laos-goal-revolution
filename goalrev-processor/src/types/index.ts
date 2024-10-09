@@ -1,3 +1,6 @@
 export * from './rest/input/match'
 export * from './rest/output/match'
 export * from './timezone'
+export * from './matchday'
+export * from './leaguegroup'
+export * from './calendar'
