@@ -6,34 +6,31 @@ import { TeamService } from "./TeamService";
 import { calendarInfo, getMatch1stHalfUTC } from "../utils/calendarUtils";
 import { MatchEventRepository } from "../db/repository/MatchEventRepository";
 import { VerseRepository } from "../db/repository/VerseRepository";
+import { LeagueService } from "./LeagueService";
 
 export class CalendarService {
 
   private matchRepository: MatchRepository;
   private matchEventRepository: MatchEventRepository;
   private verseRepository: VerseRepository;
+  private leagueService: LeagueService;
 
-  constructor(verseRepository: VerseRepository, matchEventRepository: MatchEventRepository) {
-    this.matchRepository = new MatchRepository();
+  constructor(matchRepository: MatchRepository, verseRepository: VerseRepository, matchEventRepository: MatchEventRepository, leagueService: LeagueService) {
+    this.matchRepository = matchRepository;
     this.matchEventRepository = matchEventRepository;
     this.verseRepository = verseRepository;
+    this.leagueService = leagueService;
   }
 
-  async generateLeagues(): Promise<LeagueGroup[]> {
-    const teamService = new TeamService();
+  async generateAllLeagues(): Promise<LeagueGroup[]> {
     const firstVerse = await this.verseRepository.getInitialVerse(AppDataSource.manager);
 
-    const calendar: Calendar = {
-      league: [],
-    };
-
-    const leagueGroups = await teamService.getNewLeagues();
+    const leagueGroups = await this.leagueService.getNewLeagues();
 
     for (const leagueGroup of leagueGroups) {
       for (let i = 0; i < leagueGroup.leagues.length; i++) {
         const league = leagueGroup.leagues[i];
         const schedule = CalendarService.generateLeagueSchedule(league);
-        console.log(schedule);
         const league_idx = i;
         await this.saveLeagueSchedule(league_idx, leagueGroup.timezone, leagueGroup.country, schedule, firstVerse!);
       }
@@ -41,6 +38,7 @@ export class CalendarService {
 
     return leagueGroups;
   }
+
 
   async getCalendarInfo(): Promise<TimeZoneData> {
     const entityManager = AppDataSource.manager;

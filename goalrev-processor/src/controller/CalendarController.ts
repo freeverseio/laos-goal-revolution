@@ -12,6 +12,6 @@ export class CalendarController {
 
     @Get("/generate")
     async generateLeagues() {
-        return await this.calendarService.generateLeagues();
+        return await this.calendarService.generateAllLeagues();
     }
 }

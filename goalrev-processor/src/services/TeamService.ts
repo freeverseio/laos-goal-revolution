@@ -46,43 +46,6 @@ export class TeamService {
     await entityManager.save(team);
   }
 
-  async getNewLeagues(): Promise<LeagueGroup[]> {
-    const entityManager = AppDataSource.manager;
-    // Step 1: Fetch all countries (grouping will be done by country and timezone)
-    const countries = await entityManager.find(Country);
   
-    const leagueGroups: LeagueGroup[] = [];
   
-    // Step 2: For each country, fetch distinct timezones and then fetch teams for each country and timezone
-    for (const country of countries) {
-
-        const teams = await entityManager
-          .createQueryBuilder(Team, "team")
-          .leftJoinAndSelect("team.country", "country")
-          .where("country.country_idx = :countryIdx AND team.timezone_idx = :timezoneIdx", {
-            countryIdx: country.country_idx,
-            timezoneIdx: country.timezone_idx,
-          })
-          .orderBy("team.ranking_points", "DESC")
-          .getMany();
-        if (teams.length <= 0) {
-          continue;
-        }
-        // Step 4: Group the teams into leagues of 8 and add them to structured response
-        const leagues: TeamId[][] = [];
-        for (let i = 0; i < teams.length; i += 8) {
-          leagues.push(teams.slice(i, i + 8).map(team => team.team_id as TeamId));
-        }
-  
-        // Step 5: Add the grouped leagues for the country and timezone to the result
-        leagueGroups.push({
-          country,
-          timezone: country.timezone_idx,
-          leagues,
-        });
-      
-    }
-  
-    return leagueGroups;
-  }
 }
