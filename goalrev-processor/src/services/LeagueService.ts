@@ -29,7 +29,16 @@ export class LeagueService {
     }
     return leagueGroups;
   }
-  
+
+  async getNewLeaguesByCountry(countryIdx: number, timezoneIdx: number): Promise<LeagueGroup | null> {
+    const entityManager = AppDataSource.manager;
+    const country = await entityManager.findOne(Country, { where: { country_idx: countryIdx } });
+    if (!country) {
+      return null;
+    }
+    return this.getLeagueGroupsByCountry(entityManager, country);
+  }
+
   private async getLeagueGroupsByCountry(entityManager: EntityManager, country: Country): Promise<LeagueGroup | null> {
     // Fetch teams for the current country and timezone
     const teams = await this.teamRepository.findTeamsByCountryAndTimezone(country.country_idx, country.timezone_idx);

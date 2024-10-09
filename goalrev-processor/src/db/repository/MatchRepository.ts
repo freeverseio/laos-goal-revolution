@@ -50,6 +50,7 @@ export class MatchRepository {
           visitor_teamsumskills: 0,
           start_epoch: startTime,
           state: MatchState.BEGIN,
+          seed: '',
           state_extra: '',
         }
       );

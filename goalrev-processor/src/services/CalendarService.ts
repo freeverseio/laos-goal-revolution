@@ -22,21 +22,34 @@ export class CalendarService {
     this.leagueService = leagueService;
   }
 
-  async generateAllLeagues(): Promise<LeagueGroup[]> {
-    const firstVerse = await this.verseRepository.getInitialVerse(AppDataSource.manager);
+  private async saveLeagueSchedules(leagueGroup: LeagueGroup, firstVerse: Verse): Promise<void> {
+    for (let i = 0; i < leagueGroup.leagues.length; i++) {
+      const league = leagueGroup.leagues[i];
+      const schedule = CalendarService.generateLeagueSchedule(league);
+      const league_idx = i;
+      await this.saveLeagueSchedule(league_idx, leagueGroup.timezone, leagueGroup.country, schedule, firstVerse!);
+    }
+  }
 
+  async generateCalendarForAllLeagues(): Promise<LeagueGroup[]> {
+    const firstVerse = await this.verseRepository.getInitialVerse(AppDataSource.manager);
     const leagueGroups = await this.leagueService.getNewLeagues();
 
     for (const leagueGroup of leagueGroups) {
-      for (let i = 0; i < leagueGroup.leagues.length; i++) {
-        const league = leagueGroup.leagues[i];
-        const schedule = CalendarService.generateLeagueSchedule(league);
-        const league_idx = i;
-        await this.saveLeagueSchedule(league_idx, leagueGroup.timezone, leagueGroup.country, schedule, firstVerse!);
-      }
+      // Call the new private method
+      await this.saveLeagueSchedules(leagueGroup, firstVerse!);
     }
-
     return leagueGroups;
+  }
+
+  async generateCalendarForNewLeague(countryIdx: number, timezoneIdx: number): Promise<LeagueGroup | null> {
+    const firstVerse = await this.verseRepository.getInitialVerse(AppDataSource.manager);
+    const leagueGroup = await this.leagueService.getNewLeaguesByCountry(countryIdx, timezoneIdx);
+    if (!leagueGroup) {
+      return null;
+    }
+    await this.saveLeagueSchedules(leagueGroup, firstVerse!);
+    return leagueGroup;
   }
 
 
