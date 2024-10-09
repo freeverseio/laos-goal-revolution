@@ -1,17 +1,13 @@
 import { Get, JsonController } from "routing-controllers";
 import { CalendarService } from "../services/CalendarService";
-import { VerseService } from "../services/VerseService";
 import { MatchEventService } from "../services/MatchEventService";
+import { CalendarFactory } from "../factories/CalendarFactory";
 @JsonController("/calendar")
 export class CalendarController {
-    private verseService: VerseService;
-    private matchEventService: MatchEventService;
     private calendarService: CalendarService;
 
     constructor() {
-        this.verseService = new VerseService();
-        this.matchEventService = new MatchEventService();
-        this.calendarService = new CalendarService(this.verseService, this.matchEventService);
+        this.calendarService = CalendarFactory.createCalendarService();
     }
 
     @Get("/generate")
