@@ -111,30 +111,54 @@ export class LeagueService {
 
     // getMatches
     const leagueMatches = await this.matchRepository.getLeagueMatches(timezoneIdx, countryIdx, leagueIdx);
-    console.log('leagueMatches:', leagueMatches);
+    //console.log('leagueMatches:', leagueMatches);
 
 
     // getTeams
-
+    const teams = await this.teamRepository.findTeamsByTimezoneCountryAndLeague(timezoneIdx, countryIdx, leagueIdx);
+    //console.log('teams:', teams);
         
 
     // TODO call core method
-    // teams, matchDay, matches
-    // const response = await axios.post(`${process.env.CORE_API_URL}/league/${endpoint}`, requestBody);
+    // const requestBody = {
+    //   teams: teams,
+    //   matchDay: matchDay,
+    //   matches: leagueMatches,
+    // }  
+
+    const requestBody = {
+      teams: [],
+      matchDay: matchDay,
+      matches: [],
+    }  
+    console.log('requestBody:', requestBody);
+    const response = await axios.post(`${process.env.CORE_API_URL}/league/computeLeagueLeaderboard`, requestBody);
+    console.log('response:', response.data);
     // const leagueLeaderboardOutput = response.data as PlayOutput;
     // return leagueLeaderboardOutput.teams;
 
+    //update DB
+    //open tx and update each team position
+    const transactionalEntityManager = AppDataSource.manager;
+    for (const team of teams) {  
+      const teamUpdate = await this.teamRepository.updateLeaderboard(team.team_id, team.points, team.leaderboard_position, transactionalEntityManager);
+      console.log('teamUpdate:', teamUpdate);
+    }
+
+    //close tx
+
+
     // Mock return
-    const teams = [];
+    const teamsOutput = [];
     const team = {
       teamId: 1,
       leaderboardPosition: 1,
       teamPoints: 1,
     }
-    teams.push(team);
+    teamsOutput.push(team);
 
     return {
-      teams,      
+      teams: teamsOutput,      
     };
   }
   async haveTimezoneLeaguesFinished(timezoneIdx: number): Promise<boolean> {

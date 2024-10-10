@@ -2,7 +2,7 @@ import { LeagueLeaderboardInput, LeagueLeaderboardTeamInput, LeagueLeaderboardOu
 
 export class LeagueService {
 
-  static async computeLeagueLeaderBoard(body: LeagueLeaderboardInput): Promise<LeagueLeaderboardOutput> {
+  static async computeLeagueLeaderboard(body: LeagueLeaderboardInput): Promise<LeagueLeaderboardOutput> {
     const { teams: teamsInput, matches, matchDay } = body;
 
     if (matches.length === 0) {
@@ -43,7 +43,7 @@ export class LeagueService {
       const leagueLeaderboardTeamOutput: LeagueLeaderboardTeamOutput = {
         teamId: teamsInput[i].teamId,
         leaderboardPosition: i+1,
-        teamPoints: i,
+        teamPoints: 8-i,
       }
       teamsOutput.push(leagueLeaderboardTeamOutput);
     }
