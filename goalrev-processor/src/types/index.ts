@@ -1,3 +1,5 @@
 export * from './rest/input/match'
 export * from './rest/output/match'
 export * from './timezone'
+export * from './rest/input/league'
+export * from './rest/output/league'

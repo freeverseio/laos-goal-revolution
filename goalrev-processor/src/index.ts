@@ -3,11 +3,12 @@ import { createExpressServer } from "routing-controllers";
 import { MatchController } from "./controller/MatchController";
 import { AppDataSource } from "./db/AppDataSource";
 import dotenv from "dotenv";
+import { LeagueController } from "./controller/LeagueController";
 
 dotenv.config();
 
 const app = createExpressServer({
-  controllers: [MatchController], // register controllers here
+  controllers: [MatchController, LeagueController], // register controllers here
 });
 
 AppDataSource.initialize()
