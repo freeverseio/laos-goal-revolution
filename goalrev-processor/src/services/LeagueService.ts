@@ -1,6 +1,6 @@
 import { EntityManager } from "typeorm";
 import { Team } from "../db/entity/Team";
-import { LeagueGroup,  Matchday,  Schedule,  TeamId } from "../types";
+import { LeagueGroup, Matchday, Schedule, TeamId } from "../types";
 import { Country } from "../db/entity/Country";
 import { AppDataSource } from "../db/AppDataSource";
 import { TeamRepository } from "../db/repository/TeamRepository";
@@ -47,11 +47,11 @@ export class LeagueService {
     // Fetch all countries (grouping will be done by country and timezone)
     const countries = await entityManager.find(Country, { where: { timezone_idx: timezoneIdx } });
     const leagueGroups: LeagueGroup[] = [];
-  
+
     //  Process each country and group teams into leagues
     for (const country of countries) {
-      const leaguesForCountry = await this.getLeagueGroupsByCountry( country);
-      
+      const leaguesForCountry = await this.getLeagueGroupsByCountry(country);
+
       if (leaguesForCountry) {
         leagueGroups.push(leaguesForCountry);
       }
@@ -71,17 +71,17 @@ export class LeagueService {
   private async getLeagueGroupsByCountry(country: Country): Promise<LeagueGroup | null> {
     // Fetch teams for the current country and timezone
     const teams = await this.teamRepository.findTeamsByCountryAndTimezone(country.country_idx, country.timezone_idx);
-    
+
     if (teams.length <= 0) {
       return null; // No teams, skip this country
     }
-  
+
     //  Group the teams into leagues of 8
     const leagues: TeamId[][] = [];
     for (let i = 0; i < teams.length; i += 8) {
       leagues.push(teams.slice(i, i + 8).map(team => team.team_id as TeamId));
     }
-  
+
     // Return the grouped leagues for the country and timezone
     return {
       country,
@@ -100,39 +100,41 @@ export class LeagueService {
     return Math.max(Math.ceil(verses / MATCHDAYS_PER_ROUND) - 1, 0);
   }
 
-  async saveLeagueSchedule(league_idx: number, timezone: number, country: Country, leagueSchedule: Matchday[], firstVerse: Verse) {
+  private async saveLeagueSchedules(leagueGroup: LeagueGroup, firstVerse: Verse): Promise<Schedule[]> {
+    let schedules: Schedule[] = [];
     const entityManager = AppDataSource.manager;
+    schedules = await entityManager.transaction(async (transactionalEntityManager) => {
+      for (let i = 0; i < leagueGroup.leagues.length; i++) {
+        const league = leagueGroup.leagues[i];
+        // Update the league_idx for all teams in the league
+        await this.teamRepository.updateLeagueIdxInBulk(league, i, transactionalEntityManager);
+        const schedule = CalendarService.generateLeagueSchedule(league);
+        const league_idx = i;
+        try {
+          await this.saveLeagueSchedule(league_idx, leagueGroup.timezone, leagueGroup.country, schedule, firstVerse!, transactionalEntityManager);
+        } catch (error) {
+          console.error("Error saving league schedule:", error);
+          throw error;
+        }
+        schedules.push(schedule);
+      }
+      return schedules;
+    });
+    return schedules;
+  }
+
+  private async saveLeagueSchedule(league_idx: number, timezone: number, country: Country, leagueSchedule: Matchday[], firstVerse: Verse, transactionalEntityManager: EntityManager) {
     const actualRound = await this.getActualRoundOfLeague(timezone);
-    entityManager.transaction(async (transactionalEntityManager) => {
-      leagueSchedule.forEach((matchday, matchday_idx) => {
-        matchday.forEach((match, match_idx) => {
+    leagueSchedule.forEach((matchday, matchday_idx) => {
+      matchday.forEach((match, match_idx) => {
           this.matchEventRepository.deleteAllMatchEvents(timezone, country.country_idx, league_idx, matchday_idx, match_idx, transactionalEntityManager);
           const matchStartUTC = getMatch1stHalfUTC(timezone, actualRound, matchday_idx, firstVerse.timezoneIdx, firstVerse.verseTimestamp.getTime() / 1000);
           this.matchRepository.resetMatch(timezone, country.country_idx, league_idx, matchday_idx, match_idx, match.home, match.away, matchStartUTC * 1000, transactionalEntityManager);
         });
       });
-    });
   }
 
-  private async saveLeagueSchedules(leagueGroup: LeagueGroup, firstVerse: Verse): Promise<Schedule[]> {
-    const schedules: Schedule[] = [];
-    for (let i = 0; i < leagueGroup.leagues.length; i++) {
-      const league = leagueGroup.leagues[i];
-      // Update the league_idx for all teams in the league
-      await this.teamRepository.updateLeagueIdxInBulk(league, i, AppDataSource.manager);
-      const schedule = CalendarService.generateLeagueSchedule(league);
-      const league_idx = i;
-      try {
-        await this.saveLeagueSchedule(league_idx, leagueGroup.timezone, leagueGroup.country, schedule, firstVerse!);
-      } catch (error) {
-        console.error("Error saving league schedule:", error);
-        throw error;
-      }
-      schedules.push(schedule);
-    }
-    return schedules;
-  }
-  
+
 
 
 }
