@@ -1,6 +1,8 @@
 import { EntityManager } from "typeorm";
 import { Team } from "../db/entity/Team";
-import { MatchEventOutput, MatchLog } from "../types";
+import { LeagueGroup, MatchEventOutput, MatchLog, TeamId } from "../types";
+import { Country } from "../db/entity/Country";
+import { AppDataSource } from "../db/AppDataSource";
 
 export class TeamService {
   /**
@@ -43,4 +45,7 @@ export class TeamService {
     team.match_log = encodedMatchLog;
     await entityManager.save(team);
   }
+
+  
+  
 }

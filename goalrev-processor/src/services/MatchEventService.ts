@@ -4,8 +4,17 @@ import { Match } from "../db/entity/Match";
 import { Team } from "../db/entity/Team";
 import { Player } from "../db/entity/Player";
 import { MatchEventOutput } from "../types"; 
+import { AppDataSource } from "../db/AppDataSource";
+import { MatchEventRepository } from "../db/repository/MatchEventRepository";
 
 export class MatchEventService {
+
+  private matchEventRepository: MatchEventRepository;
+
+  constructor(matchEventRepository: MatchEventRepository) {
+    this.matchEventRepository = matchEventRepository;
+  }
+
   /**
    * Saves an array of match events as MatchEvent entities in the database.
    * 
@@ -39,7 +48,7 @@ export class MatchEventService {
       matchEvent.team_id = event.team_id.toString();
       matchEventEntities.push(matchEvent);
     }
-    await entityManager.save(matchEventEntities);
+    await this.matchEventRepository.saveMatchEvents(matchEventEntities, entityManager);
   }
 
   getGoals(matchEvents: MatchEventOutput[], match: Match): [number, number] {
@@ -59,4 +68,6 @@ export class MatchEventService {
 
     return [homeGoals, visitorGoals];
   }
+
+
 }

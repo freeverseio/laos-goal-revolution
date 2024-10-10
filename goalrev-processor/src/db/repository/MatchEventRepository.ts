@@ -1,5 +1,6 @@
 import { MatchEvent } from "../entity/MatchEvent";
 import { AppDataSource } from "../AppDataSource";
+import { EntityManager } from "typeorm";
 
 // Define the custom repository class
 export class MatchEventRepository {
@@ -27,18 +28,9 @@ export class MatchEventRepository {
   }
 
   // Delete all match events filtered by timezone, country, and league
-  async deleteAllMatchEvents(
-    timezone: number, 
-    countryIdx: number, 
-    leagueIdx: number
-  ): Promise<void> {
-    await AppDataSource.transaction(async (transactionalEntityManager) => {
-      await transactionalEntityManager.delete(MatchEvent, {
-        timezone_idx: timezone,
-        country_idx: countryIdx,
-        league_idx: leagueIdx,
-      });
-    });
+  async deleteAllMatchEvents(timezoneIdx: number, countryIdx: number, leagueIdx: number, matchDayIdx: number, matchIdx: number, transactionManager: EntityManager): Promise<void> {
+    const repository = transactionManager.getRepository(MatchEvent);
+    await repository.delete({ timezone_idx: timezoneIdx, country_idx: countryIdx, league_idx: leagueIdx, match_day_idx: matchDayIdx, match_idx: matchIdx });
   }
 
   // Bulk insert match events in batches
@@ -67,5 +59,16 @@ export class MatchEventRepository {
     const repository = AppDataSource.getRepository(MatchEvent);
     return await repository.save(matchEvent);
   }
+
+  async saveMatchEvents(matchEvents: MatchEvent[], transactionManager: EntityManager): Promise<void> {
+    const repository = transactionManager.getRepository(MatchEvent);
+    await repository.save(matchEvents);
+  }
+
+  async saveMatchEvent(matchEvent: MatchEvent, transactionManager: EntityManager): Promise<MatchEvent> {
+    const repository = transactionManager.getRepository(MatchEvent);
+    return await repository.save(matchEvent);
+  }
+
 
 }
