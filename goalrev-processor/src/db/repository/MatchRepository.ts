@@ -106,17 +106,7 @@ export class MatchRepository {
           timezone_idx: timezoneIdx,
           country_idx: countryIdx,
           league_idx: leagueIdx
-        },
-        // relations: [
-        //   "homeTeam",
-        //   "visitorTeam",
-        //   "homeTeam.players",
-        //   "visitorTeam.players",
-        //   "homeTeam.tactics",
-        //   "visitorTeam.tactics",
-        //   "homeTeam.trainings",
-        //   "visitorTeam.trainings"
-        // ]
+        },        
       });      
       
     } catch (error) {
