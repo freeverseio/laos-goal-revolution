@@ -4,3 +4,5 @@ type Match = {
 };
 
 export type Matchday = Match[];
+
+export type Schedule = Matchday[];

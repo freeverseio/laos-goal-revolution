@@ -10,13 +10,9 @@ export class CalendarController {
         this.calendarService = CalendarFactory.createCalendarService();
     }
 
-    @Get("/generate")
-    async generateLeagues() {
-        return await this.calendarService.generateCalendarForAllLeagues();
-    }
 
-    @Get("/generate/:countryIdx/:timezoneIdx")
-    async generateLeague(@Param("countryIdx") countryIdx: number, @Param("timezoneIdx") timezoneIdx: number) {
-        return await this.calendarService.generateCalendarForNewLeague(countryIdx, timezoneIdx);
+    @Get("/generate/:timezoneIdx")
+    async generateLeague(@Param("timezoneIdx") timezoneIdx: number) {
+        return await this.calendarService.generateCalendarForTimezone(timezoneIdx);
     }
 }

@@ -90,5 +90,12 @@ export class MatchRepository {
     }
   }
 
+  async countPendingMatchesByTimezone(timezoneIdx: number): Promise<number> {
+    const repository = AppDataSource.getRepository(Match);
+    return await repository.count({
+      where: { timezone_idx: timezoneIdx, state: MatchState.BEGIN },
+    });
+  }
+
   
 }

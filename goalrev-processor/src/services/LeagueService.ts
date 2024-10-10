@@ -4,24 +4,31 @@ import { LeagueGroup,  TeamId } from "../types";
 import { Country } from "../db/entity/Country";
 import { AppDataSource } from "../db/AppDataSource";
 import { TeamRepository } from "../db/repository/TeamRepository";
+import { MatchRepository } from "../db/repository/MatchRepository";
+import { MATCHDAYS_PER_ROUND } from "../utils/constants/constants";
+import { VerseRepository } from "../db/repository/VerseRepository";
 
 export class LeagueService {
 
   private teamRepository: TeamRepository;
+  private matchRepository: MatchRepository;
+  private verseRepository: VerseRepository;
 
-  constructor(teamRepository: TeamRepository) {
+  constructor(teamRepository: TeamRepository, matchRepository: MatchRepository, verseRepository: VerseRepository) {
     this.teamRepository = teamRepository;
+    this.matchRepository = matchRepository;
+    this.verseRepository = verseRepository;
   }
 
-  async getNewLeagues(): Promise<LeagueGroup[]> {
+  async getNewLeaguesForTimezone(timezoneIdx: number): Promise<LeagueGroup[]> {
     const entityManager = AppDataSource.manager;
     // Fetch all countries (grouping will be done by country and timezone)
-    const countries = await entityManager.find(Country);
+    const countries = await entityManager.find(Country, { where: { timezone_idx: timezoneIdx } });
     const leagueGroups: LeagueGroup[] = [];
   
     //  Process each country and group teams into leagues
     for (const country of countries) {
-      const leaguesForCountry = await this.getLeagueGroupsByCountry(entityManager, country);
+      const leaguesForCountry = await this.getLeagueGroupsByCountry( country);
       
       if (leaguesForCountry) {
         leagueGroups.push(leaguesForCountry);
@@ -36,10 +43,10 @@ export class LeagueService {
     if (!country) {
       return null;
     }
-    return this.getLeagueGroupsByCountry(entityManager, country);
+    return this.getLeagueGroupsByCountry(country);
   }
 
-  private async getLeagueGroupsByCountry(entityManager: EntityManager, country: Country): Promise<LeagueGroup | null> {
+  private async getLeagueGroupsByCountry(country: Country): Promise<LeagueGroup | null> {
     // Fetch teams for the current country and timezone
     const teams = await this.teamRepository.findTeamsByCountryAndTimezone(country.country_idx, country.timezone_idx);
     
@@ -59,5 +66,15 @@ export class LeagueService {
       timezone: country.timezone_idx,
       leagues,
     };
+  }
+
+  async haveTimezoneLeaguesFinished(timezoneIdx: number): Promise<boolean> {
+    const pendingMatches = await this.matchRepository.countPendingMatchesByTimezone(timezoneIdx);
+    return pendingMatches <= 0;
+  }
+
+  async getActualRoundOfLeague(timezoneIdx: number): Promise<number> {
+    const verses = await this.verseRepository.countVersesByTimezone(timezoneIdx);
+    return Math.max(Math.ceil(verses / MATCHDAYS_PER_ROUND) - 1, 0);
   }
 }

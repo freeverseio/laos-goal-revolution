@@ -46,4 +46,9 @@ export class VerseRepository {
     });
     return firstVerse;
   }
+
+  async countVersesByTimezone(timezoneIdx: number): Promise<number> {
+    const repository = AppDataSource.getRepository(Verse);
+    return await repository.count({ where: { timezoneIdx: timezoneIdx } });
+  }
 }

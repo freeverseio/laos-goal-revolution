@@ -11,7 +11,7 @@ export class CalendarFactory {
       const verseRepository = new VerseRepository();
       const matchEventRepository = new MatchEventRepository();
       const teamRepository = new TeamRepository();
-      const leagueService = new LeagueService(teamRepository);  
+      const leagueService = new LeagueService(teamRepository, matchRepository, verseRepository);  
       const calendarService = new CalendarService(matchRepository, verseRepository, matchEventRepository, leagueService); // Inject VerseService & MatchEventService
       return calendarService; 
     }
