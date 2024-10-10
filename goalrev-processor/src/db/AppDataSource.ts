@@ -4,6 +4,7 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
+const isSSLEnabled = process.env.SSL_ENABLED !== "false"; // Check if SSL is enabled, defaults to true if not set
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -12,10 +13,12 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  ssl: {
-    rejectUnauthorized: false,
-    ca: process.env.SSL_CA_CERT || "certs/ca-certificate.crt"
-  },
+  ssl: isSSLEnabled
+    ? {
+        rejectUnauthorized: false,
+        ca: process.env.SSL_CA_CERT || "certs/ca-certificate.crt",
+      }
+    : false, // Disable SSL if not enabled
   synchronize: false,  // Set to true if you want to automatically sync schema changes in development
   logging: false,
   entities: [ 
@@ -33,4 +36,3 @@ export const AppDataSource = new DataSource({
   migrations: [],
   subscribers: [],
 });
-
