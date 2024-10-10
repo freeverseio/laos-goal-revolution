@@ -118,6 +118,8 @@ export class LeagueService {
     const schedules: Schedule[] = [];
     for (let i = 0; i < leagueGroup.leagues.length; i++) {
       const league = leagueGroup.leagues[i];
+      // Update the league_idx for all teams in the league
+      await this.teamRepository.updateLeagueIdxInBulk(league, i, AppDataSource.manager);
       const schedule = CalendarService.generateLeagueSchedule(league);
       const league_idx = i;
       try {
@@ -130,5 +132,7 @@ export class LeagueService {
     }
     return schedules;
   }
+  
+
 
 }
