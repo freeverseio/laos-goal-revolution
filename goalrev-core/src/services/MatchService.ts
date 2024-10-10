@@ -25,6 +25,8 @@ export class MatchService {
         type: MatchEventType.ATTACK,
         manage_to_shoot: false,
         is_goal: false,
+        primary_player_id: teamIds[0]+"0001",
+        secondary_player_id: teamIds[0]+"0002",
       },
       {
         minute: 10,
@@ -32,6 +34,8 @@ export class MatchService {
         type: MatchEventType.ATTACK,
         manage_to_shoot: true,
         is_goal: true,
+        primary_player_id: teamIds[1]+"0001",
+        secondary_player_id: teamIds[1]+"0002",
       },
 
     ];
@@ -91,6 +95,8 @@ export class MatchService {
         type: MatchEventType.ATTACK,
         manage_to_shoot: false,
         is_goal: false,
+        primary_player_id: teamIds[1]+"0001",
+        secondary_player_id: teamIds[1]+"0002",
       },
       {
         minute: 50,
@@ -98,6 +104,8 @@ export class MatchService {
         type: MatchEventType.ATTACK,
         manage_to_shoot: true,
         is_goal: true,
+        primary_player_id: teamIds[1]+"0001",
+        secondary_player_id: teamIds[1]+"0002",
       },
 
     ];

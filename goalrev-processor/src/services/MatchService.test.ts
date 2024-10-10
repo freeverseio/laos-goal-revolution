@@ -8,8 +8,11 @@ import { MatchEventService } from './MatchEventService';
 import { EntityManager } from "typeorm";
 import { Tactics } from '../db/entity/Tactic';
 import { Training } from '../db/entity/Training';
-import { VerseService } from './VerseService';
+import { CalendarService } from './CalendarService';
+import { MatchRepository } from '../db/repository/MatchRepository';
 import { Verse } from '../db/entity/Verse';
+import { TimeZoneData } from '../types/timezone';
+import { VerseRepository } from '../db/repository/VerseRepository';
 
 // Mock axios and the repository
 jest.mock('axios');
@@ -18,8 +21,15 @@ const mockedAxios = axios as jest.Mocked<typeof axios>;
 jest.mock('../db/AppDataSource');
 const mockRepository = {
   find: jest.fn(),
+  saveMatch: jest.fn(),
+  getAllMatches: jest.fn(),
 };
-(AppDataSource.getRepository as jest.Mock).mockReturnValue(mockRepository);
+
+jest.mock('../db/repository/MatchRepository');
+const mockMatchRepository = {
+  saveMatch: jest.fn(),
+  getAllMatches: jest.fn(),
+} as unknown as MatchRepository;
 
 jest.mock('./PlayerService');
 const mockPlayerService = {
@@ -38,12 +48,17 @@ const mockMatchEventService = {
   getGoals: jest.fn(),
 } as unknown as MatchEventService;
 
-jest.mock('./VerseService');
-const mockVerseService = {
+jest.mock('../db/repository/VerseRepository');
+const mockVerseRepository = {
   getLastVerse: jest.fn(),
   getInitialVerse: jest.fn(),
   saveVerse: jest.fn(),
-} as unknown as VerseService;
+} as unknown as VerseRepository;
+
+jest.mock('./CalendarService');
+const mockCalendarService = {
+  getCalendarInfo: jest.fn(),
+} as unknown as CalendarService;
 
 // Mock for EntityManager
 const mockEntityManager = {
@@ -97,40 +112,40 @@ const mockMatch: Match = {
 describe('MatchService', () => {
   let matchService: MatchService;
 
+
   beforeEach(() => {
     jest.clearAllMocks(); // Clear all previous mocks
-    matchService = new MatchService(mockPlayerService, mockTeamService, mockMatchEventService, mockVerseService);
+
+    matchService = new MatchService(
+      mockPlayerService,
+      mockTeamService,
+      mockMatchEventService,
+      mockCalendarService,
+      mockVerseRepository,
+      mockMatchRepository // Inject the mocked repository
+    );
   });
 
   describe('playMatches', () => {
     it('should retrieve matches and call playMatch for each match', async () => {
+      // mock Date.now()
+      jest.spyOn(Date, 'now').mockReturnValue(1920000000);
       const mockMatches = [mockMatch, { ...mockMatch, match_idx: 2 }];
-      mockRepository.find.mockResolvedValue(mockMatches);
+      jest.spyOn(mockMatchRepository, 'getAllMatches').mockResolvedValue(mockMatches);
+
+      jest.spyOn(mockCalendarService, 'getCalendarInfo').mockResolvedValue({ verseNumber: 0, timestamp: 1520000, timezone: 1, matchDay: 1, half: 1, leagueRound: 1 } as TimeZoneData);
+
       const playMatchSpy = jest.spyOn(matchService, 'playMatch').mockResolvedValue('ok');
-      const verseServiceSpy = jest.spyOn(mockVerseService, 'getInitialVerse').mockResolvedValue({ verseNumber: 0, verseTimestamp: new Date(), timezoneIdx: 1 } as Verse);
-      const lastVerseSpy = jest.spyOn(mockVerseService, 'getLastVerse').mockResolvedValue({ verseNumber: 0, verseTimestamp: new Date(), timezoneIdx: 1 } as Verse);
-      const saveVerseSpy = jest.spyOn(mockVerseService, 'saveVerse');
+      const verseServiceSpy = jest.spyOn(mockVerseRepository, 'getInitialVerse').mockResolvedValue({ verseNumber: 0, verseTimestamp: new Date(1620000000), timezoneIdx: 1 } as Verse);
+      const lastVerseSpy = jest.spyOn(mockVerseRepository, 'getLastVerse').mockResolvedValue({ verseNumber: 0, verseTimestamp: new Date(1620000000), timezoneIdx: 1 } as Verse);
+      const saveVerseSpy = jest.spyOn(mockVerseRepository, 'saveVerse');
+
+      
       await matchService.playMatches(1, 1);
 
-      expect(mockRepository.find).toHaveBeenCalledWith({
-        where: {
-          timezone_idx: 1,
-          match_day_idx: 1,
-        },
-        relations: [
-          'homeTeam',
-          'visitorTeam',
-          'homeTeam.players',
-          'visitorTeam.players',
-          'homeTeam.tactics',
-          'visitorTeam.tactics',
-          'homeTeam.trainings',
-          'visitorTeam.trainings',
-        ],
-      });
+      expect(mockMatchRepository.getAllMatches).toHaveBeenCalledWith(1, 1);
       expect(playMatchSpy).toHaveBeenCalledTimes(2); // Called for each match
       expect(saveVerseSpy).toHaveBeenCalled();
-
     });
   });
 
@@ -146,14 +161,12 @@ describe('MatchService', () => {
         `${process.env.CORE_API_URL}/match/play1stHalf`,
         expect.any(Object)
       );
-      expect(mockEntityManager.save).toHaveBeenCalledWith(mockMatch);
+      expect(mockMatchRepository.saveMatch).toHaveBeenCalledWith(mockMatch, mockEntityManager);
       expect(response).toBe('ok');
     });
 
     it('should update skills, team data, and save match when in 2nd half', async () => {
-      // mock getGoals
       jest.spyOn(mockMatchEventService, 'getGoals').mockReturnValue([0, 0]);
-      // Prepare mock for 2nd half
       mockedAxios.post.mockResolvedValue({
         data: {
           matchEvents: [],
@@ -173,7 +186,7 @@ describe('MatchService', () => {
       expect(mockTeamService.updateTeamData).toHaveBeenCalledTimes(2); // Both teams
       expect(mockMatch.home_teamsumskills).toBe(150); // Updated skill points
       expect(mockMatch.visitor_teamsumskills).toBe(140);
-      expect(mockEntityManager.save).toHaveBeenCalledWith(mockMatch);
+      expect(mockMatchRepository.saveMatch).toHaveBeenCalledWith(mockMatch, mockEntityManager);
     });
   });
 
