@@ -13,6 +13,7 @@ import { MatchRepository } from '../db/repository/MatchRepository';
 import { Verse } from '../db/entity/Verse';
 import { TimeZoneData } from '../types/timezone';
 import { VerseRepository } from '../db/repository/VerseRepository';
+import { LeagueService } from './LeagueService';
 
 // Mock axios and the repository
 jest.mock('axios');
@@ -59,6 +60,11 @@ jest.mock('./CalendarService');
 const mockCalendarService = {
   getCalendarInfo: jest.fn(),
 } as unknown as CalendarService;
+
+jest.mock('./LeagueService');
+const mockLeagueService = {
+  generateCalendarForTimezone: jest.fn(),
+} as unknown as LeagueService;
 
 // Mock for EntityManager
 const mockEntityManager = {
@@ -122,7 +128,8 @@ describe('MatchService', () => {
       mockMatchEventService,
       mockCalendarService,
       mockVerseRepository,
-      mockMatchRepository // Inject the mocked repository
+      mockMatchRepository,
+      mockLeagueService
     );
   });
 
