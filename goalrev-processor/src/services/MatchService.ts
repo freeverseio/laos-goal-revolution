@@ -11,6 +11,8 @@ import { EntityManager } from "typeorm";
 import { CalendarService } from "./CalendarService";
 import { AppDataSource } from "../db/AppDataSource";
 import { VerseRepository } from "../db/repository/VerseRepository";
+import { MATCHDAYS_PER_ROUND } from "../utils/constants";
+import { LeagueService } from "./LeagueService";
 
 export class MatchService {
   private playerService: PlayerService;
@@ -18,15 +20,16 @@ export class MatchService {
   private matchEventService: MatchEventService;
   private calendarService: CalendarService;
   private verseRepository: VerseRepository;
-  private matchRepository: MatchRepository;  // Inject the repository
-
+  private matchRepository: MatchRepository;  
+  private leagueService: LeagueService;
   constructor(
     playerService: PlayerService,
     teamService: TeamService,
     matchEventService: MatchEventService,
     calendarService: CalendarService,
     verseRepository: VerseRepository,
-    matchRepository: MatchRepository // Add repository as a dependency
+    matchRepository: MatchRepository,
+    leagueService: LeagueService
   ) {
     this.playerService = playerService;
     this.teamService = teamService;
@@ -34,20 +37,22 @@ export class MatchService {
     this.calendarService = calendarService;
     this.verseRepository = verseRepository;
     this.matchRepository = matchRepository; // Initialize it
+    this.leagueService = leagueService;
   }
 
-  async playMatches() {
+  async playMatches(): Promise<any> {
     const info = await this.calendarService.getCalendarInfo();
 
     // Check if timestamp to play is in the future
     if (info.timestamp! > Date.now() / 1000) {
       console.log("Timestamp to play is in the future, skipping");
       return {
-        verseNumber: info.verseNumber!,
-        timezoneIdx: info.timezone,
+        verseNumber: 0,
+        timezoneIdx: 0,
         matchDay: info.matchDay,
         halfTime: info.half,
         verseTimestamp: new Date(info.timestamp! * 1000),
+        message: "Timestamp to play is in the future, skipping",
       };
     }
 
@@ -65,10 +70,29 @@ export class MatchService {
       verseTimestamp: new Date(info.timestamp! * 1000),
     }, AppDataSource.manager);
 
-    if (matches.length === 0) {
+    // for now we only play matches in timezone 10
+    if (info.timezone!=10) {
       //continue playing matches
-       this.playMatches();
+      return this.playMatches();
+    } else {
+      // if last match of the league has been played
+      if (info.matchDay == MATCHDAYS_PER_ROUND - 1 && info.half == 1) {
+        // TODO update league table
+        this.leagueService.generateCalendarForTimezone(info.timezone);
+        return {
+          verseNumber: info.verseNumber!,
+          timezoneIdx: info.timezone,
+          matchDay: info.matchDay,
+          halfTime: info.half,
+          verseTimestamp: new Date(info.timestamp! * 1000),
+          message: "Last match of the league has been played",
+        };
+      }
     }
+
+
+
+
 
     return {
       verseNumber: info.verseNumber!,
@@ -76,6 +100,7 @@ export class MatchService {
       matchDay: info.matchDay,
       halfTime: info.half,
       verseTimestamp: new Date(info.timestamp! * 1000),
+      message: "OK",
     };
   }
 
@@ -88,7 +113,8 @@ export class MatchService {
         const requestBody = this.buildRequestBody(match, seed, is1stHalf);
 
         if (!is1stHalf && !is2ndHalf) {
-          console.warn(`Match ${match.match_idx} is not in the BEGIN or HALF state, skipping`);
+          console.warn(`Match ${match.match_idx} ${match.match_day_idx} ${match.timezone_idx} ${match.league_idx} is not in the BEGIN or HALF state, skipping`);
+          console.log(' state', match.state);
           return;
         }
 

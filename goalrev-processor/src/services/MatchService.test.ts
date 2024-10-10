@@ -13,6 +13,7 @@ import { MatchRepository } from '../db/repository/MatchRepository';
 import { Verse } from '../db/entity/Verse';
 import { TimeZoneData } from '../types/timezone';
 import { VerseRepository } from '../db/repository/VerseRepository';
+import { LeagueService } from './LeagueService';
 
 // Mock axios and the repository
 jest.mock('axios');
@@ -59,6 +60,11 @@ jest.mock('./CalendarService');
 const mockCalendarService = {
   getCalendarInfo: jest.fn(),
 } as unknown as CalendarService;
+
+jest.mock('./LeagueService');
+const mockLeagueService = {
+  generateCalendarForTimezone: jest.fn(),
+} as unknown as LeagueService;
 
 // Mock for EntityManager
 const mockEntityManager = {
@@ -122,7 +128,8 @@ describe('MatchService', () => {
       mockMatchEventService,
       mockCalendarService,
       mockVerseRepository,
-      mockMatchRepository // Inject the mocked repository
+      mockMatchRepository,
+      mockLeagueService
     );
   });
 
@@ -133,17 +140,17 @@ describe('MatchService', () => {
       const mockMatches = [mockMatch, { ...mockMatch, match_idx: 2 }];
       jest.spyOn(mockMatchRepository, 'getAllMatches').mockResolvedValue(mockMatches);
 
-      jest.spyOn(mockCalendarService, 'getCalendarInfo').mockResolvedValue({ verseNumber: 0, timestamp: 1520000, timezone: 1, matchDay: 1, half: 1, leagueRound: 1 } as TimeZoneData);
+      jest.spyOn(mockCalendarService, 'getCalendarInfo').mockResolvedValue({ verseNumber: 0, timestamp: 1520000, timezone: 10, matchDay: 1, half: 1, leagueRound: 1 } as TimeZoneData);
 
       const playMatchSpy = jest.spyOn(matchService, 'playMatch').mockResolvedValue('ok');
-      const verseServiceSpy = jest.spyOn(mockVerseRepository, 'getInitialVerse').mockResolvedValue({ verseNumber: 0, verseTimestamp: new Date(1620000000), timezoneIdx: 1 } as Verse);
-      const lastVerseSpy = jest.spyOn(mockVerseRepository, 'getLastVerse').mockResolvedValue({ verseNumber: 0, verseTimestamp: new Date(1620000000), timezoneIdx: 1 } as Verse);
+      const verseServiceSpy = jest.spyOn(mockVerseRepository, 'getInitialVerse').mockResolvedValue({ verseNumber: 0, verseTimestamp: new Date(1620000000), timezoneIdx: 10 } as Verse);
+      const lastVerseSpy = jest.spyOn(mockVerseRepository, 'getLastVerse').mockResolvedValue({ verseNumber: 0, verseTimestamp: new Date(1620000000), timezoneIdx: 10 } as Verse);
       const saveVerseSpy = jest.spyOn(mockVerseRepository, 'saveVerse');
 
       
       await matchService.playMatches();
 
-      expect(mockMatchRepository.getAllMatches).toHaveBeenCalledWith(1, 1);
+      expect(mockMatchRepository.getAllMatches).toHaveBeenCalledWith(10, 1);
       expect(playMatchSpy).toHaveBeenCalledTimes(2); // Called for each match
       expect(saveVerseSpy).toHaveBeenCalled();
     });

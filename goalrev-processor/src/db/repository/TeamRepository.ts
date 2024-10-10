@@ -1,6 +1,7 @@
 import { AppDataSource } from "../AppDataSource";
-import { EntityManager, Repository } from "typeorm";
+import { EntityManager, In, Repository } from "typeorm";
 import { Team } from "../entity/Team";
+import { TeamId } from "../../types/leaguegroup";
 
 export class TeamRepository  {
   
@@ -18,7 +19,6 @@ export class TeamRepository  {
     return teams;
   }
 
-
   async findTeamsByTimezoneCountryAndLeague(timezoneIdx: number, countryIdx: number, leagueIdx: number): Promise<Team[]> {
     const teamRepository = AppDataSource.getRepository(Team);
     const teams = await teamRepository
@@ -33,11 +33,19 @@ export class TeamRepository  {
     return teams;
   }
 
-
   async updateLeaderboard(teamId: string, points: number, leaderboardPosition: number, transactionalEntityManager: EntityManager): Promise<void> {
     console.log("updateLeaderboard.teamId:", teamId, "points:", points, "leaderboardPosition:", leaderboardPosition);
     const teamRepository = transactionalEntityManager.getRepository(Team);
     await teamRepository.update(teamId, { points: points, leaderboard_position: leaderboardPosition });
   }
   
+  async updateLeagueIdx(teamId: string, leagueIdx: number, transactionalEntityManager: EntityManager): Promise<void> {
+    const teamRepository = transactionalEntityManager.getRepository(Team);
+    await teamRepository.update(teamId, { league_idx: leagueIdx });
+  }
+
+  async updateLeagueIdxInBulk(teams: TeamId[], leagueIdx: number, transactionalEntityManager: EntityManager): Promise<void> {
+    const teamRepository = transactionalEntityManager.getRepository(Team);
+    await teamRepository.update({ team_id: In(teams) }, { league_idx: leagueIdx });
+  }
 }
