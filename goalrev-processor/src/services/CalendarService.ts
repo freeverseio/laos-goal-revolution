@@ -1,61 +1,17 @@
 import { AppDataSource } from "../db/AppDataSource";
-import { Country, Verse } from "../db/entity/";
-import { MatchRepository } from "../db/repository/MatchRepository";
-import { Calendar, LeagueGroup, Matchday, Schedule, TimeZoneData } from "../types";
-import { TeamService } from "./TeamService";
-import { calendarInfo, getMatch1stHalfUTC } from "../utils/calendarUtils";
-import { MatchEventRepository } from "../db/repository/MatchEventRepository";
+import { Matchday, TimeZoneData } from "../types";
+import { calendarInfo } from "../utils/calendarUtils";
 import { VerseRepository } from "../db/repository/VerseRepository";
-import { LeagueService } from "./LeagueService";
+
 
 export class CalendarService {
 
-  private matchRepository: MatchRepository;
-  private matchEventRepository: MatchEventRepository;
   private verseRepository: VerseRepository;
-  private leagueService: LeagueService;
 
-  constructor(matchRepository: MatchRepository, verseRepository: VerseRepository, matchEventRepository: MatchEventRepository, leagueService: LeagueService) {
-    this.matchRepository = matchRepository;
-    this.matchEventRepository = matchEventRepository;
+  constructor(verseRepository: VerseRepository) {
     this.verseRepository = verseRepository;
-    this.leagueService = leagueService;
   }
 
-  private async saveLeagueSchedules(leagueGroup: LeagueGroup, firstVerse: Verse): Promise<Schedule[]> {
-    const schedules: Schedule[] = [];
-    for (let i = 0; i < leagueGroup.leagues.length; i++) {
-      const league = leagueGroup.leagues[i];
-      const schedule = CalendarService.generateLeagueSchedule(league);
-      const league_idx = i;
-      try {
-        await this.saveLeagueSchedule(league_idx, leagueGroup.timezone, leagueGroup.country, schedule, firstVerse!);
-      } catch (error) {
-        console.error("Error saving league schedule:", error);
-        throw error;
-      }
-      schedules.push(schedule);
-    }
-    return schedules;
-  }
-
-  async generateCalendarForTimezone(timezoneIdx: number): Promise<Schedule[]> {
-    const finished = await this.leagueService.haveTimezoneLeaguesFinished(timezoneIdx);
-    if (!finished) {
-      return [];
-    }
-    const firstVerse = await this.verseRepository.getInitialVerse(AppDataSource.manager);
-    const leagueGroups = await this.leagueService.getNewLeaguesForTimezone(timezoneIdx);
-    const schedules: Schedule[] = [];
-    for (const leagueGroup of leagueGroups) {
-      // Call the new private method
-      const leagueSchedules = await this.saveLeagueSchedules(leagueGroup, firstVerse!);
-      schedules.push(...leagueSchedules);
-    }
-    return schedules;
-  }
-
-  
   async getCalendarInfo(): Promise<TimeZoneData> {
     const entityManager = AppDataSource.manager;
     const lastVerse = await this.verseRepository.getLastVerse(entityManager);
@@ -131,19 +87,7 @@ export class CalendarService {
     return [...matchdays, ...secondHalf];
   }
 
-  async saveLeagueSchedule(league_idx: number, timezone: number, country: Country, leagueSchedule: Matchday[], firstVerse: Verse) {
-    const entityManager = AppDataSource.manager;
-    const actualRound = await this.leagueService.getActualRoundOfLeague(timezone);
-    entityManager.transaction(async (transactionalEntityManager) => {
-      leagueSchedule.forEach((matchday, matchday_idx) => {
-        matchday.forEach((match, match_idx) => {
-          this.matchEventRepository.deleteAllMatchEvents(timezone, country.country_idx, league_idx, matchday_idx, match_idx, transactionalEntityManager);
-          const matchStartUTC = getMatch1stHalfUTC(timezone, actualRound, matchday_idx, firstVerse.timezoneIdx, firstVerse.verseTimestamp.getTime() / 1000);
-          this.matchRepository.resetMatch(timezone, country.country_idx, league_idx, matchday_idx, match_idx, match.home, match.away, matchStartUTC * 1000, transactionalEntityManager);
-        });
-      });
-    });
-  }
+
 
 
 

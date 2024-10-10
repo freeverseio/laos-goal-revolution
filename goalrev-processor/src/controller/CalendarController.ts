@@ -1,18 +1,18 @@
 import { Get, JsonController, Param } from "routing-controllers";
-import { CalendarService } from "../services/CalendarService";
-import { MatchEventService } from "../services/MatchEventService";
+import { LeagueService } from "../services/LeagueService";
 import { CalendarFactory } from "../factories/CalendarFactory";
+import { LeagueFactory } from "../factories/LeagueFactory";
 @JsonController("/calendar")
 export class CalendarController {
-    private calendarService: CalendarService;
+    
+  private leagueService: LeagueService;
 
     constructor() {
-        this.calendarService = CalendarFactory.createCalendarService();
+        this.leagueService = LeagueFactory.createLeagueService();
     }
 
-
     @Get("/generate/:timezoneIdx")
-    async generateLeague(@Param("timezoneIdx") timezoneIdx: number) {
-        return await this.calendarService.generateCalendarForTimezone(timezoneIdx);
+    async generateCalendar(@Param("timezoneIdx") timezoneIdx: number) {
+        return await this.leagueService.generateCalendarForTimezone(timezoneIdx);
     }
 }

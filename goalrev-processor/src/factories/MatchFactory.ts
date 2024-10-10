@@ -19,9 +19,7 @@ export class MatchFactory {
     const matchEventService = new MatchEventService(matchEventRepository);
     const verseRepository = new VerseRepository();
     const matchRepository = new MatchRepository();
-    const teamRepository = new TeamRepository();
-    const leagueService = new LeagueService(teamRepository, matchRepository, verseRepository);
-    const calendarService = new CalendarService(matchRepository, verseRepository, matchEventRepository, leagueService); // Inject VerseService & MatchEventService
+    const calendarService = new CalendarService(verseRepository); // Inject VerseService & MatchEventService
 
     // Create and return the MatchService with injected dependencies
     return new MatchService(

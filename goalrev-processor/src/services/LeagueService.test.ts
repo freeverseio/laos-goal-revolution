@@ -6,6 +6,7 @@ import { EntityManager } from "typeorm";
 import { AppDataSource } from "../db/AppDataSource";
 import { Country } from "../db/entity/Country";
 import { Team } from "../db/entity/Team";
+import { MatchEventRepository } from "../db/repository/MatchEventRepository";
 
 
 jest.mock("../db/AppDataSource");
@@ -16,6 +17,7 @@ describe("LeagueService", () => {
   let matchRepository: jest.Mocked<MatchRepository>;
   let verseRepository: jest.Mocked<VerseRepository>;
   let entityManager: jest.Mocked<EntityManager>;
+  let matchEventRepository: jest.Mocked<MatchEventRepository>;
 
   beforeEach(() => {
     teamRepository = {
@@ -38,7 +40,7 @@ describe("LeagueService", () => {
     // Mocking the manager for the AppDataSource
     (AppDataSource.manager as any) = entityManager;
 
-    leagueService = new LeagueService(teamRepository, matchRepository, verseRepository);
+    leagueService = new LeagueService(teamRepository, matchRepository, verseRepository, matchEventRepository);
   });
 
 

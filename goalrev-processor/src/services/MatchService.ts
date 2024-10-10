@@ -65,7 +65,10 @@ export class MatchService {
       verseTimestamp: new Date(info.timestamp! * 1000),
     }, AppDataSource.manager);
 
-    
+    if (matches.length === 0) {
+      //continue playing matches
+       this.playMatches();
+    }
 
     return {
       verseNumber: info.verseNumber!,
