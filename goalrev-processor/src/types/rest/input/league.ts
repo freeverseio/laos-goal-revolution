@@ -3,7 +3,3 @@ export interface UpdateLeagueLeaderboardInput {
   countryIdx: number,
   leagueIdx: number,
 }
-
-export interface UpdateLeagueLeaderboardsInput {
-  timezoneIdx: number,
-}

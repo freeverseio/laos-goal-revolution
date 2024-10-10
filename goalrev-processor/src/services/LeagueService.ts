@@ -97,7 +97,6 @@ export class LeagueService {
   }
 
   async updateLeaderboard(timezoneIdx: number, countryIdx: number, leagueIdx: number) {
-
     // getMatchDay
     const info = await this.calendarService.getCalendarInfo();    
     // check if timestamp to play is in the future
@@ -111,42 +110,33 @@ export class LeagueService {
 
     // getMatches
     const leagueMatches = await this.matchRepository.getLeagueMatches(timezoneIdx, countryIdx, leagueIdx);
-    //console.log('leagueMatches:', leagueMatches);
-
+    const leagueMatchesInput = leagueMatches.map(match => ({
+      homeGoals: match.home_goals,
+      visitorGoals: match.visitor_goals
+    }));
 
     // getTeams
     const teams = await this.teamRepository.findTeamsByTimezoneCountryAndLeague(timezoneIdx, countryIdx, leagueIdx);
-    //console.log('teams:', teams);
-        
-
-    // TODO call core method
-    // const requestBody = {
-    //   teams: teams,
-    //   matchDay: matchDay,
-    //   matches: leagueMatches,
-    // }  
-
+    const teamsInput = teams.map(team => ({
+      teamId: team.team_id,
+      teamIdxInLeague: team.team_idx_in_league,
+    }));
+     
+    // call goalrev-core
     const requestBody = {
-      teams: [],
+      teams: teamsInput,
       matchDay: matchDay,
-      matches: [],
+      matches: leagueMatchesInput,
     }  
-    console.log('requestBody:', requestBody);
     const response = await axios.post(`${process.env.CORE_API_URL}/league/computeLeagueLeaderboard`, requestBody);
     console.log('response:', response.data);
-    // const leagueLeaderboardOutput = response.data as PlayOutput;
-    // return leagueLeaderboardOutput.teams;
 
-    //update DB
-    //open tx and update each team position
+    // update DB
     const transactionalEntityManager = AppDataSource.manager;
-    for (const team of teams) {  
-      const teamUpdate = await this.teamRepository.updateLeaderboard(team.team_id, team.points, team.leaderboard_position, transactionalEntityManager);
-      console.log('teamUpdate:', teamUpdate);
+    for (const team of response.data.teams) {  
+      console.log(`calling updateLeaderboard.teamUpdate: ${team.teamId}, points: ${team.teamPoints}, position: ${team.leaderboardPosition}`);
+      await this.teamRepository.updateLeaderboard(team.teamId, team.teamPoints, team.leaderboardPosition, transactionalEntityManager);
     }
-
-    //close tx
-
 
     // Mock return
     const teamsOutput = [];
