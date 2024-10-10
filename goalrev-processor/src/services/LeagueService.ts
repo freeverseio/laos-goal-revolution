@@ -8,13 +8,14 @@ import { Team } from "../db/entity/Team";
 import { LeagueGroup,  Matchday,  Schedule,  TeamId } from "../types";
 import { Country } from "../db/entity/Country";
 import { TeamRepository } from "../db/repository/TeamRepository";
-import { MatchRepository } from "../db/repository/MatchRepository";
 import { MATCHDAYS_PER_ROUND } from "../utils/constants/constants";
 import { VerseRepository } from "../db/repository/VerseRepository";
 import { Verse } from "../db/entity/Verse";
 import { MatchEventRepository } from "../db/repository/MatchEventRepository";
 import { getMatch1stHalfUTC } from "../utils/calendarUtils";
 import { CalendarService } from "./CalendarService";
+import { MatchRepository } from "../db/repository/MatchRepository";
+import { Match } from "../db/entity";
 
 export class LeagueService {
   private teamRepository: TeamRepository;
@@ -109,8 +110,8 @@ export class LeagueService {
     const matchDay = info.matchDay;
 
     // getMatches
-    //const leagueMatches = await this.matchRepository.getLeagueMatches(timezoneIdx, countryIdx, leagueIdx);
-    //console.log('leagueMatches:', leagueMatches);
+    const leagueMatches = await this.matchRepository.getLeagueMatches(timezoneIdx, countryIdx, leagueIdx);
+    console.log('leagueMatches:', leagueMatches);
 
 
     // getTeams

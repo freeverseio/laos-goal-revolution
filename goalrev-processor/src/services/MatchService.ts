@@ -155,28 +155,6 @@ export class MatchService {
     });
   }
 
-  public async getLeagueMatches(timezoneIdx: number, countryIdx: number, leagueIdx: number) {
-    const matchRepository = AppDataSource.getRepository(Match);
-
-    return await matchRepository.find({
-      where: {
-        timezone_idx: timezoneIdx,
-        country_idx: countryIdx,
-        league_idx: leagueIdx
-      },
-      // relations: [
-      //   "homeTeam",
-      //   "visitorTeam",
-      //   "homeTeam.players",
-      //   "visitorTeam.players",
-      //   "homeTeam.tactics",
-      //   "visitorTeam.tactics",
-      //   "homeTeam.trainings",
-      //   "visitorTeam.trainings"
-      // ]
-    });
-  }
-
   buildRequestBody(match: Match, seed: string, is1stHalf: boolean): PlayMatchRequest {
     return {
       verseSeed: seed,
