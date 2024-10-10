@@ -8,6 +8,7 @@ import { VerseRepository } from "../db/repository/VerseRepository";
 import { MatchEventRepository } from "../db/repository/MatchEventRepository";
 import { LeagueService } from "../services/LeagueService";
 import { TeamRepository } from "../db/repository/TeamRepository";
+import { LeagueFactory } from "./LeagueFactory";
 
 export class MatchFactory {
   
@@ -19,8 +20,8 @@ export class MatchFactory {
     const matchEventService = new MatchEventService(matchEventRepository);
     const verseRepository = new VerseRepository();
     const matchRepository = new MatchRepository();
-    const calendarService = new CalendarService(verseRepository); // Inject VerseService & MatchEventService
-
+    const calendarService = new CalendarService(verseRepository); 
+    const leagueService = LeagueFactory.createLeagueService();
     // Create and return the MatchService with injected dependencies
     return new MatchService(
       playerService,
@@ -28,7 +29,8 @@ export class MatchFactory {
       matchEventService,
       calendarService,
       verseRepository,
-      matchRepository 
+      matchRepository,
+      leagueService
     );
   }
 }
