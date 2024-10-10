@@ -10,14 +10,10 @@ export class MatchController {
         this.matchService = MatchFactory.createMatchService();
     }
 
-    @Post("/playDay") // Define a new POST endpoint
-    async playMatches(@Body() data: PlayMatchesInput) { // Accept request body
-        return await this.matchService.playMatches(data.timeZone,  data.matchDay); // Call playMatches method
-    }
 
     @Post("/play")
     async playAllMatches() {
-        return await this.matchService.playMatches(null, null);
+        return await this.matchService.playMatches();
     }
 
 
