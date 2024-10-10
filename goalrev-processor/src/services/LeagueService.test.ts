@@ -7,6 +7,7 @@ import { AppDataSource } from "../db/AppDataSource";
 import { Country } from "../db/entity/Country";
 import { Team } from "../db/entity/Team";
 import { MatchEventRepository } from "../db/repository/MatchEventRepository";
+import { LeagueGroup } from "../types/leaguegroup";
 
 
 jest.mock("../db/AppDataSource");
@@ -22,6 +23,7 @@ describe("LeagueService", () => {
   beforeEach(() => {
     teamRepository = {
       findTeamsByCountryAndTimezone: jest.fn(),
+      updateLeagueIdx: jest.fn(),
     } as any;
     
     matchRepository = {
@@ -117,4 +119,7 @@ describe("LeagueService", () => {
       expect(result).toBe(0);
     });
   });
+
+
+  
 });
