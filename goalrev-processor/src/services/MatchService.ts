@@ -36,7 +36,7 @@ export class MatchService {
     this.matchRepository = matchRepository; // Initialize it
   }
 
-  async playMatches(timezone: number | null, matchDay: number | null) {
+  async playMatches() {
     const info = await this.calendarService.getCalendarInfo();
 
     // Check if timestamp to play is in the future
@@ -44,7 +44,7 @@ export class MatchService {
       console.log("Timestamp to play is in the future, skipping");
       return {
         verseNumber: info.verseNumber!,
-        timezoneIdx: timezone ?? info.timezone,
+        timezoneIdx: info.timezone,
         matchDay: info.matchDay,
         halfTime: info.half,
         verseTimestamp: new Date(info.timestamp! * 1000),
@@ -52,22 +52,24 @@ export class MatchService {
     }
 
     // Use repository to fetch matches
-    const matches = await this.matchRepository.getAllMatches(timezone ?? info.timezone, matchDay ?? info.matchDay!);
+    const matches = await this.matchRepository.getAllMatches(info.timezone, info.matchDay!);
     const seed = crypto.randomBytes(32).toString('hex');
-
+    
     // Process matches
     await Promise.all(matches.map(match => this.playMatch(match, seed)));
 
     // Update the verse timestamp using verseService
     await this.verseRepository.saveVerse({
       verseNumber: info.verseNumber!,
-      timezoneIdx: timezone ?? info.timezone,
+      timezoneIdx: info.timezone,
       verseTimestamp: new Date(info.timestamp! * 1000),
     }, AppDataSource.manager);
 
+    
+
     return {
       verseNumber: info.verseNumber!,
-      timezoneIdx: timezone ?? info.timezone,
+      timezoneIdx: info.timezone,
       matchDay: info.matchDay,
       halfTime: info.half,
       verseTimestamp: new Date(info.timestamp! * 1000),

@@ -141,7 +141,7 @@ describe('MatchService', () => {
       const saveVerseSpy = jest.spyOn(mockVerseRepository, 'saveVerse');
 
       
-      await matchService.playMatches(1, 1);
+      await matchService.playMatches();
 
       expect(mockMatchRepository.getAllMatches).toHaveBeenCalledWith(1, 1);
       expect(playMatchSpy).toHaveBeenCalledTimes(2); // Called for each match
