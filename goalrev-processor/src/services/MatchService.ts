@@ -160,27 +160,6 @@ export class MatchService {
     return "ok";
   }
 
-  private async getMatches(timezone: number, matchDay: number) {
-    const matchRepository = AppDataSource.getRepository(Match);
-
-    return await matchRepository.find({
-      where: {
-        timezone_idx: timezone,
-        match_day_idx: matchDay
-      },
-      relations: [
-        "homeTeam",
-        "visitorTeam",
-        "homeTeam.players",
-        "visitorTeam.players",
-        "homeTeam.tactics",
-        "visitorTeam.tactics",
-        "homeTeam.trainings",
-        "visitorTeam.trainings"
-      ]
-    });
-  }
-
   buildRequestBody(match: Match, seed: string, is1stHalf: boolean): PlayMatchRequest {
     return {
       verseSeed: seed,
