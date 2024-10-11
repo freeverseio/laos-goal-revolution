@@ -8,6 +8,7 @@ import { Country } from "../db/entity/Country";
 import { Team } from "../db/entity/Team";
 import { MatchEventRepository } from "../db/repository/MatchEventRepository";
 import { LeagueGroup } from "../types/leaguegroup";
+import { CalendarService } from "./CalendarService";
 
 
 jest.mock("../db/AppDataSource");
@@ -19,6 +20,7 @@ describe("LeagueService", () => {
   let verseRepository: jest.Mocked<VerseRepository>;
   let entityManager: jest.Mocked<EntityManager>;
   let matchEventRepository: jest.Mocked<MatchEventRepository>;
+  let calendarService: jest.Mocked<CalendarService>;
 
   beforeEach(() => {
     teamRepository = {
@@ -34,6 +36,10 @@ describe("LeagueService", () => {
       countVersesByTimezone: jest.fn(),
     } as any;
 
+    calendarService = {
+      generateCalendarForTimezone: jest.fn(),
+    } as any;
+
     entityManager = {
       find: jest.fn(),
       findOne: jest.fn(),
@@ -42,7 +48,7 @@ describe("LeagueService", () => {
     // Mocking the manager for the AppDataSource
     (AppDataSource.manager as any) = entityManager;
 
-    leagueService = new LeagueService(teamRepository, matchRepository, verseRepository, matchEventRepository);
+    leagueService = new LeagueService(teamRepository, matchRepository, verseRepository, matchEventRepository, calendarService);
   });
 
 

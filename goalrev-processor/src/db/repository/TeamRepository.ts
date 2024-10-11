@@ -1,9 +1,23 @@
 import { AppDataSource } from "../AppDataSource";
 import { EntityManager, In, Repository } from "typeorm";
-import { Team } from "../entity/Team";
+import { Team, TeamPartialUpdate } from "../entity/Team";
 import { TeamId } from "../../types/leaguegroup";
 
 export class TeamRepository  {
+
+  async bulkUpdate(teams: TeamPartialUpdate[], transactionalEntityManager: EntityManager): Promise<void> {
+    const teamRepository = transactionalEntityManager.getRepository(Team);
+    await teamRepository.save(teams);
+  }
+
+  async findTeamsWithPlayersByTimezone(timezoneIdx: number): Promise<Team[]> {
+    const teamRepository = AppDataSource.getRepository(Team);
+    const teams = await teamRepository.find({ 
+      where: { timezone_idx: timezoneIdx },
+      relations: ["players"] 
+    });
+    return teams;
+  }
   
   async findTeamsByCountryAndTimezone(countryIdx: number, timezoneIdx: number): Promise<Team[]> {
     const teamRepository = AppDataSource.getRepository(Team);

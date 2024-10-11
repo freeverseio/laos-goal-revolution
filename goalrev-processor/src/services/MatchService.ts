@@ -78,7 +78,8 @@ export class MatchService {
       // if last match of the league has been played
       if (info.matchDay == MATCHDAYS_PER_ROUND - 1 && info.half == 1) {
         // TODO update league table
-        this.leagueService.generateCalendarForTimezone(info.timezone);
+        await this.leagueService.computeTeamRankingPointsForTimezone(info.timezone);
+        await this.leagueService.generateCalendarForTimezone(info.timezone);
         return {
           verseNumber: info.verseNumber!,
           timezoneIdx: info.timezone,
