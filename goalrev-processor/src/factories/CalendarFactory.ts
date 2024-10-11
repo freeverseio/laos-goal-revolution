@@ -7,11 +7,7 @@ import { LeagueService } from "../services/LeagueService";
 
 export class CalendarFactory {
     static createCalendarService(): CalendarService {
-      const matchRepository = new MatchRepository();
       const verseRepository = new VerseRepository();
-      const matchEventRepository = new MatchEventRepository();
-      const teamRepository = new TeamRepository();
-      const leagueService = new LeagueService(teamRepository, matchRepository, verseRepository, matchEventRepository);  
       const calendarService = new CalendarService(verseRepository); // Inject VerseService & MatchEventService
       return calendarService; 
     }
