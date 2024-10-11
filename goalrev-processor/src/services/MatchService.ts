@@ -75,9 +75,10 @@ export class MatchService {
       //continue playing matches
       return this.playMatches();
     } else {
+     
+
       // if last match of the league has been played
       if (info.matchDay == MATCHDAYS_PER_ROUND - 1 && info.half == 1) {
-        // TODO update league table
         await this.leagueService.computeTeamRankingPointsForTimezone(info.timezone);
         await this.leagueService.generateCalendarForTimezone(info.timezone);
         return {
@@ -90,10 +91,6 @@ export class MatchService {
         };
       }
     }
-
-
-
-
 
     return {
       verseNumber: info.verseNumber!,
