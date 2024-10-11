@@ -42,7 +42,7 @@ export class LeagueService {
     for (let i = 0; i < 8; i++) {
       const leagueLeaderboardTeamOutput: LeagueLeaderboardTeamOutput = {
         teamId: teamsInput[i].teamId,
-        leaderboardPosition: (i+1),
+        leaderboardPosition: (i), //0..7
         teamPoints: (8-i),
       }
       teamsOutput.push(leagueLeaderboardTeamOutput);
