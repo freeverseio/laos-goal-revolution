@@ -1,4 +1,4 @@
-import { LeagueLeaderboardInput, LeagueLeaderboardTeamInput, LeagueLeaderboardOutput, LeagueLeaderboardTeamOutput, } from "../types";
+import { LeagueLeaderboardInput, LeagueLeaderboardTeamInput, LeagueLeaderboardOutput, LeagueLeaderboardTeamOutput, RankingPointsInput, RankingPointsOutput } from "../types";
 
 export class LeagueService {
 
@@ -55,4 +55,11 @@ export class LeagueService {
 
     return leagueLeaderboardOutput;
   }  
+
+  static async computeRankingPoints(body: RankingPointsInput): Promise<RankingPointsOutput> {
+    //randomly generate new ranking points from 1 to 100
+    const newRankingPoints = Math.floor(Math.random() * 100) + 1;
+
+    return { rankingPoints: newRankingPoints, err: 0 };
+  }
 }

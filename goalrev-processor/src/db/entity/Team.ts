@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn, OneToMany, OneToOne } from "typeorm";
+import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn, OneToMany, OneToOne, DeepPartial } from "typeorm";
 import { Country, League, Player, Tactics, Training } from "./"; 
 
 @Entity("teams")
@@ -94,3 +94,6 @@ export class Team {
   @Column({ type: 'int', default: 0 })
   promo_timeout!: number;
 }
+
+
+export type TeamPartialUpdate = DeepPartial<Team>; 

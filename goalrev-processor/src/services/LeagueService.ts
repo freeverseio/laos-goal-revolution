@@ -1,21 +1,19 @@
-import { AppDataSource } from "../db/AppDataSource";
 import axios from "axios";
+import { AppDataSource } from "../db/AppDataSource";
 
-import { calendarInfo } from "../utils/calendarUtils";
-import { MatchService } from "./MatchService";
 import { EntityManager } from "typeorm";
-import { Team } from "../db/entity/Team";
-import { LeagueGroup, Matchday, Schedule, TeamId } from "../types";
 import { Country } from "../db/entity/Country";
-import { TeamRepository } from "../db/repository/TeamRepository";
-import { MATCHDAYS_PER_ROUND } from "../utils/constants/constants";
-import { VerseRepository } from "../db/repository/VerseRepository";
 import { Verse } from "../db/entity/Verse";
 import { MatchEventRepository } from "../db/repository/MatchEventRepository";
-import { getMatch1stHalfUTC } from "../utils/calendarUtils";
-import { CalendarService } from "./CalendarService";
 import { MatchRepository } from "../db/repository/MatchRepository";
-import { Match } from "../db/entity";
+import { TeamRepository } from "../db/repository/TeamRepository";
+import { VerseRepository } from "../db/repository/VerseRepository";
+import { LeagueGroup, Matchday, Schedule, TeamId } from "../types";
+import { getMatch1stHalfUTC } from "../utils/calendarUtils";
+import { MATCHDAYS_PER_ROUND } from "../utils/constants/constants";
+import { CalendarService } from "./CalendarService";
+import { RankingPointsInput } from "../types/rest/input/rankingPoints";
+import { TeamPartialUpdate } from "../db/entity";
 
 export class LeagueService {
   private teamRepository: TeamRepository;
@@ -31,6 +29,26 @@ export class LeagueService {
     this.calendarService = calendarService;
     this.matchEventRepository = matchEventRepository;
   }
+
+  async computeTeamRankingPointsForTimezone(timezoneIdx: number): Promise<void> {
+    const teams = await this.teamRepository.findTeamsWithPlayersByTimezone(timezoneIdx);
+    const partialRankingPoints: TeamPartialUpdate[] = [];
+    for (let i = 0; i < teams.length; i++) {
+      const team = teams[i];
+      const players = team.players;
+      const encodedSkills = players.map(player => player.encoded_skills);
+      const rankingPoints = await this.getTeamRankingPoints(team.team_id, encodedSkills, team.leaderboard_position, Number(team.prev_perf_points));
+      partialRankingPoints.push({
+        team_id: team.team_id,
+        ranking_points: rankingPoints.toString(),
+      });
+    }
+    const entityManager = AppDataSource.manager;
+    await entityManager.transaction(async (transactionalEntityManager) => {
+      await this.teamRepository.bulkUpdate(partialRankingPoints, transactionalEntityManager);
+    });
+  }
+
 
   async generateCalendarForTimezone(timezoneIdx: number): Promise<Schedule[]> {
     const finished = await this.haveTimezoneLeaguesFinished(timezoneIdx);
@@ -98,7 +116,7 @@ export class LeagueService {
 
   async updateLeaderboard(timezoneIdx: number, countryIdx: number, leagueIdx: number) {
     // getMatchDay
-    const info = await this.calendarService.getCalendarInfo();    
+    const info = await this.calendarService.getCalendarInfo();
     // check if timestamp to play is in the future
     if (info.timestamp! > Date.now() / 1000) {
       console.error("Timestamp to play is in the future, skipping");
@@ -121,19 +139,18 @@ export class LeagueService {
       teamId: team.team_id,
       teamIdxInLeague: team.team_idx_in_league,
     }));
-     
+
     // call goalrev-core
     const requestBody = {
       teams: teamsInput,
       matchDay: matchDay,
       matches: leagueMatchesInput,
-    }  
+    }
     const response = await axios.post(`${process.env.CORE_API_URL}/league/computeLeagueLeaderboard`, requestBody);
-    console.log('response:', response.data);
 
     // update DB
     const transactionalEntityManager = AppDataSource.manager;
-    for (const team of response.data.teams) {  
+    for (const team of response.data.teams) {
       console.log(`calling updateLeaderboard.teamUpdate: ${team.teamId}, points: ${team.teamPoints}, position: ${team.leaderboardPosition}`);
       await this.teamRepository.updateLeaderboard(team.teamId, team.teamPoints, team.leaderboardPosition, transactionalEntityManager);
     }
@@ -148,7 +165,7 @@ export class LeagueService {
     teamsOutput.push(team);
 
     return {
-      teams: teamsOutput,      
+      teams: teamsOutput,
     };
   }
   async haveTimezoneLeaguesFinished(timezoneIdx: number): Promise<boolean> {
@@ -188,11 +205,24 @@ export class LeagueService {
     const actualRound = await this.getActualRoundOfLeague(timezone);
     leagueSchedule.forEach((matchday, matchday_idx) => {
       matchday.forEach((match, match_idx) => {
-          this.matchEventRepository.deleteAllMatchEvents(timezone, country.country_idx, league_idx, matchday_idx, match_idx, transactionalEntityManager);
-          const matchStartUTC = getMatch1stHalfUTC(timezone, actualRound, matchday_idx, firstVerse.timezoneIdx, firstVerse.verseTimestamp.getTime() / 1000);
-          this.matchRepository.resetMatch(timezone, country.country_idx, league_idx, matchday_idx, match_idx, match.home, match.away, matchStartUTC, transactionalEntityManager);
-        });
+        this.matchEventRepository.deleteAllMatchEvents(timezone, country.country_idx, league_idx, matchday_idx, match_idx, transactionalEntityManager);
+        const matchStartUTC = getMatch1stHalfUTC(timezone, actualRound, matchday_idx, firstVerse.timezoneIdx, firstVerse.verseTimestamp.getTime() / 1000);
+        this.matchRepository.resetMatch(timezone, country.country_idx, league_idx, matchday_idx, match_idx, match.home, match.away, matchStartUTC, transactionalEntityManager);
       });
+    });
+  }
+
+  private async getTeamRankingPoints(teamId: string, encodedSkills: string[], leagueRanking: number, prevPerfPoints: number): Promise<number> {
+    const requestBody: RankingPointsInput = {
+      leagueRanking,
+      prevPerfPoints,
+      teamId,
+      isBot: false,
+      skills: encodedSkills,
+    }
+    console.log(`requestBody: ${JSON.stringify(requestBody)}`);
+    const response = await axios.post(`${process.env.CORE_API_URL}/league/computeRankingPoints`, requestBody);
+    return response.data.rankingPoints;
   }
 
 
