@@ -77,23 +77,7 @@ export class MatchService {
     } else {
       // compute league leaderboard
       if(info.half == 1){
-        // get distinct (timezone_idx, country_idx, league_idx)
-        const result = matches.reduce((acc: { set: Set<string>, result: { timezone_idx: number, country_idx: number, league_idx: number }[] }, match: Match) => {
-          const obj = { timezone_idx: match.timezone_idx, country_idx: match.country_idx, league_idx: match.league_idx };
-          const key = JSON.stringify(obj);
-          if (!acc.set.has(key)) {
-            acc.set.add(key);
-            acc.result.push(obj);
-          }
-          return acc;
-        }, { set: new Set<string>(), result: [] });
-
-        // update each league leaderboard
-        for (const obj of result.result) {
-          console.log('updating league leaderboard: ', obj.timezone_idx, obj.country_idx, obj.league_idx);
-          await this.leagueService.updateLeaderboard(obj.timezone_idx, obj.country_idx, obj.league_idx);
-        }
-        console.log(`updated [${result.result.length}] league leaderboards`);
+        await this.updateLeagueLederbord(matches);
       }
 
       // if last match of the league has been played
@@ -119,6 +103,26 @@ export class MatchService {
       verseTimestamp: new Date(info.timestamp! * 1000),
       message: "OK",
     };
+  }
+
+  private async updateLeagueLederbord(matches: Match[]) {
+    // get distinct (timezone_idx, country_idx, league_idx)
+    const result = matches.reduce((acc: { set: Set<string>; result: { timezone_idx: number; country_idx: number; league_idx: number; }[]; }, match: Match) => {
+      const obj = { timezone_idx: match.timezone_idx, country_idx: match.country_idx, league_idx: match.league_idx };
+      const key = JSON.stringify(obj);
+      if (!acc.set.has(key)) {
+        acc.set.add(key);
+        acc.result.push(obj);
+      }
+      return acc;
+    }, { set: new Set<string>(), result: [] });
+
+    // update each league leaderboard by timezone_idx, country_idx, league_idx
+    for (const obj of result.result) {
+      console.log('updating league leaderboard: ', obj.timezone_idx, obj.country_idx, obj.league_idx);
+      await this.leagueService.updateLeaderboard(obj.timezone_idx, obj.country_idx, obj.league_idx);
+    }
+    console.log(`updated [${result.result.length}] league leaderboards`);
   }
 
   async playMatch(match: Match, seed: string) {
