@@ -64,6 +64,7 @@ const mockCalendarService = {
 jest.mock('./LeagueService');
 const mockLeagueService = {
   generateCalendarForTimezone: jest.fn(),
+  updateLeaderboard: jest.fn(),
 } as unknown as LeagueService;
 
 // Mock for EntityManager
@@ -115,12 +116,14 @@ const mockMatch: Match = {
   state: MatchState.BEGIN,
 } as unknown as Match;
 
+const originalLog = console.log;
+
 describe('MatchService', () => {
   let matchService: MatchService;
 
-
   beforeEach(() => {
     jest.clearAllMocks(); // Clear all previous mocks
+    jest.spyOn(console, 'log').mockImplementation(() => {});
 
     matchService = new MatchService(
       mockPlayerService,
@@ -131,6 +134,11 @@ describe('MatchService', () => {
       mockMatchRepository,
       mockLeagueService
     );
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+    console.log = originalLog;
   });
 
   describe('playMatches', () => {
@@ -146,13 +154,14 @@ describe('MatchService', () => {
       const verseServiceSpy = jest.spyOn(mockVerseRepository, 'getInitialVerse').mockResolvedValue({ verseNumber: 0, verseTimestamp: new Date(1620000000), timezoneIdx: 10 } as Verse);
       const lastVerseSpy = jest.spyOn(mockVerseRepository, 'getLastVerse').mockResolvedValue({ verseNumber: 0, verseTimestamp: new Date(1620000000), timezoneIdx: 10 } as Verse);
       const saveVerseSpy = jest.spyOn(mockVerseRepository, 'saveVerse');
-
+      jest.spyOn(mockLeagueService, 'updateLeaderboard').mockResolvedValue({ teams: [] });      
       
       await matchService.playMatches();
 
       expect(mockMatchRepository.getAllMatches).toHaveBeenCalledWith(10, 1);
       expect(playMatchSpy).toHaveBeenCalledTimes(2); // Called for each match
       expect(saveVerseSpy).toHaveBeenCalled();
+      expect(mockLeagueService.updateLeaderboard).toHaveBeenCalledTimes(1);      
     });
   });
 
