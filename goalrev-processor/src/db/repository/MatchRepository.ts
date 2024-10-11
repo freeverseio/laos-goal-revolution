@@ -97,5 +97,26 @@ export class MatchRepository {
     });
   }
 
+
+  async getLeagueMatches(timezoneIdx: number, countryIdx: number, leagueIdx: number): Promise<Match[]>{
+    const repository = AppDataSource.getRepository(Match);
+    try {
+      return await repository.find({
+        where: {
+          timezone_idx: timezoneIdx,
+          country_idx: countryIdx,
+          league_idx: leagueIdx
+        },        
+      });      
+      
+    } catch (error) {
+      console.error("Error getting LeagueMatches:", error);
+      throw new Error("Get LeagueMatches failed");
+    }
+  }
+
+
+  
+
   
 }

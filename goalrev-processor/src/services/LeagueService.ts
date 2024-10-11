@@ -1,28 +1,34 @@
+import { AppDataSource } from "../db/AppDataSource";
+import axios from "axios";
+
+import { calendarInfo } from "../utils/calendarUtils";
+import { MatchService } from "./MatchService";
 import { EntityManager } from "typeorm";
 import { Team } from "../db/entity/Team";
 import { LeagueGroup, Matchday, Schedule, TeamId } from "../types";
 import { Country } from "../db/entity/Country";
-import { AppDataSource } from "../db/AppDataSource";
 import { TeamRepository } from "../db/repository/TeamRepository";
-import { MatchRepository } from "../db/repository/MatchRepository";
 import { MATCHDAYS_PER_ROUND } from "../utils/constants/constants";
 import { VerseRepository } from "../db/repository/VerseRepository";
 import { Verse } from "../db/entity/Verse";
 import { MatchEventRepository } from "../db/repository/MatchEventRepository";
 import { getMatch1stHalfUTC } from "../utils/calendarUtils";
 import { CalendarService } from "./CalendarService";
+import { MatchRepository } from "../db/repository/MatchRepository";
+import { Match } from "../db/entity";
 
 export class LeagueService {
-
   private teamRepository: TeamRepository;
+  private calendarService: CalendarService;
   private matchRepository: MatchRepository;
   private verseRepository: VerseRepository;
-  private matchEventRepository: MatchEventRepository;
+  private matchEventRepository: MatchEventRepository
 
-  constructor(teamRepository: TeamRepository, matchRepository: MatchRepository, verseRepository: VerseRepository, matchEventRepository: MatchEventRepository) {
+  constructor(teamRepository: TeamRepository, matchRepository: MatchRepository, verseRepository: VerseRepository, matchEventRepository: MatchEventRepository, calendarService: CalendarService) {
     this.teamRepository = teamRepository;
     this.matchRepository = matchRepository;
     this.verseRepository = verseRepository;
+    this.calendarService = calendarService;
     this.matchEventRepository = matchEventRepository;
   }
 
@@ -90,6 +96,61 @@ export class LeagueService {
     };
   }
 
+  async updateLeaderboard(timezoneIdx: number, countryIdx: number, leagueIdx: number) {
+    // getMatchDay
+    const info = await this.calendarService.getCalendarInfo();    
+    // check if timestamp to play is in the future
+    if (info.timestamp! > Date.now() / 1000) {
+      console.error("Timestamp to play is in the future, skipping");
+      return {
+        err: 1,
+      };
+    }
+    const matchDay = info.matchDay;
+
+    // getMatches
+    const leagueMatches = await this.matchRepository.getLeagueMatches(timezoneIdx, countryIdx, leagueIdx);
+    const leagueMatchesInput = leagueMatches.map(match => ({
+      homeGoals: match.home_goals,
+      visitorGoals: match.visitor_goals
+    }));
+
+    // getTeams
+    const teams = await this.teamRepository.findTeamsByTimezoneCountryAndLeague(timezoneIdx, countryIdx, leagueIdx);
+    const teamsInput = teams.map(team => ({
+      teamId: team.team_id,
+      teamIdxInLeague: team.team_idx_in_league,
+    }));
+     
+    // call goalrev-core
+    const requestBody = {
+      teams: teamsInput,
+      matchDay: matchDay,
+      matches: leagueMatchesInput,
+    }  
+    const response = await axios.post(`${process.env.CORE_API_URL}/league/computeLeagueLeaderboard`, requestBody);
+    console.log('response:', response.data);
+
+    // update DB
+    const transactionalEntityManager = AppDataSource.manager;
+    for (const team of response.data.teams) {  
+      console.log(`calling updateLeaderboard.teamUpdate: ${team.teamId}, points: ${team.teamPoints}, position: ${team.leaderboardPosition}`);
+      await this.teamRepository.updateLeaderboard(team.teamId, team.teamPoints, team.leaderboardPosition, transactionalEntityManager);
+    }
+
+    // Mock return
+    const teamsOutput = [];
+    const team = {
+      teamId: 1,
+      leaderboardPosition: 1,
+      teamPoints: 1,
+    }
+    teamsOutput.push(team);
+
+    return {
+      teams: teamsOutput,      
+    };
+  }
   async haveTimezoneLeaguesFinished(timezoneIdx: number): Promise<boolean> {
     const pendingMatches = await this.matchRepository.countPendingMatchesByTimezone(timezoneIdx);
     return pendingMatches <= 0;
