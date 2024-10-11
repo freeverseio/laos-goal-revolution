@@ -28,7 +28,26 @@ module.exports = makeExtendSchemaPlugin(build => {
       
       extend type Query {
         getBestPlayers(limit: Int!): [String!]
-        getNumUnreadMessages(teamId : ID!): Int!        
+        getNumUnreadMessages(teamId : ID!): Int! 
+        getMessages(teamId: ID!, auctionId: ID, limit: Int, offset: Int): Messages!
+      }
+
+      type Message {
+        id: String
+        destinatary: String!
+        category: String!
+        auctionId: String
+        title: String!
+        text: String!
+        customImageUrl: String
+        metadata: String
+        isRead: Boolean
+        createdAt: String
+      }
+
+      type Messages {
+        totalCount: Int!
+        nodes: [Message]
       }
 
       type PlayerHistoryGraphEncodedSkills {
