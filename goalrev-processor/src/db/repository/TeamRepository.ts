@@ -60,6 +60,16 @@ export class TeamRepository  {
 
   async updateLeagueIdxInBulk(teams: TeamId[], leagueIdx: number, transactionalEntityManager: EntityManager): Promise<void> {
     const teamRepository = transactionalEntityManager.getRepository(Team);
-    await teamRepository.update({ team_id: In(teams) }, { league_idx: leagueIdx });
+  
+    const updatePromises = teams.map((teamId, index) => {
+      const teamIdxInLeague = index % 8; // Index between 0 and 7
+      return teamRepository.createQueryBuilder()
+        .update(Team)
+        .set({ league_idx: leagueIdx, team_idx_in_league: teamIdxInLeague })
+        .where("team_id = :teamId", { teamId })
+        .execute();
+    });
+  
+    await Promise.all(updatePromises);
   }
 }
