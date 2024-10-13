@@ -4,7 +4,11 @@ export * from "./Timezone";
 export * from "./League";
 export * from "./Match";
 export * from "./Team";
+export * from "./TeamHistory";
 export * from "./Player";
+export * from "./PlayerHistory";
 export * from "./Tactic";
+export * from "./TacticsHistory"
 export * from "./Training";
 export * from "./Verse";
+export * from "./MatchHistory";

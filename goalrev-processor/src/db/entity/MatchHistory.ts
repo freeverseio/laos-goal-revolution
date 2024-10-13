@@ -1,7 +1,12 @@
-import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryColumn,
+  ManyToOne,
+  JoinColumn,
+} from "typeorm";
 import { Team } from "./Team";
-import { League } from "./League";
-import { MatchState } from "./Match"; 
+import { MatchState } from "./Match"; // Assuming MatchState is defined as an enum
 
 @Entity("matches_histories")
 export class MatchHistory {
@@ -23,33 +28,28 @@ export class MatchHistory {
   @PrimaryColumn({ type: "int" })
   match_idx!: number;
 
-  @ManyToOne(() => Team, { nullable: true })
-  @JoinColumn({ name: "home_team_id" })
-  homeTeam?: Team;
+  @Column({ type: "text" })
+  home_team_id!: string;
 
-  @ManyToOne(() => Team, { nullable: true })
-  @JoinColumn({ name: "visitor_team_id" })
-  visitorTeam?: Team;
+  @Column({ type: "text" })
+  visitor_team_id!: string;
 
   @Column({ type: "text" })
   seed!: string;
 
-  @Column({ type: "int" })
+  @Column({ type: "int", default: 0 })
   home_goals!: number;
 
-  @Column({ type: "int" })
+  @Column({ type: "int", default: 0 })
   visitor_goals!: number;
 
-  @Column({ type: "int" })
+  @Column({ type: "int", default: 0 })
   home_teamsumskills!: number;
 
-  @Column({ type: "int" })
+  @Column({ type: "int", default: 0 })
   visitor_teamsumskills!: number;
 
-  @Column({
-    type: "enum",
-    enum: MatchState,
-  })
+  @Column({ type: "enum", enum: MatchState })
   state!: MatchState;
 
   @Column({ type: "text" })
@@ -58,11 +58,5 @@ export class MatchHistory {
   @Column({ type: "bigint" })
   start_epoch!: number;
 
-  @ManyToOne(() => League)
-  @JoinColumn([
-    { name: "timezone_idx" },
-    { name: "country_idx" },
-    { name: "league_idx" },
-  ])
-  league!: League;
+
 }

@@ -6,7 +6,7 @@ describe('CalendarInfo Tests', () => {
 
     test('Basic cases for calendarInfo', () => {
         let info;
-       
+
         info = calendarInfo(0, 1, 0);
         expect(info).toEqual({ timezone: 1, matchDay: 0, half: 0, leagueRound: 0, timestamp: 0 });
 
@@ -104,6 +104,24 @@ describe('CalendarInfo Tests', () => {
         // Test with specific timestamp
         const referenceDeploy = 1727967000;
         info1 = initMatchtimeAndTimezone(referenceDeploy);
+
+     
+        const dateStart = new Date('2024-09-29T23:00:00Z');
+        const deployTimeInUnixEpochSecs = Math.floor(dateStart.getTime() / 1000);
+        const matchTimeAndTZ = initMatchtimeAndTimezone(deployTimeInUnixEpochSecs);
+        console.log(`matchTimeAndTZ: ${JSON.stringify(matchTimeAndTZ)}`);
+        for (let i = 0; i < 100; i++) {
+            const info2 = calendarInfo(i, matchTimeAndTZ.TZForRound1, matchTimeAndTZ.firstVerseTimeStamp);
+            if (info2.timezone == 10) {
+                console.log(`info2: ${JSON.stringify(info2)}`);
+                // print date in CET
+                const date = new Date(info2?.timestamp! * 1000);
+                console.log(`i: ${date.toLocaleString('en-US', { timeZone: 'Europe/Madrid' })}`);
+            }
+        }
+
+
+        // 12:30 CET / 22:30 CET
         const referenceDeployTZ = 15;
         const referenceDeployTimestamp = 1727969400;
         expect(info1).toEqual({ "TZForRound1": referenceDeployTZ, "firstVerseTimeStamp": referenceDeployTimestamp });

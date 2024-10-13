@@ -1,8 +1,7 @@
 import { EntityManager } from "typeorm";
 import { Team } from "../db/entity/Team";
-import { LeagueGroup, MatchEventOutput, MatchLog, TeamId } from "../types";
-import { Country } from "../db/entity/Country";
-import { AppDataSource } from "../db/AppDataSource";
+import { MatchEventOutput, MatchLog } from "../types";
+import { TeamHistoryMapper } from "./mapper/TeamHistoryMapper";
 
 export class TeamService {
   /**
@@ -13,10 +12,11 @@ export class TeamService {
    * @param teamId - The ID of the team to update.
    * @param entityManager - The transaction-scoped EntityManager instance.
    */
-  async updateTeamData(matchLog: MatchLog, matchEvents: MatchEventOutput[], teamId: string, entityManager: EntityManager): Promise<void> {
+  async updateTeamData(matchLog: MatchLog, matchEvents: MatchEventOutput[], teamId: string, verseNumber: number, entityManager: EntityManager): Promise<void> {
     // Find the team by its ID
     const team = await entityManager.findOne(Team, { where: { team_id: teamId } });
-    
+    const teamHistory = TeamHistoryMapper.mapToTeamHistory(team!, verseNumber);
+
     if (!team) {
       throw new Error(`Team with ID ${teamId} not found`);
     }
@@ -37,8 +37,13 @@ export class TeamService {
     // Update points 
     team.points += matchLog.gamePoints;
 
+    team.w += matchLog.gamePoints > 1 ? 1 : 0;
+    team.d += matchLog.gamePoints === 1 ? 1 : 0;
+    team.l += matchLog.gamePoints === 0 ? 1 : 0;
+
     // Save the updated team back to the database
     await entityManager.save(team);
+    await entityManager.save(teamHistory);
   }
 
   async updateTeamMatchLog(entityManager: EntityManager, encodedMatchLog: string, team: Team): Promise<void> {

@@ -1,11 +1,12 @@
+import { EntityManager } from "typeorm";
 import { AppDataSource } from "../AppDataSource";
 import { MatchHistory } from "../entity/MatchHistory";
 
 export class MatchHistoryRepository {
   
   // Insert a single match history record
-  async insertMatchHistory(matchHistory: MatchHistory): Promise<void> {
-    const repository = AppDataSource.getRepository(MatchHistory);
+  async insertMatchHistory(matchHistory: MatchHistory, entityManager: EntityManager): Promise<void> {
+    const repository = entityManager.getRepository(MatchHistory);
     try {
       await repository.insert(matchHistory);
     } catch (error) {
@@ -15,14 +16,14 @@ export class MatchHistoryRepository {
   }
 
   // Bulk insert match history records
-  async bulkInsertMatchHistories(matchHistories: MatchHistory[]): Promise<void> {
-    const repository = AppDataSource.getRepository(MatchHistory);
+  async bulkInsertMatchHistories(matchHistories: MatchHistory[], entityManager: EntityManager): Promise<void> {
+    const repository = entityManager.getRepository(MatchHistory);
     const queryRunner = AppDataSource.createQueryRunner();
     await queryRunner.startTransaction();
 
     try {
       for (const matchHistory of matchHistories) {
-        await queryRunner.manager.save(matchHistory);
+        await repository.save(matchHistory);
       }
       await queryRunner.commitTransaction();
     } catch (error) {
