@@ -2,6 +2,7 @@ import { TeamService } from './TeamService';
 import { Team } from '../db/entity/Team';
 import { MatchEventOutput, MatchEventType, MatchLog } from '../types';
 import { EntityManager } from 'typeorm';
+import { MatchState } from '../db/entity';
 
 const mockEntityManager = {
   findOne: jest.fn(),
@@ -44,7 +45,7 @@ describe('TeamService', () => {
       encodedMatchLog: '',
     };
 
-    await teamService.updateTeamData(matchLog, matchEvents, '1', 1, mockEntityManager);
+    await teamService.updateTeamData(matchLog, matchEvents, mockTeam, 1, false, mockEntityManager);
 
     // Check that goals_forward, goals_against, training_points, and points were updated
     expect(mockTeam.goals_forward).toBe(2); // Team scored 2 goals
@@ -83,7 +84,7 @@ describe('TeamService', () => {
       encodedMatchLog: '',
     };
 
-    await teamService.updateTeamData(matchLog, matchEvents, '1', 1, mockEntityManager);
+    await teamService.updateTeamData(matchLog, matchEvents, mockTeam, 1, false, mockEntityManager);
 
     // Check that goals_forward, goals_against, training_points, and points were updated
     expect(mockTeam.goals_forward).toBe(1); // Team scored 1 goal
@@ -110,6 +111,8 @@ describe('TeamService', () => {
       { minute: 30, type: MatchEventType.ATTACK, team_id: 2, manage_to_shoot: true, is_goal: true }, // Goal by the opponent
     ];
 
+
+
     const matchLog: MatchLog = {
       numberOfGoals: 0,
       gamePoints: 0, // Team loses, no points
@@ -121,7 +124,7 @@ describe('TeamService', () => {
       encodedMatchLog: '',
     };
 
-    await teamService.updateTeamData(matchLog, matchEvents, '1', 1, mockEntityManager);
+    await teamService.updateTeamData(matchLog, matchEvents, mockTeam, 1, false, mockEntityManager);
 
     // Check that goals_forward, goals_against, training_points, and points were updated
     expect(mockTeam.goals_forward).toBe(0); // Team scored 0 goals
@@ -133,24 +136,5 @@ describe('TeamService', () => {
     expect(mockEntityManager.save).toHaveBeenCalledWith(mockTeam);
   });
 
-  it('should throw an error if the team is not found', async () => {
-    mockEntityManager.findOne.mockResolvedValueOnce(null); // No team found
-
-    const matchEvents: MatchEventOutput[] = [
-      { minute: 15, type: MatchEventType.ATTACK, team_id: 1, manage_to_shoot: true, is_goal: true },
-    ];
-
-    const matchLog: MatchLog = {
-      numberOfGoals: 0,
-      gamePoints: 0,
-      teamSumSkills: 0,
-      trainingPoints: 50,
-      isHomeStadium: false,
-      changesAtHalftime: false,
-      isCancelled: false,
-      encodedMatchLog: '',
-    };
-
-    await expect(teamService.updateTeamData(matchLog, matchEvents, '1', 1, mockEntityManager)).rejects.toThrow('Team with ID 1 not found');
-  });
+  
 });

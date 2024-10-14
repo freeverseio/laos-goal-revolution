@@ -42,6 +42,7 @@ jest.mock('./TeamService');
 const mockTeamService = {
   updateTeamData: jest.fn(),
   updateTeamMatchLog: jest.fn(),
+  updateTeamGoals: jest.fn(),
 } as unknown as TeamService;
 
 jest.mock('./MatchEventService');

@@ -150,6 +150,7 @@ export class MatchService {
         const playOutput = response.data as PlayOutput;
 
         await this.matchEventService.saveMatchEvents(playOutput.matchEvents, match, transactionManager);
+        // TODO unify goals logic (team & match)
         const goals = this.matchEventService.getGoals(playOutput.matchEvents, match);
 
         match.home_goals += goals[0];
@@ -160,17 +161,14 @@ export class MatchService {
         }
         match.state = is1stHalf ? MatchState.HALF : MatchState.END;
 
-        await this.teamService.updateTeamMatchLog(transactionManager, playOutput.matchLogs[0].encodedMatchLog, match.homeTeam!);
-        await this.teamService.updateTeamMatchLog(transactionManager, playOutput.matchLogs[1].encodedMatchLog, match.visitorTeam!);
-
+        await this.teamService.updateTeamData(playOutput.matchLogs[0], playOutput.matchEvents, match.homeTeam!, verseNumber, is1stHalf, transactionManager);
+        await this.teamService.updateTeamData(playOutput.matchLogs[1], playOutput.matchEvents, match.visitorTeam!, verseNumber, is1stHalf, transactionManager);
+        
         if (is2ndHalf) {
           // Update skills, teams, and events within the transaction
           await this.playerService.updateSkills(match.homeTeam!.tactics, playOutput.updatedSkills[0], verseNumber, transactionManager);
           await this.playerService.updateSkills(match.visitorTeam!.tactics, playOutput.updatedSkills[1], verseNumber, transactionManager);
-
-          await this.teamService.updateTeamData(playOutput.matchLogs[0], playOutput.matchEvents, match.homeTeam!.team_id, verseNumber, transactionManager);
-          await this.teamService.updateTeamData(playOutput.matchLogs[1], playOutput.matchEvents, match.visitorTeam!.team_id, verseNumber, transactionManager);
-
+         
           match.home_teamsumskills = playOutput.matchLogs[0].teamSumSkills;
           match.visitor_teamsumskills = playOutput.matchLogs[1].teamSumSkills;
         }
