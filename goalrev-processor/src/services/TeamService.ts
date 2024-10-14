@@ -1,49 +1,52 @@
 import { EntityManager } from "typeorm";
 import { Team } from "../db/entity/Team";
-import { MatchEventOutput, MatchLog } from "../types";
+import { MatchEventOutput, MatchLog, MatchHalf } from "../types";
 import { TeamHistoryMapper } from "./mapper/TeamHistoryMapper";
+import { MatchState } from "../db/entity/Match";
 
 export class TeamService {
-  /**
-   * Updates team data based on match events and training points.
-   * 
-   * @param matchEvents - Array of match events affecting the team.
-   * @param trainingPoints - The number of training points to add to the team.
-   * @param teamId - The ID of the team to update.
-   * @param entityManager - The transaction-scoped EntityManager instance.
-   */
-  async updateTeamData(matchLog: MatchLog, matchEvents: MatchEventOutput[], teamId: string, verseNumber: number, entityManager: EntityManager): Promise<void> {
-    // Find the team by its ID
-    const team = await entityManager.findOne(Team, { where: { team_id: teamId } });
-    if (!team) {
-      throw new Error(`Team with ID ${teamId} not found`);
-    }
-    const teamHistory = TeamHistoryMapper.mapToTeamHistory(team!, verseNumber);
+
+  async updateTeamData(
+    matchLog: MatchLog, 
+    matchEvents: MatchEventOutput[], 
+    team: Team,
+    verseNumber: number,
+    is1stHalf: boolean,
+    entityManager: EntityManager
+  ): Promise<void> {
+   
+   
 
     // Iterate over match events and update goals
     matchEvents.forEach((event) => {
       if (event.is_goal) {
-        if (event.team_id === Number(teamId)) {
+        if (event.team_id === Number(team.team_id)) {
           team.goals_forward += 1;
         } else {
           team.goals_against += 1;
         }
       }
     });
-
-    // Update training points
-    team.training_points = matchLog.trainingPoints;
-    // Update points 
-    team.points += matchLog.gamePoints;
-
-    team.w += matchLog.gamePoints > 1 ? 1 : 0;
-    team.d += matchLog.gamePoints === 1 ? 1 : 0;
-    team.l += matchLog.gamePoints === 0 ? 1 : 0;
-
-    // Save the updated team back to the database
+    team.match_log = matchLog.encodedMatchLog;
+    if (!is1stHalf) {
+      const teamHistory = TeamHistoryMapper.mapToTeamHistory(team!, verseNumber);
+      // Save the updated team back to the database
+      await entityManager.save(teamHistory);
+      
+      // Update training points
+      team.training_points = matchLog.trainingPoints;
+      // Update points 
+      team.w += matchLog.gamePoints > 1 ? 1 : 0;
+      team.d += matchLog.gamePoints === 1 ? 1 : 0;
+      team.l += matchLog.gamePoints === 0 ? 1 : 0;
+      team.points += matchLog.gamePoints;
+    } 
+   
     await entityManager.save(team);
-    await entityManager.save(teamHistory);
   }
+
+  
+
 
   async updateTeamMatchLog(entityManager: EntityManager, encodedMatchLog: string, team: Team): Promise<void> {
     team.match_log = encodedMatchLog;
