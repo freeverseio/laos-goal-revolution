@@ -15,11 +15,10 @@ export class TeamService {
   async updateTeamData(matchLog: MatchLog, matchEvents: MatchEventOutput[], teamId: string, verseNumber: number, entityManager: EntityManager): Promise<void> {
     // Find the team by its ID
     const team = await entityManager.findOne(Team, { where: { team_id: teamId } });
-    const teamHistory = TeamHistoryMapper.mapToTeamHistory(team!, verseNumber);
-
     if (!team) {
       throw new Error(`Team with ID ${teamId} not found`);
     }
+    const teamHistory = TeamHistoryMapper.mapToTeamHistory(team!, verseNumber);
 
     // Iterate over match events and update goals
     matchEvents.forEach((event) => {
