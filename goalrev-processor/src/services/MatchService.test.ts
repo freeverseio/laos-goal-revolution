@@ -160,8 +160,8 @@ describe('MatchService', () => {
       jest.spyOn(mockCalendarService, 'getCalendarInfo').mockResolvedValue({ verseNumber: 0, timestamp: 1520000, timezone: 10, matchDay: 1, half: 1, leagueRound: 1 } as TimeZoneData);
 
       const playMatchSpy = jest.spyOn(matchService, 'playMatch').mockResolvedValue('ok');
-      const verseServiceSpy = jest.spyOn(mockVerseRepository, 'getInitialVerse').mockResolvedValue({ verseNumber: 0, verseTimestamp: new Date(1620000000), timezoneIdx: 10 } as Verse);
-      const lastVerseSpy = jest.spyOn(mockVerseRepository, 'getLastVerse').mockResolvedValue({ verseNumber: 0, verseTimestamp: new Date(1620000000), timezoneIdx: 10 } as Verse);
+      const verseServiceSpy = jest.spyOn(mockVerseRepository, 'getInitialVerse').mockResolvedValue({ verseNumber: 0, verseTimestamp: 1620000, timezoneIdx: 10 } as Verse);
+      const lastVerseSpy = jest.spyOn(mockVerseRepository, 'getLastVerse').mockResolvedValue({ verseNumber: 0, verseTimestamp: 16200000, timezoneIdx: 10 } as Verse);
       const saveVerseSpy = jest.spyOn(mockVerseRepository, 'saveVerse');
       jest.spyOn(mockLeagueService, 'updateLeaderboard').mockResolvedValue({ teams: [] });      
       

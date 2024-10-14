@@ -6,8 +6,8 @@ export class Verse {
   @PrimaryColumn({ name: 'verse_number', type: 'int' })
   verseNumber!: number;
 
-  @Column({ name: 'verse_timestamp', type: 'timestamp' })
-  verseTimestamp!: Date;
+  @Column({ name: 'verse_timestamp', type: 'bigint' })
+  verseTimestamp!: number;
 
   @Column({ name: 'timezone_idx', type: 'int' })
   timezoneIdx!: number;
