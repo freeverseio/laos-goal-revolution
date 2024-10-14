@@ -151,7 +151,6 @@ export class LeagueService {
     // update DB
     const transactionalEntityManager = AppDataSource.manager;
     for (const team of response.data.teams) {
-      console.log(`calling updateLeaderboard.teamUpdate: ${team.teamId}, points: ${team.teamPoints}, position: ${team.leaderboardPosition}`);
       await this.teamRepository.updateLeaderboard(team.teamId, team.teamPoints, team.leaderboardPosition, transactionalEntityManager);
     }
 
@@ -220,7 +219,6 @@ export class LeagueService {
       isBot: false,
       skills: encodedSkills,
     }
-    console.log(`requestBody: ${JSON.stringify(requestBody)}`);
     const response = await axios.post(`${process.env.CORE_API_URL}/league/computeRankingPoints`, requestBody);
     return response.data.rankingPoints;
   }
