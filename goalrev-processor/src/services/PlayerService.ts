@@ -36,9 +36,12 @@ export class PlayerService {
       tactics.shirt_10,
     ];
 
+    // remove duplicates
+    const uniqueShirtNumbers = [...new Set(shirtNumbers)];
+
     // Update each player based on their player ID and corresponding PlayerSkill
     for (let i = 0; i < playerSkills.length; i++) {
-      const shirtNumber = shirtNumbers[i];
+      const shirtNumber = uniqueShirtNumbers[i];
       const playerSkill = playerSkills[i];
       if (!shirtNumber) {
         return;
