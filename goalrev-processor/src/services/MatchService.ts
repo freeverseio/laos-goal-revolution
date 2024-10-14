@@ -89,6 +89,7 @@ export class MatchService {
       if (info.matchDay == MATCHDAYS_PER_ROUND - 1 && info.half == 1) {
         await this.leagueService.computeTeamRankingPointsForTimezone(info.timezone);
         await this.leagueService.generateCalendarForTimezone(info.timezone);
+        await this.teamService.resetTeams();
         return {
           verseNumber: info.verseNumber!,
           timezoneIdx: info.timezone,
@@ -124,10 +125,8 @@ export class MatchService {
 
     // update each league leaderboard by timezone_idx, country_idx, league_idx
     for (const obj of result.result) {
-      console.log('updating league leaderboard: ', obj.timezone_idx, obj.country_idx, obj.league_idx);
       await this.leagueService.updateLeaderboard(obj.timezone_idx, obj.country_idx, obj.league_idx);
     }
-    console.log(`updated [${result.result.length}] league leaderboards`);
   }
 
   async playMatch(match: Match, seed: string,verseNumber: number) {
@@ -141,7 +140,6 @@ export class MatchService {
 
         if (!is1stHalf && !is2ndHalf) {
           console.warn(`Match ${match.match_idx} ${match.match_day_idx} ${match.timezone_idx} ${match.league_idx} is not in the BEGIN or HALF state, skipping`);
-          console.log(' state', match.state);
           return;
         }
 

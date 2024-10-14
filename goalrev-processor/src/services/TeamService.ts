@@ -3,6 +3,7 @@ import { Team } from "../db/entity/Team";
 import { MatchEventOutput, MatchLog, MatchHalf } from "../types";
 import { TeamHistoryMapper } from "./mapper/TeamHistoryMapper";
 import { MatchState } from "../db/entity/Match";
+import { AppDataSource } from "../db/AppDataSource";
 
 export class TeamService {
 
@@ -53,6 +54,21 @@ export class TeamService {
     await entityManager.save(team);
   }
 
-  
+  async resetTeams(): Promise<void> {
+    const teamRepository = AppDataSource.getRepository(Team);
+    // reset all teams using QueryBuilder for clarity
+    await teamRepository
+      .createQueryBuilder()
+      .update(Team)
+      .set({ 
+        w: 0, 
+        d: 0, 
+        l: 0, 
+        points: 0, 
+        goals_forward: 0, 
+        goals_against: 0 
+      })
+      .execute();
+  }
   
 }

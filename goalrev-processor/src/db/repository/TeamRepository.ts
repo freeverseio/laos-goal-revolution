@@ -48,7 +48,6 @@ export class TeamRepository  {
   }
 
   async updateLeaderboard(teamId: string, points: number, leaderboardPosition: number, transactionalEntityManager: EntityManager): Promise<void> {
-    console.log("updateLeaderboard.teamId:", teamId, "points:", points, "leaderboardPosition:", leaderboardPosition);
     const teamRepository = transactionalEntityManager.getRepository(Team);
     await teamRepository.update(teamId, { points: points, leaderboard_position: leaderboardPosition });
   }
@@ -69,7 +68,8 @@ export class TeamRepository  {
         .where("team_id = :teamId", { teamId })
         .execute();
     });
-  
     await Promise.all(updatePromises);
   }
+  
 }
+
