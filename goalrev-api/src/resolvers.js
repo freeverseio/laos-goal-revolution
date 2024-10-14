@@ -1,3 +1,5 @@
+const getMessagesResolver = require("./resolvers/messagesResolver");
+
 const resolvers = (sql) => {
   return {
     Query: {
@@ -12,7 +14,11 @@ const resolvers = (sql) => {
       },
       getNumUnreadMessages: async (_, { teamId }) => {
         return parseInt(0);
-      }
+      },      
+      getMessages: async (parent, args, context, info) => {
+        const { teamId, auctionId, limit, offset } = args;
+        return getMessagesResolver(context, { teamId, auctionId, limit, offset });
+      },
     },
     Mutation: {
       createSpecialPlayer: async (_, params, context) => {
