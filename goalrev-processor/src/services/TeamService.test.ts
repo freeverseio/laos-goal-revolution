@@ -44,7 +44,7 @@ describe('TeamService', () => {
       encodedMatchLog: '',
     };
 
-    await teamService.updateTeamData(matchLog, matchEvents, '1', mockEntityManager);
+    await teamService.updateTeamData(matchLog, matchEvents, '1', 1, mockEntityManager);
 
     // Check that goals_forward, goals_against, training_points, and points were updated
     expect(mockTeam.goals_forward).toBe(2); // Team scored 2 goals
@@ -83,7 +83,7 @@ describe('TeamService', () => {
       encodedMatchLog: '',
     };
 
-    await teamService.updateTeamData(matchLog, matchEvents, '1', mockEntityManager);
+    await teamService.updateTeamData(matchLog, matchEvents, '1', 1, mockEntityManager);
 
     // Check that goals_forward, goals_against, training_points, and points were updated
     expect(mockTeam.goals_forward).toBe(1); // Team scored 1 goal
@@ -121,7 +121,7 @@ describe('TeamService', () => {
       encodedMatchLog: '',
     };
 
-    await teamService.updateTeamData(matchLog, matchEvents, '1', mockEntityManager);
+    await teamService.updateTeamData(matchLog, matchEvents, '1', 1, mockEntityManager);
 
     // Check that goals_forward, goals_against, training_points, and points were updated
     expect(mockTeam.goals_forward).toBe(0); // Team scored 0 goals
@@ -151,6 +151,6 @@ describe('TeamService', () => {
       encodedMatchLog: '',
     };
 
-    await expect(teamService.updateTeamData(matchLog, matchEvents, '1', mockEntityManager)).rejects.toThrow('Team with ID 1 not found');
+    await expect(teamService.updateTeamData(matchLog, matchEvents, '1', 1, mockEntityManager)).rejects.toThrow('Team with ID 1 not found');
   });
 });

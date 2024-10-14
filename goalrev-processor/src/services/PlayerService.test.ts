@@ -82,7 +82,7 @@ describe('PlayerService', () => {
       mockEntityManager.find.mockResolvedValueOnce([mockPlayer]);
 
       // Call updateSkills
-      await playerService.updateSkills(tactics, [mockPlayerSkill], mockEntityManager);
+      await playerService.updateSkills(tactics, [mockPlayerSkill], 0,mockEntityManager);
 
       // Expect the player to be found with player_id from tactics
       expect(mockEntityManager.find).toHaveBeenCalledWith(Player, {
@@ -164,7 +164,7 @@ describe('PlayerService', () => {
       };
 
       // Call updateSkills
-      await playerService.updateSkills(tactics, [mockPlayerSkill], mockEntityManager);
+      await playerService.updateSkills(tactics, [mockPlayerSkill], 1, mockEntityManager);
 
       // Expect the repository findOne method to have been called
       expect(mockEntityManager.find).toHaveBeenCalledWith(Player, {
