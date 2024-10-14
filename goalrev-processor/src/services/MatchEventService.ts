@@ -1,11 +1,9 @@
 import { EntityManager } from "typeorm";
-import { MatchEvent } from "../db/entity/MatchEvent";
 import { Match } from "../db/entity/Match";
+import { MatchEvent } from "../db/entity/MatchEvent";
 import { Team } from "../db/entity/Team";
-import { Player } from "../db/entity/Player";
-import { MatchEventOutput } from "../types"; 
-import { AppDataSource } from "../db/AppDataSource";
 import { MatchEventRepository } from "../db/repository/MatchEventRepository";
+import { MatchEventOutput } from "../types";
 
 export class MatchEventService {
 

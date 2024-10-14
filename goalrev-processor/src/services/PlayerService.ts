@@ -1,5 +1,6 @@
 import { EntityManager } from "typeorm";
 import { Player, Tactics } from "../db/entity";
+import { PlayerHistoryMapper } from "./mapper/PlayerHistoryMapper";
 
 export interface PlayerSkill {
   defence: number;
@@ -15,9 +16,10 @@ export class PlayerService {
    * Updates the skills of players based on the given player skills array.
    * @param tactics - The team tactics containing the player IDs.
    * @param playerSkills - An array of player skills, where each element corresponds to a shirt number in tactics.
+   * @param verseNumber - The verse number.
    * @param entityManager - The transaction-scoped EntityManager instance.
    */
-  async updateSkills(tactics: Tactics, playerSkills: PlayerSkill[], entityManager: EntityManager): Promise<void> {
+  async updateSkills(tactics: Tactics, playerSkills: PlayerSkill[], verseNumber: number, entityManager: EntityManager): Promise<void> {
    
     // The players in tactics are referenced by shirt_0 to shirt_10
     const shirtNumbers = [
@@ -54,6 +56,9 @@ export class PlayerService {
         return;
       }
       if (player) {
+        // save player history
+        const playerHistory = PlayerHistoryMapper.mapToPlayerHistory(player, verseNumber);
+        await entityManager.save(playerHistory);
         // Update the player's skills
         player.defence = playerSkill.defence;
         player.speed = playerSkill.speed;

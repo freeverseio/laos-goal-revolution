@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-import { Match, MatchEvent, Country, Timezone, League, Team, Player, Tactics, Training, Verse } from "./entity";
+import { Match, MatchEvent, Country, Timezone, League, Team, Player, Tactics, Training, Verse, MatchHistory, PlayerHistory, TacticsHistory, TeamHistory } from "./entity";
 import * as dotenv from "dotenv";
 
 dotenv.config();
@@ -26,10 +26,14 @@ export const AppDataSource = new DataSource({
     Country, 
     Timezone, 
     League, 
-    Team, 
+    Team,
+    TeamHistory,
     Match, 
+    MatchHistory,
     Player, 
+    PlayerHistory,
     Tactics, 
+    TacticsHistory,
     Training, 
     Verse
   ],

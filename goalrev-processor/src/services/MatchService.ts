@@ -13,6 +13,8 @@ import { AppDataSource } from "../db/AppDataSource";
 import { VerseRepository } from "../db/repository/VerseRepository";
 import { MATCHDAYS_PER_ROUND } from "../utils/constants";
 import { LeagueService } from "./LeagueService";
+import { MatchHistoryRepository } from "../db/repository/MatchHistoryRepository";
+import { MatchHistoryMapper } from "./mapper/MatchHistoryMapper";
 
 export class MatchService {
   private playerService: PlayerService;
@@ -21,6 +23,7 @@ export class MatchService {
   private calendarService: CalendarService;
   private verseRepository: VerseRepository;
   private matchRepository: MatchRepository;  
+  private matchHistoryRepository: MatchHistoryRepository;
   private leagueService: LeagueService;
   constructor(
     playerService: PlayerService,
@@ -29,6 +32,7 @@ export class MatchService {
     calendarService: CalendarService,
     verseRepository: VerseRepository,
     matchRepository: MatchRepository,
+    matchHistoryRepository: MatchHistoryRepository,
     leagueService: LeagueService
   ) {
     this.playerService = playerService;
@@ -38,6 +42,7 @@ export class MatchService {
     this.verseRepository = verseRepository;
     this.matchRepository = matchRepository; // Initialize it
     this.leagueService = leagueService;
+    this.matchHistoryRepository = matchHistoryRepository;
   }
 
   async playMatches(): Promise<any> {
@@ -55,13 +60,13 @@ export class MatchService {
         message: "Timestamp to play is in the future, skipping",
       };
     }
-
+    
     // Use repository to fetch matches
     const matches = await this.matchRepository.getAllMatches(info.timezone, info.matchDay!);
     const seed = crypto.randomBytes(32).toString('hex');
     
     // Process matches
-    await Promise.all(matches.map(match => this.playMatch(match, seed)));
+    await Promise.all(matches.map(match => this.playMatch(match, seed, info.verseNumber!)));
 
     // Update the verse timestamp using verseService
     await this.verseRepository.saveVerse({
@@ -125,8 +130,9 @@ export class MatchService {
     console.log(`updated [${result.result.length}] league leaderboards`);
   }
 
-  async playMatch(match: Match, seed: string) {
+  async playMatch(match: Match, seed: string,verseNumber: number) {
     const entityManager = AppDataSource.manager; // Use EntityManager for transactions
+    const mapHistory = MatchHistoryMapper.mapMatchHistory(match, verseNumber, seed);
     try {
       await entityManager.transaction(async (transactionManager: EntityManager) => {
         const is1stHalf = match.state === MatchState.BEGIN;
@@ -159,11 +165,11 @@ export class MatchService {
 
         if (is2ndHalf) {
           // Update skills, teams, and events within the transaction
-          await this.playerService.updateSkills(match.homeTeam!.tactics, playOutput.updatedSkills[0], transactionManager);
-          await this.playerService.updateSkills(match.visitorTeam!.tactics, playOutput.updatedSkills[1], transactionManager);
+          await this.playerService.updateSkills(match.homeTeam!.tactics, playOutput.updatedSkills[0], verseNumber, transactionManager);
+          await this.playerService.updateSkills(match.visitorTeam!.tactics, playOutput.updatedSkills[1], verseNumber, transactionManager);
 
-          await this.teamService.updateTeamData(playOutput.matchLogs[0], playOutput.matchEvents, match.homeTeam!.team_id, transactionManager);
-          await this.teamService.updateTeamData(playOutput.matchLogs[1], playOutput.matchEvents, match.visitorTeam!.team_id, transactionManager);
+          await this.teamService.updateTeamData(playOutput.matchLogs[0], playOutput.matchEvents, match.homeTeam!.team_id, verseNumber, transactionManager);
+          await this.teamService.updateTeamData(playOutput.matchLogs[1], playOutput.matchEvents, match.visitorTeam!.team_id, verseNumber, transactionManager);
 
           match.home_teamsumskills = playOutput.matchLogs[0].teamSumSkills;
           match.visitor_teamsumskills = playOutput.matchLogs[1].teamSumSkills;
@@ -171,9 +177,9 @@ export class MatchService {
 
         // Save the match using the repository
         await this.matchRepository.saveMatch(match, transactionManager);
+        await this.matchHistoryRepository.insertMatchHistory(mapHistory, transactionManager);
       });
     } catch (error) {
-      console.log("match", match);
       console.error("Error playing match:", error);
       throw error; // Rollback will occur automatically if an error is thrown
     }

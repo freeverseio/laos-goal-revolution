@@ -6,7 +6,7 @@ describe('CalendarInfo Tests', () => {
 
     test('Basic cases for calendarInfo', () => {
         let info;
-       
+
         info = calendarInfo(0, 1, 0);
         expect(info).toEqual({ timezone: 1, matchDay: 0, half: 0, leagueRound: 0, timestamp: 0 });
 
@@ -104,6 +104,11 @@ describe('CalendarInfo Tests', () => {
         // Test with specific timestamp
         const referenceDeploy = 1727967000;
         info1 = initMatchtimeAndTimezone(referenceDeploy);
+
+     
+
+
+        // 12:30 CET / 22:30 CET
         const referenceDeployTZ = 15;
         const referenceDeployTimestamp = 1727969400;
         expect(info1).toEqual({ "TZForRound1": referenceDeployTZ, "firstVerseTimeStamp": referenceDeployTimestamp });

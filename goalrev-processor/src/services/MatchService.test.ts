@@ -14,6 +14,7 @@ import { Verse } from '../db/entity/Verse';
 import { TimeZoneData } from '../types/timezone';
 import { VerseRepository } from '../db/repository/VerseRepository';
 import { LeagueService } from './LeagueService';
+import { MatchHistoryRepository } from '../db/repository/MatchHistoryRepository';
 
 // Mock axios and the repository
 jest.mock('axios');
@@ -75,6 +76,11 @@ const mockEntityManager = {
   get: jest.fn(),
 } as unknown as jest.Mocked<EntityManager>;
 
+jest.mock('../db/repository/MatchHistoryRepository');
+const mockMatchHistoryRepository = {
+  saveMatchHistory: jest.fn(),
+} as unknown as MatchHistoryRepository;
+
 // Mock AppDataSource.manager
 Object.defineProperty(AppDataSource, 'manager', {
   value: mockEntityManager,
@@ -132,7 +138,8 @@ describe('MatchService', () => {
       mockCalendarService,
       mockVerseRepository,
       mockMatchRepository,
-      mockLeagueService
+      mockMatchHistoryRepository,
+      mockLeagueService,
     );
   });
 
@@ -170,7 +177,7 @@ describe('MatchService', () => {
       mockedAxios.post.mockResolvedValue({ data: { matchEvents: [], updatedSkills: [[], []], matchLogs: [{}, {}], earnedTrainingPoints: 0 } });
       jest.spyOn(mockMatchEventService, 'getGoals').mockReturnValue([0, 0]);
       const buildRequestBodySpy = jest.spyOn(matchService, 'buildRequestBody');
-      const response = await matchService.playMatch(mockMatch, "test-seed");
+      const response = await matchService.playMatch(mockMatch, "test-seed", 0);
 
       expect(buildRequestBodySpy).toHaveBeenCalledWith(mockMatch, "test-seed", true);
       expect(mockedAxios.post).toHaveBeenCalledWith(
@@ -195,7 +202,7 @@ describe('MatchService', () => {
       });
       mockMatch.state = MatchState.HALF;
 
-      await matchService.playMatch(mockMatch, "test-seed");
+      await matchService.playMatch(mockMatch, "test-seed", 0);
 
       // Ensure methods are called
       expect(mockPlayerService.updateSkills).toHaveBeenCalledTimes(2); // Both home and visitor team
