@@ -68,10 +68,8 @@ export class TeamRepository  {
         .where("team_id = :teamId", { teamId })
         .execute();
     });
-  
     await Promise.all(updatePromises);
   }
-  
   
 }
 
