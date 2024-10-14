@@ -79,6 +79,7 @@ const mockEntityManager = {
 jest.mock('../db/repository/MatchHistoryRepository');
 const mockMatchHistoryRepository = {
   saveMatchHistory: jest.fn(),
+  insertMatchHistory: jest.fn(),
 } as unknown as MatchHistoryRepository;
 
 // Mock AppDataSource.manager
