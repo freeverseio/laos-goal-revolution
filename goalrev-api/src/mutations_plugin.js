@@ -24,6 +24,7 @@ module.exports = makeExtendSchemaPlugin(build => {
           playerId: String!
         ): Boolean
         setLastTimeLoggedIn(teamId: ID!): Boolean
+        transferFirstBotToAddr(timezone: Int!, countryIdxInTimezone: ID!, address: String!): Boolean
       }
       
       extend type Query {
