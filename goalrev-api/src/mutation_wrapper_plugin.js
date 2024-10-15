@@ -43,18 +43,18 @@ const updateTacticByTeamIdWrapper = propName => {
         var query = {
             text: 'SELECT encoded_skills, shirt_number, red_card, injury_matches_left, timezone_idx, country_idx, league_idx, match_day_idx, match_idx FROM players JOIN matches ON (players.team_Id = matches.home_team_id OR players.team_Id = matches.visitor_team_id)  WHERE (team_id = $1 AND state = $2);',
             values: [teamId, 'half'],
-        };                   
+        };
         const resultQ1 = await pgClient.query(query);
 
         const is1stHalf = (resultQ1.rowCount === 0);
-        if (is1stHalf) { return resolve(); } 
+        if (is1stHalf) { return resolve(); }
 
         // Second, query for match events to see count redCards in 1stHalf:
         data = resultQ1.rows;
         query = {
             text: 'SELECT COUNT(*) FROM match_events WHERE (team_id = $1 AND type = $2 AND timezone_idx = $3 AND country_idx = $4 AND league_idx = $5 AND match_day_idx = $6 AND match_idx = $7);',
             values: [teamId, 'red_card', data[0].timezone_idx, data[0].country_idx, data[0].league_idx, data[0].match_day_idx, data[0].match_idx],
-        };                    
+        };
 
         const resultQ2 = await pgClient.query(query);
         if (resultQ2.rowCount === 0) {
@@ -75,13 +75,13 @@ const playerHistoryGraphByPlayerIdResolver = propName => {
         var query = {
             text: 'SELECT encoded_skills FROM players_histories WHERE player_id = $1 ORDER BY block_number DESC',
             values: [source.playerId],
-        };                   
-       
+        };
+
         const resulsqlResult = await pgClient.query(query);
         let playerHistoryGraph = [];
         for (let i = 0; i < resulsqlResult.rows.length; i++) {
-            playerHistoryGraph.push({encodedSkills: resulsqlResult.rows[i].encoded_skills});
-        }        
+            playerHistoryGraph.push({ encodedSkills: resulsqlResult.rows[i].encoded_skills });
+        }
         return { nodes: playerHistoryGraph };
     };;
 };
@@ -92,14 +92,96 @@ const transferFirstBotToAddrWrapper = propName => {
         var query = {
             text: `UPDATE teams SET "owner" = $1 WHERE team_id = (SELECT team_id FROM teams t WHERE "owner" = '0x0000000000000000000000000000000000000000' AND timezone_idx = $2 AND country_idx = $3  ORDER BY ranking_points DESC LIMIT 1)`,
             values: [args.address, args.timezone, args.countryIdxInTimezone],
-        };        
-        const resulsqlResult = await pgClient.query(query);  
+        };
+        const resulsqlResult = await pgClient.query(query);
         let isUdpated = false;
-        if(resulsqlResult && resulsqlResult.rowCount === 1) {
-            isUdpated = true; 
-            console.log("Assigned tema to addr: ", args.address);           
-        }        
+        if (resulsqlResult && resulsqlResult.rowCount === 1) {
+            isUdpated = true;
+            console.log("Assigned tema to addr: ", args.address);
+        }
         return true;
+    };
+};
+
+const setMessageWrapper = propName => {
+return async (resolve, source, args, context, resolveInfo) => {    
+    const { input } = args;
+    const { id, destinatary, category, auctionId, title, text, customImageUrl, metadata } = input;
+    try {
+        if (id) {
+            return Error("Can't accept id in set message");
+        }
+        const { pgClient } = context;
+        const idFromDb = await insertNotificationMessage({pgClient, 
+            destinatary,
+            category,
+            auctionId,
+            title,
+            text,
+            customImageUrl,
+            metadata,
+        });
+    
+        return idFromDb;
+    } catch (e) {
+        return e;
+    }
+    };
+};
+
+const insertNotificationMessage = async ({ pgClient, destinatary, category, auctionId, title, text, customImageUrl, metadata }) => {
+    const values = [destinatary, category, auctionId, title, text, customImageUrl, metadata];
+    try {
+        const insertMessageQuery = {
+            text: `
+                INSERT INTO 
+                    inbox(
+                    destinatary,
+                    category,
+                    auction_id,
+                    title,
+                    text_message,
+                    custom_image_url,
+                    metadata,
+                    is_read
+                    )
+                VALUES ($1, $2, $3, $4, $5, $6, $7, false)
+                RETURNING id
+                `,
+        };
+        const { rows } = await pgClient.query(insertMessageQuery, values);
+        const { id } = rows[0];
+        return id;
+    } catch (e) {
+        throw e;
+    }
+};
+
+const setMessageReadWrapper = propName => {
+    return async (resolve, source, args, context, resolveInfo) => {    
+        const { id } = args;
+        try {
+            const { pgClient } = context;
+            const updateMessageReadQuery = {
+                text: `
+                  UPDATE
+                    inbox
+                  SET
+                    is_read=true
+                  WHERE
+                    id=$1
+                  `,
+              };
+            const values = [id];
+            const {rowCount} = await pgClient.query(updateMessageReadQuery, values);
+            if (rowCount === 0) {
+                console.warn("Message not found. MessageId: ", id);
+                return false;
+            }
+            return true
+        } catch (e) {
+            return e;
+        }
     };
 };
 
@@ -108,6 +190,8 @@ module.exports = makeWrapResolversPlugin({
         updateTrainingByTeamId: updateTrainingByTeamIdWrapper(),
         updateTacticByTeamId: updateTacticByTeamIdWrapper(),
         transferFirstBotToAddr: transferFirstBotToAddrWrapper(),
+        setMessage: setMessageWrapper(),
+        setMessageRead: setMessageReadWrapper(),
     },
     Player: {
         playerHistoryGraphByPlayerId: playerHistoryGraphByPlayerIdResolver(),

@@ -1,4 +1,4 @@
-const getMessagesResolver = require("./resolvers/messagesResolver");
+const {getMessagesResolver, getNumUnreadMessagesResolver} = require("./resolvers/messagesResolver");
 
 const resolvers = (sql) => {
   return {
@@ -12,8 +12,9 @@ const resolvers = (sql) => {
         const result = await context.pgClient.query(text, values);
         return result.rows.map(obj => obj.player_id);
       },
-      getNumUnreadMessages: async (_, { teamId }) => {
-        return parseInt(0);
+      getNumUnreadMessages: async (parent, args, context, info) => {
+        const { teamId } = args;
+        return getNumUnreadMessagesResolver(context, { teamId });
       },      
       getMessages: async (parent, args, context, info) => {
         const { teamId, auctionId, limit, offset } = args;
