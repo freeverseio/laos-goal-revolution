@@ -205,7 +205,7 @@ export class LeagueService {
     leagueSchedule.forEach((matchday, matchday_idx) => {
       matchday.forEach((match, match_idx) => {
         this.matchEventRepository.deleteAllMatchEvents(timezone, country.country_idx, league_idx, matchday_idx, match_idx, transactionalEntityManager);
-        const matchStartUTC = getMatch1stHalfUTC(timezone, actualRound, matchday_idx, firstVerse.timezoneIdx, firstVerse.verseTimestamp.getTime() / 1000);
+        const matchStartUTC = getMatch1stHalfUTC(timezone, actualRound, matchday_idx, firstVerse.timezoneIdx, Number(firstVerse.verseTimestamp) );
         this.matchRepository.resetMatch(timezone, country.country_idx, league_idx, matchday_idx, match_idx, match.home, match.away, matchStartUTC, transactionalEntityManager);
       });
     });

@@ -49,14 +49,14 @@ export class MatchService {
     const info = await this.calendarService.getCalendarInfo();
 
     // Check if timestamp to play is in the future
-    if (info.timestamp! > Date.now() / 1000) {
-      console.log("Timestamp to play is in the future, skipping");
+    if (this.checkTimestampInFuture(info.timestamp!, info.timezone)) {
+      console.log("Timestamp to play is in the future, waiting...");
       return {
         verseNumber: 0,
         timezoneIdx: 0,
         matchDay: info.matchDay,
         halfTime: info.half,
-        verseTimestamp: new Date(info.timestamp! * 1000),
+        verseTimestamp: info.timestamp,
         message: "Timestamp to play is in the future, skipping",
       };
     }
@@ -71,8 +71,8 @@ export class MatchService {
     // Update the verse timestamp using verseService
     await this.verseRepository.saveVerse({
       verseNumber: info.verseNumber!,
-      timezoneIdx: info.timezone,
-      verseTimestamp: new Date(info.timestamp! * 1000),
+      timezoneIdx: info.timezone ,
+      verseTimestamp: info.timestamp ?? 0,
     }, AppDataSource.manager);
 
     // for now we only play matches in timezone 10
@@ -95,7 +95,7 @@ export class MatchService {
           timezoneIdx: info.timezone,
           matchDay: info.matchDay,
           halfTime: info.half,
-          verseTimestamp: new Date(info.timestamp! * 1000),
+          verseTimestamp: info.timestamp,
           message: "Last match of the league has been played",
         };
       }
@@ -106,7 +106,7 @@ export class MatchService {
       timezoneIdx: info.timezone,
       matchDay: info.matchDay,
       halfTime: info.half,
-      verseTimestamp: new Date(info.timestamp! * 1000),
+      verseTimestamp: info.timestamp,
       message: "OK",
     };
   }
@@ -209,5 +209,14 @@ export class MatchService {
         MatchMapper.mapTrainingToRequest(match.visitorTeam!.trainings) // Visitor team training
       ]
     };
+  }
+
+  private checkTimestampInFuture(timestampUTC: number, timezone: number): boolean {
+    // Create a Date object from the given timestamp in UTC
+    const currentTime = new Date().getTime() * 1000;
+    const timestampInLocalTime = timestampUTC;
+    
+    // Check if the provided timestamp is in the future compared to the current time
+    return timestampInLocalTime > currentTime;
   }
 }

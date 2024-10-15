@@ -20,7 +20,7 @@ export class CalendarService {
       throw new Error("No verses found");
     }
     //  Unix Epoch timestamp in milliseconds
-    const firstVerseTimestamp = firstVerse!.verseTimestamp.getTime() / 1000;
+    const firstVerseTimestamp = Number(firstVerse!.verseTimestamp);
     const nextVerseNumber = lastVerse!.verseNumber + 1;
     const info = calendarInfo(nextVerseNumber, Number(firstVerse!.timezoneIdx), firstVerseTimestamp); // Convert timezone to number
     return {
