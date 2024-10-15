@@ -115,4 +115,43 @@ const messagesView = ({
   };
 };
 
-module.exports = getMessagesResolver;
+const selectNumUnreadMessages = async (context, { destinatary, createdAt }) => {
+  const { pgClient } = context;
+  const values = [destinatary, createdAt];
+  try {
+    const selectNumUnreadMessagesQuery = {
+      text: `
+        SELECT
+          count(id) as num
+        FROM
+          inbox
+        WHERE
+          destinatary = $1
+          AND is_read = false
+          AND created_at >= $2
+      `,
+    };
+    const { rows } = await pgClient.query(selectNumUnreadMessagesQuery, values);
+    return rows[0];
+  } catch (e) {
+    throw e;
+  }
+};
+
+const getNumUnreadMessagesResolver = async (context, { teamId }) => {
+  try {
+    const { pgClient } = context;
+    const mailboxStartedAt = await selectTeamMailboxStartedAt(pgClient, { teamId });
+    const isDateValid = dayjs(mailboxStartedAt).isValid();
+    const createdAt = isDateValid ? mailboxStartedAt : dayjs('2020-06-01T16:00:00.000Z').format();
+    const { num: numUnreadMessages } = await selectNumUnreadMessages(context, { destinatary: teamId, createdAt });
+    return parseInt(numUnreadMessages);
+  } catch (e) {
+    return e;
+  }
+};
+
+module.exports = {
+  getMessagesResolver,
+  getNumUnreadMessagesResolver,
+};

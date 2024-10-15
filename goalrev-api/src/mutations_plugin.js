@@ -25,6 +25,8 @@ module.exports = makeExtendSchemaPlugin(build => {
         ): Boolean
         setLastTimeLoggedIn(teamId: ID!): Boolean
         transferFirstBotToAddr(timezone: Int!, countryIdxInTimezone: ID!, address: String!): Boolean
+        setMessage(input: SetMessageInput!): ID!
+        setMessageRead(id: ID!): Boolean
       }
       
       extend type Query {
@@ -49,6 +51,16 @@ module.exports = makeExtendSchemaPlugin(build => {
       type Messages {
         totalCount: Int!
         nodes: [Message]
+      }
+
+      input SetMessageInput {
+        destinatary: String!
+        category: String!
+        auctionId: String
+        title: String!
+        text: String!
+        customImageUrl: String
+        metadata: String
       }
 
       type PlayerHistoryGraphEncodedSkills {
