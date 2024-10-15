@@ -8,4 +8,6 @@ CREATE TABLE public.verses (
     FOREIGN KEY (timezone_idx) REFERENCES public.timezones(timezone_idx)
 );
 
-INSERT INTO public.verses (verse_number, verse_timestamp, timezone_idx) VALUES (1, '2024-05-10 18:00:00', 23);
+INSERT INTO public.verses (verse_number, verse_timestamp, timezone_idx, root) 
+VALUES 
+    (1, 1728257400, 23, '0'); 
