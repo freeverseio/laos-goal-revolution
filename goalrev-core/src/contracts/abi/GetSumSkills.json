@@ -1,0 +1,2195 @@
+{
+  "contractName": "GetSumSkills",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "encodedSkills",
+          "type": "uint256"
+        }
+      ],
+      "name": "getAggressiveness",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "encodedSkills",
+          "type": "uint256"
+        }
+      ],
+      "name": "getAlignedEndOfFirstHalf",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "encodedSkills",
+          "type": "uint256"
+        }
+      ],
+      "name": "getBirthDay",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "encodedSkills",
+          "type": "uint256"
+        }
+      ],
+      "name": "getForwardness",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "encodedSkills",
+          "type": "uint256"
+        }
+      ],
+      "name": "getGamesNonStopping",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "encodedSkills",
+          "type": "uint256"
+        }
+      ],
+      "name": "getGeneration",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "encodedSkills",
+          "type": "uint256"
+        }
+      ],
+      "name": "getInjuryWeeksLeft",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "encodedSkills",
+          "type": "uint256"
+        }
+      ],
+      "name": "getInternalPlayerId",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "encodedSkills",
+          "type": "uint256"
+        }
+      ],
+      "name": "getIsSpecial",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "encodedSkills",
+          "type": "uint256"
+        }
+      ],
+      "name": "getLeftishness",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "encodedSkills",
+          "type": "uint256"
+        }
+      ],
+      "name": "getOutOfGameFirstHalf",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "encodedSkills",
+          "type": "uint256"
+        }
+      ],
+      "name": "getPlayerIdFromSkills",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "encodedSkills",
+          "type": "uint256"
+        }
+      ],
+      "name": "getPotential",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "encodedSkills",
+          "type": "uint256"
+        }
+      ],
+      "name": "getRedCardLastGame",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "encodedSkills",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint8",
+          "name": "skillIdx",
+          "type": "uint8"
+        }
+      ],
+      "name": "getSkill",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "encodedSkills",
+          "type": "uint256"
+        }
+      ],
+      "name": "getSubstitutedFirstHalf",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "encodedSkills",
+          "type": "uint256"
+        }
+      ],
+      "name": "getSumOfSkills",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "encodedSkills",
+          "type": "uint256"
+        }
+      ],
+      "name": "getYellowCardFirstHalf",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256[25]",
+          "name": "arr",
+          "type": "uint256[25]"
+        },
+        {
+          "internalType": "int256",
+          "name": "left",
+          "type": "int256"
+        },
+        {
+          "internalType": "int256",
+          "name": "right",
+          "type": "int256"
+        }
+      ],
+      "name": "quickSort25",
+      "outputs": [],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256[25]",
+          "name": "data",
+          "type": "uint256[25]"
+        }
+      ],
+      "name": "sort25",
+      "outputs": [
+        {
+          "internalType": "uint256[25]",
+          "name": "",
+          "type": "uint256[25]"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256[25]",
+          "name": "skills",
+          "type": "uint256[25]"
+        }
+      ],
+      "name": "getSumOfTopPlayerSkills",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "teamSkills",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.6.3+commit.8dda9521\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"encodedSkills\",\"type\":\"uint256\"}],\"name\":\"getAggressiveness\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"encodedSkills\",\"type\":\"uint256\"}],\"name\":\"getAlignedEndOfFirstHalf\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"encodedSkills\",\"type\":\"uint256\"}],\"name\":\"getBirthDay\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"encodedSkills\",\"type\":\"uint256\"}],\"name\":\"getForwardness\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"encodedSkills\",\"type\":\"uint256\"}],\"name\":\"getGamesNonStopping\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"encodedSkills\",\"type\":\"uint256\"}],\"name\":\"getGeneration\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"encodedSkills\",\"type\":\"uint256\"}],\"name\":\"getInjuryWeeksLeft\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"encodedSkills\",\"type\":\"uint256\"}],\"name\":\"getInternalPlayerId\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"encodedSkills\",\"type\":\"uint256\"}],\"name\":\"getIsSpecial\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"encodedSkills\",\"type\":\"uint256\"}],\"name\":\"getLeftishness\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"encodedSkills\",\"type\":\"uint256\"}],\"name\":\"getOutOfGameFirstHalf\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"encodedSkills\",\"type\":\"uint256\"}],\"name\":\"getPlayerIdFromSkills\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"encodedSkills\",\"type\":\"uint256\"}],\"name\":\"getPotential\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"encodedSkills\",\"type\":\"uint256\"}],\"name\":\"getRedCardLastGame\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"encodedSkills\",\"type\":\"uint256\"},{\"internalType\":\"uint8\",\"name\":\"skillIdx\",\"type\":\"uint8\"}],\"name\":\"getSkill\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"encodedSkills\",\"type\":\"uint256\"}],\"name\":\"getSubstitutedFirstHalf\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"encodedSkills\",\"type\":\"uint256\"}],\"name\":\"getSumOfSkills\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256[25]\",\"name\":\"skills\",\"type\":\"uint256[25]\"}],\"name\":\"getSumOfTopPlayerSkills\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"teamSkills\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"encodedSkills\",\"type\":\"uint256\"}],\"name\":\"getYellowCardFirstHalf\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256[25]\",\"name\":\"arr\",\"type\":\"uint256[25]\"},{\"internalType\":\"int256\",\"name\":\"left\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"right\",\"type\":\"int256\"}],\"name\":\"quickSort25\",\"outputs\":[],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256[25]\",\"name\":\"data\",\"type\":\"uint256[25]\"}],\"name\":\"sort25\",\"outputs\":[{\"internalType\":\"uint256[25]\",\"name\":\"\",\"type\":\"uint256[25]\"}],\"stateMutability\":\"pure\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{\"getSumOfTopPlayerSkills(uint256[25])\":{\"notice\":\"warning: getSumOfTopPlayerSkills rewrites the skills array this function returns the sum of the skills of the top 18 players in the team\"}}}},\"settings\":{\"compilationTarget\":{\"/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/gameEngine/GetSumSkills.sol\":\"GetSumSkills\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/encoders/EncodingSkillsGetters.sol\":{\"keccak256\":\"0x65343384ee45047e6730c3810e337686f0a493a078a129cbcb875ac459e9886b\",\"urls\":[\"bzz-raw://26475f70dc708767955e1c50729e6d769eb7353cf3059644775f3accd99392ff\",\"dweb:/ipfs/QmZFv3rgvtr3NHyNVD6NsbGFHf8KTf83JyN7JnPYFy5bKf\"]},\"/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/gameEngine/GetSumSkills.sol\":{\"keccak256\":\"0x31b586c548cf59ca4c0f9dd5830f33a2263cb9997b5ec94f94c300f7b5143387\",\"urls\":[\"bzz-raw://119f76a05ec06b3ccc1f8d27472682f478dc606c4ac7114248d687b63d943188\",\"dweb:/ipfs/QmQgCMYbSKD6BtG1z8Yv6JkGJHBcukKwoSSqmdjkQ1yi7z\"]},\"/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/gameEngine/SortValues25.sol\":{\"keccak256\":\"0x23c86c972260f6da281a4bb175d93f8a9f951ff75b906a6d2a35d2a8670115ff\",\"urls\":[\"bzz-raw://61a10033423ec01a3b95fdd248533dd4d182c97399dac722de85d6bf01854ca1\",\"dweb:/ipfs/QmUMvkUvxVHgJBVcpdgjz2WoB5P63rmpqr2tG7dJx7ARKB\"]}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b506107bf806100206000396000f3fe608060405234801561001057600080fd5b50600436106101375760003560e01c80637ffa3a2e116100b8578063d2f7967d1161007c578063d2f7967d146103e2578063e37528bb146103ff578063e804e5191461041c578063f1aba29c14610439578063f2c357641461048d578063f2dc657f146104aa57610137565b80637ffa3a2e146102e157806388438b00146102fe578063c2bc41cd1461038b578063cc7d473b146103a8578063d1b3d8fd146103c557610137565b8063434807ad116100ff578063434807ad1461022657806347524b601461024357806356e3df97146102745780636f6c2ae01461029157806379e76597146102ae57610137565b80631060c9c21461013c5780631fc7768f1461016b57806320ba0fab1461018857806329d0dcfb146101e35780633518dd1d14610209575b600080fd5b6101596004803603602081101561015257600080fd5b50356104c7565b60408051918252519081900360200190f35b6101596004803603602081101561018157600080fd5b50356104d2565b6101e1600480360361036081101561019f57600080fd5b810190808061032001906019806020026040519081016040528092919082601960200280828437600092019190915250919450508135925050602001356104db565b005b610159600480360360408110156101f957600080fd5b508035906020013560ff166105e8565b6101596004803603602081101561021f57600080fd5b50356105f7565b6101596004803603602081101561023c57600080fd5b5035610600565b6102606004803603602081101561025957600080fd5b5035610609565b604080519115158252519081900360200190f35b6101596004803603602081101561028a57600080fd5b5035610615565b610159600480360360208110156102a757600080fd5b503561061e565b6102cb600480360360208110156102c457600080fd5b5035610643565b6040805160ff9092168252519081900360200190f35b610260600480360360208110156102f757600080fd5b503561064c565b610352600480360361032081101561031557600080fd5b8101908080610320019060198060200260405190810160405280929190826019602002808284376000920191909152509194506106589350505050565b604051808261032080838360005b83811015610378578181015183820152602001610360565b5050505090500191505060405180910390f35b610159600480360360208110156103a157600080fd5b503561066d565b610260600480360360208110156103be57600080fd5b5035610676565b610260600480360360208110156103db57600080fd5b5035610682565b610159600480360360208110156103f857600080fd5b503561068e565b6102606004803603602081101561041557600080fd5b503561069c565b6102cb6004803603602081101561043257600080fd5b50356106a8565b610159600480360361032081101561045057600080fd5b8101908080610320019060198060200260405190810160405280929190826019602002808284376000920191909152509194506106b19350505050565b610260600480360360208110156104a357600080fd5b5035610754565b610159600480360360208110156104c057600080fd5b5035610760565b60b51c6207ffff1690565b607e1c60071690565b8181808214156104ec5750506105e3565b60008560028686030586016019811061050157fe5b602002015190505b8183136105b9575b8086846019811061051e57fe5b6020020151111561053457600190920191610511565b85826019811061054057fe5b60200201518111156105585760001990910190610534565b8183136105b45785826019811061056b57fe5b602002015186846019811061057c57fe5b602002015187856019811061058d57fe5b6020020188856019811061059d57fe5b602002019190915252600190920191600019909101905b610509565b818512156105cc576105cc8686846104db565b838312156105df576105df8684866104db565b5050505b505050565b60ff166014021c620fffff1690565b607b1c60071690565b60741c600f1690565b60cc1c60019081161490565b60cd1c60ff1690565b600061062982610609565b61063b576106368261068e565b61063d565b815b92915050565b60b11c60071690565b60d61c60019081161490565b61066061076a565b61063b82600060186104db565b60781c60071690565b60ad1c60019081161490565b60d51c60019081161490565b60811c6507ffffffffff1690565b60b41c60019081161490565b60ae1c60071690565b6000805b60198160ff16101561071357828160ff16601981106106d057fe5b60200201511561070b576106f6838260ff16601981106106ec57fe5b60200201516104c7565b838260ff166019811061070557fe5b60200201525b6001016106b5565b5061071d82610658565b5060005b60128160ff16101561074e57828160ff166019811061073c57fe5b60200201519190910190600101610721565b50919050565b60ac1c60019081161490565b60641c61ffff1690565b604051806103200160405280601990602082028036833750919291505056fea264697066735822122014a4a0d5899fa6d76abcac936eb428b1fda2502d40d256ddb421530f7fd39b3b64736f6c63430006030033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106101375760003560e01c80637ffa3a2e116100b8578063d2f7967d1161007c578063d2f7967d146103e2578063e37528bb146103ff578063e804e5191461041c578063f1aba29c14610439578063f2c357641461048d578063f2dc657f146104aa57610137565b80637ffa3a2e146102e157806388438b00146102fe578063c2bc41cd1461038b578063cc7d473b146103a8578063d1b3d8fd146103c557610137565b8063434807ad116100ff578063434807ad1461022657806347524b601461024357806356e3df97146102745780636f6c2ae01461029157806379e76597146102ae57610137565b80631060c9c21461013c5780631fc7768f1461016b57806320ba0fab1461018857806329d0dcfb146101e35780633518dd1d14610209575b600080fd5b6101596004803603602081101561015257600080fd5b50356104c7565b60408051918252519081900360200190f35b6101596004803603602081101561018157600080fd5b50356104d2565b6101e1600480360361036081101561019f57600080fd5b810190808061032001906019806020026040519081016040528092919082601960200280828437600092019190915250919450508135925050602001356104db565b005b610159600480360360408110156101f957600080fd5b508035906020013560ff166105e8565b6101596004803603602081101561021f57600080fd5b50356105f7565b6101596004803603602081101561023c57600080fd5b5035610600565b6102606004803603602081101561025957600080fd5b5035610609565b604080519115158252519081900360200190f35b6101596004803603602081101561028a57600080fd5b5035610615565b610159600480360360208110156102a757600080fd5b503561061e565b6102cb600480360360208110156102c457600080fd5b5035610643565b6040805160ff9092168252519081900360200190f35b610260600480360360208110156102f757600080fd5b503561064c565b610352600480360361032081101561031557600080fd5b8101908080610320019060198060200260405190810160405280929190826019602002808284376000920191909152509194506106589350505050565b604051808261032080838360005b83811015610378578181015183820152602001610360565b5050505090500191505060405180910390f35b610159600480360360208110156103a157600080fd5b503561066d565b610260600480360360208110156103be57600080fd5b5035610676565b610260600480360360208110156103db57600080fd5b5035610682565b610159600480360360208110156103f857600080fd5b503561068e565b6102606004803603602081101561041557600080fd5b503561069c565b6102cb6004803603602081101561043257600080fd5b50356106a8565b610159600480360361032081101561045057600080fd5b8101908080610320019060198060200260405190810160405280929190826019602002808284376000920191909152509194506106b19350505050565b610260600480360360208110156104a357600080fd5b5035610754565b610159600480360360208110156104c057600080fd5b5035610760565b60b51c6207ffff1690565b607e1c60071690565b8181808214156104ec5750506105e3565b60008560028686030586016019811061050157fe5b602002015190505b8183136105b9575b8086846019811061051e57fe5b6020020151111561053457600190920191610511565b85826019811061054057fe5b60200201518111156105585760001990910190610534565b8183136105b45785826019811061056b57fe5b602002015186846019811061057c57fe5b602002015187856019811061058d57fe5b6020020188856019811061059d57fe5b602002019190915252600190920191600019909101905b610509565b818512156105cc576105cc8686846104db565b838312156105df576105df8684866104db565b5050505b505050565b60ff166014021c620fffff1690565b607b1c60071690565b60741c600f1690565b60cc1c60019081161490565b60cd1c60ff1690565b600061062982610609565b61063b576106368261068e565b61063d565b815b92915050565b60b11c60071690565b60d61c60019081161490565b61066061076a565b61063b82600060186104db565b60781c60071690565b60ad1c60019081161490565b60d51c60019081161490565b60811c6507ffffffffff1690565b60b41c60019081161490565b60ae1c60071690565b6000805b60198160ff16101561071357828160ff16601981106106d057fe5b60200201511561070b576106f6838260ff16601981106106ec57fe5b60200201516104c7565b838260ff166019811061070557fe5b60200201525b6001016106b5565b5061071d82610658565b5060005b60128160ff16101561074e57828160ff166019811061073c57fe5b60200201519190910190600101610721565b50919050565b60ac1c60019081161490565b60641c61ffff1690565b604051806103200160405280601990602082028036833750919291505056fea264697066735822122014a4a0d5899fa6d76abcac936eb428b1fda2502d40d256ddb421530f7fd39b3b64736f6c63430006030033",
+  "sourceMap": "220:562:24:-:0;;;;5:9:-1;2:2;;;27:1;24;17:12;2:2;220:562:24;;;;;;;",
+  "deployedSourceMap": "220:562:24:-:0;;;;5:9:-1;2:2;;;27:1;24;17:12;2:2;220:562:24;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;12:1:-1;9;2:12;2162:151:9;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;2162:151:9;;:::i;:::-;;;;;;;;;;;;;;;;1310:137;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;1310:137:9;;:::i;320:624:31:-;;;;;;15:3:-1;10;7:12;4:2;;;32:1;29;22:12;4:2;320:624:31;;;;;;;;;;;;;;;;;;;;;;;;;;;30:3:-1;22:6;14;1:33;99:1;81:16;;74:27;;;;-1:-1;320:624:31;;-1:-1:-1;;320:624:31;;;-1:-1:-1;;320:624:31;;;;:::i;:::-;;180:188:9;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;180:188:9;;;;;;;;;:::i;1170:134::-;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;1170:134:9;;:::i;891:133::-;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;891:133:9;;:::i;2323:135::-;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;2323:135:9;;:::i;:::-;;;;;;;;;;;;;;;;;;2469:128;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;2469:128:9;;:::i;508:190::-;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;508:190:9;;:::i;1878:134::-;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;1878:134:9;;:::i;:::-;;;;;;;;;;;;;;;;;;;2761:145;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;2761:145:9;;:::i;159:151:31:-;;;;;;15:3:-1;10;7:12;4:2;;;32:1;29;22:12;4:2;159:151:31;;;;;;;;;;;;;;;;;;;;;;;;;;;30:3:-1;22:6;14;1:33;99:1;81:16;;74:27;;;;-1:-1;159:151:31;;-1:-1:-1;159:151:31;;-1:-1:-1;;;;159:151:31:i;:::-;;;;;;;;;23:1:-1;8:100;33:3;30:1;27:10;8:100;;;90:11;;;84:18;71:11;;;64:39;52:2;45:10;8:100;;;12:14;159:151:31;;;;;;;;;;;;;;;;1030:134:9;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;1030:134:9;;:::i;1598:133::-;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;1598:133:9;;:::i;2603:144::-;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;2603:144:9;;:::i;704:181::-;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;704:181:9;;:::i;2018:138::-;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;2018:138:9;;:::i;1737:135::-;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;1737:135:9;;:::i;441:338:24:-;;;;;;15:3:-1;10;7:12;4:2;;;32:1;29;22:12;4:2;441:338:24;;;;;;;;;;;;;;;;;;;;;;;;;;;30:3:-1;22:6;14;1:33;99:1;81:16;;74:27;;;;-1:-1;441:338:24;;-1:-1:-1;441:338:24;;-1:-1:-1;;;;441:338:24:i;1453:139:9:-;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;1453:139:9;;:::i;374:128::-;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;374:128:9;;:::i;2162:151::-;2281:3;2264:20;2287:6;2264:29;;2162:151::o;1310:137::-;1432:3;1415:20;1438:1;1415:24;;1310:137::o;320:624:31:-;416:4;438:5;456:4;;;453:16;;;462:7;;;;453:16;478:10;491:3;524:1;508:12;;;507:18;500:4;:25;491:36;;;;;;;;;;;478:49;;537:277;549:1;544;:6;537:277;;566:32;588:5;573:3;582:1;573:12;;;;;;;;;;;:20;566:32;;;595:3;;;;;566:32;;;627:3;636:1;627:12;;;;;;;;;;;619:5;:20;612:32;;;-1:-1:-1;;641:3:31;;;;612:32;;;667:1;662;:6;658:146;;720:3;729:1;720:12;;;;;;;;;;;734:3;743:1;734:12;;;;;;;;;;;689:3;698:1;689:12;;;;;;;;;;703:3;712:1;703:12;;;;;;;;;;688:59;;;;;765:3;;;;;-1:-1:-1;;786:3:31;;;;658:146;537:277;;;834:1;827:4;:8;823:51;;;849:25;861:3;866:4;872:1;849:11;:25::i;:::-;892:5;888:1;:9;884:53;;;911:26;923:3;928:1;931:5;911:11;:26::i;:::-;320:624;;;;;;;:::o;180:188:9:-;303:17;;323:2;303:22;285:41;330:7;284:53;;180:188::o;1170:134::-;1289:3;1272:20;1295:1;1272:24;;1170:134::o;891:133::-;1008:3;991:20;1014:2;991:25;;891:133::o;2323:135::-;2437:3;2420:20;2443:1;2420:24;;;2412:38;;2323:135::o;2469:128::-;2580:3;2563:20;2587:3;2562:28;;2469:128::o;508:190::-;583:7;610:27;623:13;610:12;:27::i;:::-;609:82;;657:34;677:13;657:19;:34::i;:::-;609:82;;;641:13;609:82;602:89;508:190;-1:-1:-1;;508:190:9:o;1878:134::-;1997:3;1980:20;2003:1;1980:24;;1878:134::o;2761:145::-;2885:3;2868:20;2891:1;2868:24;;;2860:38;;2761:145::o;159:151:31:-;220:18;;:::i;:::-;249:34;261:4;271:1;279:2;249:11;:34::i;1030:134:9:-;1149:3;1132:20;1155:1;1132:24;;1030:134::o;1598:133::-;1711:3;1694:20;1717:1;1694:24;;;1693:31;;1598:133::o;2603:144::-;2726:3;2709:20;2732:1;2709:24;;;2701:38;;2603:144::o;704:181::-;828:3;811:20;834:13;811:36;;704:181::o;2018:138::-;2136:3;2119:20;2142:1;2119:24;;;2118:31;;2018:138::o;1737:135::-;1857:3;1840:20;1863:1;1840:24;;1737:135::o;441:338:24:-;522:18;;552:129;574:2;570:1;:6;;;552:129;;;601:6;608:1;601:9;;;;;;;;;;;;;:14;597:73;;645:25;660:6;667:1;660:9;;;;;;;;;;;;;645:14;:25::i;:::-;633:6;640:1;633:9;;;;;;;;;;;;:37;597:73;578:3;;552:129;;;;690:14;697:6;690;:14::i;:::-;-1:-1:-1;719:7:24;714:59;736:2;732:1;:6;;;714:59;;;761:6;768:1;761:9;;;;;;;;;;;;;747:23;;;;;740:3;;714:59;;;;441:338;;;:::o;1453:139:9:-;1572:3;1555:20;1578:1;1555:24;;;1554:31;;1453:139::o;374:128::-;483:3;466:20;490:5;465:30;;374:128::o;220:562:24:-;;;;;;;;;;;29:2:-1;21:6;17:15;125:4;109:14;101:6;88:42;-1:-1;220:562:24;;;-1:-1:-1;;220:562:24:o",
+  "source": "pragma solidity >= 0.6.3;\n\n/**\n @title Getters for library to serialize/deserialize player skills\n @author Freeverse.io, www.freeverse.io\n*/\n\nimport \"./SortValues25.sol\";\nimport \"../encoders/EncodingSkillsGetters.sol\";\n\ncontract GetSumSkills is SortValues25, EncodingSkillsGetters {\n\n    /// warning: getSumOfTopPlayerSkills rewrites the skills array\n    /// this function returns the sum of the skills of the top 18 players in the team\n    function getSumOfTopPlayerSkills(uint256[25] memory skills) public pure returns (uint256 teamSkills) {\n        for (uint8 p = 0; p < 25; p++) {\n            if (skills[p] != 0)\n                skills[p] = getSumOfSkills(skills[p]);\n        }\n        sort25(skills);\n        for (uint8 p = 0; p < 18; p++) { teamSkills += skills[p]; }\n    }\n\n}\n",
+  "sourcePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/gameEngine/GetSumSkills.sol",
+  "ast": {
+    "absolutePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/gameEngine/GetSumSkills.sol",
+    "exportedSymbols": {
+      "GetSumSkills": [
+        11492
+      ]
+    },
+    "id": 11493,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 11424,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.6",
+          ".3"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:25:24"
+      },
+      {
+        "absolutePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/gameEngine/SortValues25.sol",
+        "file": "./SortValues25.sol",
+        "id": 11425,
+        "nodeType": "ImportDirective",
+        "scope": 11493,
+        "sourceUnit": 14811,
+        "src": "142:28:24",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/encoders/EncodingSkillsGetters.sol",
+        "file": "../encoders/EncodingSkillsGetters.sol",
+        "id": 11426,
+        "nodeType": "ImportDirective",
+        "scope": 11493,
+        "sourceUnit": 2801,
+        "src": "171:47:24",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 11427,
+              "name": "SortValues25",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 14810,
+              "src": "245:12:24",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_SortValues25_$14810",
+                "typeString": "contract SortValues25"
+              }
+            },
+            "id": 11428,
+            "nodeType": "InheritanceSpecifier",
+            "src": "245:12:24"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 11429,
+              "name": "EncodingSkillsGetters",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 2800,
+              "src": "259:21:24",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_EncodingSkillsGetters_$2800",
+                "typeString": "contract EncodingSkillsGetters"
+              }
+            },
+            "id": 11430,
+            "nodeType": "InheritanceSpecifier",
+            "src": "259:21:24"
+          }
+        ],
+        "contractDependencies": [
+          2800,
+          14810
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 11492,
+        "linearizedBaseContracts": [
+          11492,
+          2800,
+          14810
+        ],
+        "name": "GetSumSkills",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 11490,
+              "nodeType": "Block",
+              "src": "542:237:24",
+              "statements": [
+                {
+                  "body": {
+                    "id": 11466,
+                    "nodeType": "Block",
+                    "src": "583:98:24",
+                    "statements": [
+                      {
+                        "condition": {
+                          "argumentTypes": null,
+                          "commonType": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          },
+                          "id": 11454,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "leftExpression": {
+                            "argumentTypes": null,
+                            "baseExpression": {
+                              "argumentTypes": null,
+                              "id": 11450,
+                              "name": "skills",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 11435,
+                              "src": "601:6:24",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_array$_t_uint256_$25_memory_ptr",
+                                "typeString": "uint256[25] memory"
+                              }
+                            },
+                            "id": 11452,
+                            "indexExpression": {
+                              "argumentTypes": null,
+                              "id": 11451,
+                              "name": "p",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 11441,
+                              "src": "608:1:24",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_uint8",
+                                "typeString": "uint8"
+                              }
+                            },
+                            "isConstant": false,
+                            "isLValue": true,
+                            "isPure": false,
+                            "lValueRequested": false,
+                            "nodeType": "IndexAccess",
+                            "src": "601:9:24",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          },
+                          "nodeType": "BinaryOperation",
+                          "operator": "!=",
+                          "rightExpression": {
+                            "argumentTypes": null,
+                            "hexValue": "30",
+                            "id": 11453,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "kind": "number",
+                            "lValueRequested": false,
+                            "nodeType": "Literal",
+                            "src": "614:1:24",
+                            "subdenomination": null,
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_rational_0_by_1",
+                              "typeString": "int_const 0"
+                            },
+                            "value": "0"
+                          },
+                          "src": "601:14:24",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_bool",
+                            "typeString": "bool"
+                          }
+                        },
+                        "falseBody": null,
+                        "id": 11465,
+                        "nodeType": "IfStatement",
+                        "src": "597:73:24",
+                        "trueBody": {
+                          "expression": {
+                            "argumentTypes": null,
+                            "id": 11463,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": false,
+                            "lValueRequested": false,
+                            "leftHandSide": {
+                              "argumentTypes": null,
+                              "baseExpression": {
+                                "argumentTypes": null,
+                                "id": 11455,
+                                "name": "skills",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 11435,
+                                "src": "633:6:24",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_array$_t_uint256_$25_memory_ptr",
+                                  "typeString": "uint256[25] memory"
+                                }
+                              },
+                              "id": 11457,
+                              "indexExpression": {
+                                "argumentTypes": null,
+                                "id": 11456,
+                                "name": "p",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 11441,
+                                "src": "640:1:24",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_uint8",
+                                  "typeString": "uint8"
+                                }
+                              },
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": true,
+                              "nodeType": "IndexAccess",
+                              "src": "633:9:24",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_uint256",
+                                "typeString": "uint256"
+                              }
+                            },
+                            "nodeType": "Assignment",
+                            "operator": "=",
+                            "rightHandSide": {
+                              "argumentTypes": null,
+                              "arguments": [
+                                {
+                                  "argumentTypes": null,
+                                  "baseExpression": {
+                                    "argumentTypes": null,
+                                    "id": 11459,
+                                    "name": "skills",
+                                    "nodeType": "Identifier",
+                                    "overloadedDeclarations": [],
+                                    "referencedDeclaration": 11435,
+                                    "src": "660:6:24",
+                                    "typeDescriptions": {
+                                      "typeIdentifier": "t_array$_t_uint256_$25_memory_ptr",
+                                      "typeString": "uint256[25] memory"
+                                    }
+                                  },
+                                  "id": 11461,
+                                  "indexExpression": {
+                                    "argumentTypes": null,
+                                    "id": 11460,
+                                    "name": "p",
+                                    "nodeType": "Identifier",
+                                    "overloadedDeclarations": [],
+                                    "referencedDeclaration": 11441,
+                                    "src": "667:1:24",
+                                    "typeDescriptions": {
+                                      "typeIdentifier": "t_uint8",
+                                      "typeString": "uint8"
+                                    }
+                                  },
+                                  "isConstant": false,
+                                  "isLValue": true,
+                                  "isPure": false,
+                                  "lValueRequested": false,
+                                  "nodeType": "IndexAccess",
+                                  "src": "660:9:24",
+                                  "typeDescriptions": {
+                                    "typeIdentifier": "t_uint256",
+                                    "typeString": "uint256"
+                                  }
+                                }
+                              ],
+                              "expression": {
+                                "argumentTypes": [
+                                  {
+                                    "typeIdentifier": "t_uint256",
+                                    "typeString": "uint256"
+                                  }
+                                ],
+                                "id": 11458,
+                                "name": "getSumOfSkills",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 2727,
+                                "src": "645:14:24",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_function_internal_pure$_t_uint256_$returns$_t_uint256_$",
+                                  "typeString": "function (uint256) pure returns (uint256)"
+                                }
+                              },
+                              "id": 11462,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "kind": "functionCall",
+                              "lValueRequested": false,
+                              "names": [],
+                              "nodeType": "FunctionCall",
+                              "src": "645:25:24",
+                              "tryCall": false,
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_uint256",
+                                "typeString": "uint256"
+                              }
+                            },
+                            "src": "633:37:24",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          },
+                          "id": 11464,
+                          "nodeType": "ExpressionStatement",
+                          "src": "633:37:24"
+                        }
+                      }
+                    ]
+                  },
+                  "condition": {
+                    "argumentTypes": null,
+                    "commonType": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    },
+                    "id": 11446,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftExpression": {
+                      "argumentTypes": null,
+                      "id": 11444,
+                      "name": "p",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 11441,
+                      "src": "570:1:24",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint8",
+                        "typeString": "uint8"
+                      }
+                    },
+                    "nodeType": "BinaryOperation",
+                    "operator": "<",
+                    "rightExpression": {
+                      "argumentTypes": null,
+                      "hexValue": "3235",
+                      "id": 11445,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "number",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "574:2:24",
+                      "subdenomination": null,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_rational_25_by_1",
+                        "typeString": "int_const 25"
+                      },
+                      "value": "25"
+                    },
+                    "src": "570:6:24",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 11467,
+                  "initializationExpression": {
+                    "assignments": [
+                      11441
+                    ],
+                    "declarations": [
+                      {
+                        "constant": false,
+                        "id": 11441,
+                        "name": "p",
+                        "nodeType": "VariableDeclaration",
+                        "overrides": null,
+                        "scope": 11467,
+                        "src": "557:7:24",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint8",
+                          "typeString": "uint8"
+                        },
+                        "typeName": {
+                          "id": 11440,
+                          "name": "uint8",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "557:5:24",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint8",
+                            "typeString": "uint8"
+                          }
+                        },
+                        "value": null,
+                        "visibility": "internal"
+                      }
+                    ],
+                    "id": 11443,
+                    "initialValue": {
+                      "argumentTypes": null,
+                      "hexValue": "30",
+                      "id": 11442,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "number",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "567:1:24",
+                      "subdenomination": null,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_rational_0_by_1",
+                        "typeString": "int_const 0"
+                      },
+                      "value": "0"
+                    },
+                    "nodeType": "VariableDeclarationStatement",
+                    "src": "557:11:24"
+                  },
+                  "loopExpression": {
+                    "expression": {
+                      "argumentTypes": null,
+                      "id": 11448,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "nodeType": "UnaryOperation",
+                      "operator": "++",
+                      "prefix": false,
+                      "src": "578:3:24",
+                      "subExpression": {
+                        "argumentTypes": null,
+                        "id": 11447,
+                        "name": "p",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 11441,
+                        "src": "578:1:24",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint8",
+                          "typeString": "uint8"
+                        }
+                      },
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint8",
+                        "typeString": "uint8"
+                      }
+                    },
+                    "id": 11449,
+                    "nodeType": "ExpressionStatement",
+                    "src": "578:3:24"
+                  },
+                  "nodeType": "ForStatement",
+                  "src": "552:129:24"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 11469,
+                        "name": "skills",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 11435,
+                        "src": "697:6:24",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$25_memory_ptr",
+                          "typeString": "uint256[25] memory"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_array$_t_uint256_$25_memory_ptr",
+                          "typeString": "uint256[25] memory"
+                        }
+                      ],
+                      "id": 11468,
+                      "name": "sort25",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 14680,
+                      "src": "690:6:24",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$_t_array$_t_uint256_$25_memory_ptr_$returns$_t_array$_t_uint256_$25_memory_ptr_$",
+                        "typeString": "function (uint256[25] memory) pure returns (uint256[25] memory)"
+                      }
+                    },
+                    "id": 11470,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "690:14:24",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$25_memory_ptr",
+                      "typeString": "uint256[25] memory"
+                    }
+                  },
+                  "id": 11471,
+                  "nodeType": "ExpressionStatement",
+                  "src": "690:14:24"
+                },
+                {
+                  "body": {
+                    "id": 11488,
+                    "nodeType": "Block",
+                    "src": "745:28:24",
+                    "statements": [
+                      {
+                        "expression": {
+                          "argumentTypes": null,
+                          "id": 11486,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "leftHandSide": {
+                            "argumentTypes": null,
+                            "id": 11482,
+                            "name": "teamSkills",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 11438,
+                            "src": "747:10:24",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          },
+                          "nodeType": "Assignment",
+                          "operator": "+=",
+                          "rightHandSide": {
+                            "argumentTypes": null,
+                            "baseExpression": {
+                              "argumentTypes": null,
+                              "id": 11483,
+                              "name": "skills",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 11435,
+                              "src": "761:6:24",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_array$_t_uint256_$25_memory_ptr",
+                                "typeString": "uint256[25] memory"
+                              }
+                            },
+                            "id": 11485,
+                            "indexExpression": {
+                              "argumentTypes": null,
+                              "id": 11484,
+                              "name": "p",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 11473,
+                              "src": "768:1:24",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_uint8",
+                                "typeString": "uint8"
+                              }
+                            },
+                            "isConstant": false,
+                            "isLValue": true,
+                            "isPure": false,
+                            "lValueRequested": false,
+                            "nodeType": "IndexAccess",
+                            "src": "761:9:24",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          },
+                          "src": "747:23:24",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "id": 11487,
+                        "nodeType": "ExpressionStatement",
+                        "src": "747:23:24"
+                      }
+                    ]
+                  },
+                  "condition": {
+                    "argumentTypes": null,
+                    "commonType": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    },
+                    "id": 11478,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftExpression": {
+                      "argumentTypes": null,
+                      "id": 11476,
+                      "name": "p",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 11473,
+                      "src": "732:1:24",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint8",
+                        "typeString": "uint8"
+                      }
+                    },
+                    "nodeType": "BinaryOperation",
+                    "operator": "<",
+                    "rightExpression": {
+                      "argumentTypes": null,
+                      "hexValue": "3138",
+                      "id": 11477,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "number",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "736:2:24",
+                      "subdenomination": null,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_rational_18_by_1",
+                        "typeString": "int_const 18"
+                      },
+                      "value": "18"
+                    },
+                    "src": "732:6:24",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 11489,
+                  "initializationExpression": {
+                    "assignments": [
+                      11473
+                    ],
+                    "declarations": [
+                      {
+                        "constant": false,
+                        "id": 11473,
+                        "name": "p",
+                        "nodeType": "VariableDeclaration",
+                        "overrides": null,
+                        "scope": 11489,
+                        "src": "719:7:24",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint8",
+                          "typeString": "uint8"
+                        },
+                        "typeName": {
+                          "id": 11472,
+                          "name": "uint8",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "719:5:24",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint8",
+                            "typeString": "uint8"
+                          }
+                        },
+                        "value": null,
+                        "visibility": "internal"
+                      }
+                    ],
+                    "id": 11475,
+                    "initialValue": {
+                      "argumentTypes": null,
+                      "hexValue": "30",
+                      "id": 11474,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "number",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "729:1:24",
+                      "subdenomination": null,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_rational_0_by_1",
+                        "typeString": "int_const 0"
+                      },
+                      "value": "0"
+                    },
+                    "nodeType": "VariableDeclarationStatement",
+                    "src": "719:11:24"
+                  },
+                  "loopExpression": {
+                    "expression": {
+                      "argumentTypes": null,
+                      "id": 11480,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "nodeType": "UnaryOperation",
+                      "operator": "++",
+                      "prefix": false,
+                      "src": "740:3:24",
+                      "subExpression": {
+                        "argumentTypes": null,
+                        "id": 11479,
+                        "name": "p",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 11473,
+                        "src": "740:1:24",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint8",
+                          "typeString": "uint8"
+                        }
+                      },
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint8",
+                        "typeString": "uint8"
+                      }
+                    },
+                    "id": 11481,
+                    "nodeType": "ExpressionStatement",
+                    "src": "740:3:24"
+                  },
+                  "nodeType": "ForStatement",
+                  "src": "714:59:24"
+                }
+              ]
+            },
+            "documentation": {
+              "id": 11431,
+              "nodeType": "StructuredDocumentation",
+              "src": "288:148:24",
+              "text": "warning: getSumOfTopPlayerSkills rewrites the skills array\n this function returns the sum of the skills of the top 18 players in the team"
+            },
+            "functionSelector": "f1aba29c",
+            "id": 11491,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getSumOfTopPlayerSkills",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 11436,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 11435,
+                  "name": "skills",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 11491,
+                  "src": "474:25:24",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$25_memory_ptr",
+                    "typeString": "uint256[25]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 11432,
+                      "name": "uint256",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "474:7:24",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 11434,
+                    "length": {
+                      "argumentTypes": null,
+                      "hexValue": "3235",
+                      "id": 11433,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "number",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "482:2:24",
+                      "subdenomination": null,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_rational_25_by_1",
+                        "typeString": "int_const 25"
+                      },
+                      "value": "25"
+                    },
+                    "nodeType": "ArrayTypeName",
+                    "src": "474:11:24",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$25_storage_ptr",
+                      "typeString": "uint256[25]"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "473:27:24"
+            },
+            "returnParameters": {
+              "id": 11439,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 11438,
+                  "name": "teamSkills",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 11491,
+                  "src": "522:18:24",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 11437,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "522:7:24",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "521:20:24"
+            },
+            "scope": 11492,
+            "src": "441:338:24",
+            "stateMutability": "pure",
+            "virtual": false,
+            "visibility": "public"
+          }
+        ],
+        "scope": 11493,
+        "src": "220:562:24"
+      }
+    ],
+    "src": "0:783:24"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/gameEngine/GetSumSkills.sol",
+    "exportedSymbols": {
+      "GetSumSkills": [
+        11492
+      ]
+    },
+    "id": 11493,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 11424,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.6",
+          ".3"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:25:24"
+      },
+      {
+        "absolutePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/gameEngine/SortValues25.sol",
+        "file": "./SortValues25.sol",
+        "id": 11425,
+        "nodeType": "ImportDirective",
+        "scope": 11493,
+        "sourceUnit": 14811,
+        "src": "142:28:24",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/encoders/EncodingSkillsGetters.sol",
+        "file": "../encoders/EncodingSkillsGetters.sol",
+        "id": 11426,
+        "nodeType": "ImportDirective",
+        "scope": 11493,
+        "sourceUnit": 2801,
+        "src": "171:47:24",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 11427,
+              "name": "SortValues25",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 14810,
+              "src": "245:12:24",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_SortValues25_$14810",
+                "typeString": "contract SortValues25"
+              }
+            },
+            "id": 11428,
+            "nodeType": "InheritanceSpecifier",
+            "src": "245:12:24"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 11429,
+              "name": "EncodingSkillsGetters",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 2800,
+              "src": "259:21:24",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_EncodingSkillsGetters_$2800",
+                "typeString": "contract EncodingSkillsGetters"
+              }
+            },
+            "id": 11430,
+            "nodeType": "InheritanceSpecifier",
+            "src": "259:21:24"
+          }
+        ],
+        "contractDependencies": [
+          2800,
+          14810
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 11492,
+        "linearizedBaseContracts": [
+          11492,
+          2800,
+          14810
+        ],
+        "name": "GetSumSkills",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 11490,
+              "nodeType": "Block",
+              "src": "542:237:24",
+              "statements": [
+                {
+                  "body": {
+                    "id": 11466,
+                    "nodeType": "Block",
+                    "src": "583:98:24",
+                    "statements": [
+                      {
+                        "condition": {
+                          "argumentTypes": null,
+                          "commonType": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          },
+                          "id": 11454,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "leftExpression": {
+                            "argumentTypes": null,
+                            "baseExpression": {
+                              "argumentTypes": null,
+                              "id": 11450,
+                              "name": "skills",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 11435,
+                              "src": "601:6:24",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_array$_t_uint256_$25_memory_ptr",
+                                "typeString": "uint256[25] memory"
+                              }
+                            },
+                            "id": 11452,
+                            "indexExpression": {
+                              "argumentTypes": null,
+                              "id": 11451,
+                              "name": "p",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 11441,
+                              "src": "608:1:24",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_uint8",
+                                "typeString": "uint8"
+                              }
+                            },
+                            "isConstant": false,
+                            "isLValue": true,
+                            "isPure": false,
+                            "lValueRequested": false,
+                            "nodeType": "IndexAccess",
+                            "src": "601:9:24",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          },
+                          "nodeType": "BinaryOperation",
+                          "operator": "!=",
+                          "rightExpression": {
+                            "argumentTypes": null,
+                            "hexValue": "30",
+                            "id": 11453,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "kind": "number",
+                            "lValueRequested": false,
+                            "nodeType": "Literal",
+                            "src": "614:1:24",
+                            "subdenomination": null,
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_rational_0_by_1",
+                              "typeString": "int_const 0"
+                            },
+                            "value": "0"
+                          },
+                          "src": "601:14:24",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_bool",
+                            "typeString": "bool"
+                          }
+                        },
+                        "falseBody": null,
+                        "id": 11465,
+                        "nodeType": "IfStatement",
+                        "src": "597:73:24",
+                        "trueBody": {
+                          "expression": {
+                            "argumentTypes": null,
+                            "id": 11463,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": false,
+                            "lValueRequested": false,
+                            "leftHandSide": {
+                              "argumentTypes": null,
+                              "baseExpression": {
+                                "argumentTypes": null,
+                                "id": 11455,
+                                "name": "skills",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 11435,
+                                "src": "633:6:24",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_array$_t_uint256_$25_memory_ptr",
+                                  "typeString": "uint256[25] memory"
+                                }
+                              },
+                              "id": 11457,
+                              "indexExpression": {
+                                "argumentTypes": null,
+                                "id": 11456,
+                                "name": "p",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 11441,
+                                "src": "640:1:24",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_uint8",
+                                  "typeString": "uint8"
+                                }
+                              },
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": true,
+                              "nodeType": "IndexAccess",
+                              "src": "633:9:24",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_uint256",
+                                "typeString": "uint256"
+                              }
+                            },
+                            "nodeType": "Assignment",
+                            "operator": "=",
+                            "rightHandSide": {
+                              "argumentTypes": null,
+                              "arguments": [
+                                {
+                                  "argumentTypes": null,
+                                  "baseExpression": {
+                                    "argumentTypes": null,
+                                    "id": 11459,
+                                    "name": "skills",
+                                    "nodeType": "Identifier",
+                                    "overloadedDeclarations": [],
+                                    "referencedDeclaration": 11435,
+                                    "src": "660:6:24",
+                                    "typeDescriptions": {
+                                      "typeIdentifier": "t_array$_t_uint256_$25_memory_ptr",
+                                      "typeString": "uint256[25] memory"
+                                    }
+                                  },
+                                  "id": 11461,
+                                  "indexExpression": {
+                                    "argumentTypes": null,
+                                    "id": 11460,
+                                    "name": "p",
+                                    "nodeType": "Identifier",
+                                    "overloadedDeclarations": [],
+                                    "referencedDeclaration": 11441,
+                                    "src": "667:1:24",
+                                    "typeDescriptions": {
+                                      "typeIdentifier": "t_uint8",
+                                      "typeString": "uint8"
+                                    }
+                                  },
+                                  "isConstant": false,
+                                  "isLValue": true,
+                                  "isPure": false,
+                                  "lValueRequested": false,
+                                  "nodeType": "IndexAccess",
+                                  "src": "660:9:24",
+                                  "typeDescriptions": {
+                                    "typeIdentifier": "t_uint256",
+                                    "typeString": "uint256"
+                                  }
+                                }
+                              ],
+                              "expression": {
+                                "argumentTypes": [
+                                  {
+                                    "typeIdentifier": "t_uint256",
+                                    "typeString": "uint256"
+                                  }
+                                ],
+                                "id": 11458,
+                                "name": "getSumOfSkills",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 2727,
+                                "src": "645:14:24",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_function_internal_pure$_t_uint256_$returns$_t_uint256_$",
+                                  "typeString": "function (uint256) pure returns (uint256)"
+                                }
+                              },
+                              "id": 11462,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "kind": "functionCall",
+                              "lValueRequested": false,
+                              "names": [],
+                              "nodeType": "FunctionCall",
+                              "src": "645:25:24",
+                              "tryCall": false,
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_uint256",
+                                "typeString": "uint256"
+                              }
+                            },
+                            "src": "633:37:24",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          },
+                          "id": 11464,
+                          "nodeType": "ExpressionStatement",
+                          "src": "633:37:24"
+                        }
+                      }
+                    ]
+                  },
+                  "condition": {
+                    "argumentTypes": null,
+                    "commonType": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    },
+                    "id": 11446,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftExpression": {
+                      "argumentTypes": null,
+                      "id": 11444,
+                      "name": "p",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 11441,
+                      "src": "570:1:24",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint8",
+                        "typeString": "uint8"
+                      }
+                    },
+                    "nodeType": "BinaryOperation",
+                    "operator": "<",
+                    "rightExpression": {
+                      "argumentTypes": null,
+                      "hexValue": "3235",
+                      "id": 11445,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "number",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "574:2:24",
+                      "subdenomination": null,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_rational_25_by_1",
+                        "typeString": "int_const 25"
+                      },
+                      "value": "25"
+                    },
+                    "src": "570:6:24",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 11467,
+                  "initializationExpression": {
+                    "assignments": [
+                      11441
+                    ],
+                    "declarations": [
+                      {
+                        "constant": false,
+                        "id": 11441,
+                        "name": "p",
+                        "nodeType": "VariableDeclaration",
+                        "overrides": null,
+                        "scope": 11467,
+                        "src": "557:7:24",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint8",
+                          "typeString": "uint8"
+                        },
+                        "typeName": {
+                          "id": 11440,
+                          "name": "uint8",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "557:5:24",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint8",
+                            "typeString": "uint8"
+                          }
+                        },
+                        "value": null,
+                        "visibility": "internal"
+                      }
+                    ],
+                    "id": 11443,
+                    "initialValue": {
+                      "argumentTypes": null,
+                      "hexValue": "30",
+                      "id": 11442,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "number",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "567:1:24",
+                      "subdenomination": null,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_rational_0_by_1",
+                        "typeString": "int_const 0"
+                      },
+                      "value": "0"
+                    },
+                    "nodeType": "VariableDeclarationStatement",
+                    "src": "557:11:24"
+                  },
+                  "loopExpression": {
+                    "expression": {
+                      "argumentTypes": null,
+                      "id": 11448,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "nodeType": "UnaryOperation",
+                      "operator": "++",
+                      "prefix": false,
+                      "src": "578:3:24",
+                      "subExpression": {
+                        "argumentTypes": null,
+                        "id": 11447,
+                        "name": "p",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 11441,
+                        "src": "578:1:24",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint8",
+                          "typeString": "uint8"
+                        }
+                      },
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint8",
+                        "typeString": "uint8"
+                      }
+                    },
+                    "id": 11449,
+                    "nodeType": "ExpressionStatement",
+                    "src": "578:3:24"
+                  },
+                  "nodeType": "ForStatement",
+                  "src": "552:129:24"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 11469,
+                        "name": "skills",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 11435,
+                        "src": "697:6:24",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$25_memory_ptr",
+                          "typeString": "uint256[25] memory"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_array$_t_uint256_$25_memory_ptr",
+                          "typeString": "uint256[25] memory"
+                        }
+                      ],
+                      "id": 11468,
+                      "name": "sort25",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 14680,
+                      "src": "690:6:24",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$_t_array$_t_uint256_$25_memory_ptr_$returns$_t_array$_t_uint256_$25_memory_ptr_$",
+                        "typeString": "function (uint256[25] memory) pure returns (uint256[25] memory)"
+                      }
+                    },
+                    "id": 11470,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "690:14:24",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$25_memory_ptr",
+                      "typeString": "uint256[25] memory"
+                    }
+                  },
+                  "id": 11471,
+                  "nodeType": "ExpressionStatement",
+                  "src": "690:14:24"
+                },
+                {
+                  "body": {
+                    "id": 11488,
+                    "nodeType": "Block",
+                    "src": "745:28:24",
+                    "statements": [
+                      {
+                        "expression": {
+                          "argumentTypes": null,
+                          "id": 11486,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "leftHandSide": {
+                            "argumentTypes": null,
+                            "id": 11482,
+                            "name": "teamSkills",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 11438,
+                            "src": "747:10:24",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          },
+                          "nodeType": "Assignment",
+                          "operator": "+=",
+                          "rightHandSide": {
+                            "argumentTypes": null,
+                            "baseExpression": {
+                              "argumentTypes": null,
+                              "id": 11483,
+                              "name": "skills",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 11435,
+                              "src": "761:6:24",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_array$_t_uint256_$25_memory_ptr",
+                                "typeString": "uint256[25] memory"
+                              }
+                            },
+                            "id": 11485,
+                            "indexExpression": {
+                              "argumentTypes": null,
+                              "id": 11484,
+                              "name": "p",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 11473,
+                              "src": "768:1:24",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_uint8",
+                                "typeString": "uint8"
+                              }
+                            },
+                            "isConstant": false,
+                            "isLValue": true,
+                            "isPure": false,
+                            "lValueRequested": false,
+                            "nodeType": "IndexAccess",
+                            "src": "761:9:24",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          },
+                          "src": "747:23:24",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "id": 11487,
+                        "nodeType": "ExpressionStatement",
+                        "src": "747:23:24"
+                      }
+                    ]
+                  },
+                  "condition": {
+                    "argumentTypes": null,
+                    "commonType": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    },
+                    "id": 11478,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftExpression": {
+                      "argumentTypes": null,
+                      "id": 11476,
+                      "name": "p",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 11473,
+                      "src": "732:1:24",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint8",
+                        "typeString": "uint8"
+                      }
+                    },
+                    "nodeType": "BinaryOperation",
+                    "operator": "<",
+                    "rightExpression": {
+                      "argumentTypes": null,
+                      "hexValue": "3138",
+                      "id": 11477,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "number",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "736:2:24",
+                      "subdenomination": null,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_rational_18_by_1",
+                        "typeString": "int_const 18"
+                      },
+                      "value": "18"
+                    },
+                    "src": "732:6:24",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 11489,
+                  "initializationExpression": {
+                    "assignments": [
+                      11473
+                    ],
+                    "declarations": [
+                      {
+                        "constant": false,
+                        "id": 11473,
+                        "name": "p",
+                        "nodeType": "VariableDeclaration",
+                        "overrides": null,
+                        "scope": 11489,
+                        "src": "719:7:24",
+                        "stateVariable": false,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint8",
+                          "typeString": "uint8"
+                        },
+                        "typeName": {
+                          "id": 11472,
+                          "name": "uint8",
+                          "nodeType": "ElementaryTypeName",
+                          "src": "719:5:24",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint8",
+                            "typeString": "uint8"
+                          }
+                        },
+                        "value": null,
+                        "visibility": "internal"
+                      }
+                    ],
+                    "id": 11475,
+                    "initialValue": {
+                      "argumentTypes": null,
+                      "hexValue": "30",
+                      "id": 11474,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "number",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "729:1:24",
+                      "subdenomination": null,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_rational_0_by_1",
+                        "typeString": "int_const 0"
+                      },
+                      "value": "0"
+                    },
+                    "nodeType": "VariableDeclarationStatement",
+                    "src": "719:11:24"
+                  },
+                  "loopExpression": {
+                    "expression": {
+                      "argumentTypes": null,
+                      "id": 11480,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "nodeType": "UnaryOperation",
+                      "operator": "++",
+                      "prefix": false,
+                      "src": "740:3:24",
+                      "subExpression": {
+                        "argumentTypes": null,
+                        "id": 11479,
+                        "name": "p",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 11473,
+                        "src": "740:1:24",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint8",
+                          "typeString": "uint8"
+                        }
+                      },
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint8",
+                        "typeString": "uint8"
+                      }
+                    },
+                    "id": 11481,
+                    "nodeType": "ExpressionStatement",
+                    "src": "740:3:24"
+                  },
+                  "nodeType": "ForStatement",
+                  "src": "714:59:24"
+                }
+              ]
+            },
+            "documentation": {
+              "id": 11431,
+              "nodeType": "StructuredDocumentation",
+              "src": "288:148:24",
+              "text": "warning: getSumOfTopPlayerSkills rewrites the skills array\n this function returns the sum of the skills of the top 18 players in the team"
+            },
+            "functionSelector": "f1aba29c",
+            "id": 11491,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getSumOfTopPlayerSkills",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 11436,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 11435,
+                  "name": "skills",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 11491,
+                  "src": "474:25:24",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$25_memory_ptr",
+                    "typeString": "uint256[25]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 11432,
+                      "name": "uint256",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "474:7:24",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 11434,
+                    "length": {
+                      "argumentTypes": null,
+                      "hexValue": "3235",
+                      "id": 11433,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "number",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "482:2:24",
+                      "subdenomination": null,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_rational_25_by_1",
+                        "typeString": "int_const 25"
+                      },
+                      "value": "25"
+                    },
+                    "nodeType": "ArrayTypeName",
+                    "src": "474:11:24",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$25_storage_ptr",
+                      "typeString": "uint256[25]"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "473:27:24"
+            },
+            "returnParameters": {
+              "id": 11439,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 11438,
+                  "name": "teamSkills",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 11491,
+                  "src": "522:18:24",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 11437,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "522:7:24",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "521:20:24"
+            },
+            "scope": 11492,
+            "src": "441:338:24",
+            "stateMutability": "pure",
+            "virtual": false,
+            "visibility": "public"
+          }
+        ],
+        "scope": 11493,
+        "src": "220:562:24"
+      }
+    ],
+    "src": "0:783:24"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.6.3+commit.8dda9521.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.0.23",
+  "updatedAt": "2024-10-16T06:02:47.908Z",
+  "devdoc": {
+    "methods": {}
+  },
+  "userdoc": {
+    "methods": {
+      "getSumOfTopPlayerSkills(uint256[25])": {
+        "notice": "warning: getSumOfTopPlayerSkills rewrites the skills array this function returns the sum of the skills of the top 18 players in the team"
+      }
+    }
+  }
+}

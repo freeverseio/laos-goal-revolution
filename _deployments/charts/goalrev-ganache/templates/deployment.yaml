@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: goalrev-ganache
+  labels:
+    app.kubernetes.io/app: goalrev-ganache
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/app: goalrev-ganache
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/app: goalrev-ganache
+    spec:
+      containers:
+      - name: goalrev-ganache
+        image: freeverseio/goalrev-ganache:{{ .Values.imageTag }}        
+        resources:
+          requests:
+            memory: "1024Mi"
+            cpu: "100m"
+          limits:
+            memory: "2056Mi"
+            cpu: "500m"
+        imagePullPolicy: Always        
+      imagePullSecrets:
+      - name: docker-secret

@@ -27,7 +27,6 @@ commands:
           docker build -t << parameters.image >>:$CIRCLE_SHA1 .
           docker push << parameters.image >>:$CIRCLE_SHA1
  
-
 jobs:
 
   deploy_to_cluster:
@@ -105,7 +104,6 @@ jobs:
           image: << parameters.image >>
           root: << parameters.root >>
 
-
 workflows:
   ci-workflow:
     jobs:
@@ -136,72 +134,44 @@ workflows:
             branches:
               only:
                 - main
+      - build:
+          name: build-goalrev-ganache
+          root: goalrev-ganache
+          image: freeverseio/goalrev-ganache
+          context: dockerhub
+          filters:
+            branches:
+              only:
+                - main
 
       - deployment-test
 
       - approval:
           type: approval
-          name: approve-api-deploy
+          name: approve-goalrev-all-deploy
           requires:
             - deployment-test
             - build-goalrev-api
-          filters:
-            branches:
-              only:
-                - main
-
-      - approval:
-          type: approval
-          name: approve-core-deploy
-          requires:
-            - deployment-test
             - build-goalrev-core
-          filters:
-            branches:
-              only:
-                - main
-      
-      - approval:
-          type: approval
-          name: approve-processor-deploy
-          requires:
-            - deployment-test
             - build-goalrev-processor
+            - build-goalrev-ganache
+          filters:
+            branches:
+              only:
+                - main      
+      
+      - deploy_to_cluster:
+          name: deploy-to-dev-all
+          requires:
+            - deployment-test
+            - approve-goalrev-all-deploy
+          environment: development
           filters:
             branches:
               only:
                 - main
       
-      - deploy_to_cluster:
-          name: deploy-to-dev-api
-          requires:
-            - deployment-test
-            - approve-api-deploy
-          environment: development
-          filters:
-            branches:
-              only:
-                - main
-      - deploy_to_cluster:
-          name: deploy-to-dev-core
-          requires:
-            - deployment-test
-            - approve-core-deploy
-          environment: development
-          filters:
-            branches:
-              only:
-                - main
-      - deploy_to_cluster:
-          name: deploy-to-dev-processor
-          requires:
-            - deployment-test
-            - approve-processor-deploy
-          environment: development
-          filters:
-            branches:
-              only:
-                - main
+        
 
       
       

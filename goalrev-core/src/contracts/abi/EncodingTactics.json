@@ -1,0 +1,441 @@
+{
+  "contractName": "EncodingTactics",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "NO_SUBST",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "encoded",
+          "type": "uint32"
+        }
+      ],
+      "name": "decodeBoosts",
+      "outputs": [
+        {
+          "internalType": "uint8[6]",
+          "name": "skillsBoost",
+          "type": "uint8[6]"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint8[6]",
+          "name": "skillsBoost",
+          "type": "uint8[6]"
+        }
+      ],
+      "name": "encodeBoosts",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "encoded",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint8[3]",
+          "name": "substitutions",
+          "type": "uint8[3]"
+        },
+        {
+          "internalType": "uint8[3]",
+          "name": "subsRounds",
+          "type": "uint8[3]"
+        },
+        {
+          "internalType": "uint8[14]",
+          "name": "lineup",
+          "type": "uint8[14]"
+        },
+        {
+          "internalType": "bool[10]",
+          "name": "extraAttack",
+          "type": "bool[10]"
+        },
+        {
+          "internalType": "uint8",
+          "name": "tacticsId",
+          "type": "uint8"
+        }
+      ],
+      "name": "encodeTactics",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tactics",
+          "type": "uint256"
+        }
+      ],
+      "name": "getItemsData",
+      "outputs": [
+        {
+          "internalType": "uint8[25]",
+          "name": "staminas",
+          "type": "uint8[25]"
+        },
+        {
+          "internalType": "uint16",
+          "name": "",
+          "type": "uint16"
+        },
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tactics",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint32",
+          "name": "val",
+          "type": "uint32"
+        }
+      ],
+      "name": "setItemBoost",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tactics",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint16",
+          "name": "val",
+          "type": "uint16"
+        }
+      ],
+      "name": "setItemId",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tactics",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint8[25]",
+          "name": "vals",
+          "type": "uint8[25]"
+        }
+      ],
+      "name": "setStaminaRecovery",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.6.3+commit.8dda9521\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"NO_SUBST\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"encoded\",\"type\":\"uint32\"}],\"name\":\"decodeBoosts\",\"outputs\":[{\"internalType\":\"uint8[6]\",\"name\":\"skillsBoost\",\"type\":\"uint8[6]\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint8[6]\",\"name\":\"skillsBoost\",\"type\":\"uint8[6]\"}],\"name\":\"encodeBoosts\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"encoded\",\"type\":\"uint32\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint8[3]\",\"name\":\"substitutions\",\"type\":\"uint8[3]\"},{\"internalType\":\"uint8[3]\",\"name\":\"subsRounds\",\"type\":\"uint8[3]\"},{\"internalType\":\"uint8[14]\",\"name\":\"lineup\",\"type\":\"uint8[14]\"},{\"internalType\":\"bool[10]\",\"name\":\"extraAttack\",\"type\":\"bool[10]\"},{\"internalType\":\"uint8\",\"name\":\"tacticsId\",\"type\":\"uint8\"}],\"name\":\"encodeTactics\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tactics\",\"type\":\"uint256\"}],\"name\":\"getItemsData\",\"outputs\":[{\"internalType\":\"uint8[25]\",\"name\":\"staminas\",\"type\":\"uint8[25]\"},{\"internalType\":\"uint16\",\"name\":\"\",\"type\":\"uint16\"},{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tactics\",\"type\":\"uint256\"},{\"internalType\":\"uint32\",\"name\":\"val\",\"type\":\"uint32\"}],\"name\":\"setItemBoost\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tactics\",\"type\":\"uint256\"},{\"internalType\":\"uint16\",\"name\":\"val\",\"type\":\"uint16\"}],\"name\":\"setItemId\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tactics\",\"type\":\"uint256\"},{\"internalType\":\"uint8[25]\",\"name\":\"vals\",\"type\":\"uint8[25]\"}],\"name\":\"setStaminaRecovery\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{\"encodeBoosts(uint8[6])\":{\"notice\":\"bits: 5 skills * 6b per skill (max 64) + 2b for potential = 32b\"}},\"notice\":\"Spec: Tactics serializes a total of 3*4+3*4+14*5+10+6+25*2+13+32 = 205 bits. substitutions[3]    = 4 bit each = [3 different nums from 0 to 10], with 11 = no subs subsRounds[3]       = 4 bit each = [3 different nums from 0 to 11], round at which subs are to happen lineup[14]          = 5 bit each = [playerIdxInTeam1, ..., ] extraAttack[10]     = 1 bit each, 0: normal, 1: player has extra attack duties tacticsId           = 6 bit (0 = 442, 1 = 541, ... ...added by shop:  offsets: 110 -> 159, 160 -> 172, 173 -> 204... staminaRecovery[25] = 2 bit each => 50b ( 0 = none, 1 = 2 games, 2 = 4 games, 3 = full recovery) itemId              = 13 bit  itemEncodedBoost    = 32 bit*\"}},\"settings\":{\"compilationTarget\":{\"/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/encoders/EncodingTactics.sol\":\"EncodingTactics\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/encoders/EncodingTactics.sol\":{\"keccak256\":\"0xed78b5242416f829fa463bc4527b7f97ef8280c5f634ad6c35577d77b681d2c8\",\"urls\":[\"bzz-raw://9ccec65a0c34df7b186a86e87b60fd5357f57a3b48020ae877e7e88ee448cf38\",\"dweb:/ipfs/QmSW9f1HaPLVtk5YANrHGzWayjoTExhyEYyidc6qneWwpK\"]},\"/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/encoders/EncodingTacticsBase1.sol\":{\"keccak256\":\"0xfc4a2d7256399b17c44b5ef1e0b0a05bddbcbf5bc0f2f868d92e57bf7b12e9f8\",\"urls\":[\"bzz-raw://0dc28d2b018f0196895a078df7fe236ff2eb875272f4b8bef2a7aa22c1df5f03\",\"dweb:/ipfs/Qma7CDmuAE65LMo4Uo9ZDa67V8iTqiyezPc6s2M3D3wY9c\"]},\"/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/encoders/EncodingTacticsBase2.sol\":{\"keccak256\":\"0x1d4fba7936318c6a7ff198bf66776889f7f35c52be08558b2191711f8b684471\",\"urls\":[\"bzz-raw://d767ec1388ba590b95438e47f3a205dcc7d1cac2507f8e53d944820ae188eed2\",\"dweb:/ipfs/Qmahcr8FZYdbidaN5nv7iJk6ECi9KvRnSfFPjZsSoHUjHG\"]}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b50610a0e806100206000396000f3fe608060405234801561001057600080fd5b50600436106100885760003560e01c80636f30b06f1161005b5780636f30b06f146101ae578063755bfe0d1461028a578063b8100e57146102f5578063be8fcecb1461031e57610088565b806310bca22c1461008d5780632777d02a146100fc5780633c23306414610135578063638a530714610153575b600080fd5b6100aa600480360360208110156100a357600080fd5b5035610377565b604051808461032080838360005b838110156100d05781810151838201526020016100b8565b50505061ffff90961692019182525063ffffffff90921660208301525060408051918290030192509050f35b6101236004803603604081101561011257600080fd5b508035906020013561ffff166103e0565b60408051918252519081900360200190f35b61013d610456565b6040805160ff9092168252519081900360200190f35b6101766004803603602081101561016957600080fd5b503563ffffffff1661045b565b604051808260c080838360005b8381101561019b578181015183820152602001610183565b5050505090500191505060405180910390f35b61012360048036036103e08110156101c557600080fd5b8101908080606001906003806020026040519081016040528092919082600360200280828437600092019190915250506040805160608181019092529295949381810193925090600390839083908082843760009201919091525050604080516101c08181019092529295949381810193925090600e90839083908082843760009201919091525050604080516101408181019092529295949381810193925090600a90839083908082843760009201919091525091945050503560ff1690506104ae565b6102dc600480360360c08110156102a057600080fd5b810190808060c0019060068060200260405190810160405280929190826006602002808284376000920191909152509194506107d29350505050565b6040805163ffffffff9092168252519081900360200190f35b6101236004803603604081101561030b57600080fd5b508035906020013563ffffffff16610858565b610123600480360361034081101561033557600080fd5b60408051610320818101909252833593928301929161034083019190602084019060199083908390808284376000920191909152509194506108759350505050565b61037f61093c565b600080805b601960ff821610156103c45780600202606e0160ff1685901c600316848260ff16601981106103af57fe5b60ff9092166020929092020152600101610384565b50919360a084901c611fff169360ad1c63ffffffff1692509050565b60006120008261ffff161061043c576040805162461bcd60e51b815260206004820152601f60248201527f7374616d696e615265636f76657279206d757374206265203c20322a2a313300604482015290519081900360640190fd5b5060a01b61ffff60a01b16611fff60a01b19919091161790565b600b81565b61046361095b565b60005b600560ff8216116104a8578060060260ff168363ffffffff16901c603f16828260ff166006811061049357fe5b60ff9092166020929092020152600101610466565b50919050565b600060408260ff1610610508576040805162461bcd60e51b815260206004820152601e60248201527f7461637469637349642073686f756c642066697420696e203634206269740000604482015290519081900360640190fd5b60ff821660005b600a8160ff161015610556578060060160ff16858260ff16600a811061053157fe5b6020020151610541576000610544565b60015b60ff16901b919091179060010161050f565b5060005b600b8160ff1610156105fb5760198660ff8316600e811061057757fe5b602002015160ff1611156105cb576040805162461bcd60e51b8152602060048201526016602482015275696e636f7272656374206c696e65757020656e74727960501b604482015290519081900360640190fd5b8060050260100160ff16868260ff16600e81106105e457fe5b602002015160ff16901b919091179060010161055a565b5060005b60038160ff1610156107c757600c888260ff166003811061061c57fe5b602002015160ff161061066f576040805162461bcd60e51b8152602060048201526016602482015275696e636f7272656374206c696e65757020656e74727960501b604482015290519081900360640190fd5b600c878260ff166003811061068057fe5b602002015160ff16106106cc576040805162461bcd60e51b815260206004820152600f60248201526e1a5b98dbdc9c9958dd081c9bdd5b99608a1b604482015290519081900360640190fd5b600b8860ff8316600381106106dd57fe5b602002015160ff16141561074357601986600b830160ff16600e81106106ff57fe5b602002015160ff16146107435760405162461bcd60e51b815260040180806020018281038252603081526020018061097a6030913960400191505060405180910390fd5b80600b0160050260100160ff168682600b0160ff16600e811061076257fe5b602002015160ff16901b821791508060040260560160ff16888260ff166003811061078957fe5b602002015160ff16901b821791508060040260620160ff16878260ff16600381106107b057fe5b602002015160ff16901b91909117906001016105ff565b509695505050505050565b60006004826005602002015160ff161061081d5760405162461bcd60e51b815260040180806020018281038252602f8152602001806109aa602f913960400191505060405180910390fd5b60005b600560ff8216116104a8578060060260ff16838260ff166006811061084157fe5b602002015160ff16901b9190911790600101610820565b60ad1b63ffffffff60ad1b1663ffffffff60ad1b19919091161790565b6000805b601960ff82161015610934576004838260ff166019811061089657fe5b602002015160ff16106108f0576040805162461bcd60e51b815260206004820152601b60248201527f7374616d696e615265636f76657279206d757374206265203c20340000000000604482015290519081900360640190fd5b80600202606e0160ff16838260ff166019811061090957fe5b602002015160ff16901b81600202606e0160ff166003901b1985161793508080600101915050610879565b509192915050565b6040518061032001604052806019906020820280368337509192915050565b6040518060c00160405280600690602082028036833750919291505056fe696e636f7272656374206c696e65757020656e74727920666f72206e6f20737562737469747574656420706c6179657263616e6e6f74206f66666572206974656d73207468617420626f6f737420706f74656e7469616c20736f206d756368a26469706673582212203da63566d8faafe381fa0aae756b22794db1623df38b7bd763d6a48cf48b7f6564736f6c63430006030033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100885760003560e01c80636f30b06f1161005b5780636f30b06f146101ae578063755bfe0d1461028a578063b8100e57146102f5578063be8fcecb1461031e57610088565b806310bca22c1461008d5780632777d02a146100fc5780633c23306414610135578063638a530714610153575b600080fd5b6100aa600480360360208110156100a357600080fd5b5035610377565b604051808461032080838360005b838110156100d05781810151838201526020016100b8565b50505061ffff90961692019182525063ffffffff90921660208301525060408051918290030192509050f35b6101236004803603604081101561011257600080fd5b508035906020013561ffff166103e0565b60408051918252519081900360200190f35b61013d610456565b6040805160ff9092168252519081900360200190f35b6101766004803603602081101561016957600080fd5b503563ffffffff1661045b565b604051808260c080838360005b8381101561019b578181015183820152602001610183565b5050505090500191505060405180910390f35b61012360048036036103e08110156101c557600080fd5b8101908080606001906003806020026040519081016040528092919082600360200280828437600092019190915250506040805160608181019092529295949381810193925090600390839083908082843760009201919091525050604080516101c08181019092529295949381810193925090600e90839083908082843760009201919091525050604080516101408181019092529295949381810193925090600a90839083908082843760009201919091525091945050503560ff1690506104ae565b6102dc600480360360c08110156102a057600080fd5b810190808060c0019060068060200260405190810160405280929190826006602002808284376000920191909152509194506107d29350505050565b6040805163ffffffff9092168252519081900360200190f35b6101236004803603604081101561030b57600080fd5b508035906020013563ffffffff16610858565b610123600480360361034081101561033557600080fd5b60408051610320818101909252833593928301929161034083019190602084019060199083908390808284376000920191909152509194506108759350505050565b61037f61093c565b600080805b601960ff821610156103c45780600202606e0160ff1685901c600316848260ff16601981106103af57fe5b60ff9092166020929092020152600101610384565b50919360a084901c611fff169360ad1c63ffffffff1692509050565b60006120008261ffff161061043c576040805162461bcd60e51b815260206004820152601f60248201527f7374616d696e615265636f76657279206d757374206265203c20322a2a313300604482015290519081900360640190fd5b5060a01b61ffff60a01b16611fff60a01b19919091161790565b600b81565b61046361095b565b60005b600560ff8216116104a8578060060260ff168363ffffffff16901c603f16828260ff166006811061049357fe5b60ff9092166020929092020152600101610466565b50919050565b600060408260ff1610610508576040805162461bcd60e51b815260206004820152601e60248201527f7461637469637349642073686f756c642066697420696e203634206269740000604482015290519081900360640190fd5b60ff821660005b600a8160ff161015610556578060060160ff16858260ff16600a811061053157fe5b6020020151610541576000610544565b60015b60ff16901b919091179060010161050f565b5060005b600b8160ff1610156105fb5760198660ff8316600e811061057757fe5b602002015160ff1611156105cb576040805162461bcd60e51b8152602060048201526016602482015275696e636f7272656374206c696e65757020656e74727960501b604482015290519081900360640190fd5b8060050260100160ff16868260ff16600e81106105e457fe5b602002015160ff16901b919091179060010161055a565b5060005b60038160ff1610156107c757600c888260ff166003811061061c57fe5b602002015160ff161061066f576040805162461bcd60e51b8152602060048201526016602482015275696e636f7272656374206c696e65757020656e74727960501b604482015290519081900360640190fd5b600c878260ff166003811061068057fe5b602002015160ff16106106cc576040805162461bcd60e51b815260206004820152600f60248201526e1a5b98dbdc9c9958dd081c9bdd5b99608a1b604482015290519081900360640190fd5b600b8860ff8316600381106106dd57fe5b602002015160ff16141561074357601986600b830160ff16600e81106106ff57fe5b602002015160ff16146107435760405162461bcd60e51b815260040180806020018281038252603081526020018061097a6030913960400191505060405180910390fd5b80600b0160050260100160ff168682600b0160ff16600e811061076257fe5b602002015160ff16901b821791508060040260560160ff16888260ff166003811061078957fe5b602002015160ff16901b821791508060040260620160ff16878260ff16600381106107b057fe5b602002015160ff16901b91909117906001016105ff565b509695505050505050565b60006004826005602002015160ff161061081d5760405162461bcd60e51b815260040180806020018281038252602f8152602001806109aa602f913960400191505060405180910390fd5b60005b600560ff8216116104a8578060060260ff16838260ff166006811061084157fe5b602002015160ff16901b9190911790600101610820565b60ad1b63ffffffff60ad1b1663ffffffff60ad1b19919091161790565b6000805b601960ff82161015610934576004838260ff166019811061089657fe5b602002015160ff16106108f0576040805162461bcd60e51b815260206004820152601b60248201527f7374616d696e615265636f76657279206d757374206265203c20340000000000604482015290519081900360640190fd5b80600202606e0160ff16838260ff166019811061090957fe5b602002015160ff16901b81600202606e0160ff166003901b1985161793508080600101915050610879565b509192915050565b6040518061032001604052806019906020820280368337509192915050565b6040518060c00160405280600690602082028036833750919291505056fe696e636f7272656374206c696e65757020656e74727920666f72206e6f20737562737469747574656420706c6179657263616e6e6f74206f66666572206974656d73207468617420626f6f737420706f74656e7469616c20736f206d756368a26469706673582212203da63566d8faafe381fa0aae756b22794db1623df38b7bd763d6a48cf48b7f6564736f6c63430006030033",
+  "sourceMap": "1035:75:13:-:0;;;;5:9:-1;2:2;;;27:1;24;17:12;2:2;1035:75:13;;;;;;;",
+  "deployedSourceMap": "1035:75:13:-:0;;;;5:9:-1;2:2;;;27:1;24;17:12;2:2;1035:75:13;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;12:1:-1;9;2:12;1085:406:15;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;1085:406:15;;:::i;:::-;;;;;;;;;23:1:-1;8:100;33:3;30:1;27:10;8:100;;;90:11;;;84:18;71:11;;;64:39;52:2;45:10;8:100;;;-1:-1;;;1085:406:15;;;;;;;;;-1:-1:-1;1085:406:15;;;;;;;;-1:-1:-1;1085:406:15;;;;;;;;;-1:-1:-1;1085:406:15;-1:-1:-1;1085:406:15;675:225;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;675:225:15;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;248:35:14;;;:::i;:::-;;;;;;;;;;;;;;;;;;;1896:225:15;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;1896:225:15;;;;:::i;:::-;;;;;;;;;23:1:-1;8:100;33:3;30:1;27:10;8:100;;;90:11;;;84:18;71:11;;;64:39;52:2;45:10;8:100;;;12:14;1896:225:15;;;;;;;;;;;;;;;;755:1419:14;;;;;;15:3:-1;10;7:12;4:2;;;32:1;29;22:12;4:2;755:1419:14;;;;;;;;;;;;;;;;;;;;;;;;;;;30:3:-1;22:6;14;1:33;99:1;81:16;;74:27;;;;-1:-1;;755:1419:14;;;;;;;;;;;;;;;;;;;-1:-1:-1;755:1419:14;;;;;;;;;;1:33:-1;99:1;81:16;;74:27;;;;-1:-1;;755:1419:14;;;;;;;;;;;;;;;;;;;-1:-1:-1;755:1419:14;;;;;;;;;;1:33:-1;99:1;81:16;;74:27;;;;-1:-1;;755:1419:14;;;;;;;;;;;;;;;;;;;-1:-1:-1;755:1419:14;;;;;;;;;;1:33:-1;99:1;81:16;;74:27;;;;-1:-1;755:1419:14;;-1:-1:-1;;;755:1419:14;;;;-1:-1:-1;755:1419:14;:::i;1573:317:15:-;;;;;;15:3:-1;10;7:12;4:2;;;32:1;29;22:12;4:2;1573:317:15;;;;;;;;;;;;;;;;;;;;;;;;;;;30:3:-1;22:6;14;1:33;99:1;81:16;;74:27;;;;-1:-1;1573:317:15;;-1:-1:-1;1573:317:15;;-1:-1:-1;;;;1573:317:15:i;:::-;;;;;;;;;;;;;;;;;;;906:169;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;906:169:15;;;;;;;;;:::i;288:381::-;;;;;;15:3:-1;10;7:12;4:2;;;32:1;29;22:12;4:2;288:381:15;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1:33:-1;99:1;81:16;;74:27;;;;-1:-1;288:381:15;;-1:-1:-1;288:381:15;;-1:-1:-1;;;;288:381:15:i;1085:406::-;1144:43;;:::i;:::-;1189:6;;;1215:123;238:2;1233:24;;;;1215:123;;;1319:1;1317;:3;1311;:9;1299:22;;:7;:22;;1325:1;1298:28;1278:8;1287:1;1278:11;;;;;;;;;:49;;;;:11;;;;;;:49;1259:3;;1215:123;;;-1:-1:-1;1085:406:15;;1410:3;1399:14;;;1417:4;1398:23;;1456:3;1445:14;1463:10;1444:29;;-1:-1:-1;1085:406:15;-1:-1:-1;1085:406:15:o;675:225::-;743:7;776:5;770:3;:11;;;762:55;;;;;-1:-1:-1;;;762:55:15;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;889:3:15;873:19;-1:-1:-1;;;873:19:15;-1:-1:-1;;;;835:33:15;;;;834:59;;675:225::o;248:35:14:-;281:2;248:35;:::o;1896:225:15:-;1954:36;;:::i;:::-;2007:8;2002:113;280:1;2021:14;;;;2002:113;;2095:2;2093:1;:4;2082:15;;:7;:15;;;;2101:2;2081:22;2057:11;2069:2;2057:15;;;;;;;;;:47;;;;:15;;;;;;:47;2037:4;;2002:113;;;;1896:225;;;:::o;755:1419:14:-;1006:7;1050:2;1038:9;:14;;;1030:57;;;;;-1:-1:-1;;;1030:57:14;;;;;;;;;;;;;;;;;;;;;;;;;;;;1115:18;;;1097:15;1143:107;1165:2;1161:1;:6;;;1143:107;;;1238:1;1234;:5;1199:40;;1207:11;1219:1;1207:14;;;;;;;;;;;;;:22;;1228:1;1207:22;;;1224:1;1207:22;1199:31;;:40;;1188:51;;;;;1169:3;;1143:107;;;-1:-1:-1;1274:7:14;1269:181;1291:2;1287:1;:6;;;1269:181;;;240:2;1322:6;:33;:9;;;;;;;;;;;;;:33;;;;1314:68;;;;;-1:-1:-1;;;1314:68:14;;;;;;;;;;;;-1:-1:-1;;;1314:68:14;;;;;;;;;;;;;;;1438:1;1434;:5;1429:2;:10;1407:32;;1415:6;1422:1;1415:9;;;;;;;;;;;;;1407:18;;:32;;1396:43;;;;;1295:3;;1269:181;;;-1:-1:-1;1474:7:14;1469:665;1491:1;1487;:5;;;1469:665;;;1540:2;1521:13;1535:1;1521:16;;;;;;;;;;;;;:21;;;1513:56;;;;;-1:-1:-1;;;1513:56:14;;;;;;;;;;;;-1:-1:-1;;;1513:56:14;;;;;;;;;;;;;;;1607:2;1591:10;1602:1;1591:13;;;;;;;;;;;;;:18;;;1583:46;;;;;-1:-1:-1;;;1583:46:14;;;;;;;;;;;;-1:-1:-1;;;1583:46:14;;;;;;;;;;;;;;;281:2;1779:13;:28;:16;;;;;;;;;;;;;:28;;;1775:155;;;240:2;1835:6;1846:2;1842:6;;1835:27;:14;;;;;;;;;;;;:27;;;1827:88;;;;-1:-1:-1;;;1827:88:14;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1991:1;1995:2;1991:6;1986:1;:12;1981:2;:17;1954:44;;1962:6;1969:1;1973:2;1969:6;1962:14;;;;;;;;;;;;;1954:23;;:44;;1943:55;;;;2061:1;2057;:5;2052:2;:10;2023:39;;2031:13;2045:1;2031:16;;;;;;;;;;;;;2023:25;;:39;;2012:50;;;;2122:1;2118;:5;2113:2;:10;2087:36;;2095:10;2106:1;2095:13;;;;;;;;;;;;;2087:22;;:36;;2076:47;;;;;1494:3;;1469:665;;;-1:-1:-1;2160:7:14;755:1419;-1:-1:-1;;;;;;755:1419:14:o;1573:317:15:-;1653:14;1711:1;1687:11;280:1;1687:21;;;;:25;;;1679:85;;;;-1:-1:-1;;;1679:85:15;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1779:8;1774:110;280:1;1793:14;;;;1774:110;;1870:2;1868:1;:4;1841:31;;1848:11;1860:2;1848:15;;;;;;;;;;;;;1841:23;;:31;;1829:44;;;;;1809:4;;1774:110;;906:169;1064:3;1048:19;-1:-1:-1;;;1048:19:15;-1:-1:-1;;;;1004:39:15;;;;1003:65;;906:169::o;288:381::-;394:7;;414:225;238:2;432:24;;;;414:225;;;495:1;485:4;490:1;485:7;;;;;;;;;;;;;:11;;;477:51;;;;;-1:-1:-1;;;477:51:15;;;;;;;;;;;;;;;;;;;;;;;;;;;;625:1;623;:3;617;:9;596:31;;604:4;609:1;604:7;;;;;;;;;;;;;596:16;;:31;;588:1;586;:3;580;:9;565:25;;573:1;565:25;;563:28;553:7;:38;552:76;542:86;;458:3;;;;;;;414:225;;;-1:-1:-1;655:7:15;;288:381;-1:-1:-1;;288:381:15:o;1035:75:13:-;;;;;;;;;;;29:2:-1;21:6;17:15;125:4;109:14;101:6;88:42;-1:-1;1035:75:13;;;-1:-1:-1;;1035:75:13:o;:::-;;;;;;;;;;;29:2:-1;21:6;17:15;125:4;109:14;101:6;88:42;-1:-1;1035:75:13;;;-1:-1:-1;;1035:75:13:o",
+  "source": "pragma solidity >= 0.6.3;\n\nimport \"../encoders/EncodingTacticsBase1.sol\";\nimport \"../encoders/EncodingTacticsBase2.sol\";\n\n/**\n @title Library to serialize/deserialize match tactics decided by users\n @author Freeverse.io, www.freeverse.io\n @dev Due to contract-too-large-to-deploy, these functions had to be split into Base1, Base2\n*/\n \n/**\n Spec: Tactics serializes a total of 3*4+3*4+14*5+10+6+25*2+13+32 = 205 bits.\n\n substitutions[3]    = 4 bit each = [3 different nums from 0 to 10], with 11 = no subs\n subsRounds[3]       = 4 bit each = [3 different nums from 0 to 11], round at which subs are to happen\n lineup[14]          = 5 bit each = [playerIdxInTeam1, ..., ]\n extraAttack[10]     = 1 bit each, 0: normal, 1: player has extra attack duties\n tacticsId           = 6 bit (0 = 442, 1 = 541, ...\n\n ...added by shop:  offsets: 110 -> 159, 160 -> 172, 173 -> 204...\n staminaRecovery[25] = 2 bit each => 50b ( 0 = none, 1 = 2 games, 2 = 4 games, 3 = full recovery)\n itemId              = 13 bit \n itemEncodedBoost    = 32 bit\n**/\n\ncontract EncodingTactics is EncodingTacticsBase1, EncodingTacticsBase2 {\n\n}\n",
+  "sourcePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/encoders/EncodingTactics.sol",
+  "ast": {
+    "absolutePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/encoders/EncodingTactics.sol",
+    "exportedSymbols": {
+      "EncodingTactics": [
+        3874
+      ]
+    },
+    "id": 3875,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 3866,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.6",
+          ".3"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:25:13"
+      },
+      {
+        "absolutePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/encoders/EncodingTacticsBase1.sol",
+        "file": "../encoders/EncodingTacticsBase1.sol",
+        "id": 3867,
+        "nodeType": "ImportDirective",
+        "scope": 3875,
+        "sourceUnit": 4111,
+        "src": "27:46:13",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/encoders/EncodingTacticsBase2.sol",
+        "file": "../encoders/EncodingTacticsBase2.sol",
+        "id": 3868,
+        "nodeType": "ImportDirective",
+        "scope": 3875,
+        "sourceUnit": 4413,
+        "src": "74:46:13",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 3870,
+              "name": "EncodingTacticsBase1",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 4110,
+              "src": "1063:20:13",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_EncodingTacticsBase1_$4110",
+                "typeString": "contract EncodingTacticsBase1"
+              }
+            },
+            "id": 3871,
+            "nodeType": "InheritanceSpecifier",
+            "src": "1063:20:13"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 3872,
+              "name": "EncodingTacticsBase2",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 4412,
+              "src": "1085:20:13",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_EncodingTacticsBase2_$4412",
+                "typeString": "contract EncodingTacticsBase2"
+              }
+            },
+            "id": 3873,
+            "nodeType": "InheritanceSpecifier",
+            "src": "1085:20:13"
+          }
+        ],
+        "contractDependencies": [
+          4110,
+          4412
+        ],
+        "contractKind": "contract",
+        "documentation": {
+          "id": 3869,
+          "nodeType": "StructuredDocumentation",
+          "src": "336:697:13",
+          "text": "Spec: Tactics serializes a total of 3*4+3*4+14*5+10+6+25*2+13+32 = 205 bits.\nsubstitutions[3]    = 4 bit each = [3 different nums from 0 to 10], with 11 = no subs\nsubsRounds[3]       = 4 bit each = [3 different nums from 0 to 11], round at which subs are to happen\nlineup[14]          = 5 bit each = [playerIdxInTeam1, ..., ]\nextraAttack[10]     = 1 bit each, 0: normal, 1: player has extra attack duties\ntacticsId           = 6 bit (0 = 442, 1 = 541, ...\n...added by shop:  offsets: 110 -> 159, 160 -> 172, 173 -> 204...\nstaminaRecovery[25] = 2 bit each => 50b ( 0 = none, 1 = 2 games, 2 = 4 games, 3 = full recovery)\nitemId              = 13 bit \nitemEncodedBoost    = 32 bit*"
+        },
+        "fullyImplemented": true,
+        "id": 3874,
+        "linearizedBaseContracts": [
+          3874,
+          4412,
+          4110
+        ],
+        "name": "EncodingTactics",
+        "nodeType": "ContractDefinition",
+        "nodes": [],
+        "scope": 3875,
+        "src": "1035:75:13"
+      }
+    ],
+    "src": "0:1111:13"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/encoders/EncodingTactics.sol",
+    "exportedSymbols": {
+      "EncodingTactics": [
+        3874
+      ]
+    },
+    "id": 3875,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 3866,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.6",
+          ".3"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:25:13"
+      },
+      {
+        "absolutePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/encoders/EncodingTacticsBase1.sol",
+        "file": "../encoders/EncodingTacticsBase1.sol",
+        "id": 3867,
+        "nodeType": "ImportDirective",
+        "scope": 3875,
+        "sourceUnit": 4111,
+        "src": "27:46:13",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/encoders/EncodingTacticsBase2.sol",
+        "file": "../encoders/EncodingTacticsBase2.sol",
+        "id": 3868,
+        "nodeType": "ImportDirective",
+        "scope": 3875,
+        "sourceUnit": 4413,
+        "src": "74:46:13",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 3870,
+              "name": "EncodingTacticsBase1",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 4110,
+              "src": "1063:20:13",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_EncodingTacticsBase1_$4110",
+                "typeString": "contract EncodingTacticsBase1"
+              }
+            },
+            "id": 3871,
+            "nodeType": "InheritanceSpecifier",
+            "src": "1063:20:13"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 3872,
+              "name": "EncodingTacticsBase2",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 4412,
+              "src": "1085:20:13",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_EncodingTacticsBase2_$4412",
+                "typeString": "contract EncodingTacticsBase2"
+              }
+            },
+            "id": 3873,
+            "nodeType": "InheritanceSpecifier",
+            "src": "1085:20:13"
+          }
+        ],
+        "contractDependencies": [
+          4110,
+          4412
+        ],
+        "contractKind": "contract",
+        "documentation": {
+          "id": 3869,
+          "nodeType": "StructuredDocumentation",
+          "src": "336:697:13",
+          "text": "Spec: Tactics serializes a total of 3*4+3*4+14*5+10+6+25*2+13+32 = 205 bits.\nsubstitutions[3]    = 4 bit each = [3 different nums from 0 to 10], with 11 = no subs\nsubsRounds[3]       = 4 bit each = [3 different nums from 0 to 11], round at which subs are to happen\nlineup[14]          = 5 bit each = [playerIdxInTeam1, ..., ]\nextraAttack[10]     = 1 bit each, 0: normal, 1: player has extra attack duties\ntacticsId           = 6 bit (0 = 442, 1 = 541, ...\n...added by shop:  offsets: 110 -> 159, 160 -> 172, 173 -> 204...\nstaminaRecovery[25] = 2 bit each => 50b ( 0 = none, 1 = 2 games, 2 = 4 games, 3 = full recovery)\nitemId              = 13 bit \nitemEncodedBoost    = 32 bit*"
+        },
+        "fullyImplemented": true,
+        "id": 3874,
+        "linearizedBaseContracts": [
+          3874,
+          4412,
+          4110
+        ],
+        "name": "EncodingTactics",
+        "nodeType": "ContractDefinition",
+        "nodes": [],
+        "scope": 3875,
+        "src": "1035:75:13"
+      }
+    ],
+    "src": "0:1111:13"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.6.3+commit.8dda9521.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.0.23",
+  "updatedAt": "2024-10-16T06:02:47.842Z",
+  "devdoc": {
+    "methods": {}
+  },
+  "userdoc": {
+    "methods": {
+      "encodeBoosts(uint8[6])": {
+        "notice": "bits: 5 skills * 6b per skill (max 64) + 2b for potential = 32b"
+      }
+    },
+    "notice": "Spec: Tactics serializes a total of 3*4+3*4+14*5+10+6+25*2+13+32 = 205 bits. substitutions[3]    = 4 bit each = [3 different nums from 0 to 10], with 11 = no subs subsRounds[3]       = 4 bit each = [3 different nums from 0 to 11], round at which subs are to happen lineup[14]          = 5 bit each = [playerIdxInTeam1, ..., ] extraAttack[10]     = 1 bit each, 0: normal, 1: player has extra attack duties tacticsId           = 6 bit (0 = 442, 1 = 541, ... ...added by shop:  offsets: 110 -> 159, 160 -> 172, 173 -> 204... staminaRecovery[25] = 2 bit each => 50b ( 0 = none, 1 = 2 games, 2 = 4 games, 3 = full recovery) itemId              = 13 bit  itemEncodedBoost    = 32 bit*"
+  }
+}

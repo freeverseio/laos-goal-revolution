@@ -1,0 +1,299 @@
+[
+  {
+    "encodedLog": "904625697166429907578684580254429362549174092576235409827636622758600564479",
+    "assister": [
+      15,
+      14,
+      13,
+      12,
+      15,
+      14,
+      13,
+      12,
+      15,
+      14,
+      13,
+      12
+    ],
+    "shooter": [
+      15,
+      14,
+      13,
+      12,
+      15,
+      14,
+      13,
+      12,
+      15,
+      14,
+      13,
+      12
+    ],
+    "forwardPos": [
+      0,
+      1,
+      2,
+      3,
+      0,
+      1,
+      2,
+      3,
+      0,
+      1,
+      2,
+      3
+    ],
+    "penalty": [
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1
+    ],
+    "isHomeStadium": true,
+    "halfTimeSubs": [
+      31,
+      30,
+      31
+    ],
+    "nGKAndDefs": [
+      14,
+      15
+    ],
+    "nTot": [
+      15,
+      14
+    ],
+    "winner": 3,
+    "teamSumSkills": 16777215,
+    "trainingPoints": 4095,
+    "nGoals": 15,
+    "outOfGamePlayer": [
+      14,
+      13
+    ],
+    "outOfGameType": [
+      2,
+      3
+    ],
+    "outOfGameRound": [
+      14,
+      15
+    ],
+    "yellowCard": [
+      14,
+      15,
+      15,
+      14
+    ],
+    "inGameSubsHappened": [
+      3,
+      2,
+      3,
+      2,
+      3,
+      2
+    ],
+    "changesAtHalftime": 0
+  },
+  {
+    "encodedLog": "452312848583163519205360420064242222497338214976076956548505435227689901823",
+    "assister": [
+      15,
+      14,
+      13,
+      12,
+      15,
+      14,
+      13,
+      12,
+      15,
+      14,
+      13,
+      12
+    ],
+    "shooter": [
+      15,
+      14,
+      13,
+      12,
+      15,
+      14,
+      13,
+      12,
+      15,
+      14,
+      13,
+      12
+    ],
+    "forwardPos": [
+      0,
+      1,
+      2,
+      3,
+      0,
+      1,
+      2,
+      3,
+      0,
+      1,
+      2,
+      3
+    ],
+    "penalty": [
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1
+    ],
+    "isHomeStadium": false,
+    "halfTimeSubs": [
+      31,
+      30,
+      31
+    ],
+    "nGKAndDefs": [
+      14,
+      15
+    ],
+    "nTot": [
+      15,
+      14
+    ],
+    "winner": 3,
+    "teamSumSkills": 16777215,
+    "trainingPoints": 4095,
+    "nGoals": 15,
+    "outOfGamePlayer": [
+      14,
+      13
+    ],
+    "outOfGameType": [
+      2,
+      3
+    ],
+    "outOfGameRound": [
+      14,
+      15
+    ],
+    "yellowCard": [
+      14,
+      15,
+      15,
+      14
+    ],
+    "inGameSubsHappened": [
+      3,
+      2,
+      3,
+      2,
+      3,
+      2
+    ],
+    "changesAtHalftime": 0
+  },
+  {
+    "encodedLog": "3166189940082761849445305381205365062808353480577027676223292560413153877759",
+    "assister": [
+      15,
+      14,
+      13,
+      12,
+      15,
+      14,
+      13,
+      12,
+      15,
+      14,
+      13,
+      12
+    ],
+    "shooter": [
+      15,
+      14,
+      13,
+      12,
+      15,
+      14,
+      13,
+      12,
+      15,
+      14,
+      13,
+      12
+    ],
+    "forwardPos": [
+      0,
+      1,
+      2,
+      3,
+      0,
+      1,
+      2,
+      3,
+      0,
+      1,
+      2,
+      3
+    ],
+    "penalty": [
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1
+    ],
+    "isHomeStadium": false,
+    "halfTimeSubs": [
+      31,
+      30,
+      31
+    ],
+    "nGKAndDefs": [
+      14,
+      15
+    ],
+    "nTot": [
+      15,
+      14
+    ],
+    "winner": 3,
+    "teamSumSkills": 16777215,
+    "trainingPoints": 4095,
+    "nGoals": 15,
+    "outOfGamePlayer": [
+      14,
+      13
+    ],
+    "outOfGameType": [
+      2,
+      3
+    ],
+    "outOfGameRound": [
+      14,
+      15
+    ],
+    "yellowCard": [
+      14,
+      15,
+      15,
+      14
+    ],
+    "inGameSubsHappened": [
+      3,
+      2,
+      3,
+      2,
+      3,
+      2
+    ],
+    "changesAtHalftime": 3
+  }
+]

@@ -1,0 +1,8 @@
+releases:
+  - name: goalrev-ganache-release
+    namespace: "{{ .Values.namespace }}"  # Correct indentation here
+    installed: true
+    createNamespace: false
+    chart: .
+    values:
+      - imageTag: {{ .Values.imageTag }}
