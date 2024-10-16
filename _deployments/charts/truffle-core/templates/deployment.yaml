@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: goalrev-truffle-core
+  labels:
+    app.kubernetes.io/app: goalrev-truffle-core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/app: goalrev-truffle-core
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/app: goalrev-truffle-core
+    spec:
+      containers:
+      - name: goalrev-truffle-core
+        image: freeverseio/goalrev-truffle-core:{{ .Values.imageTag }}        
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        imagePullPolicy: Always        
+      imagePullSecrets:
+      - name: docker-secret
