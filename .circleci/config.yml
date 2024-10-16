@@ -136,7 +136,7 @@ workflows:
                 - main
       - build:
           name: build-goalrev-ganache-core
-          root: goalrev-ganache-core
+          root: goalrev-truffle-core
           image: freeverseio/goalrev-ganache-core
           context: dockerhub
           filters:
