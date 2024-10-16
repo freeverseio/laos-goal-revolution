@@ -4,15 +4,20 @@ import { LeagueService } from "../services/LeagueService";
 
 @JsonController("/league")
 export class LeagueController {
+  private leagueService: LeagueService;
+
+  constructor() {
+    this.leagueService = new LeagueService();
+  }
 
   @Post("/computeLeagueLeaderboard")
   async computeLeagueLeaderboard(@Body() body: LeagueLeaderboardInput): Promise<LeagueLeaderboardOutput> {
-    return await LeagueService.computeLeagueLeaderboard(body);
+    return await this.leagueService.computeLeagueLeaderboard(body);
   }
 
   @Post("/computeRankingPoints")
   async computeRankingPoints(@Body() body: RankingPointsInput): Promise<RankingPointsOutput> {
-    return await LeagueService.computeRankingPoints(body);
+    return await this.leagueService.computeRankingPoints(body);
   }
 
 }
