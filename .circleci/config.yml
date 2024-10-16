@@ -135,10 +135,14 @@ workflows:
               only:
                 - main
       - build:
-          name: build-goalrev-ganache-core
-          root: goalrev-truffle-core
+          name: build-goalrev-ganache
+          root: goalrev-ganache
           image: freeverseio/goalrev-ganache
-          context: dockerhub          
+          context: dockerhub
+          filters:
+            branches:
+              only:
+                - main
 
       - deployment-test
 
@@ -175,11 +179,14 @@ workflows:
                 - main
       - approval:
           type: approval
-          name: approve-ganache-core-deploy
+          name: approve-ganache-deploy
           requires:
             - deployment-test
-            - build-goalrev-ganache-core
-          
+            - build-goalrev-ganache
+          filters:
+            branches:
+              only:
+                - main          
       
       - deploy_to_cluster:
           name: deploy-to-dev-api
@@ -212,10 +219,10 @@ workflows:
               only:
                 - main
       - deploy_to_cluster:
-          name: deploy-to-dev-ganache-core
+          name: deploy-to-dev-ganache
           requires:
             - deployment-test
-            - approve-ganache-core-deploy
+            - approve-ganache-deploy
           environment: development
         
 

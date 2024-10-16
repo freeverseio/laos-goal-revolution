@@ -1,28 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: goalrev-truffle-core
+  name: goalrev-ganache
   labels:
-    app.kubernetes.io/app: goalrev-truffle-core
+    app.kubernetes.io/app: goalrev-ganache
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/app: goalrev-truffle-core
+      app.kubernetes.io/app: goalrev-ganache
   template:
     metadata:
       labels:
-        app.kubernetes.io/app: goalrev-truffle-core
+        app.kubernetes.io/app: goalrev-ganache
     spec:
       containers:
-      - name: goalrev-truffle-core
-        image: freeverseio/goalrev-truffle-core:{{ .Values.imageTag }}        
+      - name: goalrev-ganache
+        image: freeverseio/goalrev-ganache:{{ .Values.imageTag }}        
         resources:
           requests:
-            memory: "256Mi"
+            memory: "1024Mi"
             cpu: "100m"
           limits:
-            memory: "512Mi"
+            memory: "2056Mi"
             cpu: "500m"
         imagePullPolicy: Always        
       imagePullSecrets:

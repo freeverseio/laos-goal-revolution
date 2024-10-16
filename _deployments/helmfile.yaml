@@ -45,3 +45,7 @@ helmfiles:
       - namespace: {{ .Values.namespace }}
       - imageTag: {{ requiredEnv "CIRCLE_SHA1" }}
       - coreAppPort: {{ .Values.coreAppPort }}
+  - path: "charts/goalrev-ganache/helmfile.yaml"
+    values:
+      - namespace: {{ .Values.namespace }}
+      - imageTag: {{ requiredEnv "CIRCLE_SHA1" }}
