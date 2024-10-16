@@ -27,7 +27,6 @@ commands:
           docker build -t << parameters.image >>:$CIRCLE_SHA1 .
           docker push << parameters.image >>:$CIRCLE_SHA1
  
-
 jobs:
 
   deploy_to_cluster:
@@ -105,7 +104,6 @@ jobs:
           image: << parameters.image >>
           root: << parameters.root >>
 
-
 workflows:
   ci-workflow:
     jobs:
@@ -136,6 +134,15 @@ workflows:
             branches:
               only:
                 - main
+      - build:
+          name: build-goalrev-ganache-core
+          root: goalrev-ganache-core
+          image: freeverseio/goalrev-ganache-core
+          context: dockerhub
+          filters:
+            branches:
+              only:
+                - main
 
       - deployment-test
 
@@ -159,14 +166,23 @@ workflows:
           filters:
             branches:
               only:
-                - main
-      
+                - main      
       - approval:
           type: approval
           name: approve-processor-deploy
           requires:
             - deployment-test
             - build-goalrev-processor
+          filters:
+            branches:
+              only:
+                - main
+      - approval:
+          type: approval
+          name: approve-ganache-core-deploy
+          requires:
+            - deployment-test
+            - build-goalrev-ganache-core
           filters:
             branches:
               only:
@@ -202,6 +218,13 @@ workflows:
             branches:
               only:
                 - main
+      - deploy_to_cluster:
+        name: deploy-to-dev-ganache-core
+        requires:
+          - deployment-test
+          - approve-ganache-core-deploy
+        environment: development
+        
 
       
       
