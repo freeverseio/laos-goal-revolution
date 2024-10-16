@@ -148,45 +148,17 @@ workflows:
 
       - approval:
           type: approval
-          name: approve-api-deploy
+          name: approve-goalrev-all-deploy
           requires:
             - deployment-test
             - build-goalrev-api
-          filters:
-            branches:
-              only:
-                - main
-
-      - approval:
-          type: approval
-          name: approve-core-deploy
-          requires:
-            - deployment-test
             - build-goalrev-core
-          filters:
-            branches:
-              only:
-                - main      
-      - approval:
-          type: approval
-          name: approve-processor-deploy
-          requires:
-            - deployment-test
             - build-goalrev-processor
-          filters:
-            branches:
-              only:
-                - main
-      - approval:
-          type: approval
-          name: approve-ganache-deploy
-          requires:
-            - deployment-test
             - build-goalrev-ganache
           filters:
             branches:
               only:
-                - main          
+                - main      
       
       - deploy_to_cluster:
           name: deploy-to-dev-api
