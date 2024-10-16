@@ -30,7 +30,7 @@ async function startGanache() {
 // Run Truffle Migrations
 async function runMigrations() {
   try {
-    const { stdout, stderr } = await execPromise('truffle migrate --network ganache');
+    const { stdout, stderr } = await execPromise('./node_modules/.bin/truffle migrate --network ganache');
     if (stderr) {
       console.error(`Migration error: ${stderr}`);
     }
