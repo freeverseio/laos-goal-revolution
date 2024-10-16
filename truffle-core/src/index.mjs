@@ -1,4 +1,3 @@
-import express from 'express';
 import ganache from 'ganache';
 import { exec } from 'child_process';
 import { promisify } from 'util';
@@ -6,16 +5,14 @@ import { promisify } from 'util';
 const execPromise = promisify(exec);
 
 let ganacheServer;
-const app = express();
-const PORT = 3000;  // Port for your Express server
 
-// Ganache configuration with deterministic settings
+// Ganache configuration with deterministic mnemonic
 const ganacheOptions = {
   port: 8545,
-  gasLimit: 8000000, // Set a fixed gas limit for consistency
-  gasPrice: 20000000000, // Fixed gas price (20 Gwei)
+  gasLimit: 8000000,  // Set a fixed gas limit for consistency
+  gasPrice: 20000000000,  // Fixed gas price (20 Gwei)
   mnemonic: "myth like bonus scare over problem client lizard pioneer submit female collect", // Fixed mnemonic
-  network_id: 5777, // Fixed network id
+  network_id: 5777,  // Fixed network id
 };
 
 // Start Ganache Programmatically
@@ -45,20 +42,6 @@ async function runMigrations() {
   }
 }
 
-// Stop Ganache
-function stopGanache() {
-  return new Promise((resolve) => {
-    if (ganacheServer) {
-      ganacheServer.close(() => {
-        console.log('Ganache server stopped.');
-        resolve();
-      });
-    } else {
-      resolve();
-    }
-  });
-}
-
 // Main function to orchestrate the process
 async function main() {
   try {
@@ -66,10 +49,8 @@ async function main() {
     await startGanache();
     await runMigrations();
 
-    // After migrations, start the Express server
-    app.listen(PORT, () => {
-      console.log(`Express server running on port ${PORT}`);
-    });
+    // Keep Ganache running and available on port 8545
+    console.log("Ganache is running. You can now query it on http://localhost:8545");
 
   } catch (error) {
     console.error('Error during startup:', error);
@@ -77,15 +58,5 @@ async function main() {
   }
 }
 
-// Express Routes
-app.get('/stop-ganache', async (req, res) => {
-  try {
-    await stopGanache();
-    res.send('Ganache stopped');
-  } catch (error) {
-    res.status(500).send(`Error stopping Ganache: ${error}`);
-  }
-});
-
-// Start everything: Ganache -> Migrations -> Express
+// Start everything: Ganache -> Migrations
 main();
