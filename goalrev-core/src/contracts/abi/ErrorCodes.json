@@ -1,0 +1,1704 @@
+{
+  "contractName": "ErrorCodes",
+  "abi": [],
+  "metadata": "{\"compiler\":{\"version\":\"0.6.3+commit.8dda9521\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"author\":\"Freeverse.io, www.freeverse.io\",\"methods\":{},\"title\":\"Error codes returned by many functions in the project\"},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/gameEngine/ErrorCodes.sol\":\"ErrorCodes\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/gameEngine/ErrorCodes.sol\":{\"keccak256\":\"0x3695b9ae989c8277354dd0171252f1095d3b04cccc6e83df1f89c7dedae5b576\",\"urls\":[\"bzz-raw://def11625786fbbe0884f99e2ac11c8da2980490949076f939aa249526d34f443\",\"dweb:/ipfs/QmVdQFJXRX5f589SD1vjuyfc9TDxXVjupz8N8d87EVwFX4\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea26469706673582212208433b854091ce0352c09188ae66618a0d59c661fff0a330202d9eeed02363b2f64736f6c63430006030033",
+  "deployedBytecode": "0x6080604052600080fdfea26469706673582212208433b854091ce0352c09188ae66618a0d59c661fff0a330202d9eeed02363b2f64736f6c63430006030033",
+  "sourceMap": "137:1048:21:-:0;;;;5:9:-1;2:2;;;27:1;24;17:12;2:2;137:1048:21;;;;;;;",
+  "deployedSourceMap": "137:1048:21:-:0;;;12:1:-1;9;2:12",
+  "source": "pragma solidity >= 0.6.3;\n\n/**\n @title Error codes returned by many functions in the project\n @author Freeverse.io, www.freeverse.io\n*/\n\ncontract ErrorCodes {\n    \n    uint8 internal constant ERR_IS2NDHALF = 1;\n    uint8 internal constant ERR_TRAINING_SPLAYER = 2;\n    uint8 internal constant ERR_TRAINING_SINGLESKILL = 3;\n    uint8 internal constant ERR_TRAINING_SUMSKILLS = 4;\n    uint8 internal constant ERR_TRAINING_PREVMATCH = 5;\n    uint8 internal constant ERR_TRAINING_STAMINA = 6;\n    \n    uint8 internal constant ERR_COMPUTETRAINING = 7;\n    uint8 internal constant ERR_PLAYHALF = 8;\n    uint8 internal constant ERR_EVOLVE = 9;\n    uint8 internal constant ERR_UPDATEAFTER_YELLOW = 10;\n    uint8 internal constant ERR_SHOP = 11;\n    uint8 internal constant ERR_UPDATEAFTER_CHANGES = 12;\n    uint8 internal constant ERR_UPDATEAFTER_OUTOFGAME1 = 13;\n    uint8 internal constant ERR_UPDATEAFTER_OUTOFGAME2 = 14;\n\n    uint8 internal constant ERR_PLAYHALF_TOO_MANY_LINEDUP = 15;\n    uint8 internal constant ERR_PLAYHALF_HALFCHANGES = 16;\n    uint8 internal constant ERR_PLAYHALF_PLAYER_TWICE = 17;\n\n    uint8 internal constant ERR_2NDHALF_CANCELLED_DUE_TO_1STHALF_CANCELLED = 18;\n\n}",
+  "sourcePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/gameEngine/ErrorCodes.sol",
+  "ast": {
+    "absolutePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/gameEngine/ErrorCodes.sol",
+    "exportedSymbols": {
+      "ErrorCodes": [
+        10195
+      ]
+    },
+    "id": 10196,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 10139,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.6",
+          ".3"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:25:21"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": {
+          "id": 10140,
+          "nodeType": "StructuredDocumentation",
+          "src": "27:108:21",
+          "text": "@title Error codes returned by many functions in the project\n@author Freeverse.io, www.freeverse.io"
+        },
+        "fullyImplemented": true,
+        "id": 10195,
+        "linearizedBaseContracts": [
+          10195
+        ],
+        "name": "ErrorCodes",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": true,
+            "id": 10143,
+            "name": "ERR_IS2NDHALF",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "168:41:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10141,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "168:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "31",
+              "id": 10142,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "208:1:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_1_by_1",
+                "typeString": "int_const 1"
+              },
+              "value": "1"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10146,
+            "name": "ERR_TRAINING_SPLAYER",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "215:48:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10144,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "215:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "32",
+              "id": 10145,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "262:1:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_2_by_1",
+                "typeString": "int_const 2"
+              },
+              "value": "2"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10149,
+            "name": "ERR_TRAINING_SINGLESKILL",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "269:52:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10147,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "269:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "33",
+              "id": 10148,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "320:1:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_3_by_1",
+                "typeString": "int_const 3"
+              },
+              "value": "3"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10152,
+            "name": "ERR_TRAINING_SUMSKILLS",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "327:50:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10150,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "327:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "34",
+              "id": 10151,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "376:1:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_4_by_1",
+                "typeString": "int_const 4"
+              },
+              "value": "4"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10155,
+            "name": "ERR_TRAINING_PREVMATCH",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "383:50:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10153,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "383:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "35",
+              "id": 10154,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "432:1:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_5_by_1",
+                "typeString": "int_const 5"
+              },
+              "value": "5"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10158,
+            "name": "ERR_TRAINING_STAMINA",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "439:48:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10156,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "439:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "36",
+              "id": 10157,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "486:1:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_6_by_1",
+                "typeString": "int_const 6"
+              },
+              "value": "6"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10161,
+            "name": "ERR_COMPUTETRAINING",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "498:47:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10159,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "498:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "37",
+              "id": 10160,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "544:1:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_7_by_1",
+                "typeString": "int_const 7"
+              },
+              "value": "7"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10164,
+            "name": "ERR_PLAYHALF",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "551:40:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10162,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "551:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "38",
+              "id": 10163,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "590:1:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_8_by_1",
+                "typeString": "int_const 8"
+              },
+              "value": "8"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10167,
+            "name": "ERR_EVOLVE",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "597:38:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10165,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "597:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "39",
+              "id": 10166,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "634:1:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_9_by_1",
+                "typeString": "int_const 9"
+              },
+              "value": "9"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10170,
+            "name": "ERR_UPDATEAFTER_YELLOW",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "641:51:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10168,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "641:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "3130",
+              "id": 10169,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "690:2:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_10_by_1",
+                "typeString": "int_const 10"
+              },
+              "value": "10"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10173,
+            "name": "ERR_SHOP",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "698:37:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10171,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "698:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "3131",
+              "id": 10172,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "733:2:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_11_by_1",
+                "typeString": "int_const 11"
+              },
+              "value": "11"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10176,
+            "name": "ERR_UPDATEAFTER_CHANGES",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "741:52:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10174,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "741:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "3132",
+              "id": 10175,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "791:2:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_12_by_1",
+                "typeString": "int_const 12"
+              },
+              "value": "12"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10179,
+            "name": "ERR_UPDATEAFTER_OUTOFGAME1",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "799:55:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10177,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "799:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "3133",
+              "id": 10178,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "852:2:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_13_by_1",
+                "typeString": "int_const 13"
+              },
+              "value": "13"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10182,
+            "name": "ERR_UPDATEAFTER_OUTOFGAME2",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "860:55:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10180,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "860:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "3134",
+              "id": 10181,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "913:2:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_14_by_1",
+                "typeString": "int_const 14"
+              },
+              "value": "14"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10185,
+            "name": "ERR_PLAYHALF_TOO_MANY_LINEDUP",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "922:58:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10183,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "922:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "3135",
+              "id": 10184,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "978:2:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_15_by_1",
+                "typeString": "int_const 15"
+              },
+              "value": "15"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10188,
+            "name": "ERR_PLAYHALF_HALFCHANGES",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "986:53:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10186,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "986:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "3136",
+              "id": 10187,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1037:2:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_16_by_1",
+                "typeString": "int_const 16"
+              },
+              "value": "16"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10191,
+            "name": "ERR_PLAYHALF_PLAYER_TWICE",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "1045:54:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10189,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "1045:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "3137",
+              "id": 10190,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1097:2:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_17_by_1",
+                "typeString": "int_const 17"
+              },
+              "value": "17"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10194,
+            "name": "ERR_2NDHALF_CANCELLED_DUE_TO_1STHALF_CANCELLED",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "1106:75:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10192,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "1106:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "3138",
+              "id": 10193,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1179:2:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_18_by_1",
+                "typeString": "int_const 18"
+              },
+              "value": "18"
+            },
+            "visibility": "internal"
+          }
+        ],
+        "scope": 10196,
+        "src": "137:1048:21"
+      }
+    ],
+    "src": "0:1185:21"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/gameEngine/ErrorCodes.sol",
+    "exportedSymbols": {
+      "ErrorCodes": [
+        10195
+      ]
+    },
+    "id": 10196,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 10139,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.6",
+          ".3"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:25:21"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": {
+          "id": 10140,
+          "nodeType": "StructuredDocumentation",
+          "src": "27:108:21",
+          "text": "@title Error codes returned by many functions in the project\n@author Freeverse.io, www.freeverse.io"
+        },
+        "fullyImplemented": true,
+        "id": 10195,
+        "linearizedBaseContracts": [
+          10195
+        ],
+        "name": "ErrorCodes",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": true,
+            "id": 10143,
+            "name": "ERR_IS2NDHALF",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "168:41:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10141,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "168:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "31",
+              "id": 10142,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "208:1:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_1_by_1",
+                "typeString": "int_const 1"
+              },
+              "value": "1"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10146,
+            "name": "ERR_TRAINING_SPLAYER",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "215:48:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10144,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "215:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "32",
+              "id": 10145,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "262:1:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_2_by_1",
+                "typeString": "int_const 2"
+              },
+              "value": "2"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10149,
+            "name": "ERR_TRAINING_SINGLESKILL",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "269:52:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10147,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "269:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "33",
+              "id": 10148,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "320:1:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_3_by_1",
+                "typeString": "int_const 3"
+              },
+              "value": "3"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10152,
+            "name": "ERR_TRAINING_SUMSKILLS",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "327:50:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10150,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "327:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "34",
+              "id": 10151,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "376:1:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_4_by_1",
+                "typeString": "int_const 4"
+              },
+              "value": "4"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10155,
+            "name": "ERR_TRAINING_PREVMATCH",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "383:50:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10153,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "383:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "35",
+              "id": 10154,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "432:1:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_5_by_1",
+                "typeString": "int_const 5"
+              },
+              "value": "5"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10158,
+            "name": "ERR_TRAINING_STAMINA",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "439:48:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10156,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "439:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "36",
+              "id": 10157,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "486:1:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_6_by_1",
+                "typeString": "int_const 6"
+              },
+              "value": "6"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10161,
+            "name": "ERR_COMPUTETRAINING",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "498:47:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10159,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "498:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "37",
+              "id": 10160,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "544:1:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_7_by_1",
+                "typeString": "int_const 7"
+              },
+              "value": "7"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10164,
+            "name": "ERR_PLAYHALF",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "551:40:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10162,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "551:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "38",
+              "id": 10163,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "590:1:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_8_by_1",
+                "typeString": "int_const 8"
+              },
+              "value": "8"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10167,
+            "name": "ERR_EVOLVE",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "597:38:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10165,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "597:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "39",
+              "id": 10166,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "634:1:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_9_by_1",
+                "typeString": "int_const 9"
+              },
+              "value": "9"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10170,
+            "name": "ERR_UPDATEAFTER_YELLOW",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "641:51:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10168,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "641:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "3130",
+              "id": 10169,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "690:2:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_10_by_1",
+                "typeString": "int_const 10"
+              },
+              "value": "10"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10173,
+            "name": "ERR_SHOP",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "698:37:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10171,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "698:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "3131",
+              "id": 10172,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "733:2:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_11_by_1",
+                "typeString": "int_const 11"
+              },
+              "value": "11"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10176,
+            "name": "ERR_UPDATEAFTER_CHANGES",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "741:52:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10174,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "741:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "3132",
+              "id": 10175,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "791:2:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_12_by_1",
+                "typeString": "int_const 12"
+              },
+              "value": "12"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10179,
+            "name": "ERR_UPDATEAFTER_OUTOFGAME1",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "799:55:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10177,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "799:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "3133",
+              "id": 10178,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "852:2:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_13_by_1",
+                "typeString": "int_const 13"
+              },
+              "value": "13"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10182,
+            "name": "ERR_UPDATEAFTER_OUTOFGAME2",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "860:55:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10180,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "860:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "3134",
+              "id": 10181,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "913:2:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_14_by_1",
+                "typeString": "int_const 14"
+              },
+              "value": "14"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10185,
+            "name": "ERR_PLAYHALF_TOO_MANY_LINEDUP",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "922:58:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10183,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "922:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "3135",
+              "id": 10184,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "978:2:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_15_by_1",
+                "typeString": "int_const 15"
+              },
+              "value": "15"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10188,
+            "name": "ERR_PLAYHALF_HALFCHANGES",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "986:53:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10186,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "986:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "3136",
+              "id": 10187,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1037:2:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_16_by_1",
+                "typeString": "int_const 16"
+              },
+              "value": "16"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10191,
+            "name": "ERR_PLAYHALF_PLAYER_TWICE",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "1045:54:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10189,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "1045:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "3137",
+              "id": 10190,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1097:2:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_17_by_1",
+                "typeString": "int_const 17"
+              },
+              "value": "17"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 10194,
+            "name": "ERR_2NDHALF_CANCELLED_DUE_TO_1STHALF_CANCELLED",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 10195,
+            "src": "1106:75:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint8",
+              "typeString": "uint8"
+            },
+            "typeName": {
+              "id": 10192,
+              "name": "uint8",
+              "nodeType": "ElementaryTypeName",
+              "src": "1106:5:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint8",
+                "typeString": "uint8"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "3138",
+              "id": 10193,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1179:2:21",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_18_by_1",
+                "typeString": "int_const 18"
+              },
+              "value": "18"
+            },
+            "visibility": "internal"
+          }
+        ],
+        "scope": 10196,
+        "src": "137:1048:21"
+      }
+    ],
+    "src": "0:1185:21"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.6.3+commit.8dda9521.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.0.23",
+  "updatedAt": "2024-10-16T06:02:47.894Z",
+  "devdoc": {
+    "author": "Freeverse.io, www.freeverse.io",
+    "methods": {},
+    "title": "Error codes returned by many functions in the project"
+  },
+  "userdoc": {
+    "methods": {}
+  }
+}

@@ -58,5 +58,4 @@ async function main() {
   }
 }
 
-// Start everything: Ganache -> Migrations
 main();
