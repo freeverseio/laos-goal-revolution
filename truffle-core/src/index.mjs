@@ -3,20 +3,28 @@ import ganache from 'ganache';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 
-// Promisify exec for modern async/await usage
 const execPromise = promisify(exec);
 
 let ganacheServer;
 const app = express();
-const PORT = 3000;  // The port for your Express server
+const PORT = 3000;  // Port for your Express server
+
+// Ganache configuration with deterministic settings
+const ganacheOptions = {
+  port: 8545,
+  gasLimit: 8000000, // Set a fixed gas limit for consistency
+  gasPrice: 20000000000, // Fixed gas price (20 Gwei)
+  mnemonic: "myth like bonus scare over problem client lizard pioneer submit female collect", // Fixed mnemonic
+  network_id: 5777, // Fixed network id
+};
 
 // Start Ganache Programmatically
 async function startGanache() {
   return new Promise((resolve, reject) => {
-    ganacheServer = ganache.server({ port: 8545 });
+    ganacheServer = ganache.server(ganacheOptions);
     ganacheServer.listen(8545, (err) => {
       if (err) return reject(err);
-      console.log('Ganache started on port 8545');
+      console.log("Ganache started on port 8545 with deterministic settings");
       resolve();
     });
   });
