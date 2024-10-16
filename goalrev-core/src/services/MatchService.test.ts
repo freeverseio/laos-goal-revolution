@@ -59,8 +59,8 @@ describe("MatchService", () => {
     // Validate input first
     const errors = await validate(validPlayInput);
     expect(errors.length).toBe(0); // Expect no validation errors
-
-    const result = await MatchService.play1stHalf(validPlayInput);
+    const matchService = new MatchService();
+    const result = await matchService.play1stHalf(validPlayInput);
 
     // Check if skills have been updated correctly
     expect(result.updatedSkills.length).toBe(2); // Two teams
@@ -82,8 +82,8 @@ describe("MatchService", () => {
     // Validate input first
     const errors = await validate(validPlayInput);
     expect(errors.length).toBe(0); // Expect no validation errors
-
-    const result = await MatchService.play2ndHalf(validPlayInput);
+    const matchService = new MatchService();
+    const result = await matchService.play2ndHalf(validPlayInput);
 
     // Check if skills have been updated correctly
     expect(result.updatedSkills.length).toBe(2); // Two teams

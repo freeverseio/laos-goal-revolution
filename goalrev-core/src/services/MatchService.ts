@@ -1,11 +1,44 @@
 import { MatchEvent, MatchEventType, PlayerSkill, PlayInput, PlayOutput } from "../types";
-
+import { ethers } from "ethers";
+import PlayAndEvolveAbi from '../contracts/abi/PlayAndEvolve.json';
 export class MatchService {
+
+  private provider: ethers.JsonRpcProvider;
+  private playAndEvolveContract: ethers.Contract;
+
+  constructor() {
+    // Initialize the provider with the RPC URL from environment variables
+    if (!process.env.RPC_URL) {
+      throw new Error("RPC_URL is not defined in the environment variables");
+    }
+
+    this.provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
+
+    // Initialize the contract with the provider and contract address
+    if (!process.env.PLAY_AND_EVOLVE_CONTRACT_ADDRESS) {
+      throw new Error("PLAY_AND_EVOLVE_CONTRACT_ADDRESS is not defined in the environment variables");
+    }
+
+    this.playAndEvolveContract = new ethers.Contract(
+      process.env.PLAY_AND_EVOLVE_CONTRACT_ADDRESS,
+      PlayAndEvolveAbi.abi,  
+      this.provider
+    );
+
+  }
+
+  async getPlayersPerTeamMax(): Promise<any> {
+    const result = await this.playAndEvolveContract.PLAYERS_PER_TEAM_MAX();
+    return result.toString();
+  }
   
   // Logic for playing the first half
-  static async play1stHalf(body: PlayInput): Promise<PlayOutput> {
+  async play1stHalf(body: PlayInput): Promise<PlayOutput> {
     const { skills,  tactics, teamIds } = body;
-    
+
+    const playersPerTeamMax = await this.playAndEvolveContract.PLAYERS_PER_TEAM_MAX();
+    console.log(playersPerTeamMax);
+
     const updatedSkills: [PlayerSkill[], PlayerSkill[]] = skills.map((teamSkills) =>
       teamSkills.map((skill) => ({
         defence: Math.floor(Math.random() * 10),
@@ -73,7 +106,7 @@ export class MatchService {
   }
 
   // Logic for playing the second half
-  static async play2ndHalf(body: PlayInput): Promise<PlayOutput> {
+  async play2ndHalf(body: PlayInput): Promise<PlayOutput> {
     // Validate the PlayInput object
     const { skills,  tactics, teamIds } = body;
 
