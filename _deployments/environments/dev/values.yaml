@@ -8,5 +8,5 @@ postgresUser: "doadmin"
 processorHost: goalrev-processor.gorengine.com
 processorPort: "3000"
 coreAppPort: "3001"
-ganacheRpcUrl: http://localhost:8545/
+ganacheRpcUrl: http://goalrev-ganache.goalrev.svc.cluster.local:8545/
 ganacheContractLeagues: "0x630589690929E9cdEFDeF0734717a9eF3Ec7Fcfe"
