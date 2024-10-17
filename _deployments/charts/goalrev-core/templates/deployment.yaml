@@ -28,6 +28,10 @@ spec:
         env:
           - name: APP_PORT
             value: {{ .Values.coreAppPort | quote }}
+          - name: RPC_URL
+            value: {{ .Values.ganacheRpcUrl }}
+          - name: LEAGUES_CONTRACT_ADDRESS
+            value: {{ .Values.ganacheContractLeagues | quote }}
         ports:
         - containerPort: {{ .Values.coreAppPort }}
 

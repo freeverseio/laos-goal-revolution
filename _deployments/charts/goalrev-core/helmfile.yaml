@@ -7,3 +7,5 @@ releases:
     values:
       - imageTag: {{ .Values.imageTag }}
       - coreAppPort: {{ .Values.coreAppPort }}
+      - ganacheRpcUrl: {{ .Values.ganacheRpcUrl }}
+      - ganacheContractLeagues: {{ .Values.ganacheContractLeagues }}

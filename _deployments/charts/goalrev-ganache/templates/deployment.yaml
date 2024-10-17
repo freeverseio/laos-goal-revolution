@@ -25,11 +25,6 @@ spec:
             memory: "2056Mi"
             cpu: "500m"
         imagePullPolicy: Always        
-        env:
-          - name: RPC_URL
-            value: {{ .Values.ganacheRpcUrl }}
-          - name: LEAGUES_CONTRACT_ADDRESS
-            value: {{ .Values.ganacheContractLeagues }}
       imagePullSecrets:
       - name: docker-secret
 
