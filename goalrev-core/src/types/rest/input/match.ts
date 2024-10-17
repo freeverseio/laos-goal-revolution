@@ -43,18 +43,29 @@ export class PlayInput {
   @ArrayMaxSize(5)
   matchBools!: [boolean, boolean, boolean, boolean, boolean];
 
+
   @IsDefined()
   @IsArray()
   @ArrayMinSize(2)
   @ArrayMaxSize(2)
   trainings!: [TrainingRequest, TrainingRequest];
+
+  getMatchLogs(): string[] {
+    return this.matchLogs.map((matchLog) => matchLog.encodedMatchLog ?? "0");
+  }
 }
 
 class TacticRequest {
+
+  @IsDefined()
+  @IsNumber()
+  tacticsId!: number;
+
+
   @IsDefined()
   @IsArray()
-  @ArrayMinSize(11)
-  @ArrayMaxSize(11)
+  @ArrayMinSize(14)
+  @ArrayMaxSize(14)
   lineup!: number[];
 
   @IsDefined()
@@ -66,10 +77,25 @@ class TacticRequest {
   @IsArray()
   @ArrayMaxSize(11)
   extraAttack!: boolean[];
+
+  getSubstitutions(): string[] {
+    return this.substitutions.map((substitution) => substitution.target.toString());
+  }
+
+  getSubstitutionRounds(): number[] {
+    return this.substitutions.map((substitution) => Math.floor(substitution.minute / 12));
+  }
+
+  
+  
+  
 }
 
-class TrainingRequest {
+export class TrainingRequest {
+  trainingPoints!: number;
+
   specialPlayerShirt?: number;
+
   goalkeepers?: {
     defence: number;
     speed: number;

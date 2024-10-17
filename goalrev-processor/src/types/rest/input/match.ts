@@ -20,15 +20,18 @@ export interface PlayMatchRequest {
   matchBools: [boolean, boolean, boolean, boolean, boolean]
 
   trainings: [TrainingRequest, TrainingRequest]
+
 }
 
 export interface TacticRequest {
+  tacticsId: number;
   lineup: number[];
   substitutions: { shirt: number; target: number; minute: number }[];
   extraAttack: boolean[];
 }
 
 export interface TrainingRequest {
+  trainingPoints: number;
   specialPlayerShirt: number;
   goalkeepers: {
     defence: number;

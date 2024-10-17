@@ -205,8 +205,8 @@ export class MatchService {
       ],
       matchBools: [match.state === MatchState.HALF, true, false, false, false],
       trainings: [
-        MatchMapper.mapTrainingToRequest(match.homeTeam!.trainings),  // Home team training
-        MatchMapper.mapTrainingToRequest(match.visitorTeam!.trainings) // Visitor team training
+        MatchMapper.mapTrainingToRequest(match.homeTeam!.trainings, match.homeTeam!.training_points),  // Home team training
+        MatchMapper.mapTrainingToRequest(match.visitorTeam!.trainings, match.visitorTeam!.training_points) // Visitor team training
       ]
     };
   }

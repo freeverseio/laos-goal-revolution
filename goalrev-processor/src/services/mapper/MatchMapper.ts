@@ -1,5 +1,6 @@
 import { MatchEvent, Tactics, Training, Player } from "../../db/entity";
 import { MatchEventRequest, TacticRequest, TrainingRequest } from "../../types";
+import { PLAYERS_PER_TEAM_MAX } from "../../utils/constants";
 
 export class MatchMapper {
   
@@ -17,10 +18,11 @@ export class MatchMapper {
 
   static mapTacticToRequest(tactic: Tactics): TacticRequest {
     return {
+      tacticsId: tactic.tactic_id,
       lineup: [
         tactic.shirt_0, tactic.shirt_1, tactic.shirt_2, tactic.shirt_3, tactic.shirt_4,
         tactic.shirt_5, tactic.shirt_6, tactic.shirt_7, tactic.shirt_8, tactic.shirt_9, 
-        tactic.shirt_10
+        tactic.shirt_10, tactic.substitution_0_shirt, tactic.substitution_1_shirt, tactic.substitution_2_shirt,
       ],
       substitutions: [
         {
@@ -47,8 +49,9 @@ export class MatchMapper {
     };
   }
 
-  static mapTrainingToRequest(training: Training): TrainingRequest {
+  static mapTrainingToRequest(training: Training, trainingPoints: number): TrainingRequest {
     return {
+      trainingPoints: trainingPoints,
       specialPlayerShirt: training.special_player_shirt,
       goalkeepers: {
         defence: training.goalkeepers_defence,
@@ -89,6 +92,10 @@ export class MatchMapper {
   }
 
   static calculateTeamSkills(players: Player[]): string[] {
-    return players.map(player => player.encoded_skills);
+    const skills = players.map(player => player.encoded_skills);
+    while (skills.length < PLAYERS_PER_TEAM_MAX) {
+      skills.push("0");
+    }
+    return skills;
   }
 }
