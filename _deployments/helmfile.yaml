@@ -49,3 +49,5 @@ helmfiles:
     values:
       - namespace: {{ .Values.namespace }}
       - imageTag: {{ requiredEnv "CIRCLE_SHA1" }}
+      - ganacheRpcUrl: {{ .Values.ganacheRpcUrl }}
+      - ganacheContractLeagues: {{ .Values.ganacheContractLeagues }}
