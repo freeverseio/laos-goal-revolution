@@ -1,6 +1,9 @@
-import { MatchEvent, MatchEventType, PlayerSkill, PlayInput, PlayOutput } from "../types";
+import { MatchEvent, MatchEventType, Play1stHalfAndEvolveResult, PlayerSkill, PlayInput, PlayOutput } from "../types";
 import { ethers } from "ethers";
 import PlayAndEvolveAbi from '../contracts/abi/PlayAndEvolve.json';
+import { EncodeTrainingPoints } from "./encoder/EncodeTrainingPoints";
+import { MatchMapper } from "./mapper/MatchMapper";
+import { DecodeMatchLog } from "./decoder/DecodeMatchLog";
 export class MatchService {
 
   private provider: ethers.JsonRpcProvider;
@@ -21,7 +24,7 @@ export class MatchService {
 
     this.playAndEvolveContract = new ethers.Contract(
       process.env.PLAY_AND_EVOLVE_CONTRACT_ADDRESS,
-      PlayAndEvolveAbi.abi,  
+      PlayAndEvolveAbi.abi,
       this.provider
     );
 
@@ -31,26 +34,61 @@ export class MatchService {
     const result = await this.playAndEvolveContract.PLAYERS_PER_TEAM_MAX();
     return result.toString();
   }
-  
+
   // Logic for playing the first half
   async play1stHalf(body: PlayInput): Promise<PlayOutput> {
-    const { skills,  tactics, teamIds } = body;
+    const { verseSeed, matchStartTime, skills, tactics, teamIds, matchBools, trainings } = body;
+    const matchLogs = body.getMatchLogs();
 
-    const playersPerTeamMax = await this.playAndEvolveContract.PLAYERS_PER_TEAM_MAX();
-    console.log(playersPerTeamMax);
+    let encodedTactics = await Promise.all(tactics.map(tactic => {
+      const substitutions = tactic.getSubstitutions();
+      const subsRounds = tactic.getSubstitutionRounds();
+      const lineup = tactic.lineup;
+      const extraAttack = tactic.extraAttack;
+      const tacticsId = tactic.tacticsId;
 
-    const updatedSkills: [PlayerSkill[], PlayerSkill[]] = skills.map((teamSkills) =>
-      teamSkills.map((skill) => ({
-        defence: Math.floor(Math.random() * 10),
-        speed: Math.floor(Math.random() * 10),
-        pass: Math.floor(Math.random() * 10),
-        shoot: Math.floor(Math.random() * 10),
-        endurance: Math.floor(Math.random() * 10),
-        encodedSkills: skill
-      }))
-    ) as [PlayerSkill[], PlayerSkill[]];
-
-
+      return this.playAndEvolveContract.encodeTactics(
+        substitutions,
+        subsRounds,
+        lineup,
+        extraAttack,
+        tacticsId
+      );
+    }));
+    const encodedTrainings = trainings.map(training => EncodeTrainingPoints.encode(training));
+    encodedTactics = encodedTactics.map(tactic => tactic.toString());
+    const result = await this.playAndEvolveContract.play1stHalfAndEvolve(
+      `0x${verseSeed}`,
+      matchStartTime,
+      skills,
+      teamIds,
+      encodedTactics,
+      matchLogs,
+      matchBools,
+      encodedTrainings
+    );
+    
+    const parsedResult = MatchMapper.mapPlay1stHalfAndEvolveResult(result);
+    const updatedSkills = MatchMapper.mapEncodedSkillsToPlayerSkills(parsedResult.finalSkills);
+    const decodedMatchLogs = MatchMapper.mapMatchLogsAndEventsToMatchLogs(parsedResult.matchLogsAndEvents);
+    
+    if (teamIds.includes(1)) {
+      console.log('error', parsedResult.err);
+      console.log('parameters', {
+        seed: `0x${verseSeed}`,
+        matchStartTime,
+        skills,
+        teamIds,
+        encodedTactics,
+        matchLogs,
+        matchBools,
+        encodedTrainings
+      } as any);
+      console.log('finalSkills', parsedResult.finalSkills);
+      console.log('matchLogsAndEvents', parsedResult.matchLogsAndEvents);
+      console.log('updatedSkills', updatedSkills);
+      console.log('decodedMatchLogs', decodedMatchLogs);
+    }
     const matchEvents: MatchEvent[] = [
       {
         minute: 4,
@@ -58,8 +96,8 @@ export class MatchService {
         type: MatchEventType.ATTACK,
         manage_to_shoot: false,
         is_goal: false,
-        primary_player_id: teamIds[0]+"0001",
-        secondary_player_id: teamIds[0]+"0002",
+        primary_player_id: teamIds[0] + "0001",
+        secondary_player_id: teamIds[0] + "0002",
       },
       {
         minute: 10,
@@ -67,8 +105,8 @@ export class MatchService {
         type: MatchEventType.ATTACK,
         manage_to_shoot: true,
         is_goal: true,
-        primary_player_id: teamIds[1]+"0001",
-        secondary_player_id: teamIds[1]+"0002",
+        primary_player_id: teamIds[1] + "0001",
+        secondary_player_id: teamIds[1] + "0002",
       },
 
     ];
@@ -77,28 +115,7 @@ export class MatchService {
 
     return {
       updatedSkills,
-      matchLogs: [
-        {
-          numberOfGoals: 1,
-          gamePoints: 0,
-          teamSumSkills: 0,
-          trainingPoints: 0,
-          isHomeStadium: true,
-          changesAtHalftime: true,
-          isCancelled: false,
-          encodedMatchLog: "3618502788669422116101235693605807058779801721811233097964316659973982519296",
-        },
-        {
-          numberOfGoals: 1,
-          gamePoints: 0,
-          teamSumSkills: 0,
-          trainingPoints: 0,
-          isHomeStadium: false,
-          changesAtHalftime: true,
-          isCancelled: false,
-          encodedMatchLog: "3618502788669422116101235693605807058779801721811233097964316659973982519296",
-        },
-      ],
+      matchLogs: decodedMatchLogs,
       matchEvents,
       earnedTrainingPoints: 0,
       err,
@@ -108,7 +125,7 @@ export class MatchService {
   // Logic for playing the second half
   async play2ndHalf(body: PlayInput): Promise<PlayOutput> {
     // Validate the PlayInput object
-    const { skills,  tactics, teamIds } = body;
+    const { skills, tactics, teamIds } = body;
 
     const updatedSkills: [PlayerSkill[], PlayerSkill[]] = skills.map((teamSkills) =>
       teamSkills.map((skill) => ({
@@ -128,8 +145,8 @@ export class MatchService {
         type: MatchEventType.ATTACK,
         manage_to_shoot: false,
         is_goal: false,
-        primary_player_id: teamIds[1]+"0001",
-        secondary_player_id: teamIds[1]+"0002",
+        primary_player_id: teamIds[1] + "0001",
+        secondary_player_id: teamIds[1] + "0002",
       },
       {
         minute: 50,
@@ -137,8 +154,8 @@ export class MatchService {
         type: MatchEventType.ATTACK,
         manage_to_shoot: true,
         is_goal: true,
-        primary_player_id: teamIds[1]+"0001",
-        secondary_player_id: teamIds[1]+"0002",
+        primary_player_id: teamIds[1] + "0001",
+        secondary_player_id: teamIds[1] + "0002",
       },
 
     ];
@@ -154,7 +171,7 @@ export class MatchService {
           teamSumSkills: 10,
           trainingPoints: 10,
           isHomeStadium: true,
-          changesAtHalftime: true,
+          changesAtHalftime: 1,
           isCancelled: false,
           encodedMatchLog: "3618502788669422116101235693605807058779801721811233097964316659973982519296",
         },
@@ -164,7 +181,7 @@ export class MatchService {
           teamSumSkills: 25,
           trainingPoints: 25,
           isHomeStadium: false,
-          changesAtHalftime: true,
+          changesAtHalftime: 1,
           isCancelled: false,
           encodedMatchLog: "3618502788669422116101235693605807058779801721811233097964316659973982519296",
         },
