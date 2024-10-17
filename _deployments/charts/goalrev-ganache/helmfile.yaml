@@ -6,3 +6,5 @@ releases:
     chart: .
     values:
       - imageTag: {{ .Values.imageTag }}
+      - ganacheRpcUrl: {{ .Values.ganacheRpcUrl }}
+      - ganacheContractLeagues: {{ .Values.ganacheContractLeagues }}
