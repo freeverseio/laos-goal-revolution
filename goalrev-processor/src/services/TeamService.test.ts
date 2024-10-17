@@ -40,7 +40,7 @@ describe('TeamService', () => {
       teamSumSkills: 0,
       trainingPoints: 50,
       isHomeStadium: false,
-      changesAtHalftime: false,
+      changesAtHalftime: 0,
       isCancelled: false,
       encodedMatchLog: '',
     };
@@ -79,7 +79,7 @@ describe('TeamService', () => {
       teamSumSkills: 0,
       trainingPoints: 50,
       isHomeStadium: false,
-      changesAtHalftime: false,
+      changesAtHalftime: 0,
       isCancelled: false,
       encodedMatchLog: '',
     };
@@ -119,7 +119,7 @@ describe('TeamService', () => {
       teamSumSkills: 0,
       trainingPoints: 50,
       isHomeStadium: false,
-      changesAtHalftime: false,
+      changesAtHalftime: 0,
       isCancelled: false,
       encodedMatchLog: '',
     };

@@ -21,7 +21,7 @@ export interface MatchLog {
   teamSumSkills: number;
   trainingPoints: number;
   isHomeStadium: boolean;
-  changesAtHalftime: boolean;
+  changesAtHalftime: number;
   isCancelled: boolean;
   encodedMatchLog: string;
 }
@@ -43,4 +43,9 @@ export interface MatchEvent {
   secondary_player_id?: string;
   manage_to_shoot: boolean;
   is_goal: boolean;
+}
+export interface Play1stHalfAndEvolveResult {
+  finalSkills: string[][]; 
+  matchLogsAndEvents: string[]; 
+  err: string;
 }
