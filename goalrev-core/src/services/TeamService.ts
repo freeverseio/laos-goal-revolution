@@ -19,7 +19,6 @@ export class TeamService {
   }
 
   async createTeam(body: CreateTeamInput): Promise<Team> {
-    console.log("createTeam.call SC: ", body);
     const response = await this.utilsContract.createTeam(
       body.timezoneIdx,
       body.countryIdx,
@@ -30,9 +29,7 @@ export class TeamService {
 
     const team = TeamMapper.mapCreateTeamOutput(response);
     const skills = await this.utilsContract.fullDecodeSkillsForEntireTeam(team.playerSkillsAtBirth);
-    //console.log("fullDecodeSkillsForEntireTeam: ", skills);
     const decodedTeam = TeamMapper.mapContractResponseToTeam(skills, team.teamId, team.playerSkillsAtBirth);
-    console.log("decodedTeam: ", decodedTeam);
     return decodedTeam;
   }
 
