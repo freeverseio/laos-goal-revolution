@@ -3,7 +3,8 @@ import { Team, Player, Country, League, Tactics, Training } from "../../db/entit
 import { PreferredPositionMapper } from "./PreferredPositionMapper";
 
 export class CreateTeamResponseToEntityMapper {
-  static map(response: CreateTeamResponse, timezoneIdx: number, countryIdx: number, lastLeagueIdx: number, i: number, j: number): Team {
+  static map({response, timezoneIdx, countryIdx, league_idx, team_idx_in_league, leaderboard_position}:
+    {response: CreateTeamResponse, timezoneIdx: number, countryIdx: number, league_idx: number, team_idx_in_league: number, leaderboard_position: number}): Team {
     return  {
       team_id: response.teamId,
       name: 'Mock Team',
@@ -15,7 +16,7 @@ export class CreateTeamResponseToEntityMapper {
       league: {
         timezone_idx: timezoneIdx,
         country_idx: countryIdx,
-        league_idx: lastLeagueIdx + 1 + i,
+        league_idx: league_idx,
       } as League,
       players: CreateTeamResponseToEntityMapper.mapPlayers(response.players, response.teamId),
       tactics: {} as Tactics,
@@ -23,9 +24,9 @@ export class CreateTeamResponseToEntityMapper {
       timezone_idx: timezoneIdx,
       country_idx: countryIdx,
       owner: '0x0000000000000000000000000000000000000000',
-      league_idx: lastLeagueIdx + 1 + i,
-      team_idx_in_league: j,
-      leaderboard_position: j,
+      league_idx: league_idx,
+      team_idx_in_league: team_idx_in_league,
+      leaderboard_position: leaderboard_position,
       points: 0,
       w: 0,
       d: 0,

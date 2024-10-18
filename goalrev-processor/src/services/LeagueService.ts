@@ -15,6 +15,7 @@ import { CalendarService } from "./CalendarService";
 import { RankingPointsInput } from "../types/rest/input/rankingPoints";
 import { League, Player, Tactics, Team, TeamPartialUpdate, Training } from "../db/entity";
 import { CreateTeamResponse } from "../types/rest/output/team";
+import { CreateTeamResponseToEntityMapper } from "./mapper/CreateTeamResponseToEntityMapper";
 
 export class LeagueService {
   private teamRepository: TeamRepository;
@@ -246,6 +247,19 @@ export class LeagueService {
           }    
           const response = await axios.post(`${process.env.CORE_API_URL}/team/createTeam`, requestBody);
           const createTeamResponse = response.data as CreateTeamResponse;
+
+          const teamMapped = CreateTeamResponseToEntityMapper.map({response: createTeamResponse, 
+            timezoneIdx, 
+            countryIdx, 
+            league_idx: lastLeagueIdx + 1 + i, 
+            team_idx_in_league: j, 
+            leaderboard_position: j
+          });
+
+          const resultTeam = await this.teamRepository.createTeam(teamMapped, entityManager);
+          console.log('resultTeam: ',resultTeam);
+          j=8;
+          i=16;
           
           // TODO define types
 
@@ -253,46 +267,10 @@ export class LeagueService {
 
           // TODO Mappers TeamResponse to Team Entity
 
-          console.log('TODO store Team in DB: ',response.data);        
+          //console.log('TODO store Team in DB: ',response.data);        
           // TODO Store Team in DB
-          //iterate teams
-          const team: Team = {
-            team_id: response.data.id,
-            name: 'Mock Team',
-            manager_name: 'Mock Manager',
-            country: {
-              timezone_idx: timezoneIdx,
-              country_idx: countryIdx,
-            } as Country,
-            league: {
-              timezone_idx: timezoneIdx,
-              country_idx: countryIdx,
-              league_idx: lastLeagueIdx + 1 + i,
-            } as League,
-            players: [],
-            tactics: {} as Tactics,
-            trainings: {} as Training,
-            timezone_idx: timezoneIdx,
-            country_idx: countryIdx,
-            owner: '0x0000000000000000000000000000000000000000',
-            league_idx: lastLeagueIdx + 1 + i,
-            team_idx_in_league: j,
-            leaderboard_position: j,
-            points: 0,
-            w: 0,
-            d: 0,
-            l: 0,
-            goals_forward: 0,
-            goals_against: 0,
-            prev_perf_points: '0',
-            ranking_points: '0',
-            training_points: 0,
-            tactic: '',
-            match_log: '',
-            is_zombie: false,
-            promo_timeout: 0,
-          };
           
+                   
 
 
           // const team: Team = response.data.team;
@@ -304,7 +282,7 @@ export class LeagueService {
         }
 
         // TODO bulk store 8 teams
-      }); // clos tx
+      }); // close tx
 
 
     }
