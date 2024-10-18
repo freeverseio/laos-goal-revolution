@@ -256,7 +256,7 @@ export class LeagueService {
             leaderboard_position: j
           });
 
-          const resultTeam = await this.teamRepository.createTeam(teamMapped, entityManager);
+          const resultTeam = await this.teamRepository.createTeam(teamMapped, transactionManager);
           console.log('resultTeam: ',resultTeam);
           j=8;
           i=16;
