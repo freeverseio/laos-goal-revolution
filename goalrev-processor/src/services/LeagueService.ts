@@ -257,7 +257,12 @@ export class LeagueService {
           });
 
           const resultTeam = await this.teamRepository.createTeam(teamMapped, transactionManager);
-          console.log('resultTeam: ',resultTeam);
+          //console.log('resultTeam: ',resultTeam);
+          if (!resultTeam) {
+            throw new Error('Error creating team in DB');
+          }else{
+            console.log('created team');
+          }
           j=8;
           i=16;
           
