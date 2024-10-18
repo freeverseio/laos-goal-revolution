@@ -13,3 +13,11 @@ export interface LeagueLeaderboardInput {
   matchDay: number;
   matches: LeagueLeaderboardMatchInput[];
 }
+
+export interface CreateTeamInput {
+  timezoneIdx: number,
+  countryIdx: number,    
+  teamIdxInTZ: number,
+  deployTimeInUnixEpochSecs: number,
+  divisionCreationRound: number,
+}

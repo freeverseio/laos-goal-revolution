@@ -127,5 +127,11 @@ describe("LeagueService", () => {
   });
 
 
+  describe("addDivision", () => {
+    it("happy path", async () => {
+      const result = await leagueService.addDivision(1, 10);      
+      expect(result).toBe(true);
+    });
+  });
   
 });

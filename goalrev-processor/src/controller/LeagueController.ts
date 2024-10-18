@@ -1,6 +1,6 @@
 import { Post, JsonController, Body } from "routing-controllers";
 import { LeagueService } from "../services/LeagueService";
-import { UpdateLeagueLeaderboardInput } from "../types";
+import { UpdateLeagueLeaderboardInput, AddDivisionInput } from "../types";
 import { LeagueFactory } from "../factories/LeagueFactory";
 
 @JsonController("/league")
@@ -15,6 +15,11 @@ export class LeagueController {
     @Post("/updateLeaderboard")
     async updateLeaderboard(@Body() data: UpdateLeagueLeaderboardInput) {
         return await this.leagueService.updateLeaderboard(data.timezoneIdx, data.countryIdx, data.leagueIdx);
+    }
+
+    @Post("/addDivision")
+    async addDivision(@Body() data: AddDivisionInput) {        
+        return await this.leagueService.addDivision(data.timezoneIdx, data.countryIdx);        
     }
 
 }
