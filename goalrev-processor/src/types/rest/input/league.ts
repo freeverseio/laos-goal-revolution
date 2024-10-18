@@ -7,6 +7,7 @@ export interface UpdateLeagueLeaderboardInput {
 export interface AddDivisionInput {
   timezoneIdx: number,
   countryIdx: number,
+  divisionCreationRound: number
 }
 
 export interface CreateTeamCoreInput {
