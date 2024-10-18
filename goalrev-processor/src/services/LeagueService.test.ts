@@ -9,7 +9,12 @@ import { Team } from "../db/entity/Team";
 import { MatchEventRepository } from "../db/repository/MatchEventRepository";
 import { LeagueGroup } from "../types/leaguegroup";
 import { CalendarService } from "./CalendarService";
+import { Verse } from "../db/entity";
+import { AxiosResponse } from "axios";
+import axios from 'axios';
 
+jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 jest.mock("../db/AppDataSource");
 
@@ -34,6 +39,9 @@ describe("LeagueService", () => {
     
     verseRepository = {
       countVersesByTimezone: jest.fn(),
+      getLastVerse: jest.fn(),
+      getInitialVerse: jest.fn(),
+      saveVerse: jest.fn(),
     } as any;
 
     calendarService = {
@@ -127,5 +135,34 @@ describe("LeagueService", () => {
   });
 
 
+  describe("addDivision", () => {
+    it("happy path", async () => {      
+      const mockVerse = {
+        verseNumber: 1,
+        verseTimestamp: 1643723400,
+        timezoneIdx: 10,
+        root: 'mock-root',
+        timezone: {          
+          timezone_idx: 10,
+        },
+      } as Verse;
+      const mockResponse = {
+        data: {
+          teamId: '12345',
+          teamName: 'Mock Team',
+          teamMembers: ['Member1', 'Member2', 'Member3'],
+        },
+        status: 200,
+        statusText: 'OK',
+        headers: {},
+        config: {},
+      } as AxiosResponse;
   
+      verseRepository.getInitialVerse.mockResolvedValue(mockVerse);
+      mockedAxios.post.mockResolvedValue(mockResponse);
+      const result = await leagueService.addDivision(1, 10, 1);      
+      expect(result).toBe(true);
+    });
+  });
+
 });
