@@ -244,6 +244,11 @@ export class LeagueService {
             divisionCreationRound: divisionCreationRound
           }    
           const response = await axios.post(`${process.env.CORE_API_URL}/team/createTeam`, requestBody);
+          // TODO define types
+
+          // TODO leagueRepository
+
+          // TODO Mappers TeamResponse to Team Entity
 
           console.log('TODO store Team in DB: ',response.data);        
           // TODO Store Team in DB
@@ -290,10 +295,12 @@ export class LeagueService {
           // const team: Team = response.data.team;
           // this.teamRepository.createTeam(team, entityManager);
 
-          // TODO Store Players in DB
-          // const player: Player = response.data.player[z];
-          // this.playerRepository.createPlayer(player, entityManager);
+          // TODO Mapper response.data.players to Player Entity
+
+          // set players to team
         }
+
+        // TODO bulk store 8 teams
       }); // clos tx
 
 

@@ -10,6 +10,11 @@ export class TeamRepository  {
     await teamRepository.save(teams);
   }
 
+  async bulkCreate(teams: Team[], transactionalEntityManager: EntityManager): Promise<void> {
+    const teamRepository = transactionalEntityManager.getRepository(Team);
+    await teamRepository.save(teams);
+  }
+
   async findTeamsWithPlayersByTimezone(timezoneIdx: number): Promise<Team[]> {
     const teamRepository = AppDataSource.getRepository(Team);
     const teams = await teamRepository.find({ 
