@@ -7,8 +7,8 @@ export class CreateTeamResponseToEntityMapper {
     {response: CreateTeamResponse, timezoneIdx: number, countryIdx: number, league_idx: number, team_idx_in_league: number, leaderboard_position: number}): Team {
     return  {
       team_id: response.id,
-      name: 'Mock Team',
-      manager_name: 'Mock Manager',
+      name: 'Mock Team ' + response.id,
+      manager_name: 'Mock Manager ' + response.id,
       country: {
         timezone_idx: timezoneIdx,
         country_idx: countryIdx,
