@@ -1,4 +1,4 @@
-import { PlayerSkill } from "../../types/rest/output/match";
+import { PlayerSkill } from "../../types";
 import DecodePlayerSkills from "./DecodePlayerSkills";
 
 describe('DecodePlayerSkills', () => {
