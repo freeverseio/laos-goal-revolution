@@ -15,9 +15,6 @@ export class TeamService {
     is1stHalf: boolean,
     entityManager: EntityManager
   ): Promise<void> {
-   
-   
-
     // Iterate over match events and update goals
     matchEvents.forEach((event) => {
       if (event.is_goal) {

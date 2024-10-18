@@ -20,9 +20,6 @@ export class LeagueController {
     return await this.leagueService.computeRankingPoints(body);
   }
 
-  @Post("/createTeam")
-  async createTeam(@Body() body: CreateTeamInput): Promise<CreateTeamOutput> {
-    return await this.leagueService.createTeam(body);
-  }
+ 
 
 }

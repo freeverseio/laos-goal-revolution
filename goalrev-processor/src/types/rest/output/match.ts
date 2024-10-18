@@ -21,7 +21,7 @@ export interface MatchLog {
   teamSumSkills: number;
   trainingPoints: number;
   isHomeStadium: boolean;
-  changesAtHalftime: boolean;
+  changesAtHalftime: number;
   isCancelled: boolean;
   encodedMatchLog: string;
 }

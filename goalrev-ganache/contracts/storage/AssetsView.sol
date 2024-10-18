@@ -13,11 +13,31 @@ import "./ComputeSkills.sol";
 /// Warning: This contract must ALWAYS inherit UniverseInfo first, so that it ends up inheriting Storage before any other contract.
 contract AssetsView is UniverseInfo, EncodingSkills, EncodingState, ComputeSkills {
     
+    // function getPlayerSkillsAtBirth(uint256 playerId) public view returns (uint256) {
+    //     if (getIsSpecial(playerId)) return playerId;
+    //     if (!wasPlayerCreatedVirtually(playerId)) return 0;
+    //     (uint256 teamId, uint256 playerCreationDay, uint8 shirtNum) = getTeamIdCreationDayAndShirtNum(playerId);
+    //     (uint256 dayOfBirth, uint8 potential) = computeBirthDayAndPotential(teamId, playerCreationDay, shirtNum);
+    //     (uint32[N_SKILLS] memory skills, uint8[4] memory birthTraits, uint32 sumSkills) = computeSkills(teamId, shirtNum, potential);
+    //     return encodePlayerSkills(skills, dayOfBirth, 0, playerId, birthTraits, false, false, 0, 0, false, sumSkills);
+    // }
+
     function getPlayerSkillsAtBirth(uint256 playerId) public view returns (uint256) {
         if (getIsSpecial(playerId)) return playerId;
         if (!wasPlayerCreatedVirtually(playerId)) return 0;
-        (uint256 teamId, uint256 playerCreationDay, uint8 shirtNum) = getTeamIdCreationDayAndShirtNum(playerId);
-        (uint256 dayOfBirth, uint8 potential) = computeBirthDayAndPotential(teamId, playerCreationDay, shirtNum);
+        (uint8 tz, uint256 countryIdxInTZ, uint256 playerIdxInCountry) = decodeTZCountryAndVal(playerId);
+        uint256 teamIdxInCountry = playerIdxInCountry / PLAYERS_PER_TEAM_INIT;
+        uint256 divisionIdx = teamIdxInCountry / TEAMS_PER_DIVISION;
+        uint256 divisionId = encodeTZCountryAndVal(tz, countryIdxInTZ, divisionIdx);
+        return getPlayerSkillsAtBirthPure(playerId, gameDeployDay, _divisionIdToRound[divisionId]);
+    }
+
+    function getPlayerSkillsAtBirthPure(uint256 playerId, uint256 _gameDeployDay, uint256 _divisionCreationRound) public pure returns (uint256) {
+        if (getIsSpecial(playerId)) return playerId;
+        // if (!wasPlayerCreatedVirtually(playerId)) return 0;
+        uint256 divisionCreationDay = _gameDeployDay + _divisionCreationRound * DAYS_PER_ROUND;
+        (uint256 teamId, , uint8 shirtNum) = getTeamIdCreationDayAndShirtNumPure(playerId, divisionCreationDay);
+        (uint256 dayOfBirth, uint8 potential) = computeBirthDayAndPotential(teamId, divisionCreationDay, shirtNum);
         (uint32[N_SKILLS] memory skills, uint8[4] memory birthTraits, uint32 sumSkills) = computeSkills(teamId, shirtNum, potential);
         return encodePlayerSkills(skills, dayOfBirth, 0, playerId, birthTraits, false, false, 0, 0, false, sumSkills);
     }
@@ -30,6 +50,14 @@ contract AssetsView is UniverseInfo, EncodingSkills, EncodingState, ComputeSkill
         teamId = encodeTZCountryAndVal(tz, countryIdxInTZ, teamIdxInCountry);
         creationDay = gameDeployDay + _divisionIdToRound[divisionId] * DAYS_PER_ROUND;
         shirtNum = uint8(playerIdxInCountry % PLAYERS_PER_TEAM_INIT);
+    }
+
+    function getTeamIdCreationDayAndShirtNumPure(uint256 playerId, uint256 creationDay) public pure returns(uint256 teamId, uint256, uint8 shirtNum) {
+        (uint8 tz, uint256 countryIdxInTZ, uint256 playerIdxInCountry) = decodeTZCountryAndVal(playerId);
+        uint256 teamIdxInCountry = playerIdxInCountry / PLAYERS_PER_TEAM_INIT;
+        teamId = encodeTZCountryAndVal(tz, countryIdxInTZ, teamIdxInCountry);
+        shirtNum = uint8(playerIdxInCountry % PLAYERS_PER_TEAM_INIT);
+        return(teamId, creationDay, shirtNum);
     }
 
     //// Compute a random age between 16 and 35.999, with random potential in [0,...7]

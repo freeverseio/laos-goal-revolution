@@ -268,15 +268,15 @@
       "constant": true
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.6.3+commit.8dda9521\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"get_ACADEMY_TEAM\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_FREE_PLAYER_ID\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_INGAMETIME_VS_REALTIME\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_IN_TRANSIT_SHIRTNUM\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_LEAGUES_PER_DIV\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_NULL_ADDR\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_NULL_TIMEZONE\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_PLAYERS_PER_TEAM_INIT\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_PLAYERS_PER_TEAM_MAX\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_POST_AUCTION_TIME\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_SECS_BETWEEN_VERSES\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_SK_DEF\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_SK_END\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_SK_PAS\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_SK_SHO\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_SK_SPE\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_TEAMS_PER_LEAGUE\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_VERSES_PER_DAY\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_VERSES_PER_ROUND\",\"outputs\":[{\"internalType\":\"uint16\",\"name\":\"\",\"type\":\"uint16\"}],\"stateMutability\":\"pure\",\"type\":\"function\"}],\"devdoc\":{\"author\":\"Freeverse.io, www.freeverse.io\",\"methods\":{},\"title\":\"Constants used in the project\"},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/interfaces/ConstantsGetters.sol\":\"ConstantsGetters\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/interfaces/ConstantsGetters.sol\":{\"keccak256\":\"0xf2223329e5fcf31f473c94f22fbb3f2755fc0a8d5439706ed77e49c6684f3cd1\",\"urls\":[\"bzz-raw://04010bf6cba8ca803114889b0a49a7d8cd462e889ae1fd257a2ea370c53504f0\",\"dweb:/ipfs/QmRLh2dGvuimuSikEbHmvETH3UbiPquV6UcrGFCfsXRciE\"]},\"/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/storage/Constants.sol\":{\"keccak256\":\"0x29288dbc7c1898c3081369669f2f532e92a84bd91b37636f30d978e588977400\",\"urls\":[\"bzz-raw://a63159e0b5ace6a53af48e333891d5044305782ef4736de254582b94ca87d016\",\"dweb:/ipfs/QmQTFNFMUNUw4hodPpuiZgf9c8YswSKPjkRhdKGgmnUMYz\"]}},\"version\":1}",
-  "bytecode": "0x608060405234801561001057600080fd5b5061028e806100206000396000f3fe608060405234801561001057600080fd5b50600436106101215760003560e01c80635ca8a2eb116100ad578063966a15f511610071578063966a15f5146101da578063ac260e87146101e2578063d81d4f5d146101ea578063da3f3a42146101c2578063db22a78d1461017657610121565b80635ca8a2eb146101965780635f6cb7421461019e5780636e404ca8146101c257806370cdebdb146101ca5780638258524e146101d257610121565b80633a557102116100f45780633a5571021461016e5780634482ea14146101765780634ed2be0a1461017e5780634f6efea31461018657806352d7c5411461018e57610121565b80631c164641146101265780631d5f5b82146101445780631fdff8ef1461014c57806329a816d914610154575b600080fd5b61012e610209565b6040805160ff9092168252519081900360200190f35b61012e61020e565b61012e610213565b61015c610218565b60408051918252519081900360200190f35b61015c61021e565b61012e610225565b61012e61022a565b61012e61022f565b61012e610234565b61012e610239565b6101a6610225565b604080516001600160a01b039092168252519081900360200190f35b61015c61023e565b61015c610243565b61012e610248565b61012e61023e565b61012e61024d565b6101f2610252565b6040805161ffff9092168252519081900360200190f35b601a90565b601090565b601290565b61038490565b6202a30090565b600090565b601990565b600490565b606090565b600390565b600190565b600e90565b600290565b600890565b6102a09056fea264697066735822122058120124e4530309c2cabb79edfb3fb94736336af1278eab5259d434551967a864736f6c63430006030033",
-  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106101215760003560e01c80635ca8a2eb116100ad578063966a15f511610071578063966a15f5146101da578063ac260e87146101e2578063d81d4f5d146101ea578063da3f3a42146101c2578063db22a78d1461017657610121565b80635ca8a2eb146101965780635f6cb7421461019e5780636e404ca8146101c257806370cdebdb146101ca5780638258524e146101d257610121565b80633a557102116100f45780633a5571021461016e5780634482ea14146101765780634ed2be0a1461017e5780634f6efea31461018657806352d7c5411461018e57610121565b80631c164641146101265780631d5f5b82146101445780631fdff8ef1461014c57806329a816d914610154575b600080fd5b61012e610209565b6040805160ff9092168252519081900360200190f35b61012e61020e565b61012e610213565b61015c610218565b60408051918252519081900360200190f35b61015c61021e565b61012e610225565b61012e61022a565b61012e61022f565b61012e610234565b61012e610239565b6101a6610225565b604080516001600160a01b039092168252519081900360200190f35b61015c61023e565b61015c610243565b61012e610248565b61012e61023e565b61012e61024d565b6101f2610252565b6040805161ffff9092168252519081900360200190f35b601a90565b601090565b601290565b61038490565b6202a30090565b600090565b601990565b600490565b606090565b600390565b600190565b600e90565b600290565b600890565b6102a09056fea264697066735822122058120124e4530309c2cabb79edfb3fb94736336af1278eab5259d434551967a864736f6c63430006030033",
+  "metadata": "{\"compiler\":{\"version\":\"0.6.3+commit.8dda9521\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"get_ACADEMY_TEAM\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_FREE_PLAYER_ID\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_INGAMETIME_VS_REALTIME\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_IN_TRANSIT_SHIRTNUM\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_LEAGUES_PER_DIV\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_NULL_ADDR\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_NULL_TIMEZONE\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_PLAYERS_PER_TEAM_INIT\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_PLAYERS_PER_TEAM_MAX\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_POST_AUCTION_TIME\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_SECS_BETWEEN_VERSES\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_SK_DEF\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_SK_END\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_SK_PAS\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_SK_SHO\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_SK_SPE\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_TEAMS_PER_LEAGUE\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_VERSES_PER_DAY\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"get_VERSES_PER_ROUND\",\"outputs\":[{\"internalType\":\"uint16\",\"name\":\"\",\"type\":\"uint16\"}],\"stateMutability\":\"pure\",\"type\":\"function\"}],\"devdoc\":{\"author\":\"Freeverse.io, www.freeverse.io\",\"methods\":{},\"title\":\"Constants used in the project\"},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/jurgenkudla/proyects/laos/laos-goal-revolution/goalrev-ganache/contracts/interfaces/ConstantsGetters.sol\":\"ConstantsGetters\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/jurgenkudla/proyects/laos/laos-goal-revolution/goalrev-ganache/contracts/interfaces/ConstantsGetters.sol\":{\"keccak256\":\"0xf2223329e5fcf31f473c94f22fbb3f2755fc0a8d5439706ed77e49c6684f3cd1\",\"urls\":[\"bzz-raw://04010bf6cba8ca803114889b0a49a7d8cd462e889ae1fd257a2ea370c53504f0\",\"dweb:/ipfs/QmRLh2dGvuimuSikEbHmvETH3UbiPquV6UcrGFCfsXRciE\"]},\"/Users/jurgenkudla/proyects/laos/laos-goal-revolution/goalrev-ganache/contracts/storage/Constants.sol\":{\"keccak256\":\"0x29288dbc7c1898c3081369669f2f532e92a84bd91b37636f30d978e588977400\",\"urls\":[\"bzz-raw://a63159e0b5ace6a53af48e333891d5044305782ef4736de254582b94ca87d016\",\"dweb:/ipfs/QmQTFNFMUNUw4hodPpuiZgf9c8YswSKPjkRhdKGgmnUMYz\"]}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b5061028e806100206000396000f3fe608060405234801561001057600080fd5b50600436106101215760003560e01c80635ca8a2eb116100ad578063966a15f511610071578063966a15f5146101da578063ac260e87146101e2578063d81d4f5d146101ea578063da3f3a42146101c2578063db22a78d1461017657610121565b80635ca8a2eb146101965780635f6cb7421461019e5780636e404ca8146101c257806370cdebdb146101ca5780638258524e146101d257610121565b80633a557102116100f45780633a5571021461016e5780634482ea14146101765780634ed2be0a1461017e5780634f6efea31461018657806352d7c5411461018e57610121565b80631c164641146101265780631d5f5b82146101445780631fdff8ef1461014c57806329a816d914610154575b600080fd5b61012e610209565b6040805160ff9092168252519081900360200190f35b61012e61020e565b61012e610213565b61015c610218565b60408051918252519081900360200190f35b61015c61021e565b61012e610225565b61012e61022a565b61012e61022f565b61012e610234565b61012e610239565b6101a6610225565b604080516001600160a01b039092168252519081900360200190f35b61015c61023e565b61015c610243565b61012e610248565b61012e61023e565b61012e61024d565b6101f2610252565b6040805161ffff9092168252519081900360200190f35b601a90565b601090565b601290565b61038490565b6202a30090565b600090565b601990565b600490565b606090565b600390565b600190565b600e90565b600290565b600890565b6102a09056fea26469706673582212203cb3d55c77f944ba84a924036dfd7f1b84f22a479a2d0f53bf17e5ae9ea4365764736f6c63430006030033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106101215760003560e01c80635ca8a2eb116100ad578063966a15f511610071578063966a15f5146101da578063ac260e87146101e2578063d81d4f5d146101ea578063da3f3a42146101c2578063db22a78d1461017657610121565b80635ca8a2eb146101965780635f6cb7421461019e5780636e404ca8146101c257806370cdebdb146101ca5780638258524e146101d257610121565b80633a557102116100f45780633a5571021461016e5780634482ea14146101765780634ed2be0a1461017e5780634f6efea31461018657806352d7c5411461018e57610121565b80631c164641146101265780631d5f5b82146101445780631fdff8ef1461014c57806329a816d914610154575b600080fd5b61012e610209565b6040805160ff9092168252519081900360200190f35b61012e61020e565b61012e610213565b61015c610218565b60408051918252519081900360200190f35b61015c61021e565b61012e610225565b61012e61022a565b61012e61022f565b61012e610234565b61012e610239565b6101a6610225565b604080516001600160a01b039092168252519081900360200190f35b61015c61023e565b61015c610243565b61012e610248565b61012e61023e565b61012e61024d565b6101f2610252565b6040805161ffff9092168252519081900360200190f35b601a90565b601090565b601290565b61038490565b6202a30090565b600090565b601990565b600490565b606090565b600390565b600190565b600e90565b600290565b600890565b6102a09056fea26469706673582212203cb3d55c77f944ba84a924036dfd7f1b84f22a479a2d0f53bf17e5ae9ea4365764736f6c63430006030033",
   "sourceMap": "149:1736:33:-:0;;;;5:9:-1;2:2;;;27:1;24;17:12;2:2;149:1736:33;;;;;;;",
   "deployedSourceMap": "149:1736:33:-:0;;;;5:9:-1;2:2;;;27:1;24;17:12;2:2;149:1736:33;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;12:1:-1;9;2:12;1789:94:33;;;:::i;:::-;;;;;;;;;;;;;;;;;;;480:86;;;:::i;296:98::-;;;:::i;1028:96::-;;;:::i;:::-;;;;;;;;;;;;;;;;755:92;;;:::i;1419:69::-;;;:::i;195:96::-;;;:::i;1715:69::-;;;:::i;939:84::-;;;:::i;1641:69::-;;;:::i;399:76::-;;;:::i;:::-;;;;-1:-1:-1;;;;;399:76:33;;;;;;;;;;;;;;664:86;;;:::i;1311:103::-;;;:::i;1567:69::-;;;:::i;1493:::-;;;:::i;571:88::-;;;:::i;1129:89::-;;;:::i;:::-;;;;;;;;;;;;;;;;;;;1789:94;902:2:41;1789:94:33;:::o;480:86::-;529:2:41;480:86:33;:::o;296:98::-;479:2:41;296:98:33;:::o;1028:96::-;3483:3:41;1028:96:33;:::o;755:92::-;3113:8:41;755:92:33;:::o;1419:69::-;1463:5;1419:69;:::o;195:96::-;635:2:41;195:96:33;:::o;1715:69::-;1370:1:41;1715:69:33;:::o;939:84::-;3545:2:41;939:84:33;:::o;1641:69::-;1330:1:41;1641:69:33;:::o;664:86::-;687:1:41;664:86:33;:::o;1311:103::-;1057:2:41;1311:103:33;:::o;1567:69::-;1290:1:41;1567:69:33;:::o;571:88::-;580:1:41;571:88:33;:::o;1129:89::-;3608:3:41;1129:89:33;:::o",
   "source": "pragma solidity >= 0.6.3;\n\nimport \"../storage/Constants.sol\";\n\n/**\n @title Constants used in the project\n @author Freeverse.io, www.freeverse.io\n*/\n\ncontract ConstantsGetters is Constants {\n\n    function get_PLAYERS_PER_TEAM_MAX() external pure returns(uint8) { return PLAYERS_PER_TEAM_MAX;}\n    function get_PLAYERS_PER_TEAM_INIT() external pure returns(uint8) { return PLAYERS_PER_TEAM_INIT;}\n    function get_NULL_ADDR() external pure returns(address) { return NULL_ADDR;}\n    function get_LEAGUES_PER_DIV() external pure returns(uint8) { return LEAGUES_PER_DIV;}\n    function get_TEAMS_PER_LEAGUE() external pure returns(uint8) { return TEAMS_PER_LEAGUE;}\n    function get_FREE_PLAYER_ID() external pure returns(uint256) { return FREE_PLAYER_ID;}\n    function get_POST_AUCTION_TIME() external pure returns(uint256) { return POST_AUCTION_TIME;}\n    function get_NULL_TIMEZONE() external pure returns(uint8) { return NULL_TIMEZONE;}\n    function get_VERSES_PER_DAY() external pure returns(uint8) { return VERSES_PER_DAY;}\n    function get_SECS_BETWEEN_VERSES() external pure returns(uint256) { return SECS_BETWEEN_VERSES;}\n    function get_VERSES_PER_ROUND() external pure returns(uint16) { return VERSES_PER_ROUND;}\n    function get_ACADEMY_TEAM() external pure returns(uint256) { return ACADEMY_TEAM; }\n    function get_INGAMETIME_VS_REALTIME() external pure returns(uint256) { return INGAMETIME_VS_REALTIME; }\n    function get_SK_SHO() external pure returns(uint8) { return SK_SHO; }\n    function get_SK_SPE() external pure returns(uint8) { return SK_SPE; }\n    function get_SK_PAS() external pure returns(uint8) { return SK_PAS; }\n    function get_SK_DEF() external pure returns(uint8) { return SK_DEF; }\n    function get_SK_END() external pure returns(uint8) { return SK_END; }\n    function get_IN_TRANSIT_SHIRTNUM() external pure returns(uint8) { return IN_TRANSIT_SHIRTNUM;}\n}",
-  "sourcePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/interfaces/ConstantsGetters.sol",
+  "sourcePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/goalrev-ganache/contracts/interfaces/ConstantsGetters.sol",
   "ast": {
-    "absolutePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/interfaces/ConstantsGetters.sol",
+    "absolutePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/goalrev-ganache/contracts/interfaces/ConstantsGetters.sol",
     "exportedSymbols": {
       "ConstantsGetters": [
         16350
@@ -297,12 +297,12 @@
         "src": "0:25:33"
       },
       {
-        "absolutePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/storage/Constants.sol",
+        "absolutePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/goalrev-ganache/contracts/storage/Constants.sol",
         "file": "../storage/Constants.sol",
         "id": 16194,
         "nodeType": "ImportDirective",
         "scope": 16351,
-        "sourceUnit": 20017,
+        "sourceUnit": 20387,
         "src": "27:34:33",
         "symbolAliases": [],
         "unitAlias": ""
@@ -317,10 +317,10 @@
               "id": 16196,
               "name": "Constants",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 20016,
+              "referencedDeclaration": 20386,
               "src": "178:9:33",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Constants_$20016",
+                "typeIdentifier": "t_contract$_Constants_$20386",
                 "typeString": "contract Constants"
               }
             },
@@ -330,7 +330,7 @@
           }
         ],
         "contractDependencies": [
-          20016
+          20386
         ],
         "contractKind": "contract",
         "documentation": {
@@ -343,7 +343,7 @@
         "id": 16350,
         "linearizedBaseContracts": [
           16350,
-          20016
+          20386
         ],
         "name": "ConstantsGetters",
         "nodeType": "ContractDefinition",
@@ -361,7 +361,7 @@
                     "name": "PLAYERS_PER_TEAM_MAX",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19860,
+                    "referencedDeclaration": 20230,
                     "src": "269:20:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
@@ -443,7 +443,7 @@
                     "name": "PLAYERS_PER_TEAM_INIT",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19851,
+                    "referencedDeclaration": 20221,
                     "src": "371:21:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
@@ -525,7 +525,7 @@
                     "name": "NULL_ADDR",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19845,
+                    "referencedDeclaration": 20215,
                     "src": "464:9:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -608,7 +608,7 @@
                     "name": "LEAGUES_PER_DIV",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19854,
+                    "referencedDeclaration": 20224,
                     "src": "549:15:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
@@ -690,7 +690,7 @@
                     "name": "TEAMS_PER_LEAGUE",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19857,
+                    "referencedDeclaration": 20227,
                     "src": "641:16:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
@@ -772,7 +772,7 @@
                     "name": "FREE_PLAYER_ID",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19863,
+                    "referencedDeclaration": 20233,
                     "src": "734:14:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
@@ -854,7 +854,7 @@
                     "name": "POST_AUCTION_TIME",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19980,
+                    "referencedDeclaration": 20350,
                     "src": "828:17:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
@@ -936,7 +936,7 @@
                     "name": "NULL_TIMEZONE",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 20012,
+                    "referencedDeclaration": 20382,
                     "src": "919:13:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
@@ -1018,7 +1018,7 @@
                     "name": "VERSES_PER_DAY",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 20006,
+                    "referencedDeclaration": 20376,
                     "src": "1007:14:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
@@ -1100,7 +1100,7 @@
                     "name": "SECS_BETWEEN_VERSES",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 20003,
+                    "referencedDeclaration": 20373,
                     "src": "1103:19:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint16",
@@ -1182,7 +1182,7 @@
                     "name": "VERSES_PER_ROUND",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 20009,
+                    "referencedDeclaration": 20379,
                     "src": "1200:16:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint16",
@@ -1264,7 +1264,7 @@
                     "name": "ACADEMY_TEAM",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19866,
+                    "referencedDeclaration": 20236,
                     "src": "1291:12:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
@@ -1346,7 +1346,7 @@
                     "name": "INGAMETIME_VS_REALTIME",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19881,
+                    "referencedDeclaration": 20251,
                     "src": "1389:22:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
@@ -1428,7 +1428,7 @@
                     "name": "SK_SHO",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19887,
+                    "referencedDeclaration": 20257,
                     "src": "1479:6:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
@@ -1510,7 +1510,7 @@
                     "name": "SK_SPE",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19890,
+                    "referencedDeclaration": 20260,
                     "src": "1553:6:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
@@ -1592,7 +1592,7 @@
                     "name": "SK_PAS",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19893,
+                    "referencedDeclaration": 20263,
                     "src": "1627:6:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
@@ -1674,7 +1674,7 @@
                     "name": "SK_DEF",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19896,
+                    "referencedDeclaration": 20266,
                     "src": "1701:6:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
@@ -1756,7 +1756,7 @@
                     "name": "SK_END",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19899,
+                    "referencedDeclaration": 20269,
                     "src": "1775:6:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
@@ -1838,7 +1838,7 @@
                     "name": "IN_TRANSIT_SHIRTNUM",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19872,
+                    "referencedDeclaration": 20242,
                     "src": "1862:19:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
@@ -1915,7 +1915,7 @@
     "src": "0:1885:33"
   },
   "legacyAST": {
-    "absolutePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/interfaces/ConstantsGetters.sol",
+    "absolutePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/goalrev-ganache/contracts/interfaces/ConstantsGetters.sol",
     "exportedSymbols": {
       "ConstantsGetters": [
         16350
@@ -1936,12 +1936,12 @@
         "src": "0:25:33"
       },
       {
-        "absolutePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/storage/Constants.sol",
+        "absolutePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/goalrev-ganache/contracts/storage/Constants.sol",
         "file": "../storage/Constants.sol",
         "id": 16194,
         "nodeType": "ImportDirective",
         "scope": 16351,
-        "sourceUnit": 20017,
+        "sourceUnit": 20387,
         "src": "27:34:33",
         "symbolAliases": [],
         "unitAlias": ""
@@ -1956,10 +1956,10 @@
               "id": 16196,
               "name": "Constants",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 20016,
+              "referencedDeclaration": 20386,
               "src": "178:9:33",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Constants_$20016",
+                "typeIdentifier": "t_contract$_Constants_$20386",
                 "typeString": "contract Constants"
               }
             },
@@ -1969,7 +1969,7 @@
           }
         ],
         "contractDependencies": [
-          20016
+          20386
         ],
         "contractKind": "contract",
         "documentation": {
@@ -1982,7 +1982,7 @@
         "id": 16350,
         "linearizedBaseContracts": [
           16350,
-          20016
+          20386
         ],
         "name": "ConstantsGetters",
         "nodeType": "ContractDefinition",
@@ -2000,7 +2000,7 @@
                     "name": "PLAYERS_PER_TEAM_MAX",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19860,
+                    "referencedDeclaration": 20230,
                     "src": "269:20:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
@@ -2082,7 +2082,7 @@
                     "name": "PLAYERS_PER_TEAM_INIT",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19851,
+                    "referencedDeclaration": 20221,
                     "src": "371:21:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
@@ -2164,7 +2164,7 @@
                     "name": "NULL_ADDR",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19845,
+                    "referencedDeclaration": 20215,
                     "src": "464:9:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -2247,7 +2247,7 @@
                     "name": "LEAGUES_PER_DIV",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19854,
+                    "referencedDeclaration": 20224,
                     "src": "549:15:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
@@ -2329,7 +2329,7 @@
                     "name": "TEAMS_PER_LEAGUE",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19857,
+                    "referencedDeclaration": 20227,
                     "src": "641:16:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
@@ -2411,7 +2411,7 @@
                     "name": "FREE_PLAYER_ID",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19863,
+                    "referencedDeclaration": 20233,
                     "src": "734:14:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
@@ -2493,7 +2493,7 @@
                     "name": "POST_AUCTION_TIME",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19980,
+                    "referencedDeclaration": 20350,
                     "src": "828:17:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
@@ -2575,7 +2575,7 @@
                     "name": "NULL_TIMEZONE",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 20012,
+                    "referencedDeclaration": 20382,
                     "src": "919:13:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
@@ -2657,7 +2657,7 @@
                     "name": "VERSES_PER_DAY",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 20006,
+                    "referencedDeclaration": 20376,
                     "src": "1007:14:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
@@ -2739,7 +2739,7 @@
                     "name": "SECS_BETWEEN_VERSES",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 20003,
+                    "referencedDeclaration": 20373,
                     "src": "1103:19:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint16",
@@ -2821,7 +2821,7 @@
                     "name": "VERSES_PER_ROUND",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 20009,
+                    "referencedDeclaration": 20379,
                     "src": "1200:16:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint16",
@@ -2903,7 +2903,7 @@
                     "name": "ACADEMY_TEAM",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19866,
+                    "referencedDeclaration": 20236,
                     "src": "1291:12:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
@@ -2985,7 +2985,7 @@
                     "name": "INGAMETIME_VS_REALTIME",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19881,
+                    "referencedDeclaration": 20251,
                     "src": "1389:22:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
@@ -3067,7 +3067,7 @@
                     "name": "SK_SHO",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19887,
+                    "referencedDeclaration": 20257,
                     "src": "1479:6:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
@@ -3149,7 +3149,7 @@
                     "name": "SK_SPE",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19890,
+                    "referencedDeclaration": 20260,
                     "src": "1553:6:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
@@ -3231,7 +3231,7 @@
                     "name": "SK_PAS",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19893,
+                    "referencedDeclaration": 20263,
                     "src": "1627:6:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
@@ -3313,7 +3313,7 @@
                     "name": "SK_DEF",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19896,
+                    "referencedDeclaration": 20266,
                     "src": "1701:6:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
@@ -3395,7 +3395,7 @@
                     "name": "SK_END",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19899,
+                    "referencedDeclaration": 20269,
                     "src": "1775:6:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
@@ -3477,7 +3477,7 @@
                     "name": "IN_TRANSIT_SHIRTNUM",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 19872,
+                    "referencedDeclaration": 20242,
                     "src": "1862:19:33",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
@@ -3562,35 +3562,11 @@
       "events": {},
       "links": {},
       "address": "0xFC628dd79137395F3C9744e33b1c5DE554D94882",
-      "transactionHash": "0xf6855d7c856408590fe07744e75e82d7db74da52d8908bab3d9eacdf0e5290d7"
-    },
-    "1729058543692": {
-      "events": {},
-      "links": {},
-      "address": "0xb825F9c29F35324F052C8452F9B7d4B9CBfA8aD9",
-      "transactionHash": "0x56a12ca303de56d73c6da586189afb7f334c8da0db03d8bdf02c290004baef16"
-    },
-    "1729060592154": {
-      "events": {},
-      "links": {},
-      "address": "0x6cA0e8f2796252d1757b81E1567c810B60E31a13",
-      "transactionHash": "0x3f16b25903f07604ec3aeec584fce2d60ad19b6e1b7c4f7db974c85aa6f5cf44"
-    },
-    "1729061451711": {
-      "events": {},
-      "links": {},
-      "address": "0x95130319f52903D73Ca7BCC6f33EB18d55BF4B0b",
-      "transactionHash": "0x9d19543c7229fcaead61522b23f9634799ef9d4ba09e41d0130730620acbfc6a"
-    },
-    "1729062217118": {
-      "events": {},
-      "links": {},
-      "address": "0x6289AFD1F68E46a4Dc09F00Dc228ee407432d0FE",
-      "transactionHash": "0xd3787493ce40928cad8f6893d3453e235858391b0f3de9b1256a2cad4d2e28f5"
+      "transactionHash": "0xe9c0605ad13fba23845514af92a5f7855b1a5c4edbd2c9de79aabcb2da58d854"
     }
   },
   "schemaVersion": "3.0.23",
-  "updatedAt": "2024-10-16T08:58:34.603Z",
+  "updatedAt": "2024-10-18T06:45:40.006Z",
   "networkType": "ethereum",
   "devdoc": {
     "author": "Freeverse.io, www.freeverse.io",
