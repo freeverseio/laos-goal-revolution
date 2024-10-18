@@ -223,11 +223,13 @@ export class LeagueService {
     return response.data.rankingPoints;
   }
 
-  async addDivision(timezoneIdx: number, countryIdx: number) {
+  async addDivision(timezoneIdx: number, countryIdx: number, divisionCreationRound: number) {
     console.log('addDivision: ',timezoneIdx, countryIdx);
     // open tx
     const entityManager = AppDataSource.manager;
     const lastTeamIdxInTZ = 0; // TODO retreive from DB
+    const firstVerse = await this.verseRepository.getInitialVerse(AppDataSource.manager);
+
     for (let i = 0; i < 16; i++) { // 16 leagues
       for (let j = 0; j < 8; j++) { // 8 teams per league
         // create 1 team
@@ -235,8 +237,8 @@ export class LeagueService {
           timezoneIdx,
           countryIdx,
           teamIdxInTZ: (lastTeamIdxInTZ + 1 + j + (i*8)),
-          deployTimeInUnixEpochSecs: 0, // TODO ??
-          divisionCreationRound: 0 // TODO ??
+          deployTimeInUnixEpochSecs: firstVerse.verseTimestamp,
+          divisionCreationRound: divisionCreationRound
         }    
         const response = await axios.post(`${process.env.CORE_API_URL}/league/createTeam`, requestBody);
 

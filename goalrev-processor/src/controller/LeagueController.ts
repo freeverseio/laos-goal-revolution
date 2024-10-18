@@ -19,7 +19,7 @@ export class LeagueController {
 
     @Post("/addDivision")
     async addDivision(@Body() data: AddDivisionInput) {        
-        return await this.leagueService.addDivision(data.timezoneIdx, data.countryIdx);        
+        return await this.leagueService.addDivision(data.timezoneIdx, data.countryIdx, data.divisionCreationRound);        
     }
 
 }
