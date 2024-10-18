@@ -40,8 +40,14 @@ export class PreferredPositionMapper {
         return new Error("unexistent forwardness");
     }
   }
-
-  private static leftishnessToString(value: number): string | Error {
+  //  1	"R"
+  // 2	"C"
+  // 3	"CR"
+  // 4	"L"
+  // 5	"LR"
+  // 6	"LC"
+  // 7	"LCR"
+  public static leftishnessToString(value: number): string | Error {
     if (value >= 8) {
       return new Error("unexistent leftishness");
     }

@@ -93,4 +93,41 @@ describe('PreferredPositionMapper', () => {
       expect(result).toBe('M');
     });
   });
+
+  describe('leftishnessToString', () => {
+    it('should return R for value 1', () => {
+      const result = PreferredPositionMapper.leftishnessToString(1);
+      expect(result).toBe('R');
+    });
+
+    it('should return C for value 2', () => {
+      const result = PreferredPositionMapper.leftishnessToString(2);
+      expect(result).toBe('C');
+    });
+
+    it('should return CR for value 3', () => {
+      const result = PreferredPositionMapper.leftishnessToString(3);
+      expect(result).toBe('CR');
+    });
+
+    it('should return L for value 4', () => {
+      const result = PreferredPositionMapper.leftishnessToString(4);
+      expect(result).toBe('L');
+    });
+
+    it('should return LR for value 5', () => {
+      const result = PreferredPositionMapper.leftishnessToString(5);
+      expect(result).toBe('LR');
+    });
+
+    it('should return LC for value 6', () => {
+      const result = PreferredPositionMapper.leftishnessToString(6);
+      expect(result).toBe('LC');
+    });
+
+    it('should return LCR for value 7', () => {
+      const result = PreferredPositionMapper.leftishnessToString(7);
+      expect(result).toBe('LCR');
+    });
+  });
 });
