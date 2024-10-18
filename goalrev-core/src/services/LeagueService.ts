@@ -103,10 +103,4 @@ export class LeagueService {
     return { rankingPoints: newRankingPoints, err: 0 };
   }
 
-  // TODO call SMART CONTRACT
-  async createTeam(body: CreateTeamInput): Promise<CreateTeamOutput> {
-    console.log("createTeam.call SC: ", body);
-    return { team: "team data", players: ["player1 data", "player2 data"]};
-  }
-
 }

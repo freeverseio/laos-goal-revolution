@@ -85,10 +85,6 @@ class TacticRequest {
   getSubstitutionRounds(): number[] {
     return this.substitutions.map((substitution) => Math.floor(substitution.minute / 12));
   }
-
-  
-  
-  
 }
 
 export class TrainingRequest {

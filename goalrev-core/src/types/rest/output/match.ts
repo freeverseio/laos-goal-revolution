@@ -1,3 +1,5 @@
+import { PlayerSkill } from "./player";
+
 export interface PlayOutput {
   updatedSkills: [PlayerSkill[], PlayerSkill[]]; 
   matchLogs: [MatchLog, MatchLog];
@@ -6,14 +8,6 @@ export interface PlayOutput {
   err: number; // Error code
 }
 
-export interface PlayerSkill {
-  defence: number;
-  speed: number;
-  pass: number;
-  shoot: number;
-  endurance: number;
-  encodedSkills: string;
-}
 
 export interface MatchLog {
   numberOfGoals: number;

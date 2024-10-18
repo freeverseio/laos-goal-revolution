@@ -1,4 +1,4 @@
-import { PlayerSkill } from "../../types/rest/output/match";
+import { PlayerSkill } from "../../types";
 
 export default class DecodePlayerSkills {
   static getSkill(encodedSkills: string, skillIdx: number): number {
