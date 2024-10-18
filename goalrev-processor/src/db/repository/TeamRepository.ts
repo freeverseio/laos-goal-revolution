@@ -78,7 +78,7 @@ export class TeamRepository  {
 
   async createTeam(team: Team, transactionalEntityManager: EntityManager): Promise<Team> {
     const teamRepository = transactionalEntityManager.getRepository(Team);
-    return teamRepository.create(team);
+    return teamRepository.save(team);
   }
 
   async countTeamsByTimezone(timezoneIdx: number, transactionalEntityManager: EntityManager): Promise<number> {

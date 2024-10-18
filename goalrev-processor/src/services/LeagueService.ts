@@ -246,6 +246,7 @@ export class LeagueService {
             divisionCreationRound: divisionCreationRound
           }    
           const response = await axios.post(`${process.env.CORE_API_URL}/team/createTeam`, requestBody);
+          console.log('Creating Team: ', (j + 1 + (i*8)));
           const createTeamResponse = response.data as CreateTeamResponse;
 
           const teamMapped = CreateTeamResponseToEntityMapper.map({response: createTeamResponse, 
@@ -257,33 +258,12 @@ export class LeagueService {
           });
 
           const resultTeam = await this.teamRepository.createTeam(teamMapped, transactionManager);
-          //console.log('resultTeam: ',resultTeam);
           if (!resultTeam) {
+            console.error(`error on iteration [${i}, ${j}]`);
             throw new Error('Error creating team in DB');
           }else{
             console.log('created team');
-          }
-          j=8;
-          i=16;
-          
-          // TODO define types
-
-          // TODO leagueRepository
-
-          // TODO Mappers TeamResponse to Team Entity
-
-          //console.log('TODO store Team in DB: ',response.data);        
-          // TODO Store Team in DB
-          
-                   
-
-
-          // const team: Team = response.data.team;
-          // this.teamRepository.createTeam(team, entityManager);
-
-          // TODO Mapper response.data.players to Player Entity
-
-          // set players to team
+          }         
         }
 
         // TODO bulk store 8 teams

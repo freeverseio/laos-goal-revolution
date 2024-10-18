@@ -6,7 +6,7 @@ export class CreateTeamResponseToEntityMapper {
   static map({response, timezoneIdx, countryIdx, league_idx, team_idx_in_league, leaderboard_position}:
     {response: CreateTeamResponse, timezoneIdx: number, countryIdx: number, league_idx: number, team_idx_in_league: number, leaderboard_position: number}): Team {
     return  {
-      team_id: response.teamId,
+      team_id: response.id,
       name: 'Mock Team',
       manager_name: 'Mock Manager',
       country: {
@@ -18,7 +18,7 @@ export class CreateTeamResponseToEntityMapper {
         country_idx: countryIdx,
         league_idx: league_idx,
       } as League,
-      players: CreateTeamResponseToEntityMapper.mapPlayers(response.players, response.teamId),
+      players: CreateTeamResponseToEntityMapper.mapPlayers(response.players, response.id),
       tactics: {} as Tactics,
       trainings: {} as Training,
       timezone_idx: timezoneIdx,
@@ -50,6 +50,7 @@ export class CreateTeamResponseToEntityMapper {
       if (preferredPosition instanceof Error) {
         throw new Error(`Failed to get preferred position for player ${player.id}: ${preferredPosition.message}`);
       }
+      playerEntity.name = "name " + player.id;
       playerEntity.player_id = player.id;
       playerEntity.team_id = teamId;
       playerEntity.defence = player.skills.defence;

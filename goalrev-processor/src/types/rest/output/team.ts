@@ -1,5 +1,5 @@
 export interface CreateTeamResponse {
-  teamId: string;
+  id: string;
   players: Player[];
 }
 
