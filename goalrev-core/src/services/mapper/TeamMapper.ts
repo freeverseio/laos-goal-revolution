@@ -11,7 +11,6 @@ export class TeamMapper {
   }
 
   static mapContractResponseToTeam(response: any, teamId: string, encodedSkills: string[]): Team {
-    console.log("response: ", response);
     const players: Player[] = response[0].map((skills: any, index: number) => {
       const birthTraits = response[2][index];
       const playerId = response[3][index].toString();
@@ -35,7 +34,7 @@ export class TeamMapper {
 
       return {
         id: playerId,
-        skills: [playerSkills],
+        skills: playerSkills,
         dayOfBirth,
         birthTraits: birthTraitsObj,
       };

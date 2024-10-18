@@ -26,12 +26,9 @@ export class TeamService {
       body.deployTimeInUnixEpochSecs,
       body.divisionCreationRound
     );
-
     const team = TeamMapper.mapCreateTeamOutput(response);
     const skills = await this.utilsContract.fullDecodeSkillsForEntireTeam(team.playerSkillsAtBirth);
     const decodedTeam = TeamMapper.mapContractResponseToTeam(skills, team.teamId, team.playerSkillsAtBirth);
     return decodedTeam;
   }
-
-
 }

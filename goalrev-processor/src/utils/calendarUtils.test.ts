@@ -106,21 +106,21 @@ describe('CalendarInfo Tests', () => {
         info1 = initMatchtimeAndTimezone(referenceDeploy);
 
      
-        const dateStart = new Date('2024-10-06T21:00:00Z');
-        const deployTimeInUnixEpochSecs = Math.floor(dateStart.getTime() / 1000);
-        const matchTimeAndTZ = initMatchtimeAndTimezone(deployTimeInUnixEpochSecs);
+        // const dateStart = new Date('2024-10-06T21:00:00Z');
+        // const deployTimeInUnixEpochSecs = Math.floor(dateStart.getTime() / 1000);
+        // const matchTimeAndTZ = initMatchtimeAndTimezone(deployTimeInUnixEpochSecs);
 
         
-        console.log(`matchTimeAndTZ: ${JSON.stringify(matchTimeAndTZ)}`);
-        for (let i = 0; i < 100; i++) {
-            const info2 = calendarInfo(i, matchTimeAndTZ.TZForRound1, matchTimeAndTZ.firstVerseTimeStamp);
-            if (info2.timezone == 10) {
-                console.log(`info2: ${JSON.stringify(info2)}`);
-                // print date in CET
-                const date = new Date(info2?.timestamp! * 1000);
-                console.log(`i: ${date.toLocaleString('en-US', { timeZone: 'Europe/Madrid' })}`);
-            }
-        }
+
+        // for (let i = 0; i < 100; i++) {
+        //     const info2 = calendarInfo(i, matchTimeAndTZ.TZForRound1, matchTimeAndTZ.firstVerseTimeStamp);
+        //     if (info2.timezone == 10) {
+        //         console.log(`info2: ${JSON.stringify(info2)}`);
+        //         // print date in CET
+        //         const date = new Date(info2?.timestamp! * 1000);
+        //         console.log(`i: ${date.toLocaleString('en-US', { timeZone: 'Europe/Madrid' })}`);
+        //     }
+        // }
 
 
         // 12:30 CET / 22:30 CET

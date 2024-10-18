@@ -13,21 +13,26 @@ import { getMatch1stHalfUTC } from "../utils/calendarUtils";
 import { MATCHDAYS_PER_ROUND } from "../utils/constants/constants";
 import { CalendarService } from "./CalendarService";
 import { RankingPointsInput } from "../types/rest/input/rankingPoints";
-import { Player, Team, TeamPartialUpdate } from "../db/entity";
+import { League, Player, Tactics, Team, TeamPartialUpdate, Training } from "../db/entity";
+import { CreateTeamResponse } from "../types/rest/output/team";
+import { CreateTeamResponseToEntityMapper } from "./mapper/CreateTeamResponseToEntityMapper";
+import { LeagueRepository } from "../db/repository/LeagueRepository";
 
 export class LeagueService {
   private teamRepository: TeamRepository;
   private calendarService: CalendarService;
   private matchRepository: MatchRepository;
   private verseRepository: VerseRepository;
-  private matchEventRepository: MatchEventRepository
+  private matchEventRepository: MatchEventRepository;
+  private leagueRepository: LeagueRepository;
 
-  constructor(teamRepository: TeamRepository, matchRepository: MatchRepository, verseRepository: VerseRepository, matchEventRepository: MatchEventRepository, calendarService: CalendarService) {
+  constructor(teamRepository: TeamRepository, matchRepository: MatchRepository, verseRepository: VerseRepository, matchEventRepository: MatchEventRepository, calendarService: CalendarService, leagueRepository: LeagueRepository) {
     this.teamRepository = teamRepository;
     this.matchRepository = matchRepository;
     this.verseRepository = verseRepository;
     this.calendarService = calendarService;
     this.matchEventRepository = matchEventRepository;
+    this.leagueRepository = leagueRepository;
   }
 
   async computeTeamRankingPointsForTimezone(timezoneIdx: number): Promise<void> {
@@ -225,36 +230,47 @@ export class LeagueService {
 
   async addDivision(timezoneIdx: number, countryIdx: number, divisionCreationRound: number) {
     console.log('addDivision: ',timezoneIdx, countryIdx);
-    // open tx
     const entityManager = AppDataSource.manager;
-    const lastTeamIdxInTZ = 0; // TODO retreive from DB
     const firstVerse = await this.verseRepository.getInitialVerse(AppDataSource.manager);
-
+    const nextTeamIdxInTZ =await this.teamRepository.countTeamsByTimezone( timezoneIdx, entityManager);
+    const nextLeagueIdx = await this.leagueRepository.countLeaguesByTimezoneAndCountry( timezoneIdx, countryIdx, entityManager);
+    
     for (let i = 0; i < 16; i++) { // 16 leagues
-      for (let j = 0; j < 8; j++) { // 8 teams per league
-        // create 1 team
-        const requestBody: CreateTeamCoreInput = {
-          timezoneIdx,
-          countryIdx,
-          teamIdxInTZ: (lastTeamIdxInTZ + 1 + j + (i*8)),
-          deployTimeInUnixEpochSecs: firstVerse.verseTimestamp,
-          divisionCreationRound: divisionCreationRound
-        }    
-        const response = await axios.post(`${process.env.CORE_API_URL}/league/createTeam`, requestBody);
+      // open tx
+      await entityManager.transaction(async (transactionManager: EntityManager) => {
+        for (let j = 0; j < 8; j++) { // 8 teams per league
+          // create 1 team
+          const requestBody: CreateTeamCoreInput = {
+            timezoneIdx,
+            countryIdx,
+            teamIdxInTZ: (nextTeamIdxInTZ + j + (i*8)),
+            deployTimeInUnixEpochSecs: firstVerse.verseTimestamp,
+            divisionCreationRound: divisionCreationRound
+          }    
+          const response = await axios.post(`${process.env.CORE_API_URL}/team/createTeam`, requestBody);
+          console.log('Creating Team: ', (j + (i*8)));
+          const createTeamResponse = response.data as CreateTeamResponse;
 
-        console.log('TODO store Team in DB: ',response);
-        // TODO Store Team in DB
-        // const team: Team = response.data.team;
-        // this.teamRepository.createTeam(team, entityManager);
+          const teamMapped = CreateTeamResponseToEntityMapper.map({response: createTeamResponse, 
+            timezoneIdx, 
+            countryIdx, 
+            league_idx: nextLeagueIdx + i, 
+            team_idx_in_league: j, 
+            leaderboard_position: j
+          });
 
-        // TODO Store Playersin DB
-        // const player: Player = response.data.player[z];
-        // this.playerRepository.createPlayer(player, entityManager);
-      }
+          const resultTeam = await this.teamRepository.createTeam(teamMapped, transactionManager);
+          if (!resultTeam) {
+            console.error(`error on iteration [${i}, ${j}]`);
+            throw new Error('Error creating team in DB');          
+          }         
+        }
+
+        // TODO bulk store 8 teams
+      }); // close tx
     }
   
     return true;
   }
-
 
 }

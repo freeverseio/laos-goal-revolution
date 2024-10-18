@@ -11,6 +11,9 @@ export class Player {
   team!: Team;
 
   @Column({ type: 'text' })
+  name!: string;
+
+  @Column({ type: 'text' })
   team_id!: string;
 
   @Column({ type: 'int' })

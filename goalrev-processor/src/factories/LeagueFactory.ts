@@ -1,3 +1,4 @@
+import { LeagueRepository } from "../db/repository/LeagueRepository";
 import { MatchEventRepository } from "../db/repository/MatchEventRepository";
 import { MatchRepository } from "../db/repository/MatchRepository";
 import { TeamRepository } from "../db/repository/TeamRepository";
@@ -12,6 +13,7 @@ export class LeagueFactory {
         const verseRepository = new VerseRepository();
         const matchEventRepository = new MatchEventRepository();
         const calendarService = new CalendarService(verseRepository);
-        return new LeagueService(teamRepository, matchRepository, verseRepository, matchEventRepository, calendarService);
+        const leagueRepository = new LeagueRepository();
+        return new LeagueService(teamRepository, matchRepository, verseRepository, matchEventRepository, calendarService, leagueRepository);
     }
 } 

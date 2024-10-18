@@ -10,6 +10,11 @@ export class TeamRepository  {
     await teamRepository.save(teams);
   }
 
+  async bulkCreate(teams: Team[], transactionalEntityManager: EntityManager): Promise<void> {
+    const teamRepository = transactionalEntityManager.getRepository(Team);
+    await teamRepository.save(teams);
+  }
+
   async findTeamsWithPlayersByTimezone(timezoneIdx: number): Promise<Team[]> {
     const teamRepository = AppDataSource.getRepository(Team);
     const teams = await teamRepository.find({ 
@@ -73,7 +78,12 @@ export class TeamRepository  {
 
   async createTeam(team: Team, transactionalEntityManager: EntityManager): Promise<Team> {
     const teamRepository = transactionalEntityManager.getRepository(Team);
-    return teamRepository.create(team);
+    return teamRepository.save(team);
+  }
+
+  async countTeamsByTimezone(timezoneIdx: number, transactionalEntityManager: EntityManager): Promise<number> {
+    const repository = transactionalEntityManager.getRepository(Team);
+    return await repository.count({ where: { timezone_idx: timezoneIdx } });
   }
   
 }
