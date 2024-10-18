@@ -8,12 +8,12 @@ import { MatchEventRepository } from "../db/repository/MatchEventRepository";
 import { MatchRepository } from "../db/repository/MatchRepository";
 import { TeamRepository } from "../db/repository/TeamRepository";
 import { VerseRepository } from "../db/repository/VerseRepository";
-import { LeagueGroup, Matchday, Schedule, TeamId } from "../types";
+import { CreateTeamCoreInput, LeagueGroup, Matchday, Schedule, TeamId } from "../types";
 import { getMatch1stHalfUTC } from "../utils/calendarUtils";
 import { MATCHDAYS_PER_ROUND } from "../utils/constants/constants";
 import { CalendarService } from "./CalendarService";
 import { RankingPointsInput } from "../types/rest/input/rankingPoints";
-import { TeamPartialUpdate } from "../db/entity";
+import { Player, Team, TeamPartialUpdate } from "../db/entity";
 
 export class LeagueService {
   private teamRepository: TeamRepository;
@@ -223,7 +223,36 @@ export class LeagueService {
     return response.data.rankingPoints;
   }
 
+  async addDivision(timezoneIdx: number, countryIdx: number) {
+    console.log('addDivision: ',timezoneIdx, countryIdx);
+    // open tx
+    const entityManager = AppDataSource.manager;
+    const lastTeamIdxInTZ = 0; // TODO retreive from DB
+    for (let i = 0; i < 16; i++) { // 16 leagues
+      for (let j = 0; j < 8; j++) { // 8 teams per league
+        // create 1 team
+        const requestBody: CreateTeamCoreInput = {
+          timezoneIdx,
+          countryIdx,
+          teamIdxInTZ: (lastTeamIdxInTZ + 1 + j + (i*8)),
+          deployTimeInUnixEpochSecs: 0, // TODO ??
+          divisionCreationRound: 0 // TODO ??
+        }    
+        const response = await axios.post(`${process.env.CORE_API_URL}/league/createTeam`, requestBody);
 
+        console.log('TODO store Team in DB: ',response);
+        // TODO Store Team in DB
+        // const team: Team = response.data.team;
+        // this.teamRepository.createTeam(team, entityManager);
+
+        // TODO Store Playersin DB
+        // const player: Player = response.data.player[z];
+        // this.playerRepository.createPlayer(player, entityManager);
+      }
+    }
+  
+    return true;
+  }
 
 
 }

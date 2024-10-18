@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import LeaguesAbi from '../contracts/abi/Leagues.json';
-import { LeagueLeaderboardInput, LeagueLeaderboardTeamInput, LeagueLeaderboardOutput, LeagueLeaderboardTeamOutput, RankingPointsInput, RankingPointsOutput } from "../types";
+import { LeagueLeaderboardInput, LeagueLeaderboardTeamInput, LeagueLeaderboardOutput, LeagueLeaderboardTeamOutput, RankingPointsInput, RankingPointsOutput, CreateTeamOutput, CreateTeamInput } from "../types";
 import Big from 'big.js';
 
 export class LeagueService {
@@ -102,4 +102,11 @@ export class LeagueService {
 
     return { rankingPoints: newRankingPoints, err: 0 };
   }
+
+  // TODO call SMART CONTRACT
+  async createTeam(body: CreateTeamInput): Promise<CreateTeamOutput> {
+    console.log("createTeam.call SC: ", body);
+    return { team: "team data", players: ["player1 data", "player2 data"]};
+  }
+
 }

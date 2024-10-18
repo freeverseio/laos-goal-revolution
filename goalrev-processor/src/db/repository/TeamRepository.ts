@@ -70,6 +70,11 @@ export class TeamRepository  {
     });
     await Promise.all(updatePromises);
   }
+
+  async createTeam(team: Team, transactionalEntityManager: EntityManager): Promise<Team> {
+    const teamRepository = transactionalEntityManager.getRepository(Team);
+    return teamRepository.create(team);
+  }
   
 }
 
