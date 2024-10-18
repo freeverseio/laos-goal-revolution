@@ -34,7 +34,7 @@ export class TeamMapper {
 
       return {
         id: playerId,
-        skills: [playerSkills],
+        skills: playerSkills,
         dayOfBirth,
         birthTraits: birthTraitsObj,
       };

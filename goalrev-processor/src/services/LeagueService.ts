@@ -14,6 +14,7 @@ import { MATCHDAYS_PER_ROUND } from "../utils/constants/constants";
 import { CalendarService } from "./CalendarService";
 import { RankingPointsInput } from "../types/rest/input/rankingPoints";
 import { League, Player, Tactics, Team, TeamPartialUpdate, Training } from "../db/entity";
+import { CreateTeamResponse } from "../types/rest/output/team";
 
 export class LeagueService {
   private teamRepository: TeamRepository;
@@ -244,6 +245,8 @@ export class LeagueService {
             divisionCreationRound: divisionCreationRound
           }    
           const response = await axios.post(`${process.env.CORE_API_URL}/team/createTeam`, requestBody);
+          const createTeamResponse = response.data as CreateTeamResponse;
+          
           // TODO define types
 
           // TODO leagueRepository
