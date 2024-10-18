@@ -271,7 +271,7 @@ export class LeagueService {
             trainings: {} as Training,
             timezone_idx: timezoneIdx,
             country_idx: countryIdx,
-            owner: 'mock-owner',
+            owner: '0x0000000000000000000000000000000000000000',
             league_idx: lastLeagueIdx + 1 + i,
             team_idx_in_league: j,
             leaderboard_position: j,
