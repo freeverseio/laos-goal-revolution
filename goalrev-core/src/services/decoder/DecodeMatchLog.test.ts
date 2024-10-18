@@ -47,7 +47,6 @@ describe('DecodeMatchLog', () => {
   testData.forEach(({ encodedLog, expected }, index) => {
     it(`should decode match log correctly for test case ${index + 1}`, () => {
       const result = DecodeMatchLog.decode(encodedLog);
-      console.log(result);
       expect(result).toEqual(expected);
     });
   });
