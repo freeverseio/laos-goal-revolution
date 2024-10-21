@@ -39,7 +39,6 @@ export class TeamService {
       team.l += matchLog.gamePoints === 0 ? 1 : 0;
       team.points += matchLog.gamePoints;
     } 
-   
     await entityManager.save(team);
   }
 

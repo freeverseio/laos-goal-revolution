@@ -275,8 +275,7 @@ export class LeagueService {
             console.error(`error on iteration [${i}, ${j}]`);
             throw new Error('Error creating team in DB');          
           }         
-          // create default training for the team
-          await this.trainingRepository.createDefaultTrainingByTimezone(timezoneIdx, transactionManager);
+         
         }
 
         // TODO bulk store 8 teams

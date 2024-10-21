@@ -31,10 +31,10 @@ export class Team {
   @OneToMany(() => Player, (player) => player.team, { cascade: true })
   players!: Player[];
 
-  @OneToOne(() => Tactics, (tactic) => tactic.team)
+  @OneToOne(() => Tactics, (tactic) => tactic.team, { cascade: true })
   tactics!: Tactics;
 
-  @OneToOne(() => Training, (training) => training.team)
+  @OneToOne(() => Training, (training) => training.team, { cascade: true })
   trainings!: Training;
 
   @Column({ type: 'int' })
