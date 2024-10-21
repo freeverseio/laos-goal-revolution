@@ -36,7 +36,7 @@ export class MatchService {
   }
 
   // Logic for playing the first half
-  async play1stHalf(body: PlayInput): Promise<PlayOutput> {
+  async play1stHalf__(body: PlayInput): Promise<PlayOutput> {
     const { verseSeed, matchStartTime, skills, tactics, teamIds, matchBools, trainings } = body;
     const matchLogs = body.getMatchLogs();
 
@@ -96,8 +96,8 @@ export class MatchService {
         type: MatchEventType.ATTACK,
         manage_to_shoot: false,
         is_goal: false,
-        primary_player_id: teamIds[0] + "0001",
-        secondary_player_id: teamIds[0] + "0002",
+        // primary_player_id: teamIds[0] + "0001",
+        // secondary_player_id: teamIds[0] + "0002",
       },
       {
         minute: 10,
@@ -105,8 +105,8 @@ export class MatchService {
         type: MatchEventType.ATTACK,
         manage_to_shoot: true,
         is_goal: true,
-        primary_player_id: teamIds[1] + "0001",
-        secondary_player_id: teamIds[1] + "0002",
+        // primary_player_id: teamIds[1] + "0001",
+        // secondary_player_id: teamIds[1] + "0002",
       },
 
     ];
@@ -145,8 +145,8 @@ export class MatchService {
         type: MatchEventType.ATTACK,
         manage_to_shoot: false,
         is_goal: false,
-        primary_player_id: teamIds[1] + "0001",
-        secondary_player_id: teamIds[1] + "0002",
+        // primary_player_id: teamIds[1] + "0001",
+        // secondary_player_id: teamIds[1] + "0002",
       },
       {
         minute: 50,
@@ -154,8 +154,77 @@ export class MatchService {
         type: MatchEventType.ATTACK,
         manage_to_shoot: true,
         is_goal: true,
-        primary_player_id: teamIds[1] + "0001",
-        secondary_player_id: teamIds[1] + "0002",
+        // primary_player_id: teamIds[1] + "0001",
+        // secondary_player_id: teamIds[1] + "0002",
+      },
+
+    ];
+
+    const err = 0;
+
+    return {
+      updatedSkills,
+      matchLogs: [
+        {
+          numberOfGoals: 2,
+          gamePoints: 0,
+          teamSumSkills: 10,
+          trainingPoints: 10,
+          isHomeStadium: true,
+          changesAtHalftime: 1,
+          isCancelled: false,
+          encodedMatchLog: "3618502788669422116101235693605807058779801721811233097964316659973982519296",
+        },
+        {
+          numberOfGoals: 2,
+          gamePoints: 3,
+          teamSumSkills: 25,
+          trainingPoints: 25,
+          isHomeStadium: false,
+          changesAtHalftime: 1,
+          isCancelled: false,
+          encodedMatchLog: "3618502788669422116101235693605807058779801721811233097964316659973982519296",
+        },
+      ],
+      matchEvents,
+      earnedTrainingPoints: 10,
+      err,
+    };
+  }
+
+  async play1stHalf(body: PlayInput): Promise<PlayOutput> {
+    // Validate the PlayInput object
+    const { skills, tactics, teamIds } = body;
+
+    const updatedSkills: [PlayerSkill[], PlayerSkill[]] = skills.map((teamSkills) =>
+      teamSkills.map((skill) => ({
+        defence: Math.floor(Math.random() * 10),
+        speed: Math.floor(Math.random() * 10),
+        pass: Math.floor(Math.random() * 10),
+        shoot: Math.floor(Math.random() * 10),
+        endurance: Math.floor(Math.random() * 10),
+        encodedSkills: skill
+      }))
+    ) as [PlayerSkill[], PlayerSkill[]];
+
+    const matchEvents: MatchEvent[] = [
+      {
+        minute: 56,
+        team_id: teamIds[0],
+        type: MatchEventType.ATTACK,
+        manage_to_shoot: false,
+        is_goal: false,
+        // primary_player_id: teamIds[1] + "0001",
+        // secondary_player_id: teamIds[1] + "0002",
+      },
+      {
+        minute: 50,
+        team_id: teamIds[1],
+        type: MatchEventType.ATTACK,
+        manage_to_shoot: true,
+        is_goal: true,
+        // primary_player_id: teamIds[1] + "0001",
+        // secondary_player_id: teamIds[1] + "0002",
       },
 
     ];
