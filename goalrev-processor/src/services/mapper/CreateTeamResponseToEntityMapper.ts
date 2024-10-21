@@ -1,5 +1,6 @@
 import { Country, League, Player, Tactics, Team, Training } from "../../db/entity";
 import { CreateTeamResponse, Player as PlayerResponse } from "../../types/rest/output/team";
+import { DEFAULT_ENCODED_TACTIC } from "../../utils/constants";
 import { PreferredPositionMapper } from "./PreferredPositionMapper";
 
 export class CreateTeamResponseToEntityMapper {
@@ -9,7 +10,7 @@ export class CreateTeamResponseToEntityMapper {
       team_id: response.id,
       name: 'Mock Team ' + response.id,
       manager_name: 'Mock Manager ' + response.id,
-      tactic: "340596594427581673436941882753025", // default encodedtactic
+      tactic: DEFAULT_ENCODED_TACTIC,
       country: {
         timezone_idx: timezoneIdx,
         country_idx: countryIdx,
