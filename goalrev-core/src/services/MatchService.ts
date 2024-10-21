@@ -1,9 +1,8 @@
-import { MatchEvent, MatchEventType, Play1stHalfAndEvolveResult, PlayerSkill, PlayInput, PlayOutput } from "../types";
 import { ethers } from "ethers";
 import PlayAndEvolveAbi from '../contracts/abi/PlayAndEvolve.json';
+import { MatchEvent, MatchEventType, PlayerSkill, PlayInput, PlayOutput } from "../types";
 import { EncodeTrainingPoints } from "./encoder/EncodeTrainingPoints";
 import { MatchMapper } from "./mapper/MatchMapper";
-import { DecodeMatchLog } from "./decoder/DecodeMatchLog";
 export class MatchService {
 
   private provider: ethers.JsonRpcProvider;
@@ -67,7 +66,9 @@ export class MatchService {
       matchBools,
       encodedTrainings
     );
-    
+
+    console.log('result', result);
+
     const parsedResult = MatchMapper.mapPlay1stHalfAndEvolveResult(result);
     const updatedSkills = MatchMapper.mapEncodedSkillsToPlayerSkills(parsedResult.finalSkills);
     const decodedMatchLogs = MatchMapper.mapMatchLogsAndEventsToMatchLogs(parsedResult.matchLogsAndEvents);
@@ -96,8 +97,8 @@ export class MatchService {
         type: MatchEventType.ATTACK,
         manage_to_shoot: false,
         is_goal: false,
-        // primary_player_id: teamIds[0] + "0001",
-        // secondary_player_id: teamIds[0] + "0002",
+        primary_player_id:  "2748779069626",
+        secondary_player_id: "2748779069627",
       },
       {
         minute: 10,
@@ -105,8 +106,8 @@ export class MatchService {
         type: MatchEventType.ATTACK,
         manage_to_shoot: true,
         is_goal: true,
-        // primary_player_id: teamIds[1] + "0001",
-        // secondary_player_id: teamIds[1] + "0002",
+        primary_player_id:  "2748779069626",
+        secondary_player_id: "2748779069627",
       },
 
     ];
@@ -145,8 +146,8 @@ export class MatchService {
         type: MatchEventType.ATTACK,
         manage_to_shoot: false,
         is_goal: false,
-        // primary_player_id: teamIds[1] + "0001",
-        // secondary_player_id: teamIds[1] + "0002",
+        primary_player_id:  "2748779069626",
+        secondary_player_id: "2748779069627",
       },
       {
         minute: 50,
@@ -154,8 +155,8 @@ export class MatchService {
         type: MatchEventType.ATTACK,
         manage_to_shoot: true,
         is_goal: true,
-        // primary_player_id: teamIds[1] + "0001",
-        // secondary_player_id: teamIds[1] + "0002",
+        primary_player_id:  "2748779069626",
+        secondary_player_id: "2748779069627",
       },
 
     ];
@@ -214,8 +215,8 @@ export class MatchService {
         type: MatchEventType.ATTACK,
         manage_to_shoot: false,
         is_goal: false,
-        // primary_player_id: teamIds[1] + "0001",
-        // secondary_player_id: teamIds[1] + "0002",
+        primary_player_id:  "2748779069626",
+        secondary_player_id: "2748779069627",
       },
       {
         minute: 50,
@@ -223,8 +224,8 @@ export class MatchService {
         type: MatchEventType.ATTACK,
         manage_to_shoot: true,
         is_goal: true,
-        // primary_player_id: teamIds[1] + "0001",
-        // secondary_player_id: teamIds[1] + "0002",
+        primary_player_id:  "2748779069626",
+        secondary_player_id: "2748779069627",
       },
 
     ];
