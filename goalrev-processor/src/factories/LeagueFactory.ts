@@ -2,6 +2,7 @@ import { LeagueRepository } from "../db/repository/LeagueRepository";
 import { MatchEventRepository } from "../db/repository/MatchEventRepository";
 import { MatchRepository } from "../db/repository/MatchRepository";
 import { TeamRepository } from "../db/repository/TeamRepository";
+import { TrainingCustomRepository } from "../db/repository/TrainingRepository";
 import { VerseRepository } from "../db/repository/VerseRepository";
 import { CalendarService } from "../services/CalendarService";
 import { LeagueService } from "../services/LeagueService";
@@ -14,6 +15,7 @@ export class LeagueFactory {
         const matchEventRepository = new MatchEventRepository();
         const calendarService = new CalendarService(verseRepository);
         const leagueRepository = new LeagueRepository();
-        return new LeagueService(teamRepository, matchRepository, verseRepository, matchEventRepository, calendarService, leagueRepository);
+        const trainingRepository = new TrainingCustomRepository();
+        return new LeagueService(teamRepository, matchRepository, verseRepository, matchEventRepository, calendarService, leagueRepository, trainingRepository);
     }
 } 
