@@ -90,7 +90,7 @@ const transferFirstBotToAddrWrapper = propName => {
     return async (resolve, source, args, context, resolveInfo) => {
         const { pgClient } = context;
         var query = {
-            text: `UPDATE teams SET "owner" = $1 WHERE team_id = (SELECT team_id FROM teams t WHERE "owner" = '0x0000000000000000000000000000000000000000' AND timezone_idx = $2 AND country_idx = $3  ORDER BY ranking_points DESC LIMIT 1)`,
+            text: `UPDATE teams SET "owner" = $1 WHERE team_id = (SELECT team_id FROM teams t WHERE "owner" = '0x0000000000000000000000000000000000000000' AND timezone_idx = $2 AND country_idx = $3 ORDER BY CAST(ranking_points AS INTEGER) DESC LIMIT 1)`,
             values: [args.address, args.timezone, args.countryIdxInTimezone],
         };
         const resulsqlResult = await pgClient.query(query);
