@@ -54,9 +54,8 @@ export class TacticRepository {
     }
   }
 
-   // Create initial tactics for a specific team in a timezone
+   // Create initial tactics for a specific team 
    async createInitialTactics(
-    timezoneIdx: number,
     teamID: string,
     entityManager: EntityManager
   ): Promise<void> {
