@@ -1,5 +1,5 @@
+import { BirthTraits } from '../../types/rest/output/team';
 import { PreferredPositionMapper } from './PreferredPositionMapper';
-import { BirthTraits } from '../../types';
 
 describe('PreferredPositionMapper', () => {
   describe('getPreferredPosition', () => {

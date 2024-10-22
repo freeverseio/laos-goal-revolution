@@ -1,5 +1,4 @@
-import { BirthTraits } from "../../types";
-
+import { BirthTraits } from "../../types/rest/output/team";
 
 export class PreferredPositionMapper {
   static getPreferredPosition(birthTraits: BirthTraits): string | Error {
