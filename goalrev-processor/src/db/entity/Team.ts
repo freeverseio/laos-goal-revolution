@@ -20,7 +20,7 @@ export class Team {
   ])
   country!: Country;
 
-  @ManyToOne(() => League)
+  @ManyToOne(() => League, { cascade: true })
   @JoinColumn([
     { name: "timezone_idx", referencedColumnName: "timezone_idx" },
     { name: "country_idx", referencedColumnName: "country_idx" },
@@ -28,13 +28,13 @@ export class Team {
   ])
   league!: League;
 
-  @OneToMany(() => Player, (player) => player.team)
+  @OneToMany(() => Player, (player) => player.team, { cascade: true })
   players!: Player[];
 
-  @OneToOne(() => Tactics, (tactic) => tactic.team)
+  @OneToOne(() => Tactics, (tactic) => tactic.team, { cascade: true })
   tactics!: Tactics;
 
-  @OneToOne(() => Training, (training) => training.team)
+  @OneToOne(() => Training, (training) => training.team, { cascade: true })
   trainings!: Training;
 
   @Column({ type: 'int' })

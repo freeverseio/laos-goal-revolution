@@ -43,7 +43,7 @@ const deployUtils = require('../utils/deployUtils.js');
 
 module.exports = function (deployer, network, accounts) {
   deployer.then(async () => {
-    if ((network == "ganache") || (network == "local")) {    
+    if ((network == "ganache")  || (network == "local")) {    
       const { singleTimezone, owners, requiredStake } = deployUtils.getExplicitOrDefaultSetup(deployer.networks[network], accounts);
       const account0Owners = deployUtils.getAccount0Owner(accounts[0]);
       console.log("Deploying proxy related contracts");
@@ -140,7 +140,7 @@ module.exports = function (deployer, network, accounts) {
       console.log("PROXY" + "=" + proxy.address),
       console.log("-----------AddressesEnd-----------");
     }
-   
+    
   });
 };
 

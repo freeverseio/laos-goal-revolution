@@ -15,9 +15,6 @@ export class TeamService {
     is1stHalf: boolean,
     entityManager: EntityManager
   ): Promise<void> {
-   
-   
-
     // Iterate over match events and update goals
     matchEvents.forEach((event) => {
       if (event.is_goal) {
@@ -42,7 +39,6 @@ export class TeamService {
       team.l += matchLog.gamePoints === 0 ? 1 : 0;
       team.points += matchLog.gamePoints;
     } 
-   
     await entityManager.save(team);
   }
 

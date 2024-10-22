@@ -1,15 +1,15 @@
 {
   "contractName": "ErrorCodes",
   "abi": [],
-  "metadata": "{\"compiler\":{\"version\":\"0.6.3+commit.8dda9521\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"author\":\"Freeverse.io, www.freeverse.io\",\"methods\":{},\"title\":\"Error codes returned by many functions in the project\"},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/gameEngine/ErrorCodes.sol\":\"ErrorCodes\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/gameEngine/ErrorCodes.sol\":{\"keccak256\":\"0x3695b9ae989c8277354dd0171252f1095d3b04cccc6e83df1f89c7dedae5b576\",\"urls\":[\"bzz-raw://def11625786fbbe0884f99e2ac11c8da2980490949076f939aa249526d34f443\",\"dweb:/ipfs/QmVdQFJXRX5f589SD1vjuyfc9TDxXVjupz8N8d87EVwFX4\"]}},\"version\":1}",
-  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea26469706673582212208433b854091ce0352c09188ae66618a0d59c661fff0a330202d9eeed02363b2f64736f6c63430006030033",
-  "deployedBytecode": "0x6080604052600080fdfea26469706673582212208433b854091ce0352c09188ae66618a0d59c661fff0a330202d9eeed02363b2f64736f6c63430006030033",
+  "metadata": "{\"compiler\":{\"version\":\"0.6.3+commit.8dda9521\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"author\":\"Freeverse.io, www.freeverse.io\",\"methods\":{},\"title\":\"Error codes returned by many functions in the project\"},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/jurgenkudla/proyects/laos/laos-goal-revolution/goalrev-ganache/contracts/gameEngine/ErrorCodes.sol\":\"ErrorCodes\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/jurgenkudla/proyects/laos/laos-goal-revolution/goalrev-ganache/contracts/gameEngine/ErrorCodes.sol\":{\"keccak256\":\"0x3695b9ae989c8277354dd0171252f1095d3b04cccc6e83df1f89c7dedae5b576\",\"urls\":[\"bzz-raw://def11625786fbbe0884f99e2ac11c8da2980490949076f939aa249526d34f443\",\"dweb:/ipfs/QmVdQFJXRX5f589SD1vjuyfc9TDxXVjupz8N8d87EVwFX4\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea2646970667358221220ac387fa76419487d258193df813815496c5bc22ebadf533e98ea6191febdaeeb64736f6c63430006030033",
+  "deployedBytecode": "0x6080604052600080fdfea2646970667358221220ac387fa76419487d258193df813815496c5bc22ebadf533e98ea6191febdaeeb64736f6c63430006030033",
   "sourceMap": "137:1048:21:-:0;;;;5:9:-1;2:2;;;27:1;24;17:12;2:2;137:1048:21;;;;;;;",
   "deployedSourceMap": "137:1048:21:-:0;;;12:1:-1;9;2:12",
   "source": "pragma solidity >= 0.6.3;\n\n/**\n @title Error codes returned by many functions in the project\n @author Freeverse.io, www.freeverse.io\n*/\n\ncontract ErrorCodes {\n    \n    uint8 internal constant ERR_IS2NDHALF = 1;\n    uint8 internal constant ERR_TRAINING_SPLAYER = 2;\n    uint8 internal constant ERR_TRAINING_SINGLESKILL = 3;\n    uint8 internal constant ERR_TRAINING_SUMSKILLS = 4;\n    uint8 internal constant ERR_TRAINING_PREVMATCH = 5;\n    uint8 internal constant ERR_TRAINING_STAMINA = 6;\n    \n    uint8 internal constant ERR_COMPUTETRAINING = 7;\n    uint8 internal constant ERR_PLAYHALF = 8;\n    uint8 internal constant ERR_EVOLVE = 9;\n    uint8 internal constant ERR_UPDATEAFTER_YELLOW = 10;\n    uint8 internal constant ERR_SHOP = 11;\n    uint8 internal constant ERR_UPDATEAFTER_CHANGES = 12;\n    uint8 internal constant ERR_UPDATEAFTER_OUTOFGAME1 = 13;\n    uint8 internal constant ERR_UPDATEAFTER_OUTOFGAME2 = 14;\n\n    uint8 internal constant ERR_PLAYHALF_TOO_MANY_LINEDUP = 15;\n    uint8 internal constant ERR_PLAYHALF_HALFCHANGES = 16;\n    uint8 internal constant ERR_PLAYHALF_PLAYER_TWICE = 17;\n\n    uint8 internal constant ERR_2NDHALF_CANCELLED_DUE_TO_1STHALF_CANCELLED = 18;\n\n}",
-  "sourcePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/gameEngine/ErrorCodes.sol",
+  "sourcePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/goalrev-ganache/contracts/gameEngine/ErrorCodes.sol",
   "ast": {
-    "absolutePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/gameEngine/ErrorCodes.sol",
+    "absolutePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/goalrev-ganache/contracts/gameEngine/ErrorCodes.sol",
     "exportedSymbols": {
       "ErrorCodes": [
         10195
@@ -848,7 +848,7 @@
     "src": "0:1185:21"
   },
   "legacyAST": {
-    "absolutePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/truffle-core/contracts/gameEngine/ErrorCodes.sol",
+    "absolutePath": "/Users/jurgenkudla/proyects/laos/laos-goal-revolution/goalrev-ganache/contracts/gameEngine/ErrorCodes.sol",
     "exportedSymbols": {
       "ErrorCodes": [
         10195
@@ -1692,7 +1692,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.23",
-  "updatedAt": "2024-10-16T06:02:47.894Z",
+  "updatedAt": "2024-10-18T06:09:35.367Z",
   "devdoc": {
     "author": "Freeverse.io, www.freeverse.io",
     "methods": {},

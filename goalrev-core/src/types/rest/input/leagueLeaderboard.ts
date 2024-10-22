@@ -13,3 +13,4 @@ export interface LeagueLeaderboardInput {
   matchDay: number;
   matches: LeagueLeaderboardMatchInput[];
 }
+
