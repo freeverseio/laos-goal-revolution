@@ -36,12 +36,27 @@ export class MatchRepository {
   }
   
     // Set the teams and start time for a match
-  async resetMatch(timezoneIdx: number, countryIdx: number, leagueIdx: number, matchDayIdx: number, matchIdx: number, homeTeamID: string, visitorTeamID: string, startTime: number, transactionManager: EntityManager): Promise<void> {
-    const repository = transactionManager.getRepository(Match);
-    try {
-      await repository.update(
-        { timezone_idx: timezoneIdx, country_idx: countryIdx, league_idx: leagueIdx, match_day_idx: matchDayIdx, match_idx: matchIdx },
-        {
+    async resetMatch(
+      timezoneIdx: number,
+      countryIdx: number,
+      leagueIdx: number,
+      matchDayIdx: number,
+      matchIdx: number,
+      homeTeamID: string,
+      visitorTeamID: string,
+      startTime: number,
+      transactionManager: EntityManager
+    ): Promise<void> {
+      const repository = transactionManager.getRepository(Match);
+    
+      try {
+        // Create or update the match object
+        const match = repository.create({
+          timezone_idx: timezoneIdx,
+          country_idx: countryIdx,
+          league_idx: leagueIdx,
+          match_day_idx: matchDayIdx,
+          match_idx: matchIdx,
           home_team_id: homeTeamID,
           visitor_team_id: visitorTeamID,
           home_goals: 0,
@@ -52,13 +67,15 @@ export class MatchRepository {
           state: MatchState.BEGIN,
           seed: '',
           state_extra: '',
-        }
-      );
-    } catch (error) {
-      console.error("Error setting teams:", error);
-      throw new Error("Set teams failed");
+        });
+    
+        // Save the match, performing an upsert
+        await repository.save(match);
+      } catch (error) {
+        console.error("Error resetting match:", error);
+        throw new Error("Reset match failed");
+      }
     }
-  }
 
   // Set match result
   async setMatchResult(timezoneIdx: number, countryIdx: number, leagueIdx: number, matchDayIdx: number, matchIdx: number, homeGoals: number, visitorGoals: number): Promise<void> {

@@ -218,17 +218,20 @@ CREATE TABLE public.teams_histories (
 );
 
 
--- public.teams_props definition
+-- public.team_props definition
 
 -- Drop table
 
--- DROP TABLE public.teams_props;
+-- DROP TABLE public.team_props;
 
-CREATE TABLE public.teams_props (
+CREATE TABLE public.team_props (
 	team_id text NOT NULL,
-	"name" text NULL,
-	last_time_logged_in timestamptz NULL,
-	CONSTRAINT teams_props_pkey PRIMARY KEY (team_id),
+	team_name text NULL,
+	team_manager_name text NULL,
+	mailbox_started_at timestamp NULL,
+	last_time_logged_in timestamp NULL,
+	get_social_id text NULL,
+	CONSTRAINT team_props_pkey PRIMARY KEY (team_id),
 	CONSTRAINT teams_props_team_id_fkey FOREIGN KEY (team_id) REFERENCES public.teams(team_id)
 );
 

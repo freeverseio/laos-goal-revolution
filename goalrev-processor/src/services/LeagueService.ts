@@ -2,21 +2,22 @@ import axios from "axios";
 import { AppDataSource } from "../db/AppDataSource";
 
 import { EntityManager } from "typeorm";
+import { TeamPartialUpdate } from "../db/entity";
 import { Country } from "../db/entity/Country";
 import { Verse } from "../db/entity/Verse";
+import { LeagueRepository } from "../db/repository/LeagueRepository";
 import { MatchEventRepository } from "../db/repository/MatchEventRepository";
 import { MatchRepository } from "../db/repository/MatchRepository";
 import { TeamRepository } from "../db/repository/TeamRepository";
+import { TrainingCustomRepository } from "../db/repository/TrainingRepository";
 import { VerseRepository } from "../db/repository/VerseRepository";
 import { CreateTeamCoreInput, LeagueGroup, Matchday, Schedule, TeamId } from "../types";
+import { RankingPointsInput } from "../types/rest/input/rankingPoints";
+import { CreateTeamResponse } from "../types/rest/output/team";
 import { getMatch1stHalfUTC } from "../utils/calendarUtils";
 import { MATCHDAYS_PER_ROUND } from "../utils/constants/constants";
 import { CalendarService } from "./CalendarService";
-import { RankingPointsInput } from "../types/rest/input/rankingPoints";
-import { League, Player, Tactics, Team, TeamPartialUpdate, Training } from "../db/entity";
-import { CreateTeamResponse } from "../types/rest/output/team";
 import { CreateTeamResponseToEntityMapper } from "./mapper/CreateTeamResponseToEntityMapper";
-import { LeagueRepository } from "../db/repository/LeagueRepository";
 
 export class LeagueService {
   private teamRepository: TeamRepository;
@@ -25,14 +26,24 @@ export class LeagueService {
   private verseRepository: VerseRepository;
   private matchEventRepository: MatchEventRepository;
   private leagueRepository: LeagueRepository;
+  private trainingRepository: TrainingCustomRepository;
 
-  constructor(teamRepository: TeamRepository, matchRepository: MatchRepository, verseRepository: VerseRepository, matchEventRepository: MatchEventRepository, calendarService: CalendarService, leagueRepository: LeagueRepository) {
+  constructor(
+    teamRepository: TeamRepository, 
+    matchRepository: MatchRepository, 
+    verseRepository: VerseRepository, 
+    matchEventRepository: MatchEventRepository, 
+    calendarService: CalendarService, 
+    leagueRepository: LeagueRepository, 
+    trainingRepository: TrainingCustomRepository
+  ) {
     this.teamRepository = teamRepository;
     this.matchRepository = matchRepository;
     this.verseRepository = verseRepository;
     this.calendarService = calendarService;
     this.matchEventRepository = matchEventRepository;
     this.leagueRepository = leagueRepository;
+    this.trainingRepository = trainingRepository;
   }
 
   async computeTeamRankingPointsForTimezone(timezoneIdx: number): Promise<void> {
@@ -264,6 +275,7 @@ export class LeagueService {
             console.error(`error on iteration [${i}, ${j}]`);
             throw new Error('Error creating team in DB');          
           }         
+         
         }
 
         // TODO bulk store 8 teams
