@@ -21,7 +21,6 @@ import { CreateTeamResponseToEntityMapper } from "./mapper/CreateTeamResponseToE
 
 export class LeagueService {
   private teamRepository: TeamRepository;
-  private calendarService: CalendarService;
   private matchRepository: MatchRepository;
   private verseRepository: VerseRepository;
   private matchEventRepository: MatchEventRepository;
@@ -33,14 +32,12 @@ export class LeagueService {
     matchRepository: MatchRepository, 
     verseRepository: VerseRepository, 
     matchEventRepository: MatchEventRepository, 
-    calendarService: CalendarService, 
     leagueRepository: LeagueRepository, 
     trainingRepository: TrainingCustomRepository
   ) {
     this.teamRepository = teamRepository;
     this.matchRepository = matchRepository;
     this.verseRepository = verseRepository;
-    this.calendarService = calendarService;
     this.matchEventRepository = matchEventRepository;
     this.leagueRepository = leagueRepository;
     this.trainingRepository = trainingRepository;
@@ -130,18 +127,7 @@ export class LeagueService {
     };
   }
 
-  async updateLeaderboard(timezoneIdx: number, countryIdx: number, leagueIdx: number) {
-    // getMatchDay
-    const info = await this.calendarService.getCalendarInfo();
-    // check if timestamp to play is in the future
-    if (info.timestamp! > Date.now() / 1000) {
-      console.error("Timestamp to play is in the future, skipping");
-      return {
-        err: 1,
-      };
-    }
-    const matchDay = info.matchDay;
-
+  async updateLeaderboard(timezoneIdx: number, countryIdx: number, leagueIdx: number, matchDayIdx: number) {
     // getMatches
     const leagueMatches = await this.matchRepository.getLeagueMatches(timezoneIdx, countryIdx, leagueIdx);
     const leagueMatchesInput = leagueMatches.map(match => ({
@@ -159,10 +145,14 @@ export class LeagueService {
     // call goalrev-core
     const requestBody = {
       teams: teamsInput,
-      matchDay: matchDay,
+      matchDay: matchDayIdx,
       matches: leagueMatchesInput,
     }
-    const response = await axios.post(`${process.env.CORE_API_URL}/league/computeLeagueLeaderboard`, requestBody);
+    const response = await axios.post(`${process.env.CORE_API_URL}/league/computeLeagueLeaderboard`, requestBody, {
+      headers: {
+        'Cache-Control': 'no-cache'
+      }
+    });
 
     // update DB
     const transactionalEntityManager = AppDataSource.manager;

@@ -14,7 +14,7 @@ export class LeagueController {
 
     @Post("/updateLeaderboard")
     async updateLeaderboard(@Body() data: UpdateLeagueLeaderboardInput) {
-        return await this.leagueService.updateLeaderboard(data.timezoneIdx, data.countryIdx, data.leagueIdx);
+        return await this.leagueService.updateLeaderboard(data.timezoneIdx, data.countryIdx, data.leagueIdx, data.matchDayIdx);
     }
 
     @Post("/addDivision")

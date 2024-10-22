@@ -31,7 +31,6 @@ async function TPWrapper(encoded) {
 
 async function encodeTPAndPrintOut(encoding, TP, TPperSkill, specialPlayer) {
     const result = await encoding.encodeTP(TP, TPperSkill, specialPlayer).should.be.fulfilled;
-    // console.log(String(result));
     return result;
 }
 

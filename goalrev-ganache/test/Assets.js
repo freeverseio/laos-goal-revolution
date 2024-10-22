@@ -672,9 +672,6 @@ contract('Assets', (accounts) => {
     
         digestNoPrefix.toString().should.be.equal(sigSeller.message);
     
-        console.log(sellerAccount.address);
-        console.log(sigSeller);
-    
         sigSeller.message.should.be.equal('0x4d87a039e857f2b3d2975a8b198fe0ff7b71a734347a612436e1190688d2bb69');
         sigSeller.messageHash.should.be.equal('0x376b87a3db2c3ef6e1189a96303454a32fd8bf21bfe0a470e68be98e57d36495');
         sigSeller.signature.should.be.equal('0xf0e4f8fe6502bb950fa45283832d117dda9876e1bf92c29808ab9072fd717cc3756ee55cd659cc33ed2d3d0aa6f290f3f583045e9b91c32cab64747b8b43c7701b');

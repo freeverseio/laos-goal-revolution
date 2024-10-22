@@ -231,7 +231,6 @@ contract('Engine', (accounts) => {
                 }
                 if (1 == log[5+5*e].toNumber()) goals++;
             }
-            // console.log("pens: ", pens, "goals: ", goals, "pensFailed: ", pensFailed, "shooters: ", shooters);
             totPens += pens;
             totGoals += goals;
             totPensFailed += pensFailed;
