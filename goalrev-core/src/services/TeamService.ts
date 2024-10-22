@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import utilsAbi from "../contracts/abi/utils.json";
+import utilsAbi from "../contracts/abi/Utils.json";
 import { CreateTeamInput, Team } from "../types";
 import { TeamMapper } from "./mapper/TeamMapper";
 
