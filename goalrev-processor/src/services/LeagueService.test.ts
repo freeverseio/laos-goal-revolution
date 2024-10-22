@@ -2,7 +2,7 @@ import { LeagueService } from "./LeagueService";
 import { TeamRepository } from "../db/repository/TeamRepository";
 import { MatchRepository } from "../db/repository/MatchRepository";
 import { VerseRepository } from "../db/repository/VerseRepository";
-import { EntityManager } from "typeorm";
+import { EntityManager, Transaction } from "typeorm";
 import { AppDataSource } from "../db/AppDataSource";
 import { Country } from "../db/entity/Country";
 import { Team } from "../db/entity/Team";
@@ -12,6 +12,8 @@ import { CalendarService } from "./CalendarService";
 import { Verse } from "../db/entity";
 import { AxiosResponse } from "axios";
 import axios from 'axios';
+import { LeagueRepository } from "../db/repository/LeagueRepository";
+import { TrainingCustomRepository } from "../db/repository/TrainingRepository";
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
@@ -26,11 +28,16 @@ describe("LeagueService", () => {
   let entityManager: jest.Mocked<EntityManager>;
   let matchEventRepository: jest.Mocked<MatchEventRepository>;
   let calendarService: jest.Mocked<CalendarService>;
+  let leagueRepository: jest.Mocked<LeagueRepository>;
+  let trainingRepository: jest.Mocked<TrainingCustomRepository>;
 
   beforeEach(() => {
+    jest.spyOn(console, 'log').mockImplementation(() => {});
+
     teamRepository = {
       findTeamsByCountryAndTimezone: jest.fn(),
       updateLeagueIdx: jest.fn(),
+      countTeamsByTimezone: jest.fn(),
     } as any;
     
     matchRepository = {
@@ -44,6 +51,10 @@ describe("LeagueService", () => {
       saveVerse: jest.fn(),
     } as any;
 
+    leagueRepository = {
+      countLeaguesByTimezoneAndCountry: jest.fn(),
+    } as any;
+
     calendarService = {
       generateCalendarForTimezone: jest.fn(),
     } as any;
@@ -51,15 +62,14 @@ describe("LeagueService", () => {
     entityManager = {
       find: jest.fn(),
       findOne: jest.fn(),
+      transaction: jest.fn(),
     } as any;
 
     // Mocking the manager for the AppDataSource
     (AppDataSource.manager as any) = entityManager;
 
-    leagueService = new LeagueService(teamRepository, matchRepository, verseRepository, matchEventRepository, calendarService);
+    leagueService = new LeagueService(teamRepository, matchRepository, verseRepository, matchEventRepository, leagueRepository, trainingRepository);
   });
-
-
 
   describe("getNewLeaguesByCountry", () => {
     it("should return a league group for a valid country and timezone", async () => {
@@ -159,6 +169,8 @@ describe("LeagueService", () => {
       } as AxiosResponse;
   
       verseRepository.getInitialVerse.mockResolvedValue(mockVerse);
+      teamRepository.countTeamsByTimezone.mockResolvedValueOnce(1);
+      leagueRepository.countLeaguesByTimezoneAndCountry.mockResolvedValue(1);
       mockedAxios.post.mockResolvedValue(mockResponse);
       const result = await leagueService.addDivision(1, 10, 1);      
       expect(result).toBe(true);

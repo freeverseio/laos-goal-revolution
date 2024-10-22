@@ -50,7 +50,6 @@ contract('EncodingState', (accounts) => {
         const state = await encodingState.encodePlayerState(currentTeamId, currentShirtNum, prevPlayerTeamId, lastSaleBlock).should.be.fulfilled;
         if (writeMode) { await toWrite.push(await stateWrapper(state))}
 
-        // console.log(state.toString())
         result = await encodingState.getCurrentTeamIdFromPlayerState(state).should.be.fulfilled;
         result.should.be.bignumber.equal(currentTeamId);
         result = await encodingState.getCurrentShirtNum(state).should.be.fulfilled;

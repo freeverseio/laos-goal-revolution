@@ -67,29 +67,10 @@ export class MatchService {
       encodedTrainings
     );
 
-    console.log('result', result);
-
     const parsedResult = MatchMapper.mapPlay1stHalfAndEvolveResult(result);
     const updatedSkills = MatchMapper.mapEncodedSkillsToPlayerSkills(parsedResult.finalSkills);
     const decodedMatchLogs = MatchMapper.mapMatchLogsAndEventsToMatchLogs(parsedResult.matchLogsAndEvents);
-    
-    if (teamIds.includes(1)) {
-      console.log('error', parsedResult.err);
-      console.log('parameters', {
-        seed: `0x${verseSeed}`,
-        matchStartTime,
-        skills,
-        teamIds,
-        encodedTactics,
-        matchLogs,
-        matchBools,
-        encodedTrainings
-      } as any);
-      console.log('finalSkills', parsedResult.finalSkills);
-      console.log('matchLogsAndEvents', parsedResult.matchLogsAndEvents);
-      console.log('updatedSkills', updatedSkills);
-      console.log('decodedMatchLogs', decodedMatchLogs);
-    }
+        
     const matchEvents: MatchEvent[] = [
       {
         minute: 4,

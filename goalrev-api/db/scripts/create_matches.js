@@ -29,7 +29,6 @@ const createLeagueMatches = async () => {
     }
 
     const matches = homeMatches.concat(awayMatches)
-    console.log(matches)
 
     var matchIdx = 0
     var timezoneIdx = 10
