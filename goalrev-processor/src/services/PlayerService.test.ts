@@ -34,6 +34,7 @@ describe('PlayerService', () => {
       };
 
       const mockPlayerSkill: PlayerSkill = {
+        playerId: '1',
         defence: 80,
         speed: 90,
         pass: 85,
@@ -119,6 +120,7 @@ describe('PlayerService', () => {
       mockEntityManager.find.mockResolvedValueOnce([]);
 
       const mockPlayerSkill: PlayerSkill = {
+        playerId: '1',
         defence: 80,
         speed: 90,
         pass: 85,
