@@ -1,7 +1,6 @@
 import { ethers } from "ethers";
 import PlayAndEvolveAbi from '../contracts/abi/PlayAndEvolve.json';
-import utilsAbi from "../contracts/abi/Utils.json";
-import { MatchEvent, MatchEventType, PlayInput, PlayOutput } from "../types";
+import { MatchEvent, PlayInput, PlayOutput } from "../types";
 import DecodeMatchEvents from "./decoder/DecodeMatchEvents";
 import { EncodeTrainingPoints } from "./encoder/EncodeTrainingPoints";
 import { MatchMapper } from "./mapper/MatchMapper";
