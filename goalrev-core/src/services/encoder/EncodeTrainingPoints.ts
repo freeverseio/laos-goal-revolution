@@ -8,7 +8,9 @@ export class EncodeTrainingPoints {
     encoded |= BigInt(trainingRequest.trainingPoints) << BigInt(225);
 
     // Encode specialPlayerShirt (5 bits)
-    const specialPlayer = trainingRequest.specialPlayerShirt ?? 25;
+    const specialPlayer = (trainingRequest.specialPlayerShirt != null && trainingRequest.specialPlayerShirt >= 0)
+      ? trainingRequest.specialPlayerShirt
+      : 25;
     encoded |= BigInt(specialPlayer) << BigInt(234);
 
     // Helper function to encode skills

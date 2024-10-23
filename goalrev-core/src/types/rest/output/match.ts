@@ -1,21 +1,20 @@
 import { PlayerSkill } from "./player";
 
 export interface PlayOutput {
-  updatedSkills: [PlayerSkill[], PlayerSkill[]]; 
-  matchLogs: [MatchLog, MatchLog];
-  matchEvents: MatchEvent[]; 
-  earnedTrainingPoints: number;
-  err: number; // Error code
+  updatedSkills?: [PlayerSkill[], PlayerSkill[]]; 
+  matchLogs?: [MatchLog, MatchLog];
+  matchEvents?: MatchEvent[]; 
+  err: string; // Error code
 }
 
 
 export interface MatchLog {
-  numberOfGoals: number;
-  gamePoints: number;
-  teamSumSkills: number;
-  trainingPoints: number;
+  numberOfGoals: string;
+  gamePoints: string;
+  teamSumSkills: string;
+  trainingPoints: string;
   isHomeStadium: boolean;
-  changesAtHalftime: number;
+  changesAtHalftime: string;
   isCancelled: boolean;
   encodedMatchLog: string;
 }
@@ -30,14 +29,15 @@ export enum MatchEventType {
 }
 
 export interface MatchEvent {
-  minute: number;
+  minute: string;
   type: MatchEventType;
-  team_id: number;
-  primary_player_id?: string;
-  secondary_player_id?: string;
+  team_id: string;
+  primary_shirt_number?: string;
+  secondary_shirt_number?: string;
   manage_to_shoot: boolean;
   is_goal: boolean;
 }
+
 export interface Play1stHalfAndEvolveResult {
   finalSkills: string[][]; 
   matchLogsAndEvents: string[]; 

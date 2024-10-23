@@ -36,12 +36,12 @@ export class DecodeMatchLog {
       const isCancelled = ((log >> BigInt(251)) & BigInt(1)) === BigInt(1);
 
       return {
-        numberOfGoals,
-        gamePoints,
-        teamSumSkills,
-        trainingPoints,
+        numberOfGoals: numberOfGoals.toString(),
+        gamePoints: gamePoints.toString(),
+        teamSumSkills: teamSumSkills.toString(),
+        trainingPoints: trainingPoints.toString(),
         isHomeStadium,
-        changesAtHalftime,
+        changesAtHalftime: changesAtHalftime.toString(),
         isCancelled,
         encodedMatchLog: encodedMatchLog.toString(),
       };

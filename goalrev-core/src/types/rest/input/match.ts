@@ -55,7 +55,7 @@ export class PlayInput {
   }
 }
 
-class TacticRequest {
+export class TacticRequest {
 
   @IsDefined()
   @IsNumber()

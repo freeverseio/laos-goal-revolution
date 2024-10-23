@@ -20,7 +20,8 @@ export class MatchRepository {
     return await matchRepository.find({
       where: {
         timezone_idx: timezone,
-        match_day_idx: matchDay
+        match_day_idx: matchDay,
+
       },
       relations: [
         "homeTeam",

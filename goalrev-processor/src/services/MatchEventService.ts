@@ -24,10 +24,16 @@ export class MatchEventService {
     const matchEventEntities: MatchEvent[] = [];
 
     for (const event of matchEvents) {
-      const team = await entityManager.findOne(Team, { where: { team_id: event.team_id.toString() } });
+      const team = await entityManager.findOne(
+        Team,
+        { where: { team_id: event.team_id.toString() },
+          relations: ["players"]
+        }
+      );
       if (!team) {
         throw new Error(`Team not found for team ID: ${event.team_id}`);
       }
+
 
       const matchEvent = new MatchEvent();
       matchEvent.timezone_idx = matchDetails.timezone_idx;
@@ -40,8 +46,14 @@ export class MatchEventService {
       matchEvent.type = event.type as any;
       matchEvent.manage_to_shoot = event.manage_to_shoot;
       matchEvent.is_goal = event.is_goal;
-      matchEvent.primary_player_id = event.primary_player_id;
-      matchEvent.secondary_player_id = event.secondary_player_id;
+      const primaryPlayerId = this.getPlayerIdFromShirtNumber(event.primary_shirt_number, team);
+      if (primaryPlayerId !== '') {
+        matchEvent.primary_player_id = primaryPlayerId;
+      }
+      const secondaryPlayerId = this.getPlayerIdFromShirtNumber(event.secondary_shirt_number, team);
+      if (secondaryPlayerId !== '') {
+        matchEvent.secondary_player_id = secondaryPlayerId;
+      }
       matchEvent.match_idx = matchDetails.match_idx;
       matchEvent.team_id = event.team_id.toString();
       matchEventEntities.push(matchEvent);
@@ -56,7 +68,7 @@ export class MatchEventService {
     // Iterate over match events and update goals
     matchEvents.forEach((event) => {
       if (event.is_goal) {
-        if (event.team_id === Number(match.homeTeam!.team_id)) {
+        if (event.team_id === match.homeTeam!.team_id) {
           homeGoals += 1;
         } else {
           visitorGoals += 1;
@@ -67,5 +79,12 @@ export class MatchEventService {
     return [homeGoals, visitorGoals];
   }
 
+  private getPlayerIdFromShirtNumber(shirtNumber: string | undefined, team: Team): string {
+    if (!shirtNumber) {
+      return '';
+    }
+    const player = team.players.find((player) => player.shirt_number.toString() === shirtNumber);
+    return player ? player.player_id.toString() : '';
+  }
 
 }

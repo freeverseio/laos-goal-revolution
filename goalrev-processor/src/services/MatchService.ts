@@ -130,13 +130,14 @@ export class MatchService {
   }
 
   async playMatch(match: Match, seed: string,verseNumber: number) {
+    const seedMatch = crypto.createHash('sha256').update(`${seed}${match.homeTeam!.team_id}${match.visitorTeam!.team_id}`).digest('hex');
     const entityManager = AppDataSource.manager; // Use EntityManager for transactions
-    const mapHistory = MatchHistoryMapper.mapMatchHistory(match, verseNumber, seed);
+    const mapHistory = MatchHistoryMapper.mapMatchHistory(match, verseNumber, seedMatch);
     try {
       await entityManager.transaction(async (transactionManager: EntityManager) => {
         const is1stHalf = match.state === MatchState.BEGIN;
         const is2ndHalf = match.state === MatchState.HALF;
-        const requestBody = this.buildRequestBody(match, seed, is1stHalf);
+        const requestBody = this.buildRequestBody(match, seedMatch, is1stHalf);
 
         if (!is1stHalf && !is2ndHalf) {
           console.warn(`Match ${match.match_idx} ${match.match_day_idx} ${match.timezone_idx} ${match.league_idx} is not in the BEGIN or HALF state, skipping`);
@@ -146,6 +147,7 @@ export class MatchService {
         const endpoint = is1stHalf ? "play1stHalf" : "play2ndHalf";
         const response = await axios.post(`${process.env.CORE_API_URL}/match/${endpoint}`, requestBody);
         const playOutput = response.data as PlayOutput;
+        console.log('playOutput', playOutput);
 
         await this.matchEventService.saveMatchEvents(playOutput.matchEvents, match, transactionManager);
         // TODO unify goals logic (team & match)
@@ -155,18 +157,17 @@ export class MatchService {
         match.visitor_goals += goals[1];
 
         if (is1stHalf) {
-          match.seed = seed;
+          match.seed = seedMatch;
         }
         match.state = is1stHalf ? MatchState.HALF : MatchState.END;
 
         await this.teamService.updateTeamData(playOutput.matchLogs[0], playOutput.matchEvents, match.homeTeam!, verseNumber, is1stHalf, transactionManager);
         await this.teamService.updateTeamData(playOutput.matchLogs[1], playOutput.matchEvents, match.visitorTeam!, verseNumber, is1stHalf, transactionManager);
+         // Update skills, teams, and events within the transaction
+        await this.playerService.updateSkills(match.homeTeam!.tactics, playOutput.updatedSkills[0], verseNumber, transactionManager);
+        await this.playerService.updateSkills(match.visitorTeam!.tactics, playOutput.updatedSkills[1], verseNumber, transactionManager);
         
-        if (is2ndHalf) {
-          // Update skills, teams, and events within the transaction
-          await this.playerService.updateSkills(match.homeTeam!.tactics, playOutput.updatedSkills[0], verseNumber, transactionManager);
-          await this.playerService.updateSkills(match.visitorTeam!.tactics, playOutput.updatedSkills[1], verseNumber, transactionManager);
-         
+        if (is2ndHalf) { 
           match.home_teamsumskills = playOutput.matchLogs[0].teamSumSkills;
           match.visitor_teamsumskills = playOutput.matchLogs[1].teamSumSkills;
         }
@@ -188,8 +189,8 @@ export class MatchService {
       verseSeed: seed,
       matchStartTime: Number(match.start_epoch),
       skills: [
-        MatchMapper.calculateTeamSkills(match.homeTeam!.players), // Team 1 skills
-        MatchMapper.calculateTeamSkills(match.visitorTeam!.players) // Team 2 skills
+        MatchMapper.calculateTeamSkills(match.homeTeam!.players, match.homeTeam!.tactics), // Team 1 skills
+        MatchMapper.calculateTeamSkills(match.visitorTeam!.players, match.visitorTeam!.tactics) // Team 2 skills
       ],
       teamIds: [
         Number(match.homeTeam!.team_id),

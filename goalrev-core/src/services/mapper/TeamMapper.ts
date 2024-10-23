@@ -17,11 +17,12 @@ export class TeamMapper {
       const dayOfBirth = Number(response[1][index]);
 
       const playerSkills: PlayerSkill = {
-        defence: Number(skills[0]),
-        speed: Number(skills[1]),
-        pass: Number(skills[2]),
-        shoot: Number(skills[3]),
-        endurance: Number(skills[4]),
+        playerId: playerId,
+        defence: Number(skills[0]).toString(),
+        speed: Number(skills[1]).toString(),
+        pass: Number(skills[2]).toString(),
+        shoot: Number(skills[3]).toString(),
+        endurance: Number(skills[4]).toString(),
         encodedSkills: encodedSkills[index],
       };
 
