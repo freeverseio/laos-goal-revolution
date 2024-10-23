@@ -163,8 +163,8 @@ export class MatchService {
         await this.teamService.updateTeamData(playOutput.matchLogs[0], playOutput.matchEvents, match.homeTeam!, verseNumber, is1stHalf, transactionManager);
         await this.teamService.updateTeamData(playOutput.matchLogs[1], playOutput.matchEvents, match.visitorTeam!, verseNumber, is1stHalf, transactionManager);
         //  // Update skills, teams, and events within the transaction
-        await this.playerService.updateSkills(match.homeTeam!.tactics, playOutput.updatedSkills[0], verseNumber, transactionManager);
-        await this.playerService.updateSkills(match.visitorTeam!.tactics, playOutput.updatedSkills[1], verseNumber, transactionManager);
+        await this.playerService.updateSkills(match.homeTeam!, playOutput.updatedSkills[0], verseNumber, transactionManager);
+        await this.playerService.updateSkills(match.visitorTeam!, playOutput.updatedSkills[1], verseNumber, transactionManager);
         
         if (is2ndHalf) { 
           match.home_teamsumskills = playOutput.matchLogs[0].teamSumSkills;

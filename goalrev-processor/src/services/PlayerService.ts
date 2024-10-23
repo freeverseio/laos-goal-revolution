@@ -1,5 +1,5 @@
 import { EntityManager } from "typeorm";
-import { Player, Tactics } from "../db/entity";
+import { Player, Tactics, Team } from "../db/entity";
 import { PlayerHistoryMapper } from "./mapper/PlayerHistoryMapper";
 import { AppDataSource } from "../db/AppDataSource";
 import { PlayerSkill } from "../types/rest/output/team";
@@ -12,22 +12,13 @@ export class PlayerService {
    * @param verseNumber - The verse number.
    * @param entityManager - The transaction-scoped EntityManager instance.
    */
-  async updateSkills(tactics: Tactics, playerSkills: PlayerSkill[], verseNumber: number, entityManager: EntityManager): Promise<void> {
+  async updateSkills(team: Team, playerSkills: PlayerSkill[], verseNumber: number, entityManager: EntityManager): Promise<void> {
    
-
     // Update each player based on their player ID and corresponding PlayerSkill
     for (let i = 0; i < playerSkills.length; i++) {
-      // Find the player by their ID (from the shirt number in tactics)
+      // Find the player by their ID 
       // do not use transaction for this
-      // TODO pass players to the function 
-      const repository = AppDataSource.getRepository(Player);
-      const [player] = await repository.find({
-        where: { 
-          team_id: tactics.team_id,
-          player_id: playerSkills[i].playerId
-        },
-        take: 1
-      });
+      const player = team.players.find(p => p.player_id === playerSkills[i].playerId);
       if (!player) {
         return;
       }
