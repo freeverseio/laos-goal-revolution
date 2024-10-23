@@ -163,7 +163,7 @@ describe('MatchService', () => {
       const verseServiceSpy = jest.spyOn(mockVerseRepository, 'getInitialVerse').mockResolvedValue({ verseNumber: 0, verseTimestamp: 1620000, timezoneIdx: 10 } as Verse);
       const lastVerseSpy = jest.spyOn(mockVerseRepository, 'getLastVerse').mockResolvedValue({ verseNumber: 0, verseTimestamp: 16200000, timezoneIdx: 10 } as Verse);
       const saveVerseSpy = jest.spyOn(mockVerseRepository, 'saveVerse');
-      jest.spyOn(mockLeagueService, 'updateLeaderboard').mockResolvedValue({ teams: [] });      
+      jest.spyOn(mockLeagueService, 'updateLeaderboard').mockResolvedValue(true);      
       
       await matchService.playMatches();
 

@@ -1,6 +1,7 @@
-import { PlayerService, PlayerSkill } from './PlayerService';
+import { PlayerService } from './PlayerService';
 import { Player, Tactics } from '../db/entity';
 import { EntityManager } from 'typeorm';
+import { PlayerSkill } from '../types/rest/output/team';
 
 // Mock the EntityManager
 const mockEntityManager = {
