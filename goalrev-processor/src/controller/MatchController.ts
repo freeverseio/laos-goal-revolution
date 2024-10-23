@@ -1,6 +1,5 @@
-import { Get, Param, Post, JsonController, Body } from "routing-controllers";
-import { MatchService } from "../services/MatchService"; // Import MatchService
-import { PlayMatchesInput } from "../types";
+import { Post, JsonController } from "routing-controllers";
+import { MatchService } from "../services/MatchService";
 import { MatchFactory } from "../factories/MatchFactory";
 @JsonController("/match")
 export class MatchController {

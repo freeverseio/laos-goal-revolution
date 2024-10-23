@@ -40,7 +40,7 @@ export class MatchService {
     this.matchEventService = matchEventService;
     this.calendarService = calendarService;
     this.verseRepository = verseRepository;
-    this.matchRepository = matchRepository; // Initialize it
+    this.matchRepository = matchRepository;
     this.leagueService = leagueService;
     this.matchHistoryRepository = matchHistoryRepository;
   }
