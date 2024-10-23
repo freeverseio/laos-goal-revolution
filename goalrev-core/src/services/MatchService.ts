@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
 import PlayAndEvolveAbi from '../contracts/abi/PlayAndEvolve.json';
+import utilsAbi from "../contracts/abi/Utils.json";
 import { MatchEvent, MatchEventType, PlayInput, PlayOutput } from "../types";
 import DecodeMatchEvents from "./decoder/DecodeMatchEvents";
 import { EncodeTrainingPoints } from "./encoder/EncodeTrainingPoints";
@@ -25,6 +26,7 @@ export class MatchService {
       PlayAndEvolveAbi.abi,
       this.provider
     );
+
   }
 
   async getPlayersPerTeamMax(): Promise<any> {
@@ -57,10 +59,6 @@ export class MatchService {
     const encodedTrainings = trainings.map(training => EncodeTrainingPoints.encode(training));
     encodedTactics = encodedTactics.map(tactic => tactic.toString());
 
-
-    console.log('encodedTrainings', encodedTrainings);
-    console.log('matchLogs', matchLogs);
-
     const result = await this.playAndEvolveContract.play1stHalfAndEvolve(
       `0x${verseSeed}`,
       matchStartTime,
@@ -86,9 +84,8 @@ export class MatchService {
       awayTeamId: teamIds[1].toString(),
       tacticsHome: tactics[0],
       tacticsAway: tactics[1],
-    });
+    }, decodedMatchLogs);
     const matchEvents: MatchEvent[] = matchEventsDecoder.decode();
-   
     console.log('FIRST HALF **********************************************');
     return {
       updatedSkills,
@@ -145,7 +142,7 @@ export class MatchService {
       awayTeamId: teamIds[1].toString(),
       tacticsHome: tactics[0],
       tacticsAway: tactics[1],
-    });
+    }, decodedMatchLogs);
     const matchEvents: MatchEvent[] = matchEventsDecoder.decode();
   
     console.log('SECOND HALF **********************************************');

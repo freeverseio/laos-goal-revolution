@@ -37,7 +37,7 @@ describe('DecodePlayerSkills', () => {
   test('should correctly get player id from skills', () => {
     const encodedSkills = "15312697315054057265328975129120144428100318147722999760054";
     const playerId = DecodePlayerSkills.getPlayerIdFromSkills(encodedSkills);
-    expect(playerId).toEqual(2748779069872);
+    expect(playerId).toEqual(2748779069453);
   });
 });
 

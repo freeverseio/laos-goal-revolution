@@ -1,16 +1,18 @@
 
-import { MatchEvent, MatchEventType, MatchTeams, TeamType } from "../../types/";
+import { MatchEvent, MatchEventType, MatchLog, MatchTeams, TeamType } from "../../types/";
 import { PENALTY_CODE, ROUNDS_PER_MATCH } from "../../utils/constants";
 
 export default class DecodeMatchEvents {
   private matchLogsAndEvents: string[];
   private matchEvents: [string, string, string, string, string][]; // Array of 5-string tuples
   private matchTeams: MatchTeams;
-
-  constructor(matchLogsAndEvents: string[], matchTeams: MatchTeams) {
+  private matchLogs: MatchLog[];
+  
+  constructor(matchLogsAndEvents: string[], matchTeams: MatchTeams, matchLogs: MatchLog[]) {
     this.matchLogsAndEvents = matchLogsAndEvents;
     this.matchEvents = [];
     this.matchTeams = matchTeams;
+    this.matchLogs = matchLogs;
   }
 
   decode(): MatchEvent[] {
@@ -22,7 +24,9 @@ export default class DecodeMatchEvents {
         this.matchEvents.push([events[i], events[i + 1], events[i + 2], events[i + 3], events[i + 4]]);
       }
     }
-    return this.matchEvents.map((event, index) => this.decodeEvent(index, event));
+    let matchEvents = this.matchEvents.map((event, index) => this.decodeEvent(index, event));
+    matchEvents = matchEvents.concat(this.addCardsAndInjuries());
+    return matchEvents;
   }
 
   private decodeEvent(numEvent: number, event: [string, string, string, string, string]): MatchEvent {
@@ -37,7 +41,7 @@ export default class DecodeMatchEvents {
     // set event type
     matchEvent.type = MatchEventType.ATTACK;
     // set minute
-    matchEvent.minute = Math.floor(numEvent * 45 / ROUNDS_PER_MATCH).toString();
+    matchEvent.minute = (Math.floor(numEvent * 45 / ROUNDS_PER_MATCH) > 0 ? Math.floor(numEvent * 45 / ROUNDS_PER_MATCH) : 1).toString();
     // set manage to shoot
     matchEvent.manage_to_shoot = managesToShoot === '1';
     // set is goal
@@ -72,5 +76,70 @@ export default class DecodeMatchEvents {
       const shirtNumber = this.matchTeams.tacticsAway.lineup[parseInt(playerIdx)];
       return shirtNumber?.toString();
     }
+  }
+
+  private addCardsAndInjuries(): MatchEvent[] {
+    const injuryAndCardsEvents: MatchEvent[] = [];
+    for (let teamIdx = 0; teamIdx < this.matchLogs.length; teamIdx++) {
+      const matchLog = this.matchLogs[teamIdx];
+      const teamType = teamIdx === 0 ? TeamType.HOME : TeamType.AWAY;
+
+      // Extract out-of-game player, type, and round information
+      for (let i = 0; i < matchLog.outOfGamePlayers.length; i++) {
+        const outOfGamePlayer = matchLog.outOfGamePlayers[i];
+        const outOfGameType = matchLog.outOfGameTypes[i];
+        const outOfGameRound = matchLog.outOfGameRounds[i];
+
+        if (outOfGamePlayer !== '14' && outOfGameType !== '0') { // 14 represents no player affected
+          
+          const primaryPlayer = this.getShirtNumberFromIdx(outOfGamePlayer, teamType === TeamType.HOME);
+          const minute = Math.floor(parseInt(outOfGameRound) * (45 / ROUNDS_PER_MATCH));
+          let typeOfEvent: MatchEventType;
+
+          switch (outOfGameType) {
+            case '1':
+              typeOfEvent = MatchEventType.INJURY_SOFT;
+              break;
+            case '2':
+              typeOfEvent = MatchEventType.INJURY_HARD;
+              break;
+            case '3':
+              typeOfEvent = MatchEventType.RED_CARD;
+              break;
+            default:
+              throw new Error(`Invalid outOfGameType ${outOfGameType}`);
+          }
+
+          injuryAndCardsEvents.push({
+            minute: minute.toString(),
+            type: typeOfEvent,
+            team_id: teamType === TeamType.HOME ? this.matchTeams.homeTeamId : this.matchTeams.awayTeamId,
+            primary_shirt_number: primaryPlayer,
+            is_goal: false,
+            manage_to_shoot: false,
+            assister: '',
+          } as MatchEvent);
+        }
+      }
+
+      // Extract yellow cards
+      for (let i = 0; i < matchLog.yellowCards.length; i++) {
+        const yellowCardPlayer = matchLog.yellowCards[i];
+        if (yellowCardPlayer !== '15') { // 15 represents no yellow card given
+          const primaryPlayer = this.getShirtNumberFromIdx(yellowCardPlayer, teamType === TeamType.HOME);
+          const minute = Math.floor((i + 1) * 45 / ROUNDS_PER_MATCH);
+          injuryAndCardsEvents.push({
+            minute: minute.toString(),
+            type: MatchEventType.YELLOW_CARD,
+            team_id: teamType === TeamType.HOME ? this.matchTeams.homeTeamId : this.matchTeams.awayTeamId,
+            primary_shirt_number: primaryPlayer,
+            is_goal: false,
+            manage_to_shoot: false,
+            assister: '',
+          } as MatchEvent);
+        }
+      }
+    }
+    return injuryAndCardsEvents;
   }
 }

@@ -19,6 +19,7 @@ export class PlayerService {
     for (let i = 0; i < playerSkills.length; i++) {
       // Find the player by their ID (from the shirt number in tactics)
       // do not use transaction for this
+      // TODO pass players to the function 
       const repository = AppDataSource.getRepository(Player);
       const [player] = await repository.find({
         where: { 

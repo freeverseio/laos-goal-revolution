@@ -162,7 +162,7 @@ export class MatchService {
 
         await this.teamService.updateTeamData(playOutput.matchLogs[0], playOutput.matchEvents, match.homeTeam!, verseNumber, is1stHalf, transactionManager);
         await this.teamService.updateTeamData(playOutput.matchLogs[1], playOutput.matchEvents, match.visitorTeam!, verseNumber, is1stHalf, transactionManager);
-         // Update skills, teams, and events within the transaction
+        //  // Update skills, teams, and events within the transaction
         await this.playerService.updateSkills(match.homeTeam!.tactics, playOutput.updatedSkills[0], verseNumber, transactionManager);
         await this.playerService.updateSkills(match.visitorTeam!.tactics, playOutput.updatedSkills[1], verseNumber, transactionManager);
         
@@ -171,7 +171,7 @@ export class MatchService {
           match.visitor_teamsumskills = playOutput.matchLogs[1].teamSumSkills;
         }
 
-        // Save the match using the repository
+        // // Save the match using the repository
         await this.matchRepository.saveMatch(match, transactionManager);
         await this.matchHistoryRepository.insertMatchHistory(mapHistory, transactionManager);
       });
