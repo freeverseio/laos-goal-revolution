@@ -147,7 +147,6 @@ export class MatchService {
         const endpoint = is1stHalf ? "play1stHalf" : "play2ndHalf";
         const response = await axios.post(`${process.env.CORE_API_URL}/match/${endpoint}`, requestBody);
         const playOutput = response.data as PlayOutput;
-        console.log('playOutput', playOutput);
 
         await this.matchEventService.saveMatchEvents(playOutput.matchEvents, match, transactionManager);
         // TODO unify goals logic (team & match)
