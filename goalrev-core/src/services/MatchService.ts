@@ -34,6 +34,7 @@ export class MatchService {
 
   // Logic for playing the first half
   async play1stHalf(body: PlayInput): Promise<PlayOutput> {
+   // console.log('play1stHalf', body);
     const { verseSeed, matchStartTime, skills, tactics, teamIds, matchBools, trainings } = body;
     const matchLogs = body.getMatchLogs();
 
@@ -56,6 +57,10 @@ export class MatchService {
     const encodedTrainings = trainings.map(training => EncodeTrainingPoints.encode(training));
     encodedTactics = encodedTactics.map(tactic => tactic.toString());
 
+
+    console.log('encodedTrainings', encodedTrainings);
+    console.log('matchLogs', matchLogs);
+
     const result = await this.playAndEvolveContract.play1stHalfAndEvolve(
       `0x${verseSeed}`,
       matchStartTime,
@@ -67,9 +72,10 @@ export class MatchService {
       encodedTrainings
     );
 
+    // console.log('result', result);
     const parsedResult = MatchMapper.mapPlay1stHalfAndEvolveResult(result);
     if (parsedResult.err != "0") {
-      console.error('Error playing 1st half', result);
+      //console.error('Error playing 1st half', result);
       throw new Error(parsedResult.err);
     }
     const updatedSkills = MatchMapper.mapEncodedSkillsToPlayerSkills(parsedResult.finalSkills);
@@ -82,7 +88,8 @@ export class MatchService {
       tacticsAway: tactics[1],
     });
     const matchEvents: MatchEvent[] = matchEventsDecoder.decode();
-
+   
+    console.log('FIRST HALF **********************************************');
     return {
       updatedSkills,
       matchLogs: decodedMatchLogs,
@@ -93,8 +100,8 @@ export class MatchService {
 
   // Logic for playing the second half
   async play2ndHalf(body: PlayInput): Promise<PlayOutput> {
+    // console.log('play2ndHalf: ', JSON.stringify(body));
     const { verseSeed, matchStartTime, skills, tactics, teamIds, matchBools } = body;
-
     const matchLogs = body.getMatchLogs();
 
     let encodedTactics = await Promise.all(tactics.map(tactic => {
@@ -113,8 +120,6 @@ export class MatchService {
       );
     }));
     encodedTactics = encodedTactics.map(tactic => tactic.toString());
-
-    
 
     const result = await this.playAndEvolveContract.play2ndHalfAndEvolve(
       `0x${verseSeed}`,
@@ -142,7 +147,8 @@ export class MatchService {
       tacticsAway: tactics[1],
     });
     const matchEvents: MatchEvent[] = matchEventsDecoder.decode();
-
+  
+    console.log('SECOND HALF **********************************************');
     return {
       updatedSkills,
       matchLogs: decodedMatchLogs,
