@@ -160,18 +160,7 @@ export class LeagueService {
       await this.teamRepository.updateLeaderboard(team.teamId, team.teamPoints, team.leaderboardPosition, transactionalEntityManager);
     }
 
-    // Mock return
-    const teamsOutput = [];
-    const team = {
-      teamId: 1,
-      leaderboardPosition: 1,
-      teamPoints: 1,
-    }
-    teamsOutput.push(team);
-
-    return {
-      teams: teamsOutput,
-    };
+    return true;
   }
   async haveTimezoneLeaguesFinished(timezoneIdx: number): Promise<boolean> {
     const pendingMatches = await this.matchRepository.countPendingMatchesByTimezone(timezoneIdx);
