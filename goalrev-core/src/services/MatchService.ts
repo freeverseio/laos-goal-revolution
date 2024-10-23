@@ -68,7 +68,6 @@ export class MatchService {
       encodedTrainings
     );
 
-    console.log('result', result);
     const parsedResult = MatchMapper.mapPlay1stHalfAndEvolveResult(result);
     if (parsedResult.err != "0") {
       console.error('Error playing 1st half', result);

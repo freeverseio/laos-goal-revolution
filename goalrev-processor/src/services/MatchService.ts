@@ -113,8 +113,8 @@ export class MatchService {
 
   private async updateLeagueLederbord(matches: Match[]) {
     // get distinct (timezone_idx, country_idx, league_idx)
-    const result = matches.reduce((acc: { set: Set<string>; result: { timezone_idx: number; country_idx: number; league_idx: number; }[]; }, match: Match) => {
-      const obj = { timezone_idx: match.timezone_idx, country_idx: match.country_idx, league_idx: match.league_idx };
+    const result = matches.reduce((acc: { set: Set<string>; result: { timezone_idx: number; country_idx: number; league_idx: number; match_day_idx: number; }[]; }, match: Match) => {
+      const obj = { timezone_idx: match.timezone_idx, country_idx: match.country_idx, league_idx: match.league_idx, match_day_idx: match.match_day_idx };
       const key = JSON.stringify(obj);
       if (!acc.set.has(key)) {
         acc.set.add(key);
@@ -125,7 +125,7 @@ export class MatchService {
 
     // update each league leaderboard by timezone_idx, country_idx, league_idx
     for (const obj of result.result) {
-      await this.leagueService.updateLeaderboard(obj.timezone_idx, obj.country_idx, obj.league_idx);
+      await this.leagueService.updateLeaderboard(obj.timezone_idx, obj.country_idx, obj.league_idx, obj.match_day_idx);
     }
   }
 

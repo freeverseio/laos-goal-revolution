@@ -124,7 +124,10 @@ export class MatchRepository {
           timezone_idx: timezoneIdx,
           country_idx: countryIdx,
           league_idx: leagueIdx
-        },        
+        },
+        order: {
+          match_day_idx: "ASC" // required for computeLeagueLeaderboard
+        }        
       });      
       
     } catch (error) {

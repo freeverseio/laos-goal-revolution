@@ -34,7 +34,10 @@ export class LeagueService {
     const result = await this.leaguesContract.computeLeagueLeaderBoard(teamIds, resultsArray, matchDay);
     const ranking = result[0].map((value: bigint) => Number(value));
     const points = result[1].map((value: bigint) => {  
-      // remove tiebreakers numbers    
+      // remove tiebreakers numbers
+      if (value === 0n) {
+        return Number(0);
+      }    
       const dividedValue = new Big(value.toString()).div(new Big("10000000000000000000000")).toFixed(0);      
       return Number(dividedValue);
     });
@@ -66,7 +69,7 @@ export class LeagueService {
       }
     }
 
-    let teamIdxInLeague: bigint[] = new Array(8).fill(0n);
+    let teamIdxInLeague: bigint[] = new Array(8);
     for (let i = 0; i < 8; i++) {
       teamIdxInLeague[i] = BigInt(i);
     }
@@ -78,16 +81,17 @@ export class LeagueService {
     }
 
     // call Smart Contract
-    const {ranking, points} = await this.computeLeagueLeaderboardProcess(teamIdxInLeague, results, matchDay);    
+    const {ranking, points} = await this.computeLeagueLeaderboardProcess(teamIdxInLeague, results, matchDay);        
     const teamsOutput: LeagueLeaderboardTeamOutput[] = [];
     for (let i = 0; i < 8; i++) {
       const leagueLeaderboardTeamOutput: LeagueLeaderboardTeamOutput = {
-        teamId: teamsInput[i].teamId,
-        leaderboardPosition: ranking[i], //0..7
+        teamId: teamsInput[ranking[i]].teamId,
+        leaderboardPosition: i, //0..7
         teamPoints: points[i],
       }
       teamsOutput.push(leagueLeaderboardTeamOutput);
     }
+
     const leagueLeaderboardOutput: LeagueLeaderboardOutput = { 
       teams: teamsOutput,      
       err: 0
