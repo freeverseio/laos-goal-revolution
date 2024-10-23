@@ -35,7 +35,6 @@ export class MatchService {
 
   // Logic for playing the first half
   async play1stHalf(body: PlayInput): Promise<PlayOutput> {
-   // console.log('play1stHalf', body);
     const { verseSeed, matchStartTime, skills, tactics, teamIds, matchBools, trainings } = body;
     const matchLogs = body.getMatchLogs();
 
@@ -85,7 +84,6 @@ export class MatchService {
       tacticsAway: tactics[1],
     }, decodedMatchLogs);
     const matchEvents: MatchEvent[] = matchEventsDecoder.decode();
-    console.log('FIRST HALF **********************************************');
     return {
       updatedSkills,
       matchLogs: decodedMatchLogs,
@@ -96,7 +94,6 @@ export class MatchService {
 
   // Logic for playing the second half
   async play2ndHalf(body: PlayInput): Promise<PlayOutput> {
-    // console.log('play2ndHalf: ', JSON.stringify(body));
     const { verseSeed, matchStartTime, skills, tactics, teamIds, matchBools } = body;
     const matchLogs = body.getMatchLogs();
 
@@ -144,7 +141,6 @@ export class MatchService {
     }, decodedMatchLogs);
     const matchEvents: MatchEvent[] = matchEventsDecoder.decode();
   
-    console.log('SECOND HALF **********************************************');
     return {
       updatedSkills,
       matchLogs: decodedMatchLogs,

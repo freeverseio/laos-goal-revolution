@@ -64,10 +64,11 @@ export class MatchService {
     // Use repository to fetch matches
     const matches = await this.matchRepository.getAllMatches(info.timezone, info.matchDay!);
     const seed = crypto.randomBytes(32).toString('hex');
-    
-    // Process matches
-    await Promise.all(matches.map(match => this.playMatch(match, seed, info.verseNumber!)));
 
+    // Process matches
+    for (const match of matches) {
+      await this.playMatch(match, seed, info.verseNumber!);
+    }
     // Update the verse timestamp using verseService
     await this.verseRepository.saveVerse({
       verseNumber: info.verseNumber!,
