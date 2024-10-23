@@ -199,7 +199,7 @@ export class MatchService {
         MatchMapper.mapTacticToRequest(match.homeTeam!.tactics),  // Home team tactics
         MatchMapper.mapTacticToRequest(match.visitorTeam!.tactics) // Visitor team tactics
       ],
-      matchLogs: is1stHalf ? [{}, {}] : [
+      matchLogs: [
         { encodedMatchLog: match.homeTeam!.match_log },
         { encodedMatchLog: match.visitorTeam!.match_log }
       ],
