@@ -163,13 +163,14 @@ export class MatchService {
 
         await this.matchEventService.saveMatchEvents(playOutput.matchEvents, match, transactionManager);
 
-        match.home_goals += playOutput.matchLogs[0].numberOfGoals;
-        match.visitor_goals += playOutput.matchLogs[1].numberOfGoals;
+        match.home_goals = playOutput.matchLogs[0].numberOfGoals;
+        match.visitor_goals = playOutput.matchLogs[1].numberOfGoals;
 
         if (is1stHalf) {
           match.seed = seedMatch;
         }
         match.state = is1stHalf ? MatchState.HALF : MatchState.END;
+
 
         await this.teamService.updateTeamData(playOutput.matchLogs[0], playOutput.matchLogs[1], match.homeTeam!, verseNumber, is1stHalf, true, transactionManager);
         await this.teamService.updateTeamData(playOutput.matchLogs[1], playOutput.matchLogs[0], match.visitorTeam!, verseNumber, is1stHalf, false, transactionManager);

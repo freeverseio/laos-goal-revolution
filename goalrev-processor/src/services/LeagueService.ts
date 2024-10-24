@@ -225,7 +225,7 @@ export class LeagueService {
     const nextTeamIdxInTZ =await this.teamRepository.countTeamsByTimezone( timezoneIdx, entityManager);
     const nextLeagueIdx = await this.leagueRepository.countLeaguesByTimezoneAndCountry( timezoneIdx, countryIdx, entityManager);
     
-    for (let i = 0; i < 4; i++) { // 16 leagues
+    for (let i = 0; i < 1; i++) { // 16 leagues
       // open tx
       await entityManager.transaction(async (transactionManager: EntityManager) => {
         for (let j = 0; j < 8; j++) { // 8 teams per league
