@@ -71,7 +71,7 @@ export class MatchService {
    
     const parsedResult = MatchMapper.mapPlayHalfAndEvolveResult(result);
     if (parsedResult.err != "0") {
-      console.log('body', JSON.stringify(body));
+      console.error('body', JSON.stringify(body));
       console.error('Error playing 1st half', parsedResult.err);
       throw new Error(parsedResult.err);
     }
@@ -114,8 +114,6 @@ export class MatchService {
       );
     }));
     encodedTactics = encodedTactics.map(tactic => tactic.toString());
-    console.log('encodedTactics', encodedTactics);
-    console.log('skills', skills);
 
     const result = await this.playAndEvolveContract.play2ndHalfAndEvolve(
       `0x${verseSeed}`,
