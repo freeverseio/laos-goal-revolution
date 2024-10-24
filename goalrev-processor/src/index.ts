@@ -55,13 +55,13 @@ async function playMatches() {
 
 AppDataSource.initialize()
   .then(async () => { 
-    const playMatchesScheduler = process.env.PLAY_MATCHES_SCHEDULER;
-    if (!playMatchesScheduler) {
-      throw new Error("PLAY_MATCHES_SCHEDULER is not set");
-    }
-    cron.schedule(playMatchesScheduler, () => {
-      playMatches();
-    });
+    // const playMatchesScheduler = process.env.PLAY_MATCHES_SCHEDULER;
+    // if (!playMatchesScheduler) {
+    //   throw new Error("PLAY_MATCHES_SCHEDULER is not set");
+    // }
+    // cron.schedule(playMatchesScheduler, () => {
+    //   playMatches();
+    // });
    
     app.listen(process.env.APP_PORT, () => {
       console.log(`Server is running on port ${process.env.APP_PORT}`);

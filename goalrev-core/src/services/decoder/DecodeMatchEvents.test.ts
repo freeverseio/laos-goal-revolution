@@ -114,7 +114,7 @@ describe('DecodeMatchEvents', () => {
   });
 
   test('should decode match events correctly', () => {
-    const matchEvents = decodeMatchEvents.decode();
+    const matchEvents = decodeMatchEvents.decode(false);
     
     //expect(matchEvents.length).toBe(2);
 
@@ -145,7 +145,7 @@ describe('DecodeMatchEvents', () => {
     const emptyLogs = ['Header1', 'Header2'];
     decodeMatchEvents = new DecodeMatchEvents(emptyLogs, matchTeams, []);
 
-    const matchEvents = decodeMatchEvents.decode();
+    const matchEvents = decodeMatchEvents.decode(false);
     expect(matchEvents).toEqual([]);
   });
 
@@ -157,7 +157,7 @@ describe('DecodeMatchEvents', () => {
     ];
     decodeMatchEvents = new DecodeMatchEvents(matchLogsAndEvents, matchTeams, matchLogs);
 
-    const matchEvents = decodeMatchEvents.decode();
+    const matchEvents = decodeMatchEvents.decode(false);
     expect(matchEvents[0].primary_shirt_number).toBeUndefined();
     expect(matchEvents[0].secondary_shirt_number).toBe(PENALTY_CODE);
   });
@@ -170,7 +170,7 @@ describe('DecodeMatchEvents', () => {
     ];
     decodeMatchEvents = new DecodeMatchEvents(matchLogsAndEvents, matchTeams, matchLogs);
 
-    const matchEvents = decodeMatchEvents.decode();
+    const matchEvents = decodeMatchEvents.decode(false);
     expect(matchEvents[0].secondary_shirt_number).toBeUndefined();
   });
 });

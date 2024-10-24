@@ -15,7 +15,7 @@ export default class DecodeMatchEvents {
     this.matchLogs = matchLogs;
   }
 
-  decode(): MatchEvent[] {
+  decode(is2ndHalf: boolean): MatchEvent[] {
     this.matchEvents = [];
     const events = this.matchLogsAndEvents.slice(2);
     for (let i = 0; i < events.length; i += 5) {
@@ -24,12 +24,12 @@ export default class DecodeMatchEvents {
         this.matchEvents.push([events[i], events[i + 1], events[i + 2], events[i + 3], events[i + 4]]);
       }
     }
-    let matchEvents = this.matchEvents.map((event, index) => this.decodeEvent(index, event));
-    matchEvents = matchEvents.concat(this.addCardsAndInjuries());
+    let matchEvents = this.matchEvents.map((event, index) => this.decodeEvent(index, event, is2ndHalf));
+    matchEvents = matchEvents.concat(this.addCardsAndInjuries(is2ndHalf));
     return matchEvents;
   }
 
-  private decodeEvent(numEvent: number, event: [string, string, string, string, string]): MatchEvent {
+  private decodeEvent(numEvent: number, event: [string, string, string, string, string], is2ndHalf: boolean): MatchEvent {
     const [teamThatAttacks, managesToShoot, shooterIdx, isGoal, assister] = event;
     const matchEvent = {} as MatchEvent;
     // set attacking team
@@ -41,7 +41,8 @@ export default class DecodeMatchEvents {
     // set event type
     matchEvent.type = MatchEventType.ATTACK;
     // set minute
-    matchEvent.minute = (Math.floor(numEvent * 45 / ROUNDS_PER_MATCH) > 0 ? Math.floor(numEvent * 45 / ROUNDS_PER_MATCH) : 1).toString();
+    const minute = (Math.floor(numEvent * 45 / ROUNDS_PER_MATCH) > 0 ? Math.floor(numEvent * 45 / ROUNDS_PER_MATCH) : 1) + (is2ndHalf ? 45 : 0);
+    matchEvent.minute = minute.toString();
     // set manage to shoot
     matchEvent.manage_to_shoot = managesToShoot === '1';
     // set is goal
@@ -53,6 +54,9 @@ export default class DecodeMatchEvents {
       if (shooterId !== '') {
         matchEvent.primary_shirt_number = shooterId;
       }
+    }
+    if (!matchEvent.manage_to_shoot) {
+      matchEvent.primary_shirt_number = this.getDefenderShirtNumber(teamThatAttacks !== TeamType.HOME);
     }
     // set assister
     if (assister === PENALTY_CODE) {
@@ -78,7 +82,19 @@ export default class DecodeMatchEvents {
     }
   }
 
-  private addCardsAndInjuries(): MatchEvent[] {
+  private getDefenderShirtNumber(isHomeTeam: boolean): string {
+    //  1, 2, 3 are defenders
+    const randomIdx = Math.floor(Math.random() * 3) + 1;
+    if (isHomeTeam) {
+      const defender = this.matchTeams.tacticsHome.lineup[randomIdx];
+      return defender?.toString();
+    } else {
+      const defender = this.matchTeams.tacticsAway.lineup[randomIdx];
+      return defender?.toString();
+    }
+  }
+
+  private addCardsAndInjuries(is2ndHalf: boolean): MatchEvent[] {
     const injuryAndCardsEvents: MatchEvent[] = [];
     for (let teamIdx = 0; teamIdx < this.matchLogs.length; teamIdx++) {
       const matchLog = this.matchLogs[teamIdx];
@@ -93,7 +109,8 @@ export default class DecodeMatchEvents {
         if (outOfGamePlayer !== '14' && outOfGameType !== '0') { // 14 represents no player affected
           
           const primaryPlayer = this.getShirtNumberFromIdx(outOfGamePlayer, teamType === TeamType.HOME);
-          const minute = Math.floor(parseInt(outOfGameRound) * (45 / ROUNDS_PER_MATCH));
+          
+          const minute = Math.floor(parseInt(outOfGameRound) * (45 / ROUNDS_PER_MATCH)) + (is2ndHalf ? 45 : 0);
           let typeOfEvent: MatchEventType;
 
           switch (outOfGameType) {
@@ -125,7 +142,7 @@ export default class DecodeMatchEvents {
       // Extract yellow cards
       for (let i = 0; i < matchLog.yellowCards.length; i++) {
         const yellowCardPlayer = matchLog.yellowCards[i];
-        if (yellowCardPlayer !== '15') { // 15 represents no yellow card given
+        if (yellowCardPlayer !== '14') { // 14 represents no yellow card given
           const primaryPlayer = this.getShirtNumberFromIdx(yellowCardPlayer, teamType === TeamType.HOME);
           const minute = Math.floor((i + 1) * 45 / ROUNDS_PER_MATCH);
           injuryAndCardsEvents.push({
