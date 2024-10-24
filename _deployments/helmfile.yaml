@@ -40,7 +40,7 @@ helmfiles:
       - processorHost: {{ .Values.processorHost }}
       - processorPort: {{ .Values.processorPort | quote }}
       - apiInternalUrl: {{ .Values.apiInternalUrl }}
-      - playMatchesScheduler: {{ .Values.playMatchesScheduler }}
+      - playMatchesScheduler: {{ .Values.playMatchesScheduler | quote }}
   - path: "charts/goalrev-core/helmfile.yaml"
     values:
       - namespace: {{ .Values.namespace }}

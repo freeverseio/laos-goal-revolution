@@ -13,4 +13,4 @@ releases:
       - processorHost: {{ .Values.processorHost }}
       - processorPort: {{ .Values.processorPort }}
       - apiInternalUrl: {{ .Values.apiInternalUrl }}
-      - playMatchesScheduler: {{ .Values.playMatchesScheduler }}
+      - playMatchesScheduler: {{ .Values.playMatchesScheduler | quote }}
