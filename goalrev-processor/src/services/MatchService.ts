@@ -22,7 +22,7 @@ export class MatchService {
   private matchEventService: MatchEventService;
   private calendarService: CalendarService;
   private verseRepository: VerseRepository;
-  private matchRepository: MatchRepository;  
+  private matchRepository: MatchRepository;
   private matchHistoryRepository: MatchHistoryRepository;
   private leagueService: LeagueService;
   constructor(
@@ -60,29 +60,31 @@ export class MatchService {
         message: "Timestamp to play is in the future, skipping",
       };
     }
-    
+
     // Use repository to fetch matches
     const matches = await this.matchRepository.getAllMatches(info.timezone, info.matchDay!);
     const seed = crypto.randomBytes(32).toString('hex');
 
-    // Process matches
-    for (const match of matches) {
-      await this.playMatch(match, seed, info.verseNumber!);
-    }
+
+    // Process matches in batches of 8
+    console.time('playMatches');
+    await this.processInBatches(matches, 8, seed, info.verseNumber!, (match, seed, verseNumber) => this.playMatch(match, seed, verseNumber));
+    console.timeEnd('playMatches');
+
     // Update the verse timestamp using verseService
     await this.verseRepository.saveVerse({
       verseNumber: info.verseNumber!,
-      timezoneIdx: info.timezone ,
+      timezoneIdx: info.timezone,
       verseTimestamp: info.timestamp ?? 0,
     }, AppDataSource.manager);
 
     // for now we only play matches in timezone 10
-    if (info.timezone!=10) {
+    if (info.timezone != 10) {
       //continue playing matches
       return this.playMatches();
     } else {
       // compute league leaderboard
-      if(info.half == 1){
+      if (info.half == 1) {
         await this.updateLeagueLederbord(matches);
       }
 
@@ -112,6 +114,19 @@ export class MatchService {
     };
   }
 
+  private async processInBatches(matches: Match[], batchSize: number, seed: string, verseNumber: number, fn: (match: Match, seed: string, verseNumber: number) => Promise<any>) {
+    const results = [];
+    for (let i = 0; i < matches.length; i += batchSize) {
+      const batch = matches.slice(i, i + batchSize);
+      // Await all promises in the current batch
+      console.time(`processInBatches ${i}`);
+      const batchResults = await Promise.all(batch.map(item => fn(item, seed, verseNumber)));
+      results.push(...batchResults);
+      console.timeEnd(`processInBatches ${i}`);
+    }
+    return results;
+  }
+
   private async updateLeagueLederbord(matches: Match[]) {
     // get distinct (timezone_idx, country_idx, league_idx)
     const result = matches.reduce((acc: { set: Set<string>; result: { timezone_idx: number; country_idx: number; league_idx: number; match_day_idx: number; }[]; }, match: Match) => {
@@ -130,7 +145,7 @@ export class MatchService {
     }
   }
 
-  async playMatch(match: Match, seed: string,verseNumber: number) {
+  async playMatch(match: Match, seed: string, verseNumber: number) {
     const seedMatch = crypto.createHash('sha256').update(`${seed}${match.homeTeam!.team_id}${match.visitorTeam!.team_id}`).digest('hex');
     const entityManager = AppDataSource.manager; // Use EntityManager for transactions
     const mapHistory = MatchHistoryMapper.mapMatchHistory(match, verseNumber, seedMatch);
@@ -166,8 +181,8 @@ export class MatchService {
         //  // Update skills, teams, and events within the transaction
         await this.playerService.updateSkills(match.homeTeam!, playOutput.updatedSkills[0], verseNumber, transactionManager);
         await this.playerService.updateSkills(match.visitorTeam!, playOutput.updatedSkills[1], verseNumber, transactionManager);
-        
-        if (is2ndHalf) { 
+
+        if (is2ndHalf) {
           match.home_teamsumskills = playOutput.matchLogs[0].teamSumSkills;
           match.visitor_teamsumskills = playOutput.matchLogs[1].teamSumSkills;
         }
@@ -216,7 +231,7 @@ export class MatchService {
     // Create a Date object from the given timestamp in UTC
     const currentTime = new Date().getTime() * 1000;
     const timestampInLocalTime = timestampUTC;
-    
+
     // Check if the provided timestamp is in the future compared to the current time
     return timestampInLocalTime > currentTime;
   }

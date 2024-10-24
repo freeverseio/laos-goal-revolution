@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn } from "typeorm";
+import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn, OneToOne } from "typeorm";
 import { Team } from "./Team";
 
 @Entity("tactics")
@@ -101,7 +101,7 @@ export class Tactics {
   extra_attack_10!: boolean;
 
   // Define the foreign key relationship to the Team entity
-  @ManyToOne(() => Team)
+  @OneToOne(() => Team)
   @JoinColumn({ name: "team_id", referencedColumnName: "team_id" })
   team!: Team;
 }
