@@ -40,20 +40,21 @@ export class MatchService {
     this.matchEventService = matchEventService;
     this.calendarService = calendarService;
     this.verseRepository = verseRepository;
-    this.matchRepository = matchRepository; // Initialize it
+    this.matchRepository = matchRepository;
     this.leagueService = leagueService;
     this.matchHistoryRepository = matchHistoryRepository;
   }
 
   async playMatches(): Promise<any> {
     const info = await this.calendarService.getCalendarInfo();
+    info.verseNumber
 
     // Check if timestamp to play is in the future
-    if (this.checkTimestampInFuture(info.timestamp!, info.timezone)) {
+    if (this.checkTimestampInFuture(info.timestamp!)) {
       console.log("Timestamp to play is in the future, waiting...");
       return {
-        verseNumber: 0,
-        timezoneIdx: 0,
+        verseNumber: info.verseNumber,
+        timezoneIdx: info.timezone,
         matchDay: info.matchDay,
         halfTime: info.half,
         verseTimestamp: info.timestamp,
@@ -65,11 +66,8 @@ export class MatchService {
     const matches = await this.matchRepository.getAllMatches(info.timezone, info.matchDay!);
     const seed = crypto.randomBytes(32).toString('hex');
 
-
     // Process matches in batches of 8
-    console.time('playMatches');
     await this.processInBatches(matches, 8, seed, info.verseNumber!, (match, seed, verseNumber) => this.playMatch(match, seed, verseNumber));
-    console.timeEnd('playMatches');
 
     // Update the verse timestamp using verseService
     await this.verseRepository.saveVerse({
@@ -91,8 +89,8 @@ export class MatchService {
       // if last match of the league has been played
       if (info.matchDay == MATCHDAYS_PER_ROUND - 1 && info.half == 1) {
         await this.leagueService.computeTeamRankingPointsForTimezone(info.timezone);
-        await this.leagueService.generateCalendarForTimezone(info.timezone);
-        await this.teamService.resetTeams();
+        await this.leagueService.generateCalendarForTimezone(info.timezone); // TODO: wait 8h since last match of the league has been played
+        await this.teamService.resetTeams(); // TODO timezone parameter?
         return {
           verseNumber: info.verseNumber!,
           timezoneIdx: info.timezone,
@@ -225,12 +223,8 @@ export class MatchService {
     };
   }
 
-  private checkTimestampInFuture(timestampUTC: number, timezone: number): boolean {
-    // Create a Date object from the given timestamp in UTC
-    const currentTime = new Date().getTime() * 1000;
-    const timestampInLocalTime = timestampUTC;
-
-    // Check if the provided timestamp is in the future compared to the current time
-    return timestampInLocalTime > currentTime;
+  private checkTimestampInFuture(timestamp: number): boolean {
+    const currentTimestamp = Date.now();    // Get the current timestamp in milliseconds
+    return (timestamp * 1000) > currentTimestamp;
   }
 }
