@@ -37,7 +37,7 @@ async function playMatches() {
     
     console.log('[playMatches] End calling playMatches at ', date, result);
     if(result && result.verseTimestamp) {
-      console.log(new Date(result.verseTimestamp * 1000).toLocaleString('en-GB', { timeZone: 'Europe/Madrid' }));      
+      console.log(new Date(` verseTimestamp to Date: ` + result.verseTimestamp * 1000).toLocaleString('en-GB', { timeZone: 'Europe/Madrid' }));      
     }
     const timeElapsed = new Date().getTime() - lastPlayMatches.getTime();
     const seconds = Math.floor(timeElapsed / 1000);
