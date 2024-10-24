@@ -65,9 +65,6 @@ describe('DecodeMatchLog', () => {
       expect(result).toEqual(expected);
     });
 
-    it(`should decode match log correctly and log the output for test case ${index + 1}`, () => {
-      const result = DecodeMatchLog.decode(encodedLog);
-      console.log(result);
-    });
+    
   });
 });
