@@ -9,9 +9,7 @@ export interface PlayOutput {
 
 
 export interface MatchLog {
-  assisters: string[];
-  shooters: string[];
-  forwardPositions: string[];
+
   penalties: boolean[];
   outOfGamePlayers: string[];
   outOfGameTypes: string[];

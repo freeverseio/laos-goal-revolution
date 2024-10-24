@@ -68,10 +68,11 @@ export class MatchService {
       encodedTrainings
     );
 
-    // console.log('result', result);
-    const parsedResult = MatchMapper.mapPlay1stHalfAndEvolveResult(result);
+   
+    const parsedResult = MatchMapper.mapPlayHalfAndEvolveResult(result);
     if (parsedResult.err != "0") {
-      //console.error('Error playing 1st half', result);
+      console.error('body', JSON.stringify(body));
+      console.error('Error playing 1st half: ', parsedResult.err);
       throw new Error(parsedResult.err);
     }
     const updatedSkills = MatchMapper.mapEncodedSkillsToPlayerSkills(parsedResult.finalSkills);
@@ -125,9 +126,10 @@ export class MatchService {
     );
 
 
-    const parsedResult = MatchMapper.mapPlay1stHalfAndEvolveResult(result);
+    const parsedResult = MatchMapper.mapPlayHalfAndEvolveResult(result);
     if (parsedResult.err != "0") {
-      console.error('Error playing 2st half', result);
+      console.log('body', JSON.stringify(body));
+      console.error('Error playing 2st half', parsedResult.err);
       throw new Error(parsedResult.err);
     }
     const updatedSkills = MatchMapper.mapEncodedSkillsToPlayerSkills(parsedResult.finalSkills);

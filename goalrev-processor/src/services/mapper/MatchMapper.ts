@@ -91,33 +91,12 @@ export class MatchMapper {
     };
   }
 
-  static calculateTeamSkills(players: Player[], tactics: Tactics): string[] {
-    let lineup = [];
-    lineup[0] = tactics.shirt_0;
-    lineup[1] = tactics.shirt_1;
-    lineup[2] = tactics.shirt_2;
-    lineup[3] = tactics.shirt_3;
-    lineup[4] = tactics.shirt_4;
-    lineup[5] = tactics.shirt_5;
-    lineup[6] = tactics.shirt_6;
-    lineup[7] = tactics.shirt_7;
-    lineup[8] = tactics.shirt_8;
-    lineup[9] = tactics.shirt_9;
-    lineup[10] = tactics.shirt_10;
-    lineup[11] = tactics.substitution_0_shirt;
-    lineup[12] = tactics.substitution_1_shirt;
-    lineup[13] = tactics.substitution_2_shirt;
+  static calculateTeamSkills(players: Player[]): string[] {
+    // Sort players by shirt_number
+    const sortedPlayers = [...players].sort((a, b) => a.shirt_number - b.shirt_number);
 
-    // Order players based on the lineup array, players not in lineup go to the end
-    const playerMap = new Map(players.map(player => [player.shirt_number, player]));
-    const orderedPlayers = lineup
-      .map(shirtNumber => playerMap.get(shirtNumber))
-      .filter(player => player !== undefined) as Player[];
-    const remainingPlayers = players.filter(player => !lineup.includes(player.shirt_number));
-    const finalOrder = [...orderedPlayers, ...remainingPlayers];
-
-    // Get the skills of the ordered players
-    const skills = finalOrder.map(player => player.encoded_skills);
+    // Get the skills of the sorted players
+    const skills = sortedPlayers.map(player => player.encoded_skills);
     while (skills.length < PLAYERS_PER_TEAM_MAX) {
       skills.push("0");
     }

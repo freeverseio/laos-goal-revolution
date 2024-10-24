@@ -3,7 +3,7 @@ import { DecodeMatchLog } from "../decoder/DecodeMatchLog";
 import DecodePlayerSkills from "../decoder/DecodePlayerSkills";
 
 export class MatchMapper {
-  static mapPlay1stHalfAndEvolveResult(result: any): Play1stHalfAndEvolveResult {
+  static mapPlayHalfAndEvolveResult(result: any): Play1stHalfAndEvolveResult {
     
     const parsedResult: Play1stHalfAndEvolveResult = {
       finalSkills: result[0].map((skillsArray: any) => skillsArray.map((skill: any) => skill)),

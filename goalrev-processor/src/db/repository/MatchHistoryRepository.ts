@@ -15,6 +15,16 @@ export class MatchHistoryRepository {
     }
   }
 
+  async saveMatchHistories(matchHistories: MatchHistory[], transactionManager: EntityManager): Promise<void> {
+    const repository = transactionManager.getRepository(MatchHistory);
+    try {
+      await repository.save(matchHistories);
+    } catch (error) {
+      console.error("Error saving match histories:", error);
+      throw new Error("Save match histories failed");
+    }
+  }
+
   // Bulk insert match history records
   async bulkInsertMatchHistories(matchHistories: MatchHistory[], entityManager: EntityManager): Promise<void> {
     const repository = entityManager.getRepository(MatchHistory);
