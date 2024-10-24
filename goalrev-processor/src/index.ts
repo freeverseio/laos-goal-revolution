@@ -22,6 +22,7 @@ async function playMatches() {
     const now = new Date();
     const fiveMinutesAgo = new Date(now.getTime() - 5 * 60 * 1000);
     if (lastPlayMatches > fiveMinutesAgo) {
+      console.log(`[playMatches] -- Skipping playMatches. Last play matches: ${lastPlayMatches.toLocaleString('en-GB', { timeZoneName: 'short' })}`);
       return;
     }
   }
@@ -30,21 +31,32 @@ async function playMatches() {
   lastPlayMatches = new Date();
   const date = lastPlayMatches.toISOString();
   try {
-    console.log('Start playing matches at ' + date);
+    console.log('[playMatches] Begin playing matches at ' + date);
     const matchService = MatchFactory.createMatchService();
     const result = await matchService.playMatches();
-    console.log('End calling playMatches at ', date, result);
+    
+    console.log('[playMatches] End calling playMatches at ', date, result);
+    const timeElapsed = new Date().getTime() - lastPlayMatches.getTime();
+    const seconds = Math.floor(timeElapsed / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    console.log(`[playMatches] Time elapsed to play matches: ${hours}:${minutes}:${seconds} (h:m:s)`);       
     playMatchesRunning = false;
+
   } catch (error) {    
-    console.error('Error calling playMatches at ', date , error);
+    console.error('[playMatches] Error calling playMatches at ', date);
+    console.error('[playMatches] Error: ', error);
     playMatchesRunning = false;
   }
 }
 
 AppDataSource.initialize()
-  .then(async () => {    
-    cron.schedule('*/50 * * * * *', () => { // 50 seconds
-    //cron.schedule('*/2 * * * *', () => { // 2 minutes
+  .then(async () => { 
+    const playMatchesScheduler = process.env.PLAY_MATCHES_SCHEDULER;
+    if (!playMatchesScheduler) {
+      throw new Error("PLAY_MATCHES_SCHEDULER is not set");
+    }
+    cron.schedule(playMatchesScheduler, () => { // 50 seconds
       playMatches();
     });
    
