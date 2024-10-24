@@ -56,7 +56,7 @@ AppDataSource.initialize()
     if (!playMatchesScheduler) {
       throw new Error("PLAY_MATCHES_SCHEDULER is not set");
     }
-    cron.schedule(playMatchesScheduler, () => { // 50 seconds
+    cron.schedule(playMatchesScheduler, () => {
       playMatches();
     });
    
