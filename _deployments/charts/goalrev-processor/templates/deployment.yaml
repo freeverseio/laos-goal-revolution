@@ -49,6 +49,8 @@ spec:
             value: {{ .Values.processorPort | quote }}
           - name: SSL_CA_CERT
             value: "./data/ca-certificate.pem"
+          - name: PLAY_MATCHES_SCHEDULER
+            value: {{ .Values.playMatchesScheduler }}
         ports:
         - containerPort: {{ .Values.processorPort }}
       volumes:
