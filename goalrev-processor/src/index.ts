@@ -37,10 +37,10 @@ async function playMatches() {
     
     console.log('[playMatches] End calling playMatches at ', date, result);
     if(result && result.verseTimestamp) {
-      console.log(new Date(` verseTimestamp to Date: ` + result.verseTimestamp * 1000).toLocaleString('en-GB', { timeZone: 'Europe/Madrid' }));      
+      console.log(` verseTimestamp to Date: ` + new Date(result.verseTimestamp * 1000).toLocaleString('en-GB', { timeZone: 'Europe/Madrid' }));      
     }
     const timeElapsed = new Date().getTime() - lastPlayMatches.getTime();
-    const seconds = Math.floor(timeElapsed / 1000);
+    const seconds = (timeElapsed / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
     console.log(`[playMatches] Time elapsed to play matches: ${hours}:${minutes}:${seconds} (h:m:s)`);       
