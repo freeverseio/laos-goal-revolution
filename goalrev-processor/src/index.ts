@@ -20,8 +20,8 @@ async function playMatches() {
   // check lock
   if (playMatchesRunning) {
     const now = new Date();
-    const fiveMinutesAgo = new Date(now.getTime() - 5 * 60 * 1000);
-    if (lastPlayMatches > fiveMinutesAgo) {
+    const lockExpired = new Date(now.getTime() - 10 * 60 * 1000);
+    if (lastPlayMatches > lockExpired) {
       console.log(`[playMatches] -- Skipping playMatches. Last play matches: ${lastPlayMatches.toLocaleString('en-GB', { timeZoneName: 'short' })}`);
       return;
     }
