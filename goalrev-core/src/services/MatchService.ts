@@ -68,7 +68,7 @@ export class MatchService {
       encodedTrainings
     );
 
-    // console.log('result', result);
+   
     const parsedResult = MatchMapper.mapPlayHalfAndEvolveResult(result);
     if (parsedResult.err != "0") {
       console.log('body', JSON.stringify(body));
