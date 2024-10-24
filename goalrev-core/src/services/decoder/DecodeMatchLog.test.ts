@@ -69,7 +69,7 @@ describe('DecodeMatchLog', () => {
   });
   it(`should decode match log correctly`, () => {
     const result = DecodeMatchLog.decode("455736703290365295140561448264374212021790334002775954726606799009497524883");
-    console.log(result);
+    //console.log(result);
   });
-  //460043395480774646112978561494169921375632554968791474341241423322675153570
+
 });

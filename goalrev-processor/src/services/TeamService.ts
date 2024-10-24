@@ -9,22 +9,16 @@ export class TeamService {
 
   async updateTeamData(
     matchLog: MatchLog, 
-    matchEvents: MatchEventOutput[], 
+    matchLogOpponent: MatchLog,
     team: Team,
     verseNumber: number,
     is1stHalf: boolean,
+    isHome: boolean,
     entityManager: EntityManager
   ): Promise<void> {
-    // Iterate over match events and update goals
-    matchEvents.forEach((event) => {
-      if (event.is_goal) {
-        if (event.team_id === team.team_id) {
-          team.goals_forward += 1;
-        } else {
-          team.goals_against += 1;
-        }
-      }
-    });
+   
+    team.goals_forward = matchLog.numberOfGoals;
+    team.goals_against = matchLogOpponent.numberOfGoals;
     team.match_log = matchLog.encodedMatchLog;
     if (!is1stHalf) {
       const teamHistory = TeamHistoryMapper.mapToTeamHistory(team!, verseNumber);
@@ -34,10 +28,10 @@ export class TeamService {
       // Update training points
       team.training_points = matchLog.trainingPoints;
       // Update points 
-      team.w += matchLog.gamePoints > 1 ? 1 : 0;
-      team.d += matchLog.gamePoints === 1 ? 1 : 0;
-      team.l += matchLog.gamePoints === 0 ? 1 : 0;
-      team.points += matchLog.gamePoints;
+      team.w += isHome ? (matchLog.winner === 0 ? 1 : 0) : (matchLog.winner===1 ? 1 : 0);
+      team.d += matchLog.winner===2 ? 1 : 0;
+      team.l += isHome ? (matchLog.winner===1 ? 1 : 0) : (matchLog.winner===0 ? 1 : 0);
+      //team.points += matchLog.gamePoints;
     } 
     await entityManager.save(team);
   }

@@ -9,7 +9,6 @@ export interface PlayOutput {
 
 
 export interface MatchLog {
-
   penalties: boolean[];
   outOfGamePlayers: string[];
   outOfGameTypes: string[];

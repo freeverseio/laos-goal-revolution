@@ -10,6 +10,7 @@ export interface PlayOutput {
 export interface MatchLog {
   numberOfGoals: number;
   gamePoints: number;
+  winner: number;
   teamSumSkills: number;
   trainingPoints: number;
   isHomeStadium: boolean;

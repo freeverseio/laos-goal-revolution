@@ -162,19 +162,17 @@ export class MatchService {
         const playOutput = response.data as PlayOutput;
 
         await this.matchEventService.saveMatchEvents(playOutput.matchEvents, match, transactionManager);
-        // TODO unify goals logic (team & match)
-        const goals = this.matchEventService.getGoals(playOutput.matchEvents, match);
 
-        match.home_goals += goals[0];
-        match.visitor_goals += goals[1];
+        match.home_goals += playOutput.matchLogs[0].numberOfGoals;
+        match.visitor_goals += playOutput.matchLogs[1].numberOfGoals;
 
         if (is1stHalf) {
           match.seed = seedMatch;
         }
         match.state = is1stHalf ? MatchState.HALF : MatchState.END;
 
-        await this.teamService.updateTeamData(playOutput.matchLogs[0], playOutput.matchEvents, match.homeTeam!, verseNumber, is1stHalf, transactionManager);
-        await this.teamService.updateTeamData(playOutput.matchLogs[1], playOutput.matchEvents, match.visitorTeam!, verseNumber, is1stHalf, transactionManager);
+        await this.teamService.updateTeamData(playOutput.matchLogs[0], playOutput.matchLogs[1], match.homeTeam!, verseNumber, is1stHalf, true, transactionManager);
+        await this.teamService.updateTeamData(playOutput.matchLogs[1], playOutput.matchLogs[0], match.visitorTeam!, verseNumber, is1stHalf, false, transactionManager);
         //  // Update skills, teams, and events within the transaction
         await this.playerService.updateSkills(match.homeTeam!, playOutput.updatedSkills[0], verseNumber, transactionManager);
         await this.playerService.updateSkills(match.visitorTeam!, playOutput.updatedSkills[1], verseNumber, transactionManager);
