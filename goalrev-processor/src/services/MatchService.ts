@@ -65,11 +65,8 @@ export class MatchService {
     const matches = await this.matchRepository.getAllMatches(info.timezone, info.matchDay!);
     const seed = crypto.randomBytes(32).toString('hex');
 
-
     // Process matches in batches of 8
-    console.time('playMatches');
     await this.processInBatches(matches, 8, seed, info.verseNumber!, (match, seed, verseNumber) => this.playMatch(match, seed, verseNumber));
-    console.timeEnd('playMatches');
 
     // Update the verse timestamp using verseService
     await this.verseRepository.saveVerse({
