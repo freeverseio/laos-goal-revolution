@@ -192,10 +192,9 @@ export class MatchService {
         await this.matchHistoryRepository.insertMatchHistory(mapHistory, transactionManager);
       });
     } catch (error) {
-      console.error("Error playing match:", error);
-      throw error; // Rollback will occur automatically if an error is thrown
+      console.error("Error playing match:", match);
+      return "error";
     }
-
     return "ok";
   }
 
@@ -204,8 +203,8 @@ export class MatchService {
       verseSeed: seed,
       matchStartTime: Number(match.start_epoch),
       skills: [
-        MatchMapper.calculateTeamSkills(match.homeTeam!.players, match.homeTeam!.tactics), // Team 1 skills
-        MatchMapper.calculateTeamSkills(match.visitorTeam!.players, match.visitorTeam!.tactics) // Team 2 skills
+        MatchMapper.calculateTeamSkills(match.homeTeam!.players), // Team 1 skills
+        MatchMapper.calculateTeamSkills(match.visitorTeam!.players) // Team 2 skills
       ],
       teamIds: [
         Number(match.homeTeam!.team_id),

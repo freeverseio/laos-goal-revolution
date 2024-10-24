@@ -90,9 +90,6 @@ export class DecodeMatchLog {
 
       return {
         numberOfGoals: numberOfGoals.toString(),
-        assisters: assisters.map(String),
-        shooters: shooters.map(String),
-        forwardPositions: forwardPositions.map(String),
         penalties,
         outOfGamePlayers: outOfGamePlayers.map(String),
         outOfGameTypes: outOfGameTypes.map(String),

@@ -6,9 +6,6 @@ describe('DecodeMatchLog', () => {
       encodedLog: "904625697166429907578684580254429362549174092576235409827636622758600564479",
       expected: {
         numberOfGoals: "15",
-        assisters: ["15", "14", "13", "12", "15", "14", "13", "12", "15", "14", "13", "12"],
-        shooters: ["15", "14", "13", "12", "15", "14", "13", "12", "15", "14", "13", "12"],
-        forwardPositions: ["0", "1", "2", "3", "0", "1", "2", "3", "0", "1", "2", "3"],
         penalties: [true, false, true, false, true, false, true],
         outOfGamePlayers: ["14", "13"],
         outOfGameTypes: ["2", "3"],
@@ -27,7 +24,38 @@ describe('DecodeMatchLog', () => {
         isCancelled: false,
         encodedMatchLog: "904625697166429907578684580254429362549174092576235409827636622758600564479",
       },
-    },
+     
+    }, {
+      encodedLog: "452312848583337244297713205707748466433728451888360259471082036387425289570",
+      expected: {
+        numberOfGoals: "2",
+        penalties: [
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+        ],
+        outOfGamePlayers: ["9", "0"],
+        outOfGameTypes: ["3", "0"],
+        outOfGameRounds: ["9", "0"],
+        yellowCards: ["9", "14", "0", "0"],
+        inGameSubsHappened: ["0", "0", "0", "0", "0", "0"],
+        halfTimeSubstitutions: ["0", "0", "0"],
+        nDefs: ["6", "0"],
+        nTotHalf: ["11", "0"],
+        winner: "0",
+        gamePoints: "0",
+        teamSumSkills: "0",
+        trainingPoints: "0",
+        isHomeStadium: true,
+        changesAtHalftime: "0",
+        isCancelled: false,
+        encodedMatchLog: "452312848583337244297713205707748466433728451888360259471082036387425289570",
+      }
+    }
     // Update the remaining test cases similarly...
   ];
 
