@@ -1,18 +1,10 @@
+import { PlayerSkill } from "../output/team";
+
 export interface PlayOutput {
   updatedSkills: [PlayerSkill[], PlayerSkill[]]; 
   matchLogs: [MatchLog, MatchLog];
   matchEvents: MatchEventOutput[]; 
-  earnedTrainingPoints: number;
-  err: number; // Error code
-}
-
-export interface PlayerSkill {
-  defence: number;
-  speed: number;
-  pass: number;
-  shoot: number;
-  endurance: number;
-  encodedSkills: string;
+  err: string; // Error code
 }
 
 export interface MatchLog {
@@ -38,9 +30,9 @@ export enum MatchEventType {
 export interface MatchEventOutput {
   minute: number;
   type: MatchEventType;
-  team_id: number;
-  primary_player_id?: string;
-  secondary_player_id?: string;
+  team_id: string;
+  primary_shirt_number?: string;
+  secondary_shirt_number?: string;
   manage_to_shoot: boolean;
   is_goal: boolean;
 }

@@ -14,13 +14,24 @@ export class MatchRepository {
     }
   }
 
+  async saveMatches(matches: Match[], transactionManager: EntityManager): Promise<void> {
+    const repository = transactionManager.getRepository(Match);
+    try {
+      await repository.save(matches);
+    } catch (error) {
+      console.error("Error saving matches:", error);
+      throw new Error("Save matches failed");
+    }
+  }
+
   async getAllMatches(timezone: number, matchDay: number) {
     const matchRepository = AppDataSource.getRepository(Match);
 
     return await matchRepository.find({
       where: {
         timezone_idx: timezone,
-        match_day_idx: matchDay
+        match_day_idx: matchDay,
+
       },
       relations: [
         "homeTeam",

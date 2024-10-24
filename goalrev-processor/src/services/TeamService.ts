@@ -18,7 +18,7 @@ export class TeamService {
     // Iterate over match events and update goals
     matchEvents.forEach((event) => {
       if (event.is_goal) {
-        if (event.team_id === Number(team.team_id)) {
+        if (event.team_id === team.team_id) {
           team.goals_forward += 1;
         } else {
           team.goals_against += 1;

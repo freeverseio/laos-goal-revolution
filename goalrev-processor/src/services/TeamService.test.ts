@@ -29,9 +29,9 @@ describe('TeamService', () => {
     mockEntityManager.findOne.mockResolvedValueOnce(mockTeam);
 
     const matchEvents: MatchEventOutput[] = [
-      { minute: 15, type: MatchEventType.ATTACK, team_id: 1, manage_to_shoot: true, is_goal: true }, // Goal by the team
-      { minute: 30, type: MatchEventType.ATTACK, team_id: 2, manage_to_shoot: true, is_goal: true }, // Goal by the opponent
-      { minute: 60, type: MatchEventType.ATTACK, team_id: 1, manage_to_shoot: true, is_goal: true }, // Another goal by the team
+      { minute: 15, type: MatchEventType.ATTACK, team_id: '1', manage_to_shoot: true, is_goal: true }, // Goal by the team
+      { minute: 30, type: MatchEventType.ATTACK, team_id: '2', manage_to_shoot: true, is_goal: true }, // Goal by the opponent
+      { minute: 60, type: MatchEventType.ATTACK, team_id: '1', manage_to_shoot: true, is_goal: true }, // Another goal by the team
     ];
 
     const matchLog: MatchLog = {
@@ -69,8 +69,8 @@ describe('TeamService', () => {
     mockEntityManager.findOne.mockResolvedValueOnce(mockTeam);
 
     const matchEvents: MatchEventOutput[] = [
-      { minute: 15, type: MatchEventType.ATTACK, team_id: 1, manage_to_shoot: true, is_goal: true }, // Goal by the team
-      { minute: 30, type: MatchEventType.ATTACK, team_id: 2, manage_to_shoot: true, is_goal: true }, // Goal by the opponent
+      { minute: 15, type: MatchEventType.ATTACK, team_id: '1', manage_to_shoot: true, is_goal: true }, // Goal by the team
+      { minute: 30, type: MatchEventType.ATTACK, team_id: '2', manage_to_shoot: true, is_goal: true }, // Goal by the opponent
     ];
 
     const matchLog: MatchLog = {
@@ -108,7 +108,7 @@ describe('TeamService', () => {
     mockEntityManager.findOne.mockResolvedValueOnce(mockTeam);
 
     const matchEvents: MatchEventOutput[] = [
-      { minute: 30, type: MatchEventType.ATTACK, team_id: 2, manage_to_shoot: true, is_goal: true }, // Goal by the opponent
+      { minute: 30, type: MatchEventType.ATTACK, team_id: '2', manage_to_shoot: true, is_goal: true }, // Goal by the opponent
     ];
 
 

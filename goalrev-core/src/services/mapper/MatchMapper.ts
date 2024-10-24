@@ -3,35 +3,34 @@ import { DecodeMatchLog } from "../decoder/DecodeMatchLog";
 import DecodePlayerSkills from "../decoder/DecodePlayerSkills";
 
 export class MatchMapper {
-  static mapPlay1stHalfAndEvolveResult(result: any): Play1stHalfAndEvolveResult {
+  static mapPlayHalfAndEvolveResult(result: any): Play1stHalfAndEvolveResult {
     
     const parsedResult: Play1stHalfAndEvolveResult = {
       finalSkills: result[0].map((skillsArray: any) => skillsArray.map((skill: any) => skill)),
-      matchLogsAndEvents: result[1].map((log: any) => log),
+      matchLogsAndEvents: result[1].map((log: any) => log.toString()),
       err: result[2],
     };
     return parsedResult;
   }
 
-  // static mapMatchLogsAndEventsToMatchLogs(matchLogsAndEvents: any): MatchLog[] {
-  //   const matchLog1 = 
-  // }
 
   static mapEncodedSkillsToPlayerSkills(encodedSkills: string[][]): [PlayerSkill[], PlayerSkill[]] {
     try {
       return [encodedSkills[0].map((skill: any) => ({
-        defence: DecodePlayerSkills.getSkill(skill, 0),
-        speed: DecodePlayerSkills.getSkill(skill, 1),
-        pass: DecodePlayerSkills.getSkill(skill, 2),
-        shoot: DecodePlayerSkills.getSkill(skill, 3),
-        endurance: DecodePlayerSkills.getSkill(skill, 4),
+        playerId: DecodePlayerSkills.getPlayerIdFromSkills(skill).toString(),
+        defence: DecodePlayerSkills.getSkill(skill, 0).toString(),
+        speed: DecodePlayerSkills.getSkill(skill, 1).toString(),
+        pass: DecodePlayerSkills.getSkill(skill, 2).toString(),
+        shoot: DecodePlayerSkills.getSkill(skill, 3).toString(),
+        endurance: DecodePlayerSkills.getSkill(skill, 4).toString(),
         encodedSkills: `${skill}`
       })), encodedSkills[1].map((skill: any) => ({
-        defence: DecodePlayerSkills.getSkill(skill, 0),
-        speed: DecodePlayerSkills.getSkill(skill, 1),
-        pass: DecodePlayerSkills.getSkill(skill, 2),
-        shoot: DecodePlayerSkills.getSkill(skill, 3),
-        endurance: DecodePlayerSkills.getSkill(skill, 4),
+        playerId: DecodePlayerSkills.getPlayerIdFromSkills(skill).toString(),
+        defence: DecodePlayerSkills.getSkill(skill, 0).toString(),
+        speed: DecodePlayerSkills.getSkill(skill, 1).toString(),
+        pass: DecodePlayerSkills.getSkill(skill, 2).toString(),
+        shoot: DecodePlayerSkills.getSkill(skill, 3).toString(),
+        endurance: DecodePlayerSkills.getSkill(skill, 4).toString(),
         encodedSkills: `${skill}`
       }))];
     } catch (error) {

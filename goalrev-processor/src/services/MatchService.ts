@@ -22,7 +22,7 @@ export class MatchService {
   private matchEventService: MatchEventService;
   private calendarService: CalendarService;
   private verseRepository: VerseRepository;
-  private matchRepository: MatchRepository;  
+  private matchRepository: MatchRepository;
   private matchHistoryRepository: MatchHistoryRepository;
   private leagueService: LeagueService;
   constructor(
@@ -60,28 +60,31 @@ export class MatchService {
         message: "Timestamp to play is in the future, skipping",
       };
     }
-    
+
     // Use repository to fetch matches
     const matches = await this.matchRepository.getAllMatches(info.timezone, info.matchDay!);
     const seed = crypto.randomBytes(32).toString('hex');
-    
-    // Process matches
-    await Promise.all(matches.map(match => this.playMatch(match, seed, info.verseNumber!)));
+
+
+    // Process matches in batches of 8
+    console.time('playMatches');
+    await this.processInBatches(matches, 8, seed, info.verseNumber!, (match, seed, verseNumber) => this.playMatch(match, seed, verseNumber));
+    console.timeEnd('playMatches');
 
     // Update the verse timestamp using verseService
     await this.verseRepository.saveVerse({
       verseNumber: info.verseNumber!,
-      timezoneIdx: info.timezone ,
+      timezoneIdx: info.timezone,
       verseTimestamp: info.timestamp ?? 0,
     }, AppDataSource.manager);
 
     // for now we only play matches in timezone 10
-    if (info.timezone!=10) {
+    if (info.timezone != 10) {
       //continue playing matches
       return this.playMatches();
     } else {
       // compute league leaderboard
-      if(info.half == 1){
+      if (info.half == 1) {
         await this.updateLeagueLederbord(matches);
       }
 
@@ -111,8 +114,20 @@ export class MatchService {
     };
   }
 
+  private async processInBatches(matches: Match[], batchSize: number, seed: string, verseNumber: number, fn: (match: Match, seed: string, verseNumber: number) => Promise<any>) {
+    const results = [];
+    for (let i = 0; i < matches.length; i += batchSize) {
+      const batch = matches.slice(i, i + batchSize);
+      // Await all promises in the current batch
+      console.time(`processInBatches ${i}`);
+      const batchResults = await Promise.all(batch.map(item => fn(item, seed, verseNumber)));
+      results.push(...batchResults);
+      console.timeEnd(`processInBatches ${i}`);
+    }
+    return results;
+  }
+
   private async updateLeagueLederbord(matches: Match[]) {
-    // get distinct (timezone_idx, country_idx, league_idx)
     const result = matches.reduce((acc: { set: Set<string>; result: { timezone_idx: number; country_idx: number; league_idx: number; match_day_idx: number; }[]; }, match: Match) => {
       const obj = { timezone_idx: match.timezone_idx, country_idx: match.country_idx, league_idx: match.league_idx, match_day_idx: match.match_day_idx };
       const key = JSON.stringify(obj);
@@ -129,14 +144,15 @@ export class MatchService {
     }
   }
 
-  async playMatch(match: Match, seed: string,verseNumber: number) {
+  async playMatch(match: Match, seed: string, verseNumber: number) {
+    const seedMatch = crypto.createHash('sha256').update(`${seed}${match.homeTeam!.team_id}${match.visitorTeam!.team_id}`).digest('hex');
     const entityManager = AppDataSource.manager; // Use EntityManager for transactions
-    const mapHistory = MatchHistoryMapper.mapMatchHistory(match, verseNumber, seed);
+    const mapHistory = MatchHistoryMapper.mapMatchHistory(match, verseNumber, seedMatch);
     try {
       await entityManager.transaction(async (transactionManager: EntityManager) => {
         const is1stHalf = match.state === MatchState.BEGIN;
         const is2ndHalf = match.state === MatchState.HALF;
-        const requestBody = this.buildRequestBody(match, seed, is1stHalf);
+        const requestBody = this.buildRequestBody(match, seedMatch, is1stHalf);
 
         if (!is1stHalf && !is2ndHalf) {
           console.warn(`Match ${match.match_idx} ${match.match_day_idx} ${match.timezone_idx} ${match.league_idx} is not in the BEGIN or HALF state, skipping`);
@@ -155,31 +171,29 @@ export class MatchService {
         match.visitor_goals += goals[1];
 
         if (is1stHalf) {
-          match.seed = seed;
+          match.seed = seedMatch;
         }
         match.state = is1stHalf ? MatchState.HALF : MatchState.END;
 
         await this.teamService.updateTeamData(playOutput.matchLogs[0], playOutput.matchEvents, match.homeTeam!, verseNumber, is1stHalf, transactionManager);
         await this.teamService.updateTeamData(playOutput.matchLogs[1], playOutput.matchEvents, match.visitorTeam!, verseNumber, is1stHalf, transactionManager);
-        
+        //  // Update skills, teams, and events within the transaction
+        await this.playerService.updateSkills(match.homeTeam!, playOutput.updatedSkills[0], verseNumber, transactionManager);
+        await this.playerService.updateSkills(match.visitorTeam!, playOutput.updatedSkills[1], verseNumber, transactionManager);
+
         if (is2ndHalf) {
-          // Update skills, teams, and events within the transaction
-          await this.playerService.updateSkills(match.homeTeam!.tactics, playOutput.updatedSkills[0], verseNumber, transactionManager);
-          await this.playerService.updateSkills(match.visitorTeam!.tactics, playOutput.updatedSkills[1], verseNumber, transactionManager);
-         
           match.home_teamsumskills = playOutput.matchLogs[0].teamSumSkills;
           match.visitor_teamsumskills = playOutput.matchLogs[1].teamSumSkills;
         }
 
-        // Save the match using the repository
+        // // Save the match using the repository
         await this.matchRepository.saveMatch(match, transactionManager);
         await this.matchHistoryRepository.insertMatchHistory(mapHistory, transactionManager);
       });
     } catch (error) {
-      console.error("Error playing match:", error);
-      throw error; // Rollback will occur automatically if an error is thrown
+      console.error("Error playing match:", match);
+      return "error";
     }
-
     return "ok";
   }
 
@@ -199,7 +213,7 @@ export class MatchService {
         MatchMapper.mapTacticToRequest(match.homeTeam!.tactics),  // Home team tactics
         MatchMapper.mapTacticToRequest(match.visitorTeam!.tactics) // Visitor team tactics
       ],
-      matchLogs: is1stHalf ? [{}, {}] : [
+      matchLogs: [
         { encodedMatchLog: match.homeTeam!.match_log },
         { encodedMatchLog: match.visitorTeam!.match_log }
       ],
@@ -215,7 +229,7 @@ export class MatchService {
     // Create a Date object from the given timestamp in UTC
     const currentTime = new Date().getTime() * 1000;
     const timestampInLocalTime = timestampUTC;
-    
+
     // Check if the provided timestamp is in the future compared to the current time
     return timestampInLocalTime > currentTime;
   }

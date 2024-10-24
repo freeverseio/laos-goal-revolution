@@ -163,7 +163,7 @@ describe('MatchService', () => {
       const verseServiceSpy = jest.spyOn(mockVerseRepository, 'getInitialVerse').mockResolvedValue({ verseNumber: 0, verseTimestamp: 1620000, timezoneIdx: 10 } as Verse);
       const lastVerseSpy = jest.spyOn(mockVerseRepository, 'getLastVerse').mockResolvedValue({ verseNumber: 0, verseTimestamp: 16200000, timezoneIdx: 10 } as Verse);
       const saveVerseSpy = jest.spyOn(mockVerseRepository, 'saveVerse');
-      jest.spyOn(mockLeagueService, 'updateLeaderboard').mockResolvedValue({ teams: [] });      
+      jest.spyOn(mockLeagueService, 'updateLeaderboard').mockResolvedValue(true);      
       
       await matchService.playMatches();
 
@@ -181,7 +181,7 @@ describe('MatchService', () => {
       const buildRequestBodySpy = jest.spyOn(matchService, 'buildRequestBody');
       const response = await matchService.playMatch(mockMatch, "test-seed", 0);
 
-      expect(buildRequestBodySpy).toHaveBeenCalledWith(mockMatch, "test-seed", true);
+      expect(buildRequestBodySpy).toHaveBeenCalledWith(mockMatch, "2c5829a4b0630b6c0b84177c8b1a5d91dec8188b864131b0370bd78a2ed01f57", true);
       expect(mockedAxios.post).toHaveBeenCalledWith(
         `${process.env.CORE_API_URL}/match/play1stHalf`,
         expect.any(Object)

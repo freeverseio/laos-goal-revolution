@@ -92,7 +92,11 @@ export class MatchMapper {
   }
 
   static calculateTeamSkills(players: Player[]): string[] {
-    const skills = players.map(player => player.encoded_skills);
+    // Sort players by shirt_number
+    const sortedPlayers = [...players].sort((a, b) => a.shirt_number - b.shirt_number);
+
+    // Get the skills of the sorted players
+    const skills = sortedPlayers.map(player => player.encoded_skills);
     while (skills.length < PLAYERS_PER_TEAM_MAX) {
       skills.push("0");
     }

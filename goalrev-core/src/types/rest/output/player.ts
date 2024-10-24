@@ -19,11 +19,12 @@ export interface Player {
 }
 
 export interface PlayerSkill {
-  defence: number;
-  speed: number;
-  pass: number;
-  shoot: number;
-  endurance: number;
+  playerId: string;
+  defence: string;
+  speed: string;
+  pass: string;
+  shoot: string;
+  endurance: string;
   encodedSkills: string;
 }
 

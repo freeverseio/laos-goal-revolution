@@ -11,6 +11,7 @@ export interface Player {
 }
 
 export interface PlayerSkill {
+  playerId: string;
   defence: number;
   speed: number;
   pass: number;
