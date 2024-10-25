@@ -12,6 +12,7 @@ export class TeamHistoryMapper {
     teamHistory.owner = team.owner;
     teamHistory.league_idx = team.league_idx;
     teamHistory.team_idx_in_league = team.team_idx_in_league;
+    teamHistory.leaderboard_position = team.leaderboard_position;
     teamHistory.points = team.points;
     teamHistory.w = team.w;
     teamHistory.d = team.d;
