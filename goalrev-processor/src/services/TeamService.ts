@@ -1,8 +1,7 @@
 import { EntityManager } from "typeorm";
 import { Team } from "../db/entity/Team";
-import { MatchEventOutput, MatchLog, MatchHalf } from "../types";
+import { MatchLog } from "../types";
 import { TeamHistoryMapper } from "./mapper/TeamHistoryMapper";
-import { MatchState } from "../db/entity/Match";
 import { AppDataSource } from "../db/AppDataSource";
 
 export class TeamService {
@@ -50,12 +49,20 @@ export class TeamService {
           team.points += 1; 
           break;
       }
-    } 
-    await entityManager.save(team);
+    }
+    //update rellevant columns in DB
+    await entityManager.update(Team, team.team_id, { 
+      match_log: team.match_log,
+      goals_forward: team.goals_forward, 
+      goals_against: team.goals_against, 
+      training_points: team.training_points,
+      w: team.w, 
+      d: team.d, 
+      l: team.l, 
+      points: team.points
+      // trainings: team.trainings, 
+    }); 
   }
-
-  
-
 
   async updateTeamMatchLog(entityManager: EntityManager, encodedMatchLog: string, team: Team): Promise<void> {
     team.match_log = encodedMatchLog;

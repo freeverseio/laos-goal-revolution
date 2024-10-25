@@ -15,7 +15,7 @@ import { MATCHDAYS_PER_ROUND } from "../utils/constants";
 import { LeagueService } from "./LeagueService";
 import { MatchHistoryRepository } from "../db/repository/MatchHistoryRepository";
 import { MatchHistoryMapper } from "./mapper/MatchHistoryMapper";
-import { TrainingRepository } from "../db/repository/TrainingRepository";
+import { count } from "console";
 
 export class MatchService {
   private playerService: PlayerService;
@@ -176,7 +176,6 @@ export class MatchService {
         }
         match.state = is1stHalf ? MatchState.HALF : MatchState.END;
 
-
         await this.teamService.updateTeamData(playOutput.matchLogs[0], playOutput.matchLogs[1], match.homeTeam!, verseNumber, is1stHalf, true, transactionManager);
         await this.teamService.updateTeamData(playOutput.matchLogs[1], playOutput.matchLogs[0], match.visitorTeam!, verseNumber, is1stHalf, false, transactionManager);
         //  // Update skills, teams, and events within the transaction
@@ -193,8 +192,15 @@ export class MatchService {
         await this.matchHistoryRepository.insertMatchHistory(mapHistory, transactionManager);
       });
     } catch (error) {
-      console.error("Error playing match:", match.match_idx, match.match_day_idx, match.timezone_idx, match.league_idx);
-      console.error(error);
+      console.error("Error playing match:", {
+        timezone_idx: match.timezone_idx,
+        country_idx: match.country_idx,
+        league_idx: match.league_idx,
+        match_day_idx: match.match_day_idx,
+        match_idx: match.match_idx,
+        hometeam_id: match.homeTeam?.team_id,
+        visitorTeam_id: match.visitorTeam?.team_id 
+        }, error);
       return "error";
     }
     return "ok";
