@@ -17,11 +17,10 @@ export class TeamService {
     entityManager: EntityManager
   ): Promise<void> {
    
-    team.goals_forward += matchLog.numberOfGoals;
-    team.goals_against += matchLogOpponent.numberOfGoals;
-    
     team.match_log = matchLog.encodedMatchLog;
     if (!is1stHalf) {
+      team.goals_forward += matchLog.numberOfGoals;
+      team.goals_against += matchLogOpponent.numberOfGoals;
       const teamHistory = TeamHistoryMapper.mapToTeamHistory(team!, verseNumber);
       // Save the updated team back to the database
       await entityManager.save(teamHistory);

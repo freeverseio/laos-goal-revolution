@@ -5,7 +5,7 @@ DECLARE
     current_rank INT;
 BEGIN
     -- Set initial ranking to the number of teams in the league
-    current_rank := 1;
+    current_rank := 0;
 
     -- Iterate over teams ordered by their points (descending)
     FOR current_team IN
