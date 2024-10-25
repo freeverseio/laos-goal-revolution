@@ -95,5 +95,4 @@ export class Team {
   promo_timeout!: number;
 }
 
-
 export type TeamPartialUpdate = DeepPartial<Team>; 

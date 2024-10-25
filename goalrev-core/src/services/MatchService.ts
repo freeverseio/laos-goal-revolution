@@ -70,6 +70,7 @@ export class MatchService {
 
    
     const parsedResult = MatchMapper.mapPlayHalfAndEvolveResult(result);
+    
     if (parsedResult.err != "0") {
       console.error('body', JSON.stringify(body));
       console.error('Error playing 1st half: ', parsedResult.err);
