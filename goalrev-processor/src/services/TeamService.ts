@@ -17,8 +17,9 @@ export class TeamService {
     entityManager: EntityManager
   ): Promise<void> {
    
-    team.goals_forward = matchLog.numberOfGoals;
-    team.goals_against = matchLogOpponent.numberOfGoals;
+    team.goals_forward += matchLog.numberOfGoals;
+    team.goals_against += matchLogOpponent.numberOfGoals;
+    
     team.match_log = matchLog.encodedMatchLog;
     if (!is1stHalf) {
       const teamHistory = TeamHistoryMapper.mapToTeamHistory(team!, verseNumber);
