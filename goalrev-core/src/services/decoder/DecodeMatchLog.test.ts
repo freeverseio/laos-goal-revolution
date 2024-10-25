@@ -5,7 +5,7 @@ describe('DecodeMatchLog', () => {
     {
       encodedLog: "904625697166429907578684580254429362549174092576235409827636622758600564479",
       expected: {
-        numberOfGoals: "15",
+        numberOfGoals: 15,
         penalties: [true, false, true, false, true, false, true],
         outOfGamePlayers: ["14", "13"],
         outOfGameTypes: ["2", "3"],
@@ -27,7 +27,7 @@ describe('DecodeMatchLog', () => {
     }, {
       encodedLog: "452312848583337244297713205707748466433728451888360259471082036387425289570",
       expected: {
-        numberOfGoals: "2",
+        numberOfGoals: 2,
         penalties: [
               false,
               false,

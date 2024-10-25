@@ -19,7 +19,7 @@ export interface MatchLog {
   nDefs: string[];
   nTotHalf: string[];
   winner: number;
-  numberOfGoals: string;
+  numberOfGoals: number;
   teamSumSkills: string;
   trainingPoints: string;
   isHomeStadium: boolean;

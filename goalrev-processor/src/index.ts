@@ -34,19 +34,19 @@ async function playMatches() {
     console.log('[playMatches] Begin playing matches at ' + date);
     const matchService = MatchFactory.createMatchService();
     const result = await matchService.playMatches();
-    
+
     console.log('[playMatches] End calling playMatches at ', date, result);
-    if(result && result.verseTimestamp) {
-      console.log(` verseTimestamp to Date: ` + new Date(result.verseTimestamp * 1000).toLocaleString('en-GB', { timeZone: 'Europe/Madrid' }));      
+    if (result && result.verseTimestamp) {
+      console.log(` verseTimestamp to Date: ` + new Date(result.verseTimestamp * 1000).toLocaleString('en-GB', { timeZone: 'Europe/Madrid' }));
     }
     const timeElapsed = new Date().getTime() - lastPlayMatches.getTime();
     const seconds = (timeElapsed / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
-    console.log(`[playMatches] Time elapsed to play matches: ${hours}:${minutes}:${seconds} (h:m:s)`);       
+    console.log(`[playMatches] Time elapsed to play matches: ${hours}:${minutes}:${seconds} (h:m:s)`);
     playMatchesRunning = false;
 
-  } catch (error) {    
+  } catch (error) {
     console.error('[playMatches] Error calling playMatches at ', date);
     console.error('[playMatches] Error: ', error);
     playMatchesRunning = false;
@@ -54,15 +54,15 @@ async function playMatches() {
 }
 
 AppDataSource.initialize()
-  .then(async () => { 
-    // const playMatchesScheduler = process.env.PLAY_MATCHES_SCHEDULER;
-    // if (!playMatchesScheduler) {
-    //   throw new Error("PLAY_MATCHES_SCHEDULER is not set");
-    // }
-    // cron.schedule(playMatchesScheduler, () => {
-    //   playMatches();
-    // });
-   
+  .then(async () => {
+    const playMatchesScheduler = process.env.PLAY_MATCHES_SCHEDULER;
+    if (!playMatchesScheduler) {
+      throw new Error("PLAY_MATCHES_SCHEDULER is not set");
+    }
+    cron.schedule(playMatchesScheduler, () => {
+      playMatches();
+    });
+
     app.listen(process.env.APP_PORT, () => {
       console.log(`Server is running on port ${process.env.APP_PORT}`);
     });

@@ -88,7 +88,7 @@ export class DecodeMatchLog {
       const isCancelled = ((log >> BigInt(251)) & BigInt(1)) === BigInt(1);
 
       return {
-        numberOfGoals: numberOfGoals.toString(),
+        numberOfGoals,
         penalties,
         outOfGamePlayers: outOfGamePlayers.map(String),
         outOfGameTypes: outOfGameTypes.map(String),
