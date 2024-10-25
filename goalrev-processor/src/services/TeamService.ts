@@ -60,7 +60,6 @@ export class TeamService {
       d: team.d, 
       l: team.l, 
       points: team.points
-      // trainings: team.trainings, 
     }); 
   }
 
