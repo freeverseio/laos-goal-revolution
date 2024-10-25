@@ -18,6 +18,7 @@ import { getMatch1stHalfUTC } from "../utils/calendarUtils";
 import { MATCHDAYS_PER_ROUND } from "../utils/constants/constants";
 import { CalendarService } from "./CalendarService";
 import { CreateTeamResponseToEntityMapper } from "./mapper/CreateTeamResponseToEntityMapper";
+import { MatchMapper } from "./mapper/MatchMapper";
 
 export class LeagueService {
   private teamRepository: TeamRepository;
@@ -49,11 +50,12 @@ export class LeagueService {
     for (let i = 0; i < teams.length; i++) {
       const team = teams[i];
       const players = team.players;
-      const encodedSkills = players.map(player => player.encoded_skills);
-      const rankingPoints = await this.getTeamRankingPoints(team.team_id, encodedSkills, team.leaderboard_position, Number(team.prev_perf_points));
+      const encodedSkills = MatchMapper.calculateTeamSkills(players);
+      const {rankingPoints, prevPerfPoints} = await this.getTeamRankingPoints(team.team_id, encodedSkills, team.leaderboard_position, Number(team.prev_perf_points));
       partialRankingPoints.push({
         team_id: team.team_id,
         ranking_points: rankingPoints.toString(),
+        prev_perf_points: prevPerfPoints.toString()
       });
     }
     const entityManager = AppDataSource.manager;
@@ -177,7 +179,7 @@ export class LeagueService {
     });
   }
 
-  private async getTeamRankingPoints(teamId: string, encodedSkills: string[], leagueRanking: number, prevPerfPoints: number): Promise<number> {
+  private async getTeamRankingPoints(teamId: string, encodedSkills: string[], leagueRanking: number, prevPerfPoints: number): Promise<{rankingPoints: number, prevPerfPoints: number}> {
     const requestBody: RankingPointsInput = {
       leagueRanking,
       prevPerfPoints,
@@ -186,7 +188,15 @@ export class LeagueService {
       skills: encodedSkills,
     }
     const response = await axios.post(`${process.env.CORE_API_URL}/league/computeRankingPoints`, requestBody);
-    return response.data.rankingPoints;
+    if (response.data.err == 0) {
+      return {
+        rankingPoints: response.data.rankingPoints,
+        prevPerfPoints: response.data.prevPerfPoints
+      };
+    } else {
+      console.error('Error computing team ranking points:', response.data);
+      throw new Error('Error computing team ranking points');
+    }
   }
 
   async addDivision(timezoneIdx: number, countryIdx: number, divisionCreationRound: number) {
