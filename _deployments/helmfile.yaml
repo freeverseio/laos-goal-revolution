@@ -47,7 +47,9 @@ helmfiles:
       - imageTag: {{ requiredEnv "CIRCLE_SHA1" }}
       - coreAppPort: {{ .Values.coreAppPort }}
       - ganacheRpcUrl: {{ .Values.ganacheRpcUrl }}
-      - ganacheContractLeagues: {{ .Values.ganacheContractLeagues }}      
+      - ganacheContractLeagues: {{ .Values.ganacheContractLeagues }}    
+      - ganacheContractPlayAndEvolve: {{ .Values.ganacheContractPlayAndEvolve }}
+      - ganacheContractUtils: {{ .Values.ganacheContractUtils }}
   - path: "charts/goalrev-ganache/helmfile.yaml"
     values:
       - namespace: {{ .Values.namespace }}

@@ -32,6 +32,10 @@ spec:
             value: {{ .Values.ganacheRpcUrl }}
           - name: LEAGUES_CONTRACT_ADDRESS
             value: {{ .Values.ganacheContractLeagues | quote }}
+          - name: PLAY_AND_EVOLVE_CONTRACT_ADDRESS
+            value: {{ .Values.ganacheContractPlayAndEvolve | quote }}
+          - name: UTILS_CONTRACT_ADDRESS
+            value: {{ .Values.ganacheContractUtils | quote }}
         ports:
         - containerPort: {{ .Values.coreAppPort }}
 
