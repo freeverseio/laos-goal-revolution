@@ -1,55 +1,115 @@
-CREATE OR REPLACE FUNCTION recalculate_leaderboard_position(timezone_idx INT, country_idx INT, league_idx INT) RETURNS VOID AS $$
+CREATE OR REPLACE FUNCTION recalculate_leaderboard_position(
+    p_timezone_idx INT,
+    p_country_idx INT,
+    p_league_idx INT
+) RETURNS VOID AS $$
 DECLARE
-    current_team RECORD;
-    next_team RECORD;
-    current_rank INT;
+    next_position INT := 0;
+    rank_record RECORD;
+    team_record RECORD;
 BEGIN
-    -- Set initial ranking to the number of teams in the league
-    current_rank := 0;
+    -- Create a temporary table to hold the initial rankings
+    CREATE TEMP TABLE tmp_initial_ranking AS
+    SELECT
+        t.team_id,
+        t.points,
+        t.goals_forward,
+        t.goals_against,
+        (t.goals_forward - t.goals_against) AS goal_difference,
+        RANK() OVER (
+            ORDER BY t.points DESC, (t.goals_forward - t.goals_against) DESC, t.goals_forward DESC
+        ) AS initial_rank
+    FROM
+        public.teams t
+    WHERE
+        t.timezone_idx = p_timezone_idx AND
+        t.country_idx = p_country_idx AND
+        t.league_idx = p_league_idx;
 
-    -- Iterate over teams ordered by their points (descending)
-    FOR current_team IN
-        SELECT team_id, points, goals_forward, goals_against
-        FROM public.teams
-        WHERE public.teams.timezone_idx = $1 AND public.teams.country_idx = $2 AND public.teams.league_idx = $3
-        ORDER BY points DESC, goals_forward - goals_against DESC, goals_forward DESC
+    -- Create a temporary table to hold the final rankings
+    CREATE TEMP TABLE tmp_final_ranking (
+        team_id TEXT,
+        final_rank INT
+    );
+
+    -- Process each group of teams with the same initial_rank
+    FOR rank_record IN
+        SELECT initial_rank
+        FROM tmp_initial_ranking
+        GROUP BY initial_rank
+        ORDER BY initial_rank
     LOOP
-        -- Check if there is a tie with the next team
-        SELECT * INTO next_team
-        FROM public.teams
-        WHERE public.teams.timezone_idx = $1 AND public.teams.country_idx = $2 AND public.teams.league_idx = $3
-          AND points = current_team.points
-          AND team_id <> current_team.team_id
-          AND team_id > current_team.team_id
-        ORDER BY team_id
-        LIMIT 1;
+        -- Get the teams with this initial_rank
+        CREATE TEMP TABLE tmp_tied_teams AS
+        SELECT *
+        FROM tmp_initial_ranking
+        WHERE initial_rank = rank_record.initial_rank;
 
-        IF FOUND THEN
-            -- Calculate head-to-head result
-            DECLARE
-                head_to_head_result INT;
-            BEGIN
-                SELECT COUNT(*) INTO head_to_head_result
-                FROM public.matches
-                WHERE (home_team_id = current_team.team_id AND visitor_team_id = next_team.team_id AND home_goals > visitor_goals)
-                   OR (home_team_id = next_team.team_id AND visitor_team_id = current_team.team_id AND visitor_goals > home_goals);
+        -- Check if there is more than one team tied
+        IF (SELECT COUNT(*) FROM tmp_tied_teams) > 1 THEN
+            -- Calculate head-to-head points among tied teams
+            CREATE TEMP TABLE tmp_head_to_head AS
+            SELECT
+                t.team_id,
+                COALESCE(SUM(
+                    CASE
+                        WHEN (m.home_team_id = t.team_id AND m.home_goals > m.visitor_goals) THEN 3
+                        WHEN (m.home_team_id = t.team_id AND m.home_goals = m.visitor_goals) THEN 1
+                        WHEN (m.visitor_team_id = t.team_id AND m.visitor_goals > m.home_goals) THEN 3
+                        WHEN (m.visitor_team_id = t.team_id AND m.visitor_goals = m.home_goals) THEN 1
+                        ELSE 0
+                    END
+                ), 0) AS head_to_head_points
+            FROM
+                tmp_tied_teams t
+                LEFT JOIN public.matches m ON (
+                    (
+                        (m.home_team_id = t.team_id AND m.visitor_team_id IN (SELECT team_id FROM tmp_tied_teams WHERE team_id <> t.team_id))
+                        OR
+                        (m.visitor_team_id = t.team_id AND m.home_team_id IN (SELECT team_id FROM tmp_tied_teams WHERE team_id <> t.team_id))
+                    )
+                    AND m.timezone_idx = p_timezone_idx
+                    AND m.country_idx = p_country_idx
+                    AND m.league_idx = p_league_idx
+                )
+            GROUP BY
+                t.team_id;
 
-                -- If next team won head-to-head, increment the rank
-                IF head_to_head_result > 0 THEN
-                    UPDATE public.teams
-                    SET leaderboard_position = current_rank + 1
-                    WHERE team_id = next_team.team_id;
-                END IF;
-            END;
+            -- Now order the tied teams by head_to_head_points DESC
+            FOR team_record IN
+                SELECT t.team_id
+                FROM tmp_head_to_head t
+                ORDER BY t.head_to_head_points DESC, t.team_id
+            LOOP
+                INSERT INTO tmp_final_ranking (team_id, final_rank)
+                VALUES (team_record.team_id, next_position);
+                next_position := next_position + 1;
+            END LOOP;
+
+            DROP TABLE tmp_head_to_head;
+
+        ELSE
+            -- Only one team at this rank, assign the next_position
+            INSERT INTO tmp_final_ranking (team_id, final_rank)
+            SELECT team_id, next_position
+            FROM tmp_tied_teams;
+            next_position := next_position + 1;
         END IF;
 
-        -- Update the leaderboard_position for the current team based on its current rank
-        UPDATE public.teams
-        SET leaderboard_position = current_rank
-        WHERE team_id = current_team.team_id;
-
-        -- Increment rank for the next team
-        current_rank := current_rank + 1;
+        DROP TABLE tmp_tied_teams;
     END LOOP;
+
+    -- Update the leaderboard_position in the teams table
+    UPDATE public.teams t
+    SET leaderboard_position = f.final_rank
+    FROM tmp_final_ranking f
+    WHERE t.team_id = f.team_id
+      AND t.timezone_idx = p_timezone_idx
+      AND t.country_idx = p_country_idx
+      AND t.league_idx = p_league_idx;
+
+    -- Clean up temporary tables
+    DROP TABLE tmp_initial_ranking;
+    DROP TABLE tmp_final_ranking;
 END;
 $$ LANGUAGE plpgsql;
