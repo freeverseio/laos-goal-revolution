@@ -52,22 +52,7 @@ export class TeamRepository  {
     return teams;
   }
 
-  async updateLeaderboard(teamId: string, points: number, leaderboardPosition: number, entityManager: EntityManager): Promise<void> {
-    const teamRepository = entityManager.getRepository(Team);
-    await teamRepository.update(teamId, { leaderboard_position: leaderboardPosition });
-  }
-
-  async recalculateLeaderboardPosition(timezoneIdx: number, countryIdx: number, leagueIdx: number, entityManager: EntityManager) {
-    try {
-      // const teamRepository = entityManager.getRepository(Team);
-      // teamRepository.query
-      // Execute the raw SQL to call the function
-      await entityManager.query('SELECT recalculate_leaderboard_position($1, $2, $3)', [timezoneIdx, countryIdx, leagueIdx]);
-      console.log(`Leaderboard recalculated successfully for league : ${leagueIdx} timezone: ${timezoneIdx} country: ${countryIdx}`);
-    } catch (error) {
-      console.error('Error executing recalculate leaderboard position function:', error);
-    }
-  }
+ 
   
   async updateLeagueIdx(teamId: string, leagueIdx: number, transactionalEntityManager: EntityManager): Promise<void> {
     const teamRepository = transactionalEntityManager.getRepository(Team);

@@ -129,7 +129,7 @@ export class LeagueService {
 
   async updateLeaderboard(timezoneIdx: number, countryIdx: number, leagueIdx: number) {
     const entityManager = AppDataSource.manager;
-    await this.teamRepository.recalculateLeaderboardPosition(timezoneIdx, countryIdx, leagueIdx, entityManager);
+    await this.leagueRepository.recalculateLeaderboardPosition(timezoneIdx, countryIdx, leagueIdx, entityManager);
     return true;
   }
   async haveTimezoneLeaguesFinished(timezoneIdx: number): Promise<boolean> {
