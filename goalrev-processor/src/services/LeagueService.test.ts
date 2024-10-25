@@ -13,7 +13,7 @@ import { Verse } from "../db/entity";
 import { AxiosResponse } from "axios";
 import axios from 'axios';
 import { LeagueRepository } from "../db/repository/LeagueRepository";
-import { TrainingCustomRepository } from "../db/repository/TrainingRepository";
+import { TrainingRepository } from "../db/repository/TrainingRepository";
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
@@ -29,7 +29,7 @@ describe("LeagueService", () => {
   let matchEventRepository: jest.Mocked<MatchEventRepository>;
   let calendarService: jest.Mocked<CalendarService>;
   let leagueRepository: jest.Mocked<LeagueRepository>;
-  let trainingRepository: jest.Mocked<TrainingCustomRepository>;
+  let trainingRepository: jest.Mocked<TrainingRepository>;
 
   beforeEach(() => {
     jest.spyOn(console, 'log').mockImplementation(() => {});
@@ -53,6 +53,7 @@ describe("LeagueService", () => {
 
     leagueRepository = {
       countLeaguesByTimezoneAndCountry: jest.fn(),
+      updateLeaderboard: jest.fn(),
     } as any;
 
     calendarService = {

@@ -9,7 +9,7 @@ import { LeagueRepository } from "../db/repository/LeagueRepository";
 import { MatchEventRepository } from "../db/repository/MatchEventRepository";
 import { MatchRepository } from "../db/repository/MatchRepository";
 import { TeamRepository } from "../db/repository/TeamRepository";
-import { TrainingCustomRepository } from "../db/repository/TrainingRepository";
+import { TrainingRepository } from "../db/repository/TrainingRepository";
 import { VerseRepository } from "../db/repository/VerseRepository";
 import { CreateTeamCoreInput, LeagueGroup, Matchday, Schedule, TeamId } from "../types";
 import { RankingPointsInput } from "../types/rest/input/rankingPoints";
@@ -25,7 +25,7 @@ export class LeagueService {
   private verseRepository: VerseRepository;
   private matchEventRepository: MatchEventRepository;
   private leagueRepository: LeagueRepository;
-  private trainingRepository: TrainingCustomRepository;
+  private trainingRepository: TrainingRepository;
 
   constructor(
     teamRepository: TeamRepository, 
@@ -33,7 +33,7 @@ export class LeagueService {
     verseRepository: VerseRepository, 
     matchEventRepository: MatchEventRepository, 
     leagueRepository: LeagueRepository, 
-    trainingRepository: TrainingCustomRepository
+    trainingRepository: TrainingRepository
   ) {
     this.teamRepository = teamRepository;
     this.matchRepository = matchRepository;
@@ -233,6 +233,11 @@ export class LeagueService {
     }
   
     return true;
+  }
+
+  async resetTrainings(timezoneIdx: number, countryIdx: number, leagueIdx: number) {
+    const entityManager = AppDataSource.manager;
+    await this.trainingRepository.resetTrainings(timezoneIdx, countryIdx, leagueIdx, entityManager);
   }
 
 }
