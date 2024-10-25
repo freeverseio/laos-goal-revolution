@@ -101,10 +101,27 @@ export class LeagueService {
   }  
 
   async computeRankingPoints(body: RankingPointsInput): Promise<RankingPointsOutput> {
-    //randomly generate new ranking points from 1 to 100
-    const newRankingPoints = Math.floor(Math.random() * 100) + 1;
-
-    return { rankingPoints: newRankingPoints, err: 0 };
+    try {
+      const result = await this.leaguesContract.computeTeamRankingPoints(
+        body.skills,
+        body.leagueRanking,
+        body.prevPerfPoints,
+        body.teamId,
+        body.isBot
+      );
+      return { 
+        rankingPoints: Number(result[0]), 
+        prevPerfPoints: Number(result[1]),
+        err: 0
+      };
+    } catch (error) {
+      console.error(error);
+      return { 
+        rankingPoints: 0, 
+        prevPerfPoints: 0, 
+        err: 1 
+      };
+    }
   }
 
 }

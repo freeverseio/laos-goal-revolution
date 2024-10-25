@@ -70,9 +70,34 @@ export class MatchService {
     // Use repository to fetch matches
     const matches = await this.matchRepository.getAllMatches(info.timezone, info.matchDay!);
     const seed = crypto.randomBytes(32).toString('hex');
+    if (matches.length == 0) {
+      await this.verseRepository.saveVerse({
+        verseNumber: info.verseNumber!,
+        timezoneIdx: info.timezone,
+        verseTimestamp: info.timestamp ?? 0,
+      }, AppDataSource.manager);
+      
+      //continue playing matches
+      return this.playMatches();
+    }
 
     // Process matches in batches of 8
     await this.processInBatches(matches, 8, seed, info.verseNumber!, (match, seed, verseNumber) => this.playMatch(match, seed, verseNumber));
+
+    // compute league leaderboard
+    if (info.half == 1) {
+      await this.updateLeagueData(matches);
+    }
+   
+
+    let message = "OK";
+    // if last match of the league has been played
+    if (info.matchDay == MATCHDAYS_PER_ROUND - 1 && info.half == 1) {
+      await this.leagueService.computeTeamRankingPointsForTimezone(info.timezone);
+      await this.leagueService.generateCalendarForTimezone(info.timezone); // TODO: wait 8h since last match of the league has been played
+      await this.teamService.resetTeams(); // TODO timezone parameter?
+      message = "Last match of the league has been played";
+    }
 
     // Update the verse timestamp using verseService
     await this.verseRepository.saveVerse({
@@ -81,31 +106,6 @@ export class MatchService {
       verseTimestamp: info.timestamp ?? 0,
     }, AppDataSource.manager);
 
-    // for now we only play matches in timezone 10
-    if (info.timezone != 10) {
-      //continue playing matches
-      return this.playMatches();
-    } else {
-      // compute league leaderboard
-      if (info.half == 1) {
-        await this.updateLeagueData(matches);
-      }
-
-      // if last match of the league has been played
-      if (info.matchDay == MATCHDAYS_PER_ROUND - 1 && info.half == 1) {
-        await this.leagueService.computeTeamRankingPointsForTimezone(info.timezone);
-        await this.leagueService.generateCalendarForTimezone(info.timezone); // TODO: wait 8h since last match of the league has been played
-        await this.teamService.resetTeams(); // TODO timezone parameter?
-        return {
-          verseNumber: info.verseNumber!,
-          timezoneIdx: info.timezone,
-          matchDay: info.matchDay,
-          halfTime: info.half,
-          verseTimestamp: info.timestamp,
-          message: "Last match of the league has been played",
-        };
-      }
-    }
 
     return {
       verseNumber: info.verseNumber!,
@@ -113,7 +113,7 @@ export class MatchService {
       matchDay: info.matchDay,
       halfTime: info.half,
       verseTimestamp: info.timestamp,
-      message: "OK",
+      message: message,
     };
   }
 
@@ -193,7 +193,8 @@ export class MatchService {
         await this.matchHistoryRepository.insertMatchHistory(mapHistory, transactionManager);
       });
     } catch (error) {
-      console.error("Error playing match:", match);
+      console.error("Error playing match:", match.match_idx, match.match_day_idx, match.timezone_idx, match.league_idx);
+      console.error(error);
       return "error";
     }
     return "ok";
