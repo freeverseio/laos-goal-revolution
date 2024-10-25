@@ -1,0 +1,1 @@
+ALTER TABLE teams_histories ADD COLUMN leaderboard_position INT NOT NULL DEFAULT 0;
