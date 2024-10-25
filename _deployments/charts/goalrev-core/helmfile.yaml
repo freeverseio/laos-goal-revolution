@@ -9,3 +9,5 @@ releases:
       - coreAppPort: {{ .Values.coreAppPort }}
       - ganacheRpcUrl: {{ .Values.ganacheRpcUrl }}
       - ganacheContractLeagues: {{ .Values.ganacheContractLeagues }}
+      - ganacheContractPlayAndEvolve: {{ .Values.ganacheContractPlayAndEvolve }}
+      - ganacheContractUtils: {{ .Values.ganacheContractUtils }}
