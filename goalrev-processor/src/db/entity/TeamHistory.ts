@@ -26,6 +26,9 @@ export class TeamHistory {
   @Column({ type: "int" })
   team_idx_in_league!: number;
 
+  @Column({ type: 'int', default: 0 })
+  leaderboard_position!: number;
+
   @Column({ type: "int", default: 0 })
   points!: number;
 
