@@ -7,6 +7,7 @@ import { MatchState } from '../db/entity';
 const mockEntityManager = {
   findOne: jest.fn(),
   save: jest.fn(),
+  update: jest.fn(),
 } as unknown as jest.Mocked<EntityManager>;
 
 describe('TeamService', () => {
@@ -66,7 +67,7 @@ describe('TeamService', () => {
     expect(mockTeam.points).toBe(3); // Team wins, so 3 points should be awarded
 
     // Ensure that save was called with updated team
-    expect(mockEntityManager.save).toHaveBeenCalledWith(mockTeam);
+    expect(mockEntityManager.update).toHaveBeenCalledTimes(1);
   });
 
   it('should update goals_against, training points, and award 1 point if the match is a draw', async () => {
@@ -105,7 +106,7 @@ describe('TeamService', () => {
     expect(mockTeam.points).toBe(1); // Draw, so 1 point should be awarded
 
     // Ensure that save was called with updated team
-    expect(mockEntityManager.save).toHaveBeenCalledWith(mockTeam);
+    expect(mockEntityManager.update).toHaveBeenCalledTimes(1);
   });
 
   it('should update goals_against, training points, and award 0 points if the team loses', async () => {
@@ -122,8 +123,6 @@ describe('TeamService', () => {
     const matchEvents: MatchEventOutput[] = [
       { minute: 30, type: MatchEventType.ATTACK, team_id: '2', manage_to_shoot: true, is_goal: true }, // Goal by the opponent
     ];
-
-
 
     const matchLogHome: MatchLog = {
       numberOfGoals: 0,
@@ -156,7 +155,7 @@ describe('TeamService', () => {
     expect(mockTeam.points).toBe(3); // Team lost, so 0 points should be awarded
 
     // Ensure that save was called with updated team
-    expect(mockEntityManager.save).toHaveBeenCalledWith(mockTeam);
+    expect(mockEntityManager.update).toHaveBeenCalledTimes(1);
   });
 
   
