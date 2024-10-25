@@ -27,11 +27,29 @@ export class TeamService {
       
       // Update training points
       team.training_points = matchLog.trainingPoints;
-      // Update points 
-      team.w += isHome ? (matchLog.winner === 0 ? 1 : 0) : (matchLog.winner===1 ? 1 : 0);
-      team.d += matchLog.winner===2 ? 1 : 0;
-      team.l += isHome ? (matchLog.winner===1 ? 1 : 0) : (matchLog.winner===0 ? 1 : 0);
-      //team.points += matchLog.gamePoints;
+      switch (matchLog.winner) {
+        case 0: // Home team wins
+          if (isHome) {
+            team.w += 1;
+            team.points += 3;
+          } else {
+            team.l += 1;
+          }
+          break;
+        case 1: // Away team wins
+          if (!isHome) {
+            team.w += 1;
+            team.points += 3;
+          } else {
+            team.l += 1;
+          }
+          break;
+      
+        case 2: // Draw
+          team.d += 1;
+          team.points += 1; 
+          break;
+      }
     } 
     await entityManager.save(team);
   }

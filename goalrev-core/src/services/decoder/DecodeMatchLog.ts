@@ -68,7 +68,6 @@ export class DecodeMatchLog {
       ];
 
       const winner = Number((log >> BigInt(210)) & BigInt(3));
-      const gamePoints = winner;
 
       const teamSumSkills = Number((log >> BigInt(212)) & BigInt(16777215)); // 2^24 - 1
       if (teamSumSkills < 0 || teamSumSkills > 16777215) {
@@ -99,8 +98,7 @@ export class DecodeMatchLog {
         halfTimeSubstitutions: halfTimeSubstitutions.map(String),
         nDefs: nDefs.map(String),
         nTotHalf: nTotHalf.map(String),
-        winner: winner.toString(),
-        gamePoints: gamePoints.toString(),
+        winner: winner,
         teamSumSkills: teamSumSkills.toString(),
         trainingPoints: trainingPoints.toString(),
         isHomeStadium,

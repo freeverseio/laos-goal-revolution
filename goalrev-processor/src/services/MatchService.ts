@@ -138,7 +138,7 @@ export class MatchService {
 
     // update each league leaderboard by timezone_idx, country_idx, league_idx
     for (const obj of result.result) {
-      await this.leagueService.updateLeaderboard(obj.timezone_idx, obj.country_idx, obj.league_idx, obj.match_day_idx);
+      await this.leagueService.updateLeaderboard(obj.timezone_idx, obj.country_idx, obj.league_idx);
     }
   }
 
@@ -160,7 +160,6 @@ export class MatchService {
         const endpoint = is1stHalf ? "play1stHalf" : "play2ndHalf";
         const response = await axios.post(`${process.env.CORE_API_URL}/match/${endpoint}`, requestBody);
         const playOutput = response.data as PlayOutput;
-
         await this.matchEventService.saveMatchEvents(playOutput.matchEvents, match, transactionManager);
 
         match.home_goals = playOutput.matchLogs[0].numberOfGoals;

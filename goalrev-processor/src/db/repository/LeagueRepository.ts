@@ -8,4 +8,6 @@ export class LeagueRepository {
     const leagueRepository = transactionalEntityManager.getRepository(League);
     return await leagueRepository.count({ where: { timezone_idx: timezoneIdx, country_idx: countryIdx } });
   }
+
+  
 }
