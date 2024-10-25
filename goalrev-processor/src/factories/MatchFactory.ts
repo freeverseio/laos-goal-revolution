@@ -24,6 +24,7 @@ export class MatchFactory {
     const matchHistoryRepository = new MatchHistoryRepository();
     const calendarService = new CalendarService(verseRepository); 
     const leagueService = LeagueFactory.createLeagueService();
+    
     // Create and return the MatchService with injected dependencies
     return new MatchService(
       playerService,

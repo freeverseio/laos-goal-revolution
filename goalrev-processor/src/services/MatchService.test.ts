@@ -67,6 +67,7 @@ jest.mock('./LeagueService');
 const mockLeagueService = {
   generateCalendarForTimezone: jest.fn(),
   updateLeaderboard: jest.fn(),
+  resetTrainings: jest.fn(),
 } as unknown as LeagueService;
 
 // Mock for EntityManager

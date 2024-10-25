@@ -2,7 +2,7 @@ import { EntityManager } from "typeorm";
 import { Team } from "../entity/Team";
 import { Training } from "../entity/Training";
 
-export class TrainingCustomRepository {
+export class TrainingRepository {
 
   // Create a default training for each Team in a specific timezone
   async createDefaultTrainingByTimezone(timezoneIdx: number, entityManager: EntityManager): Promise<void> {
@@ -52,7 +52,7 @@ export class TrainingCustomRepository {
   }
 
   // Reset trainings for each Team in a specific timezone
-  async resetTrainingsByTimezone(timezoneIdx: number, entityManager: EntityManager): Promise<void> {
+  async resetTrainings(timezoneIdx: number, countryIdx: number, leagueIdx: number, entityManager: EntityManager): Promise<void> {
     // Use the EntityManager to execute a raw SQL update query
     await entityManager.query(`
       UPDATE trainings
@@ -85,6 +85,8 @@ export class TrainingCustomRepository {
       FROM teams
       WHERE teams.team_id = trainings.team_id
       AND teams.timezone_idx = $1
-    `, [timezoneIdx]);
+      AND teams.country_idx = $2
+      AND teams.league_idx = $3
+    `, [timezoneIdx, countryIdx, leagueIdx]);
   }
 }

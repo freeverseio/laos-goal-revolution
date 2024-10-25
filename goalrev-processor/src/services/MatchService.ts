@@ -15,6 +15,7 @@ import { MATCHDAYS_PER_ROUND } from "../utils/constants";
 import { LeagueService } from "./LeagueService";
 import { MatchHistoryRepository } from "../db/repository/MatchHistoryRepository";
 import { MatchHistoryMapper } from "./mapper/MatchHistoryMapper";
+import { TrainingRepository } from "../db/repository/TrainingRepository";
 
 export class MatchService {
   private playerService: PlayerService;
@@ -25,6 +26,8 @@ export class MatchService {
   private matchRepository: MatchRepository;
   private matchHistoryRepository: MatchHistoryRepository;
   private leagueService: LeagueService;
+
+
   constructor(
     playerService: PlayerService,
     teamService: TeamService,
@@ -33,7 +36,8 @@ export class MatchService {
     verseRepository: VerseRepository,
     matchRepository: MatchRepository,
     matchHistoryRepository: MatchHistoryRepository,
-    leagueService: LeagueService
+    leagueService: LeagueService,
+
   ) {
     this.playerService = playerService;
     this.teamService = teamService;
@@ -43,6 +47,7 @@ export class MatchService {
     this.matchRepository = matchRepository;
     this.leagueService = leagueService;
     this.matchHistoryRepository = matchHistoryRepository;
+
   }
 
   async playMatches(): Promise<any> {
@@ -83,7 +88,7 @@ export class MatchService {
     } else {
       // compute league leaderboard
       if (info.half == 1) {
-        await this.updateLeagueLederbord(matches);
+        await this.updateLeagueData(matches);
       }
 
       // if last match of the league has been played
@@ -125,7 +130,7 @@ export class MatchService {
     return results;
   }
 
-  private async updateLeagueLederbord(matches: Match[]) {
+  private async updateLeagueData(matches: Match[]) {
     const result = matches.reduce((acc: { set: Set<string>; result: { timezone_idx: number; country_idx: number; league_idx: number; match_day_idx: number; }[]; }, match: Match) => {
       const obj = { timezone_idx: match.timezone_idx, country_idx: match.country_idx, league_idx: match.league_idx, match_day_idx: match.match_day_idx };
       const key = JSON.stringify(obj);
@@ -136,8 +141,9 @@ export class MatchService {
       return acc;
     }, { set: new Set<string>(), result: [] });
 
-    // update each league leaderboard by timezone_idx, country_idx, league_idx
+    // update each league leaderboard by timezone_idx, country_idx, league_idx & reset trainings
     for (const obj of result.result) {
+      await this.leagueService.resetTrainings(obj.timezone_idx, obj.country_idx, obj.league_idx);
       await this.leagueService.updateLeaderboard(obj.timezone_idx, obj.country_idx, obj.league_idx);
     }
   }
