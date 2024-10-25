@@ -18,7 +18,8 @@ describe("LeagueService", () => {
     // Mock the ethers provider and contract
     mockProvider = new ethers.JsonRpcProvider(process.env.RPC_URL) as jest.Mocked<ethers.JsonRpcProvider>;
     mockContract = {
-      computeLeagueLeaderBoard: jest.fn()
+      computeLeagueLeaderBoard: jest.fn(),
+      computeTeamRankingPoints: jest.fn()
     } as unknown as jest.Mocked<ethers.Contract>;
 
     (ethers.JsonRpcProvider as jest.Mock).mockReturnValue(mockProvider);
@@ -82,6 +83,7 @@ describe("LeagueService", () => {
 
   describe("computeLeagueLeaderboard", () => {
     it("should return empty teams and error if matches are empty", async () => {
+      
       const input: LeagueLeaderboardInput = {
         teams: [
           { teamId: 1, teamIdxInLeague: 0 },
@@ -163,6 +165,7 @@ describe("LeagueService", () => {
 
   describe("computeRankingPoints", () => {
     it("should return a valid rankingPoints value", async () => {
+      (mockContract.computeTeamRankingPoints as unknown as jest.Mock).mockResolvedValue([BigInt(1), BigInt(10)]);
       // Fix: Provide correct input structure
       const input: RankingPointsInput = {
         leagueRanking: 1,
@@ -174,8 +177,8 @@ describe("LeagueService", () => {
 
       const result = await leagueService.computeRankingPoints(input);
 
-      expect(result.rankingPoints).toBeGreaterThanOrEqual(1);
-      expect(result.rankingPoints).toBeLessThanOrEqual(100);
+      expect(result.rankingPoints).toBe(1);
+      expect(result.prevPerfPoints).toBe(10);
       expect(result.err).toBe(0);
     });
   });
