@@ -127,41 +127,12 @@ export class LeagueService {
     };
   }
 
-  async updateLeaderboard(timezoneIdx: number, countryIdx: number, leagueIdx: number, matchDayIdx: number) {
-    // getMatches
-    const leagueMatches = await this.matchRepository.getLeagueMatches(timezoneIdx, countryIdx, leagueIdx);
-    const leagueMatchesInput = leagueMatches.map(match => ({
-      homeGoals: match.home_goals,
-      visitorGoals: match.visitor_goals
-    }));
-
-    // getTeams
-    const teams = await this.teamRepository.findTeamsByTimezoneCountryAndLeague(timezoneIdx, countryIdx, leagueIdx);
-    const teamsInput = teams.map(team => ({
-      teamId: team.team_id,
-      teamIdxInLeague: team.team_idx_in_league,
-    }));
-
-    // call goalrev-core
-    const requestBody = {
-      teams: teamsInput,
-      matchDay: matchDayIdx,
-      matches: leagueMatchesInput,
-    }
-    const response = await axios.post(`${process.env.CORE_API_URL}/league/computeLeagueLeaderboard`, requestBody, {
-      headers: {
-        'Cache-Control': 'no-cache'
-      }
-    });
-
-    // update DB
-    const transactionalEntityManager = AppDataSource.manager;
-    for (const team of response.data.teams) {
-      await this.teamRepository.updateLeaderboard(team.teamId, team.teamPoints, team.leaderboardPosition, transactionalEntityManager);
-    }
-
+  async updateLeaderboard(timezoneIdx: number, countryIdx: number, leagueIdx: number) {
+    const entityManager = AppDataSource.manager;
+    await this.leagueRepository.recalculateLeaderboardPosition(timezoneIdx, countryIdx, leagueIdx, entityManager);
     return true;
   }
+
   async haveTimezoneLeaguesFinished(timezoneIdx: number): Promise<boolean> {
     const pendingMatches = await this.matchRepository.countPendingMatchesByTimezone(timezoneIdx);
     return pendingMatches <= 0;

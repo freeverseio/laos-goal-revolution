@@ -34,9 +34,20 @@ describe('TeamService', () => {
       { minute: 60, type: MatchEventType.ATTACK, team_id: '1', manage_to_shoot: true, is_goal: true }, // Another goal by the team
     ];
 
-    const matchLog: MatchLog = {
+    const matchLogHome: MatchLog = {
       numberOfGoals: 2,
-      gamePoints: 3, // Team wins, so 3 points
+      winner: 0,
+      teamSumSkills: 0,
+      trainingPoints: 50,
+      isHomeStadium: true,
+      changesAtHalftime: 0,
+      isCancelled: false,
+      encodedMatchLog: '',
+    };
+
+    const matchLogVisitor: MatchLog = {
+      numberOfGoals: 1,
+      winner: 0,
       teamSumSkills: 0,
       trainingPoints: 50,
       isHomeStadium: false,
@@ -45,7 +56,8 @@ describe('TeamService', () => {
       encodedMatchLog: '',
     };
 
-    await teamService.updateTeamData(matchLog, matchEvents, mockTeam, 1, false, mockEntityManager);
+
+    await teamService.updateTeamData(matchLogHome, matchLogVisitor, mockTeam, 1, false, true, mockEntityManager);
 
     // Check that goals_forward, goals_against, training_points, and points were updated
     expect(mockTeam.goals_forward).toBe(2); // Team scored 2 goals
@@ -75,7 +87,7 @@ describe('TeamService', () => {
 
     const matchLog: MatchLog = {
       numberOfGoals: 1,
-      gamePoints: 1, // Draw, so 1 point
+      winner: 2,
       teamSumSkills: 0,
       trainingPoints: 50,
       isHomeStadium: false,
@@ -84,7 +96,7 @@ describe('TeamService', () => {
       encodedMatchLog: '',
     };
 
-    await teamService.updateTeamData(matchLog, matchEvents, mockTeam, 1, false, mockEntityManager);
+    await teamService.updateTeamData(matchLog, matchLog, mockTeam, 1, false, false, mockEntityManager);
 
     // Check that goals_forward, goals_against, training_points, and points were updated
     expect(mockTeam.goals_forward).toBe(1); // Team scored 1 goal
@@ -113,9 +125,9 @@ describe('TeamService', () => {
 
 
 
-    const matchLog: MatchLog = {
+    const matchLogHome: MatchLog = {
       numberOfGoals: 0,
-      gamePoints: 0, // Team loses, no points
+      winner: 1,
       teamSumSkills: 0,
       trainingPoints: 50,
       isHomeStadium: false,
@@ -124,13 +136,24 @@ describe('TeamService', () => {
       encodedMatchLog: '',
     };
 
-    await teamService.updateTeamData(matchLog, matchEvents, mockTeam, 1, false, mockEntityManager);
+    const matchLogVisitor: MatchLog = {
+      numberOfGoals: 1,
+      winner: 1,
+      teamSumSkills: 0,
+      trainingPoints: 50,
+      isHomeStadium: true,
+      changesAtHalftime: 0,
+      isCancelled: false,
+      encodedMatchLog: '',
+    };
+
+    await teamService.updateTeamData( matchLogVisitor, matchLogHome, mockTeam, 1, false, false, mockEntityManager);
 
     // Check that goals_forward, goals_against, training_points, and points were updated
-    expect(mockTeam.goals_forward).toBe(0); // Team scored 0 goals
-    expect(mockTeam.goals_against).toBe(1); // Opponent scored 1 goal
+    expect(mockTeam.goals_forward).toBe(1); // Team scored 0 goals
+    expect(mockTeam.goals_against).toBe(0); // Opponent scored 1 goal
     expect(mockTeam.training_points).toBe(50); // Training points should be updated
-    expect(mockTeam.points).toBe(0); // Team lost, so 0 points should be awarded
+    expect(mockTeam.points).toBe(3); // Team lost, so 0 points should be awarded
 
     // Ensure that save was called with updated team
     expect(mockEntityManager.save).toHaveBeenCalledWith(mockTeam);

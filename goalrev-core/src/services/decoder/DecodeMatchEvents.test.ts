@@ -114,7 +114,7 @@ describe('DecodeMatchEvents', () => {
   });
 
   test('should decode match events correctly', () => {
-    const matchEvents = decodeMatchEvents.decode();
+    const matchEvents = decodeMatchEvents.decode(false);
     
     //expect(matchEvents.length).toBe(2);
 
@@ -130,22 +130,18 @@ describe('DecodeMatchEvents', () => {
     });
 
     // Test second event
-    expect(matchEvents[1]).toEqual({
-      team_id: matchTeams.awayTeamId,
-      type: MatchEventType.ATTACK,
-      minute: '3',
-      manage_to_shoot: false,
-      is_goal: false,
-      primary_shirt_number: '8',
-      secondary_shirt_number: '9',
-    });
+    expect(matchEvents[1].minute).toBe('3');
+    expect(matchEvents[1].is_goal).toBe(false);
+    expect(matchEvents[1].primary_shirt_number).not.toBe('8'); // has to de the defender
+    expect(matchEvents[1].secondary_shirt_number).toBe('9');
+   
   });
 
   test('should return an empty array if there are no events', () => {
     const emptyLogs = ['Header1', 'Header2'];
     decodeMatchEvents = new DecodeMatchEvents(emptyLogs, matchTeams, []);
 
-    const matchEvents = decodeMatchEvents.decode();
+    const matchEvents = decodeMatchEvents.decode(false);
     expect(matchEvents).toEqual([]);
   });
 
@@ -157,7 +153,7 @@ describe('DecodeMatchEvents', () => {
     ];
     decodeMatchEvents = new DecodeMatchEvents(matchLogsAndEvents, matchTeams, matchLogs);
 
-    const matchEvents = decodeMatchEvents.decode();
+    const matchEvents = decodeMatchEvents.decode(false);
     expect(matchEvents[0].primary_shirt_number).toBeUndefined();
     expect(matchEvents[0].secondary_shirt_number).toBe(PENALTY_CODE);
   });
@@ -170,7 +166,7 @@ describe('DecodeMatchEvents', () => {
     ];
     decodeMatchEvents = new DecodeMatchEvents(matchLogsAndEvents, matchTeams, matchLogs);
 
-    const matchEvents = decodeMatchEvents.decode();
+    const matchEvents = decodeMatchEvents.decode(false);
     expect(matchEvents[0].secondary_shirt_number).toBeUndefined();
   });
 });

@@ -129,9 +129,10 @@ const originalLog = console.log;
 describe('MatchService', () => {
   let matchService: MatchService;
 
-  beforeEach(() => {
+  beforeEach(() => {    
     jest.clearAllMocks(); // Clear all previous mocks
     jest.spyOn(console, 'log').mockImplementation(() => {});
+    jest.spyOn(console, 'time').mockImplementation(() => {});
 
     matchService = new MatchService(
       mockPlayerService,

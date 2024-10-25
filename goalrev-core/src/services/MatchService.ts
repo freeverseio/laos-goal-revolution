@@ -84,7 +84,7 @@ export class MatchService {
       tacticsHome: tactics[0],
       tacticsAway: tactics[1],
     }, decodedMatchLogs);
-    const matchEvents: MatchEvent[] = matchEventsDecoder.decode();
+    const matchEvents: MatchEvent[] = matchEventsDecoder.decode(false);
     return {
       updatedSkills,
       matchLogs: decodedMatchLogs,
@@ -141,7 +141,7 @@ export class MatchService {
       tacticsHome: tactics[0],
       tacticsAway: tactics[1],
     }, decodedMatchLogs);
-    const matchEvents: MatchEvent[] = matchEventsDecoder.decode();
+    const matchEvents: MatchEvent[] = matchEventsDecoder.decode(true);
   
     return {
       updatedSkills,

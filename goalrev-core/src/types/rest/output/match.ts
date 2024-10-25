@@ -9,7 +9,6 @@ export interface PlayOutput {
 
 
 export interface MatchLog {
-
   penalties: boolean[];
   outOfGamePlayers: string[];
   outOfGameTypes: string[];
@@ -19,9 +18,8 @@ export interface MatchLog {
   halfTimeSubstitutions: string[];
   nDefs: string[];
   nTotHalf: string[];
-  winner: string;
-  numberOfGoals: string;
-  gamePoints: string;
+  winner: number;
+  numberOfGoals: number;
   teamSumSkills: string;
   trainingPoints: string;
   isHomeStadium: boolean;

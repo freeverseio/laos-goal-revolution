@@ -52,10 +52,7 @@ export class TeamRepository  {
     return teams;
   }
 
-  async updateLeaderboard(teamId: string, points: number, leaderboardPosition: number, transactionalEntityManager: EntityManager): Promise<void> {
-    const teamRepository = transactionalEntityManager.getRepository(Team);
-    await teamRepository.update(teamId, { points: points, leaderboard_position: leaderboardPosition });
-  }
+ 
   
   async updateLeagueIdx(teamId: string, leagueIdx: number, transactionalEntityManager: EntityManager): Promise<void> {
     const teamRepository = transactionalEntityManager.getRepository(Team);

@@ -8,7 +8,7 @@ export class CreateTeamResponseToEntityMapper {
     {response: CreateTeamResponse, timezoneIdx: number, countryIdx: number, league_idx: number, team_idx_in_league: number, leaderboard_position: number}): Team {
     return  {
       team_id: response.id,
-      name: 'Mock Team ' + response.id,
+      name: response.id + 'Mock Team ',
       manager_name: 'Mock Manager ' + response.id,
       tactic: DEFAULT_ENCODED_TACTIC,
       country: {
