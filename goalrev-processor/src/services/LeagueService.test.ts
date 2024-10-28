@@ -178,4 +178,11 @@ describe("LeagueService", () => {
     });
   });
 
+  describe("normalizeRankingPoints", () => {
+    it("should normalize ranking points", () => {
+      const result = leagueService.normalizeRankingPoints("49217641126035460");
+      expect(result).toBe("1018");
+    });
+  });
+
 });

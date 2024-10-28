@@ -52,9 +52,10 @@ export class LeagueService {
       const players = team.players;
       const encodedSkills = MatchMapper.calculateTeamSkills(players);
       const {rankingPoints, prevPerfPoints} = await this.getTeamRankingPoints(team.team_id, encodedSkills, team.leaderboard_position, Number(team.prev_perf_points));
+      
       partialRankingPoints.push({
         team_id: team.team_id,
-        ranking_points: rankingPoints.toString(),
+        ranking_points: this.normalizeRankingPoints(rankingPoints),
         prev_perf_points: prevPerfPoints.toString()
       });
     }
@@ -62,6 +63,15 @@ export class LeagueService {
     await entityManager.transaction(async (transactionalEntityManager) => {
       await this.teamRepository.bulkUpdate(partialRankingPoints, transactionalEntityManager);
     });
+  }
+
+  normalizeRankingPoints(rankingPoints: string): string {
+    // Convert the input rankingPoints from a string to BigInt
+    const rankingPointsBigInt = BigInt(rankingPoints);
+    // Calculate the normalized ranking points using BigInt math
+    const normalizedRankingPoints = rankingPointsBigInt  / (48318382080000n) ;
+    // Convert the result back to a string
+    return normalizedRankingPoints.toString();
   }
 
 
@@ -179,7 +189,7 @@ export class LeagueService {
     });
   }
 
-  private async getTeamRankingPoints(teamId: string, encodedSkills: string[], leagueRanking: number, prevPerfPoints: number): Promise<{rankingPoints: number, prevPerfPoints: number}> {
+  private async getTeamRankingPoints(teamId: string, encodedSkills: string[], leagueRanking: number, prevPerfPoints: number): Promise<{rankingPoints: string, prevPerfPoints: number}> {
     const requestBody: RankingPointsInput = {
       leagueRanking,
       prevPerfPoints,

@@ -52,7 +52,6 @@ export class MatchService {
 
   async playMatches(): Promise<any> {
     const info = await this.calendarService.getCalendarInfo();
-    info.verseNumber
 
     // Check if timestamp to play is in the future
     if (this.checkTimestampInFuture(info.timestamp!)) {
