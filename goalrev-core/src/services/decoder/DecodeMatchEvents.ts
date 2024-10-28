@@ -7,7 +7,7 @@ export default class DecodeMatchEvents {
   private matchEvents: [string, string, string, string, string][]; // Array of 5-string tuples
   private matchTeams: MatchTeams;
   private matchLogs: MatchLog[];
-  
+
   constructor(matchLogsAndEvents: string[], matchTeams: MatchTeams, matchLogs: MatchLog[]) {
     this.matchLogsAndEvents = matchLogsAndEvents;
     this.matchEvents = [];
@@ -65,7 +65,7 @@ export default class DecodeMatchEvents {
       if (assister !== '0') {
         const assisterId = this.getShirtNumberFromIdx(assister, teamThatAttacks === TeamType.HOME);
         if (assisterId !== '' && assister !== shooterId) {
-        matchEvent.secondary_shirt_number = assisterId;
+          matchEvent.secondary_shirt_number = assisterId;
         }
       }
     }
@@ -96,23 +96,23 @@ export default class DecodeMatchEvents {
 
   private addCardsAndInjuries(is2ndHalf: boolean): MatchEvent[] {
     const injuryAndCardsEvents: MatchEvent[] = [];
+    const MAX_MINUTES = 45;
+
     for (let teamIdx = 0; teamIdx < this.matchLogs.length; teamIdx++) {
       const matchLog = this.matchLogs[teamIdx];
       const teamType = teamIdx === 0 ? TeamType.HOME : TeamType.AWAY;
 
-      // Extract out-of-game player, type, and round information
+      // Process out-of-game players for red cards and injuries
       for (let i = 0; i < matchLog.outOfGamePlayers.length; i++) {
         const outOfGamePlayer = matchLog.outOfGamePlayers[i];
         const outOfGameType = matchLog.outOfGameTypes[i];
         const outOfGameRound = matchLog.outOfGameRounds[i];
 
-        if (outOfGamePlayer !== '14' && outOfGameType !== '0') { // 14 represents no player affected
-          
+        if (outOfGamePlayer !== '14' && outOfGameType !== '0') { // '14' means no player affected
           const primaryPlayer = this.getShirtNumberFromIdx(outOfGamePlayer, teamType === TeamType.HOME);
-          
-          const minute = Math.floor(parseInt(outOfGameRound) * (45 / ROUNDS_PER_MATCH)) + (is2ndHalf ? 45 : 0);
-          let typeOfEvent: MatchEventType;
+          const outOfGameMinute = Math.floor(parseInt(outOfGameRound) * (45 / ROUNDS_PER_MATCH)) + (is2ndHalf ? 45 : 0);
 
+          let typeOfEvent: MatchEventType;
           switch (outOfGameType) {
             case '1':
               typeOfEvent = MatchEventType.INJURY_SOFT;
@@ -128,7 +128,7 @@ export default class DecodeMatchEvents {
           }
 
           injuryAndCardsEvents.push({
-            minute: minute.toString(),
+            minute: outOfGameMinute.toString(),
             type: typeOfEvent,
             team_id: teamType === TeamType.HOME ? this.matchTeams.homeTeamId : this.matchTeams.awayTeamId,
             primary_shirt_number: primaryPlayer,
@@ -139,14 +139,27 @@ export default class DecodeMatchEvents {
         }
       }
 
-      // Extract yellow cards
+      // Process yellow cards with randomness
       for (let i = 0; i < matchLog.yellowCards.length; i++) {
         const yellowCardPlayer = matchLog.yellowCards[i];
-        if (yellowCardPlayer !== '14') { // 14 represents no yellow card given
+        if (yellowCardPlayer !== '14') { // '14' means no yellow card given
           const primaryPlayer = this.getShirtNumberFromIdx(yellowCardPlayer, teamType === TeamType.HOME);
-          const minute = Math.floor((i + 1) * 45 / ROUNDS_PER_MATCH);
+
+          let maxMinute = MAX_MINUTES;
+          let yellowMinute: number;
+          const outOfGamePlayerIdx = matchLog.outOfGamePlayers.indexOf(yellowCardPlayer);
+
+          if (outOfGamePlayerIdx !== -1) {
+            const outOfGameRound = matchLog.outOfGameRounds[outOfGamePlayerIdx];
+            const outOfGameMinute = Math.floor(parseInt(outOfGameRound) * (45 / ROUNDS_PER_MATCH)) + (is2ndHalf ? 45 : 0);
+            maxMinute = outOfGameMinute > 0 ? outOfGameMinute - 1 : outOfGameMinute;
+          }
+
+          // Generate a pseudo-random minute for the yellow card, ensuring it doesn't exceed `maxMinute`
+          yellowMinute = this.generateRandomMinute(i, yellowCardPlayer, maxMinute);
+
           injuryAndCardsEvents.push({
-            minute: minute.toString(),
+            minute: yellowMinute.toString(),
             type: MatchEventType.YELLOW_CARD,
             team_id: teamType === TeamType.HOME ? this.matchTeams.homeTeamId : this.matchTeams.awayTeamId,
             primary_shirt_number: primaryPlayer,
@@ -157,6 +170,15 @@ export default class DecodeMatchEvents {
         }
       }
     }
+
     return injuryAndCardsEvents;
   }
+
+
+  private generateRandomMinute(seed: number, player: string, maxMinute: number): number {
+    const salt = `c${player}`;
+    const pseudoRandomValue = parseInt(salt.split('').reduce((acc, char) => acc + char.charCodeAt(0), seed.toString()), 36);
+    return Math.floor((pseudoRandomValue % maxMinute) + 1);
+  }
+
 }
