@@ -52,9 +52,10 @@ export class LeagueService {
       const players = team.players;
       const encodedSkills = MatchMapper.calculateTeamSkills(players);
       const {rankingPoints, prevPerfPoints} = await this.getTeamRankingPoints(team.team_id, encodedSkills, team.leaderboard_position, Number(team.prev_perf_points));
+      
       partialRankingPoints.push({
         team_id: team.team_id,
-        ranking_points: rankingPoints.toString(),
+        ranking_points: this.normalizeRankingPoints(rankingPoints),
         prev_perf_points: prevPerfPoints.toString()
       });
     }
@@ -62,6 +63,12 @@ export class LeagueService {
     await entityManager.transaction(async (transactionalEntityManager) => {
       await this.teamRepository.bulkUpdate(partialRankingPoints, transactionalEntityManager);
     });
+  }
+
+  private normalizeRankingPoints(rankingPoints: number): string {
+    const logPoints = Math.log(rankingPoints);
+    const normalized = (logPoints / Math.log(Number.MAX_SAFE_INTEGER)) * 1000;
+    return Math.floor(normalized).toString();
   }
 
 
