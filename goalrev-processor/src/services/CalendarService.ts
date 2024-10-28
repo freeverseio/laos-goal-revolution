@@ -29,6 +29,22 @@ export class CalendarService {
     };
   }
 
+  async getCalendarInfoAtVerse(verse: number): Promise<TimeZoneData> {
+    const entityManager = AppDataSource.manager;
+    const lastVerse = await this.verseRepository.getLastVerse(entityManager);
+    const firstVerse = await this.verseRepository.getInitialVerse(entityManager);
+    if (!lastVerse || !firstVerse) {
+      throw new Error("No verses found");
+    }
+    //  Unix Epoch timestamp in milliseconds
+    const firstVerseTimestamp = Number(firstVerse!.verseTimestamp);
+    const info = calendarInfo(verse, Number(firstVerse!.timezoneIdx), firstVerseTimestamp); // Convert timezone to number
+    return {
+      ...info,
+      verseNumber: verse
+    };
+  }
+
   static generateLeagueSchedule(teams: string[]): Matchday[] {
     const nTeams = teams.length;
 

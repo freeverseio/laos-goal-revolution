@@ -35,15 +35,15 @@ async function playMatches() {
     const matchService = MatchFactory.createMatchService();
     const result = await matchService.playMatches();
 
-    console.log('[playMatches] End calling playMatches at ', date, result);
     if (result && result.verseTimestamp) {
-      console.log(` verseTimestamp to Date: ` + new Date(result.verseTimestamp * 1000).toLocaleString('en-GB', { timeZone: 'Europe/Madrid' }));
+      console.log(` verseNumber: ${result.verseNumber}, timezoneIdx: ${result.timezoneIdx}, matchDay ${result.matchDay}, halfTime: ${result.halfTime}, verseTimestamp to Date: ` + new Date(result.verseTimestamp * 1000).toLocaleString('en-GB', { timeZone: 'Europe/Madrid' }));
+      console.log(` message: ${result.message}`);
     }
     const timeElapsed = new Date().getTime() - lastPlayMatches.getTime();
     const seconds = (timeElapsed / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
-    console.log(`[playMatches] Time elapsed to play matches: ${hours}:${minutes}:${seconds} (h:m:s)`);
+    console.log(` Time elapsed to play matches: ${hours}:${minutes}:${seconds} (h:m:s)`);
     playMatchesRunning = false;
 
   } catch (error) {

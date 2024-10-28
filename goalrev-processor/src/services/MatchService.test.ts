@@ -61,6 +61,7 @@ const mockVerseRepository = {
 jest.mock('./CalendarService');
 const mockCalendarService = {
   getCalendarInfo: jest.fn(),
+  getCalendarInfoAtVerse: jest.fn(),
 } as unknown as CalendarService;
 
 jest.mock('./LeagueService');
@@ -160,6 +161,7 @@ describe('MatchService', () => {
       jest.spyOn(mockMatchRepository, 'getAllMatches').mockResolvedValue(mockMatches);
 
       jest.spyOn(mockCalendarService, 'getCalendarInfo').mockResolvedValue({ verseNumber: 0, timestamp: 1520000, timezone: 10, matchDay: 1, half: 1, leagueRound: 1 } as TimeZoneData);
+      jest.spyOn(mockCalendarService, 'getCalendarInfoAtVerse').mockResolvedValue({ verseNumber: 4, timestamp: 1520900, timezone: 11, matchDay: 1, half: 1, leagueRound: 1 } as TimeZoneData);
 
       const playMatchSpy = jest.spyOn(matchService, 'playMatch').mockResolvedValue('ok');
       const verseServiceSpy = jest.spyOn(mockVerseRepository, 'getInitialVerse').mockResolvedValue({ verseNumber: 0, verseTimestamp: 1620000, timezoneIdx: 10 } as Verse);
