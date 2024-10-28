@@ -66,15 +66,13 @@ export class LeagueService {
   }
 
   normalizeRankingPoints(rankingPoints: string): string {
-    // Define MAX_RANKING_POINTS as a BigInt directly
-    const MAX_RANKING_POINTS = 18446744073709551615n;
     // Convert the input rankingPoints from a string to BigInt
     const rankingPointsBigInt = BigInt(rankingPoints);
     // Calculate the normalized ranking points using BigInt math
-    const normalizedRankingPoints = (rankingPointsBigInt * BigInt(Number.MAX_SAFE_INTEGER)) / MAX_RANKING_POINTS;
+    const normalizedRankingPoints = rankingPointsBigInt  / (48318382080000n) ;
     // Convert the result back to a string
     return normalizedRankingPoints.toString();
-}
+  }
 
 
   async generateCalendarForTimezone(timezoneIdx: number): Promise<Schedule[]> {
