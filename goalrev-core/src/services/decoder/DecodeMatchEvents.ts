@@ -153,7 +153,6 @@ export default class DecodeMatchEvents {
             const outOfGameRound = matchLog.outOfGameRounds[outOfGamePlayerIdx];
             const outOfGameMinute = Math.floor(parseInt(outOfGameRound) * (45 / ROUNDS_PER_MATCH));
             maxMinute = outOfGameMinute > 1 ? outOfGameMinute - 1 : maxMinute;
-            console.log(`maxMinute: ${maxMinute}`);
           }
 
           // Generate a pseudo-random minute for the yellow card, ensuring it doesn't exceed `maxMinute`
