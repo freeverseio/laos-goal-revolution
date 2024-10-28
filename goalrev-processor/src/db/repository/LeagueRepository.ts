@@ -1,5 +1,4 @@
-import { AppDataSource } from "../AppDataSource";
-import { EntityManager, Repository } from "typeorm";
+import { EntityManager } from "typeorm";
 import { League } from "../entity/League";
 
 export class LeagueRepository {
@@ -13,7 +12,7 @@ export class LeagueRepository {
     try {
       // Execute the raw SQL to call the function
       await entityManager.query('SELECT recalculate_leaderboard_position($1, $2, $3)', [timezoneIdx, countryIdx, leagueIdx]);
-      console.log(`Leaderboard recalculated successfully for league : ${leagueIdx} timezone: ${timezoneIdx} country: ${countryIdx}`);
+      console.log(` Leaderboard recalculated successfully for league : ${leagueIdx} timezone: ${timezoneIdx} country: ${countryIdx}`);
     } catch (error) {
       console.error('Error executing recalculate leaderboard position function:', error);
     }

@@ -54,8 +54,7 @@ export class MatchService {
     const info = await this.calendarService.getCalendarInfo();
 
     // Check if timestamp to play is in the future
-    if (this.checkTimestampInFuture(info.timestamp!)) {
-      console.log("Timestamp to play is in the future, waiting...");
+    if (this.checkTimestampInFuture(info.timestamp!)) {      
       return {
         verseNumber: info.verseNumber,
         timezoneIdx: info.timezone,
@@ -64,6 +63,21 @@ export class MatchService {
         verseTimestamp: info.timestamp,
         message: "Timestamp to play is in the future, skipping",
       };
+    }
+    
+    // reshuffle leagues that will start 4 verses ahead
+    const verse4Ahead = await this.calendarService.getCalendarInfoAtVerse(info.verseNumber! + 4);    
+    if(verse4Ahead.matchDay === 0 && verse4Ahead.half === 0){
+      // reset this timezone
+      const nextTimezone = verse4Ahead.timezone;
+      console.log("Rescheduling the leagues playing in timezone: ", nextTimezone); 
+      const schedule = await this.leagueService.generateCalendarForTimezone(nextTimezone); // reschedule leagues on timezone +1 (4 verses ahead)
+      if (schedule && schedule.length > 0) { 
+        console.log("Call teamService.resetTeams in next timezone: ", nextTimezone);       
+        await this.teamService.resetTeams(nextTimezone); // reset teams for timezone +1 (4 verses ahead)
+      }else{
+        console.warn("No schedule found for next timezone:", nextTimezone);
+      }      
     }
 
     // Use repository to fetch matches
@@ -93,8 +107,6 @@ export class MatchService {
     // if last match of the league has been played
     if (info.matchDay == MATCHDAYS_PER_ROUND - 1 && info.half == 1) {
       await this.leagueService.computeTeamRankingPointsForTimezone(info.timezone);
-      await this.leagueService.generateCalendarForTimezone(info.timezone); // TODO: wait 8h since last match of the league has been played
-      await this.teamService.resetTeams(); // TODO timezone parameter?
       message = "Last match of the league has been played";
     }
 
@@ -121,10 +133,10 @@ export class MatchService {
     for (let i = 0; i < matches.length; i += batchSize) {
       const batch = matches.slice(i, i + batchSize);
       // Await all promises in the current batch
-      console.time(`processInBatches ${i}`);
+      console.time(` processInBatches ${i}`);
       const batchResults = await Promise.all(batch.map(item => fn(item, seed, verseNumber)));
       results.push(...batchResults);
-      console.timeEnd(`processInBatches ${i}`);
+      console.timeEnd(` processInBatches ${i}`);
     }
     return results;
   }
@@ -158,7 +170,7 @@ export class MatchService {
         const requestBody = this.buildRequestBody(match, seedMatch, is1stHalf);
 
         if (!is1stHalf && !is2ndHalf) {
-          console.warn(`Match ${match.match_idx} ${match.match_day_idx} ${match.timezone_idx} ${match.league_idx} is not in the BEGIN or HALF state, skipping`);
+          console.warn(`Match with [matchIdx, matchDayIdx, timezoneIdx, leagueIdx] [${match.match_idx}, ${match.match_day_idx}, ${match.timezone_idx}, ${match.league_idx}] is not in the BEGIN or HALF state, skipping`);
           return;
         }
 
