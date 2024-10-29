@@ -16,6 +16,8 @@ import { LeagueService } from "./LeagueService";
 import { MatchHistoryRepository } from "../db/repository/MatchHistoryRepository";
 import { MatchHistoryMapper } from "./mapper/MatchHistoryMapper";
 import { count } from "console";
+import { TacticRepository } from "../db/repository/TacticRepository";
+import { TacticsHistoryMapper } from "./mapper/TacticsHistoryMapper";
 
 export class MatchService {
   private playerService: PlayerService;
@@ -26,6 +28,7 @@ export class MatchService {
   private matchRepository: MatchRepository;
   private matchHistoryRepository: MatchHistoryRepository;
   private leagueService: LeagueService;
+  private tacticsRepository: TacticRepository;
 
 
   constructor(
@@ -37,7 +40,7 @@ export class MatchService {
     matchRepository: MatchRepository,
     matchHistoryRepository: MatchHistoryRepository,
     leagueService: LeagueService,
-
+    tacticsRepository: TacticRepository,
   ) {
     this.playerService = playerService;
     this.teamService = teamService;
@@ -47,7 +50,7 @@ export class MatchService {
     this.matchRepository = matchRepository;
     this.leagueService = leagueService;
     this.matchHistoryRepository = matchHistoryRepository;
-
+    this.tacticsRepository = tacticsRepository;
   }
 
   async playMatches(): Promise<any> {
@@ -150,7 +153,7 @@ export class MatchService {
   async playMatch(match: Match, seed: string, verseNumber: number) {
     const seedMatch = crypto.createHash('sha256').update(`${seed}${match.homeTeam!.team_id}${match.visitorTeam!.team_id}`).digest('hex');
     const entityManager = AppDataSource.manager; // Use EntityManager for transactions
-    const mapHistory = MatchHistoryMapper.mapMatchHistory(match, verseNumber, seedMatch);
+    const matchHistory = MatchHistoryMapper.mapMatchHistory(match, verseNumber, seedMatch);
     try {
       await entityManager.transaction(async (transactionManager: EntityManager) => {
         const is1stHalf = match.state === MatchState.BEGIN;
@@ -174,6 +177,7 @@ export class MatchService {
           match.seed = seedMatch;
         }
         match.state = is1stHalf ? MatchState.HALF : MatchState.END;
+        matchHistory.state = match.state;
 
         await this.teamService.updateTeamData(playOutput.matchLogs[0], playOutput.matchLogs[1], match.homeTeam!, verseNumber, is1stHalf, true, transactionManager);
         await this.teamService.updateTeamData(playOutput.matchLogs[1], playOutput.matchLogs[0], match.visitorTeam!, verseNumber, is1stHalf, false, transactionManager);
@@ -181,14 +185,18 @@ export class MatchService {
         await this.playerService.updateSkills(match.homeTeam!, playOutput.updatedSkills[0], verseNumber, transactionManager);
         await this.playerService.updateSkills(match.visitorTeam!, playOutput.updatedSkills[1], verseNumber, transactionManager);
 
+       
         if (is2ndHalf) {
           match.home_teamsumskills = playOutput.matchLogs[0].teamSumSkills;
           match.visitor_teamsumskills = playOutput.matchLogs[1].teamSumSkills;
+           // update tactics history
+          await this.tacticsRepository.insertTacticHistory(TacticsHistoryMapper.mapToTacticsHistory(match.homeTeam!.tactics, verseNumber), transactionManager);
+          await this.tacticsRepository.insertTacticHistory(TacticsHistoryMapper.mapToTacticsHistory(match.visitorTeam!.tactics, verseNumber), transactionManager);
         }
 
         // // Save the match using the repository
         await this.matchRepository.saveMatch(match, transactionManager);
-        await this.matchHistoryRepository.insertMatchHistory(mapHistory, transactionManager);
+        await this.matchHistoryRepository.insertMatchHistory(matchHistory, transactionManager);
       });
     } catch (error) {
       console.error("Error playing match:", {
