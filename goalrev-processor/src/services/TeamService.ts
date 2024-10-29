@@ -68,7 +68,7 @@ export class TeamService {
     await entityManager.save(team);
   }
 
-  async resetTeams(): Promise<void> {
+  async resetTeams(timezoneIdx : number): Promise<void> {
     const teamRepository = AppDataSource.getRepository(Team);
     // reset all teams using QueryBuilder for clarity
     await teamRepository
@@ -82,6 +82,7 @@ export class TeamService {
         goals_forward: 0, 
         goals_against: 0 
       })
+      .where('timezone_idx = :timezoneIdx ', { timezoneIdx: timezoneIdx })
       .execute();
   }
   

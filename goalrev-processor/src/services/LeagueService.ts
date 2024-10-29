@@ -78,6 +78,7 @@ export class LeagueService {
   async generateCalendarForTimezone(timezoneIdx: number): Promise<Schedule[]> {
     const finished = await this.haveTimezoneLeaguesFinished(timezoneIdx);
     if (!finished) {
+      console.log(" -Leagues not finished for timezone: ", timezoneIdx);
       return [];
     }
     const firstVerse = await this.verseRepository.getInitialVerse(AppDataSource.manager);
@@ -216,7 +217,7 @@ export class LeagueService {
     const nextTeamIdxInTZ =await this.teamRepository.countTeamsByTimezone( timezoneIdx, entityManager);
     const nextLeagueIdx = await this.leagueRepository.countLeaguesByTimezoneAndCountry( timezoneIdx, countryIdx, entityManager);
     
-    for (let i = 0; i < 2; i++) { // 16 leagues
+    for (let i = 0; i < 4; i++) { // 16 leagues
       // open tx
       await entityManager.transaction(async (transactionManager: EntityManager) => {
         for (let j = 0; j < 8; j++) { // 8 teams per league
