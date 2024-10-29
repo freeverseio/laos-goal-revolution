@@ -10,6 +10,7 @@ import { LeagueService } from "../services/LeagueService";
 import { TeamRepository } from "../db/repository/TeamRepository";
 import { LeagueFactory } from "./LeagueFactory";
 import { MatchHistoryRepository } from "../db/repository/MatchHistoryRepository";
+import { TacticRepository } from "../db/repository/TacticRepository";
 
 export class MatchFactory {
   
@@ -24,7 +25,7 @@ export class MatchFactory {
     const matchHistoryRepository = new MatchHistoryRepository();
     const calendarService = new CalendarService(verseRepository); 
     const leagueService = LeagueFactory.createLeagueService();
-    
+    const tacticsRepository = new TacticRepository();
     // Create and return the MatchService with injected dependencies
     return new MatchService(
       playerService,
@@ -34,7 +35,8 @@ export class MatchFactory {
       verseRepository,
       matchRepository,
       matchHistoryRepository,
-      leagueService
+      leagueService,
+      tacticsRepository,
     );
   }
 }

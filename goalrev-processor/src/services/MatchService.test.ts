@@ -15,6 +15,7 @@ import { TimeZoneData } from '../types/timezone';
 import { VerseRepository } from '../db/repository/VerseRepository';
 import { LeagueService } from './LeagueService';
 import { MatchHistoryRepository } from '../db/repository/MatchHistoryRepository';
+import { TacticRepository } from '../db/repository/TacticRepository';
 
 // Mock axios and the repository
 jest.mock('axios');
@@ -70,6 +71,11 @@ const mockLeagueService = {
   updateLeaderboard: jest.fn(),
   resetTrainings: jest.fn(),
 } as unknown as LeagueService;
+
+jest.mock('../db/repository/TacticRepository');
+const mockTacticRepository = {
+  insertTacticHistory: jest.fn(),
+} as unknown as TacticRepository;
 
 // Mock for EntityManager
 const mockEntityManager = {
@@ -145,6 +151,7 @@ describe('MatchService', () => {
       mockMatchRepository,
       mockMatchHistoryRepository,
       mockLeagueService,
+      mockTacticRepository,
     );
   });
 

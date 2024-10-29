@@ -45,48 +45,48 @@ export class MatchRepository {
       ]
     });
   }
-  
-    // Set the teams and start time for a match
-    async resetMatch(
-      timezoneIdx: number,
-      countryIdx: number,
-      leagueIdx: number,
-      matchDayIdx: number,
-      matchIdx: number,
-      homeTeamID: string,
-      visitorTeamID: string,
-      startTime: number,
-      transactionManager: EntityManager
-    ): Promise<void> {
-      const repository = transactionManager.getRepository(Match);
-    
-      try {
-        // Create or update the match object
-        const match = repository.create({
-          timezone_idx: timezoneIdx,
-          country_idx: countryIdx,
-          league_idx: leagueIdx,
-          match_day_idx: matchDayIdx,
-          match_idx: matchIdx,
-          home_team_id: homeTeamID,
-          visitor_team_id: visitorTeamID,
-          home_goals: 0,
-          visitor_goals: 0,
-          home_teamsumskills: 0,
-          visitor_teamsumskills: 0,
-          start_epoch: startTime,
-          state: MatchState.BEGIN,
-          seed: '',
-          state_extra: '',
-        });
-    
-        // Save the match, performing an upsert
-        await repository.save(match);
-      } catch (error) {
-        console.error("Error resetting match:", error);
-        throw new Error("Reset match failed");
-      }
+
+  // Set the teams and start time for a match
+  async resetMatch(
+    timezoneIdx: number,
+    countryIdx: number,
+    leagueIdx: number,
+    matchDayIdx: number,
+    matchIdx: number,
+    homeTeamID: string,
+    visitorTeamID: string,
+    startTime: number,
+    transactionManager: EntityManager
+  ): Promise<void> {
+    const repository = transactionManager.getRepository(Match);
+
+    try {
+      // Create or update the match object
+      const match = repository.create({
+        timezone_idx: timezoneIdx,
+        country_idx: countryIdx,
+        league_idx: leagueIdx,
+        match_day_idx: matchDayIdx,
+        match_idx: matchIdx,
+        home_team_id: homeTeamID,
+        visitor_team_id: visitorTeamID,
+        home_goals: 0,
+        visitor_goals: 0,
+        home_teamsumskills: 0,
+        visitor_teamsumskills: 0,
+        start_epoch: startTime,
+        state: MatchState.BEGIN,
+        seed: '',
+        state_extra: '',
+      });
+
+      // Save the match, performing an upsert
+      await repository.save(match);
+    } catch (error) {
+      console.error("Error resetting match:", error);
+      throw new Error("Reset match failed");
     }
+  }
 
   // Set match result
   async setMatchResult(timezoneIdx: number, countryIdx: number, leagueIdx: number, matchDayIdx: number, matchIdx: number, homeGoals: number, visitorGoals: number): Promise<void> {
@@ -126,7 +126,7 @@ export class MatchRepository {
   }
 
 
-  async getLeagueMatches(timezoneIdx: number, countryIdx: number, leagueIdx: number): Promise<Match[]>{
+  async getLeagueMatches(timezoneIdx: number, countryIdx: number, leagueIdx: number): Promise<Match[]> {
     const repository = AppDataSource.getRepository(Match);
     try {
       return await repository.find({
@@ -137,17 +137,13 @@ export class MatchRepository {
         },
         order: {
           match_day_idx: "ASC" // required for computeLeagueLeaderboard
-        }        
-      });      
-      
+        }
+      });
+
     } catch (error) {
       console.error("Error getting LeagueMatches:", error);
       throw new Error("Get LeagueMatches failed");
     }
   }
 
-
-  
-
-  
 }

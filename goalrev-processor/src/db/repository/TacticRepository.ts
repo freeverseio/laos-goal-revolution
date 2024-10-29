@@ -1,6 +1,5 @@
 import { EntityManager } from "typeorm";
-import { Tactics } from "../entity/";
-import { Team } from "../entity/Team";
+import { Tactics, Team, TacticsHistory } from "../entity/";
 
 export class TacticRepository {
 
@@ -113,6 +112,20 @@ export class TacticRepository {
     } catch (error) {
       console.error("Error creating initial tactics:", error);
       throw new Error("Initial tactics creation failed");
+    }
+  }
+
+  async insertTacticHistory(tacticHistory: TacticsHistory, entityManager: EntityManager): Promise<void> {
+    try {
+      await entityManager
+        .createQueryBuilder()
+        .insert()
+        .into(TacticsHistory)
+        .values(tacticHistory)
+        .execute();
+    } catch (error) {
+      console.error("Error inserting tactic history:", error);
+      throw new Error("Insert failed");
     }
   }
 
