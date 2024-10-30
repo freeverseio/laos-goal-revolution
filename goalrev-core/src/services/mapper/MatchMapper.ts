@@ -43,17 +43,35 @@ export class MatchMapper {
     return [DecodeMatchLog.decode(matchLogsAndEvents[0]), DecodeMatchLog.decode(matchLogsAndEvents[1])];
   }
 
-  // static mapContractFirstHalfResultToPlayOutput(result: any): PlayOutput {
-  //   const play1stHalfAndEvolveResult = MatchMapper.mapPlay1stHalfAndEvolveResult(result);
-  //   const playerSkills = MatchMapper.mapEncodedSkillsToPlayerSkills(play1stHalfAndEvolveResult.finalSkills);
-  //   const matchLogsAndEvents = play1stHalfAndEvolveResult.matchLogsAndEvents;
-  //   const err = play1stHalfAndEvolveResult.err;
+  static mapMatchLogsToMatchLogs(decodedMatchLogsHome: any, decodedMatchLogsAway: any, is2ndHalf: boolean, encodedMatchLogsHome: any, encodedMatchLogsAway: any): [MatchLog, MatchLog] {
+    return [this.mapLogToMatchLog(decodedMatchLogsHome, is2ndHalf, encodedMatchLogsHome), this.mapLogToMatchLog(decodedMatchLogsAway, is2ndHalf, encodedMatchLogsAway)];
+  }
 
-  //   return {
-  //     updatedSkills: [playerSkills[0], playerSkills[1]],
-  //     matchLogs: [matchLogsAndEvents[0], matchLogsAndEvents[1]],
-  //     err: err
-  //   }
-    
-  // }
+  static mapLogToMatchLog(decodedMatchLogArray: any, is2ndHalf: boolean, encodedMatchLog: any): MatchLog {
+
+    const halfTimeSubstitutions1 = is2ndHalf ? (Number(decodedMatchLogArray[12])>0 ?1 : 0) : 0;
+    const halfTimeSubstitutions2 = is2ndHalf ? (Number(decodedMatchLogArray[13])>0 ?1 : 0) : 0;
+    const halfTimeSubstitutions3 = is2ndHalf ? (Number(decodedMatchLogArray[14])>0 ?1 : 0) : 0;
+    const changesAtHalftime = (halfTimeSubstitutions1 + halfTimeSubstitutions2 + halfTimeSubstitutions3).toString();
+    return {
+      teamSumSkills: decodedMatchLogArray[0].toString(),
+      winner: Number(decodedMatchLogArray[1]),
+      numberOfGoals: Number(decodedMatchLogArray[2]),
+      trainingPoints: decodedMatchLogArray[3].toString(),
+      outOfGamePlayers: [decodedMatchLogArray[4].toString()],
+      outOfGameTypes: [decodedMatchLogArray[5]?.toString()],
+      outOfGameRounds: [decodedMatchLogArray[6].toString()],
+      yellowCards: [decodedMatchLogArray[7].toString(), decodedMatchLogArray[8].toString()],
+      inGameSubsHappened: [decodedMatchLogArray[9].toString(), decodedMatchLogArray[10].toString(), decodedMatchLogArray[11].toString()],
+      halfTimeSubstitutions: is2ndHalf ? [decodedMatchLogArray[12].toString(), decodedMatchLogArray[13].toString(), decodedMatchLogArray[14].toString()] : [],
+      changesAtHalftime,
+      isHomeStadium: true,
+      isCancelled: false,
+      penalties: [false, false],
+      nDefs: ["0", "0"],
+      nTotHalf: ["0", "0"],
+      encodedMatchLog: encodedMatchLog.toString(),
+    }
+  }
+
 }

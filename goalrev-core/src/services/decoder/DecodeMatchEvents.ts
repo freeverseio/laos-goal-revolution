@@ -156,7 +156,7 @@ export default class DecodeMatchEvents {
           }
 
           // Generate a pseudo-random minute for the yellow card, ensuring it doesn't exceed `maxMinute`
-          yellowMinute = this.generateRandomMinute(i, yellowCardPlayer, maxMinute);
+          yellowMinute = this.generateRandomMinute(i, yellowCardPlayer, maxMinute) + (is2ndHalf ? 45 : 0);
 
           injuryAndCardsEvents.push({
             minute: yellowMinute.toString(),
