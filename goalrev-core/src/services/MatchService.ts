@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
 import PlayAndEvolveAbi from '../contracts/abi/PlayAndEvolve.json';
+import utilsAbi from "../contracts/abi/Utils.json";
 import { MatchEvent, PlayInput, PlayOutput } from "../types";
 import DecodeMatchEvents from "./decoder/DecodeMatchEvents";
 import { EncodeTrainingPoints } from "./encoder/EncodeTrainingPoints";
@@ -8,6 +9,7 @@ export class MatchService {
 
   private provider: ethers.JsonRpcProvider;
   private playAndEvolveContract: ethers.Contract;
+  private utilsContract: ethers.Contract;
 
   constructor() {
     // Initialize the provider with the RPC URL from environment variables
@@ -19,10 +21,18 @@ export class MatchService {
     if (!process.env.PLAY_AND_EVOLVE_CONTRACT_ADDRESS) {
       throw new Error("PLAY_AND_EVOLVE_CONTRACT_ADDRESS is not defined in the environment variables");
     }
+    if (!process.env.UTILS_CONTRACT_ADDRESS) {
+      throw new Error("UTILS_CONTRACT_ADDRESS is not defined in the environment variables");
+    }
 
     this.playAndEvolveContract = new ethers.Contract(
       process.env.PLAY_AND_EVOLVE_CONTRACT_ADDRESS,
       PlayAndEvolveAbi.abi,
+      this.provider
+    );
+    this.utilsContract = new ethers.Contract(
+      process.env.UTILS_CONTRACT_ADDRESS!,
+      utilsAbi.abi,
       this.provider
     );
 
@@ -77,7 +87,9 @@ export class MatchService {
       throw new Error(parsedResult.err);
     }
     const updatedSkills = MatchMapper.mapEncodedSkillsToPlayerSkills(parsedResult.finalSkills);
-    const decodedMatchLogs = MatchMapper.mapMatchLogsAndEventsToMatchLogs(parsedResult.matchLogsAndEvents);
+    const logsHome = await this.utilsContract.fullDecodeMatchLog(parsedResult.matchLogsAndEvents[0], false);
+    const logsAway = await this.utilsContract.fullDecodeMatchLog(parsedResult.matchLogsAndEvents[1], false);
+    const decodedMatchLogs = MatchMapper.mapMatchLogsToMatchLogs(logsHome, logsAway, false, parsedResult.matchLogsAndEvents[0], parsedResult.matchLogsAndEvents[1]);
 
     const matchEventsDecoder = new DecodeMatchEvents(parsedResult.matchLogsAndEvents, {
       homeTeamId: teamIds[0].toString(),
@@ -85,7 +97,9 @@ export class MatchService {
       tacticsHome: tactics[0],
       tacticsAway: tactics[1],
     }, decodedMatchLogs);
+
     const matchEvents: MatchEvent[] = matchEventsDecoder.decode(false);
+    
     return {
       updatedSkills,
       matchLogs: decodedMatchLogs,
@@ -134,7 +148,10 @@ export class MatchService {
       throw new Error(parsedResult.err);
     }
     const updatedSkills = MatchMapper.mapEncodedSkillsToPlayerSkills(parsedResult.finalSkills);
-    const decodedMatchLogs = MatchMapper.mapMatchLogsAndEventsToMatchLogs(parsedResult.matchLogsAndEvents);
+
+    const logsHome = await this.utilsContract.fullDecodeMatchLog(parsedResult.matchLogsAndEvents[0], true);
+    const logsAway = await this.utilsContract.fullDecodeMatchLog(parsedResult.matchLogsAndEvents[1], true);
+    const decodedMatchLogs = MatchMapper.mapMatchLogsToMatchLogs(logsHome, logsAway, true, parsedResult.matchLogsAndEvents[0], parsedResult.matchLogsAndEvents[1]);
 
     const matchEventsDecoder = new DecodeMatchEvents(parsedResult.matchLogsAndEvents, {
       homeTeamId: teamIds[0].toString(),
@@ -142,6 +159,7 @@ export class MatchService {
       tacticsHome: tactics[0],
       tacticsAway: tactics[1],
     }, decodedMatchLogs);
+
     const matchEvents: MatchEvent[] = matchEventsDecoder.decode(true);
   
     return {
