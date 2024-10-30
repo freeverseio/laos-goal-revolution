@@ -17,7 +17,8 @@ export class MatchFactory {
   static createMatchService(): MatchService {
     // Instantiate all the dependencies for MatchService
     const playerService = new PlayerService();
-    const teamService = new TeamService();
+    const teamRepository = new TeamRepository();
+    const teamService = new TeamService(teamRepository);
     const matchEventRepository = new MatchEventRepository();
     const matchEventService = new MatchEventService(matchEventRepository);
     const verseRepository = new VerseRepository();

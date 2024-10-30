@@ -7,11 +7,12 @@ import { LeagueController } from "./controller/LeagueController";
 import { CalendarController } from "./controller/CalendarController";
 import * as cron from 'node-cron';
 import { MatchFactory } from "./factories/MatchFactory";
+import { TeamController } from "./controller/TeamController";
 
 dotenv.config();
 
 const app = createExpressServer({
-  controllers: [MatchController, CalendarController, LeagueController], // register controllers here
+  controllers: [MatchController, CalendarController, LeagueController, TeamController], // register controllers here
 });
 
 let lastPlayMatches = new Date();
@@ -55,13 +56,13 @@ async function playMatches() {
 
 AppDataSource.initialize()
   .then(async () => {
-    const playMatchesScheduler = process.env.PLAY_MATCHES_SCHEDULER;
-    if (!playMatchesScheduler) {
-      throw new Error("PLAY_MATCHES_SCHEDULER is not set");
-    }
-    cron.schedule(playMatchesScheduler, () => {
-      playMatches();
-    });
+    // const playMatchesScheduler = process.env.PLAY_MATCHES_SCHEDULER;
+    // if (!playMatchesScheduler) {
+    //   throw new Error("PLAY_MATCHES_SCHEDULER is not set");
+    // }
+    // cron.schedule(playMatchesScheduler, () => {
+    //   playMatches();
+    // });
 
     app.listen(process.env.APP_PORT, () => {
       console.log(`Server is running on port ${process.env.APP_PORT}`);

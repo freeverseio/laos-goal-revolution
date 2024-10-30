@@ -52,6 +52,12 @@ export class TeamRepository  {
     return teams;
   }
 
+  async findCompleteTeamByTeamId(teamId: string): Promise<Team | null> {
+    const teamRepository = AppDataSource.getRepository(Team);
+    // find with players
+    return await teamRepository.findOne({ where: { team_id: teamId }, relations: ["players"] });
+  }
+
  
   
   async updateLeagueIdx(teamId: string, leagueIdx: number, transactionalEntityManager: EntityManager): Promise<void> {
