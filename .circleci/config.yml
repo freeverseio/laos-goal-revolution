@@ -173,7 +173,7 @@ workflows:
               only:
                 - main      
       
-      - deploy_to_cluster_dev:
+      - deploy_to_cluster:
           name: deploy-to-dev-all
           requires:
             - deployment-test
@@ -183,7 +183,7 @@ workflows:
             branches:
               only:
                 - main
-      - deploy_to_cluster_stg:
+      - deploy_to_cluster:
           name: deploy-to-stg-all
           requires:
             - deployment-test
