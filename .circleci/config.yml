@@ -52,7 +52,7 @@ jobs:
             equal: [ staging, << parameters.environment >> ]
           steps:
             - kube-orb/install-kubeconfig:
-                kubeconfig: KUBECONFIG_PROTOSTAR_STG_DATA
+                kubeconfig: KUBECONFIG_STG_GOALREV_DATA
       - helm/install_helm_client:
           version: v3.13.0
       - install-helmfile
@@ -148,7 +148,20 @@ workflows:
 
       - approval:
           type: approval
-          name: approve-goalrev-all-deploy
+          name: approve-goalrev-all-deploy-dev
+          requires:
+            - deployment-test
+            - build-goalrev-api
+            - build-goalrev-core
+            - build-goalrev-processor
+            - build-goalrev-ganache
+          filters:
+            branches:
+              only:
+                - main   
+      - approval:
+          type: approval
+          name: approve-goalrev-all-deploy-stg
           requires:
             - deployment-test
             - build-goalrev-api
@@ -160,12 +173,22 @@ workflows:
               only:
                 - main      
       
-      - deploy_to_cluster:
+      - deploy_to_cluster_dev:
           name: deploy-to-dev-all
           requires:
             - deployment-test
-            - approve-goalrev-all-deploy
+            - approve-goalrev-all-deploy-dev
           environment: development
+          filters:
+            branches:
+              only:
+                - main
+      - deploy_to_cluster_stg:
+          name: deploy-to-stg-all
+          requires:
+            - deployment-test
+            - approve-goalrev-all-deploy-stg
+          environment: staging
           filters:
             branches:
               only:

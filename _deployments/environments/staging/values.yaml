@@ -1,9 +1,13 @@
 namespace: goalrev
-laosHost: goalrevapi.gorengine.com
-postgresHost: db-postgresql-ams3-02994-do-user-14140340-0.j.db.ondigitalocean.co
-postgresDb: defaultdb
+apiHost: goalrevapi.staging.gorengine.com
+apiInternalUrl: http://goalrev-core.goalrev.svc.cluster.local:3001
+postgresHost: stg-db-do-user-4813238-0.j.db.ondigitalocean.com
+postgresDb: goalrev
 postgresPort: "25060"
-postgresUser: "doadmin"
+postgresUser: "goalrev"
+processorHost: goalrev-processor.staging.gorengine.com
+processorPort: "3000"
+coreAppPort: "3001"
 ganacheRpcUrl: http://goalrev-ganache.goalrev.svc.cluster.local:8545/
 ganacheContractLeagues: "0x630589690929E9cdEFDeF0734717a9eF3Ec7Fcfe"
 ganacheContractPlayAndEvolve: "0x6eD79Aa1c71FD7BdBC515EfdA3Bd4e26394435cC"
