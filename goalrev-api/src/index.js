@@ -5,6 +5,7 @@ const version = require("../package.json").version;
 const mutationsPlugin = require("./mutations_plugin");
 const mutationsWrapperPlugin =  require("./mutation_wrapper_plugin");
 const ConnectionFilterPlugin = require("postgraphile-plugin-connection-filter");
+const permissionWrapperPlugin = require("./permission_wrapper_plugin");
 const config = require('dotenv').config();
 
 function obfuscatePasswordInConnectionString(connectionString) {
@@ -65,12 +66,18 @@ app.use(
       graphiql: true,
       enhanceGraphiql: true,
       retryOnInitFail: true,
-      // disableDefaultMutations: true,
       appendPlugins: [
         ConnectionFilterPlugin,
         mutationsPlugin,
         mutationsWrapperPlugin,
+        permissionWrapperPlugin,
       ],
+      additionalGraphQLContextFromRequest: async (req, res) => {
+        return {
+          req,
+          res
+        };
+      },
     }
   )
 );
