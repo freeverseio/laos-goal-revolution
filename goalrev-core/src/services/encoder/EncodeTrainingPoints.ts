@@ -16,10 +16,10 @@ export class EncodeTrainingPoints {
     // Helper function to encode skills
     const encodeSkills = (skills: { defence: number; speed: number; pass: number; shoot: number; endurance: number } | undefined, offset: number) => {
       if (!skills) return;
-      encoded |= BigInt(skills.defence) << BigInt(offset + 0 * 9);
+      encoded |= BigInt(skills.shoot) << BigInt(offset + 0 * 9);
       encoded |= BigInt(skills.speed) << BigInt(offset + 1 * 9);
       encoded |= BigInt(skills.pass) << BigInt(offset + 2 * 9);
-      encoded |= BigInt(skills.shoot) << BigInt(offset + 3 * 9);
+      encoded |= BigInt(skills.defence) << BigInt(offset + 3 * 9);
       encoded |= BigInt(skills.endurance) << BigInt(offset + 4 * 9);
     };
 
