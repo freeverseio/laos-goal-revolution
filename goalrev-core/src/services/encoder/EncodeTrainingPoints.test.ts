@@ -129,10 +129,10 @@ describe('EncodeTrainingPoints', () => {
       trainingRequest.specialPlayerShirt = specialPlayer;
 
       const [goalkeepers, defenders, midfielders, attackers, specialPlayerSkills] = [0, 1, 2, 3, 4].map(bucket => ({
-        defence: TPperSkill[bucket * 5 + 0],
+        shoot: TPperSkill[bucket * 5 + 0],
         speed: TPperSkill[bucket * 5 + 1],
         pass: TPperSkill[bucket * 5 + 2],
-        shoot: TPperSkill[bucket * 5 + 3],
+        defence: TPperSkill[bucket * 5 + 3],
         endurance: TPperSkill[bucket * 5 + 4]
       }));
 
