@@ -7,6 +7,7 @@ import { TeamRepository } from "../db/repository/TeamRepository";
 import { TeamMapper } from "./mapper/TeamMapper";
 import { gql } from "@apollo/client";
 import { gqlClient } from "./graphql/GqlClient";
+import { MintedPlayer, MintTeamResponse } from "../types/rest/output/team";
 
 export class TeamService {
   private teamRepository: TeamRepository;
@@ -95,20 +96,19 @@ export class TeamService {
       .execute();
   }
 
-  async mintTeam(mintTeamInput: MintTeamInput): Promise<void> {
+  async mintTeam(mintTeamInput: MintTeamInput): Promise<MintedPlayer[]> {
     const team = await this.teamRepository.findCompleteTeamByTeamId(mintTeamInput.teamId);
     if (!team) {
       throw new Error("Team not found");
     }
     const mintTeamMutation = TeamMapper.mapTeamPlayersToMintMutation(team!, mintTeamInput.address);
-    console.log(JSON.stringify(mintTeamMutation));
+    // console.log(JSON.stringify(mintTeamMutation));
     try {
       const result = await gqlClient.mutate({
         mutation: gql`
           mutation MintTeam($input: MintInput!) {
             mint(input: $input) {
               tokenIds
-              success
             }
           }
         `,
@@ -119,6 +119,8 @@ export class TeamService {
       if (result.errors) {
         throw new Error(`Failed to mint team: ${result.errors[0].message}`);
       }
+
+      return TeamMapper.mapMintedPlayersToResponse(team, result.data.mint.tokenIds);
     } catch (error) {
       throw new Error(`Failed to mint team: ${error}`);
     }

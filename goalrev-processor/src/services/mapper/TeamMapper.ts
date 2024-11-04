@@ -1,5 +1,6 @@
 import { Team } from "../../db/entity";
 import { MintTeamMutation } from "../../types/rest/input/team";
+import { MintedPlayer } from "../../types";
 
 export class TeamMapper {
 
@@ -70,6 +71,14 @@ export class TeamMapper {
         }))
       }
     };
+  }
+
+  static mapMintedPlayersToResponse(team: Team, tokenIds: string[]): MintedPlayer[] {
+    return team.players.map((player, index) => ({
+      id: player.player_id,
+      tokenId: tokenIds[index],
+      teamId: team.team_id
+    }));
   }
 
 }
