@@ -9,29 +9,8 @@ async function loadNamesDatabase(): Promise<Database> {
     filename: './src/utils/names/names.db',
     driver: sqlite3.Database
   });
-
-  await logTableNames(db);
-  throw new Error('stop');
   
   return db;
-}
-
-async function logTableNames(db: SqliteDatabase): Promise<void> {
-  try {
-    // const results = await db.all('SELECT * FROM team_mainnames');
-    // console.log('Records in team_mainnames:');
-    // results.forEach(record => {
-    //   console.log(record);
-    // });
-    
-    const tables = await db.all<{ name: string }[]>('SELECT name FROM sqlite_master WHERE type = "table"');
-    console.log('Table Names:');
-    tables.forEach(table => {
-      console.log(table.name);
-    });
-  } catch (error) {
-    console.error('Error retrieving table names:', error);
-  }
 }
 
 interface CountResult {
