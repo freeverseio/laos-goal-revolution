@@ -19,7 +19,7 @@ import { MATCHDAYS_PER_ROUND } from "../utils/constants/constants";
 import { CalendarService } from "./CalendarService";
 import { CreateTeamResponseToEntityMapper } from "./mapper/CreateTeamResponseToEntityMapper";
 import { MatchMapper } from "./mapper/MatchMapper";
-import { generateTeamName, loadTeamNamesList } from "../utils/TeamNameUtils";
+import { generateTeamName, loadNamesDatabase } from "../utils/TeamNameUtils";
 
 export class LeagueService {
   private teamRepository: TeamRepository;
@@ -218,8 +218,8 @@ export class LeagueService {
     const nextTeamIdxInTZ =await this.teamRepository.countTeamsByTimezone( timezoneIdx, entityManager);
     const nextLeagueIdx = await this.leagueRepository.countLeaguesByTimezoneAndCountry( timezoneIdx, countryIdx, entityManager);
 
-    // Load the list of names to generate team names later
-    const { teamNamesMain, teamNamesPreffix, teamNamesSuffix } = loadTeamNamesList();
+    // Load names database once so we can use it multiple times later
+    const teamNamesDb = await loadNamesDatabase();
     
     for (let i = 0; i < 4; i++) { // 16 leagues
       // open tx
@@ -237,7 +237,7 @@ export class LeagueService {
           console.log('Creating Team: ', (j + (i*8)));
           const createTeamResponse = response.data as CreateTeamResponse;
           
-          const teamName = generateTeamName(teamNamesMain, teamNamesPreffix, teamNamesSuffix, createTeamResponse.id);
+          const teamName = await generateTeamName(teamNamesDb, createTeamResponse.id);
           const teamMapped = CreateTeamResponseToEntityMapper.map({response: createTeamResponse, 
             timezoneIdx, 
             countryIdx, 

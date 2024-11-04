@@ -1,31 +1,96 @@
 import { id } from "ethers";
-import { readFileSync } from "fs";
+import sqlite3 from 'sqlite3';
+import { open, Database as SqliteDatabase } from 'sqlite';
 
-function loadTeamNamesList() {
-  const teamNamesMain = readFileSync('./src/utils/names/team_mainnames.txt', 'utf8').split('\n');
-  const teamNamesPreffix = readFileSync('./src/utils/names/team_prefixnames.txt', 'utf8').split('\n');
-  const teamNamesSuffix = readFileSync('./src/utils/names/team_suffixnames.txt', 'utf8').split('\n');
-  return { teamNamesMain, teamNamesPreffix, teamNamesSuffix };
+type Database = SqliteDatabase<sqlite3.Database>;
+
+async function loadNamesDatabase(): Promise<Database> {
+  const db = await open({
+    filename: './src/utils/names/names.db',
+    driver: sqlite3.Database
+  });
+
+  await logTableNames(db);
+  throw new Error('stop');
+  
+  return db;
 }
 
-function generateTeamName(teamNamesMain: string[], teamNamesPreffix: string[], teamNamesSuffix: string[], teamId: string) {
+async function logTableNames(db: SqliteDatabase): Promise<void> {
+  try {
+    // const results = await db.all('SELECT * FROM team_mainnames');
+    // console.log('Records in team_mainnames:');
+    // results.forEach(record => {
+    //   console.log(record);
+    // });
+    
+    const tables = await db.all<{ name: string }[]>('SELECT name FROM sqlite_master WHERE type = "table"');
+    console.log('Table Names:');
+    tables.forEach(table => {
+      console.log(table.name);
+    });
+  } catch (error) {
+    console.error('Error retrieving table names:', error);
+  }
+}
+
+interface CountResult {
+  count: number;
+}
+
+async function countRecordsInTable(db: Database, tableName: string): Promise<number> {
+  try {
+    const SELECT_QUERY = `SELECT COUNT(*) as count FROM ${tableName}`;
+    const result = await db.get<CountResult>(SELECT_QUERY);
+    return result ? result.count : 0;
+  } catch (error) {
+    console.error('Error querying the database:', error);
+    return 0;
+  }
+}
+
+async function generateTeamName(teamNamesDb: Database, teamId: string) {
   let salt = teamId + 'ff';
-  const nameIdx = generateRnd(teamId, salt, teamNamesMain.length);
-  const mainName = teamNamesMain[Number(nameIdx)];
+  const teamNamesCount = await countRecordsInTable(teamNamesDb, 'team_mainnames');  
+  const nameIdx = generateRnd(teamId, salt, teamNamesCount);
+  const statement = await teamNamesDb.prepare('SELECT name FROM team_mainnames WHERE idx = ?');
+  const result = await statement.get<{ name: string }>(nameIdx.toString());
+  if (!result) {
+    throw new Error('Name not found in team_mainnames');
+  }
+  const mainName = result.name;
+  await statement.finalize();
   if (mainName.includes(' ')) {
     return mainName;
   }
-
+  
   // add preffix or suffix
+  const teamNamesPreffixCount = await countRecordsInTable(teamNamesDb, 'team_prefixnames');  
+  const teamNamesSuffixCount = await countRecordsInTable(teamNamesDb, 'team_suffixnames');  
   salt += "gg"
-  const complementIdx = generateRnd(teamId, salt, teamNamesPreffix.length + teamNamesSuffix.length);
+  const complementIdx = generateRnd(teamId, salt, teamNamesPreffixCount + teamNamesSuffixCount);
   salt += "hh";
-  if (complementIdx < teamNamesPreffix.length) {
-    const preffixNameIdx = generateRnd(teamId, salt, teamNamesPreffix.length);
-    return teamNamesPreffix[Number(preffixNameIdx)] + ' ' + mainName;
+  if (complementIdx < teamNamesPreffixCount) {
+    const preffixNameIdx = generateRnd(teamId, salt, teamNamesPreffixCount);
+    const statement = await teamNamesDb.prepare('SELECT name FROM team_prefixnames WHERE idx = ?');
+    const result = await statement.get<{ name: string }>(preffixNameIdx.toString());
+    await statement.finalize();
+    if (!result) {
+      throw new Error('Name not found in team_prefixnames');
+    }
+    const preffixName = result.name;
+    return preffixName + ' ' + mainName;
+
   } else {
-    const suffixNameIdx = generateRnd(teamId, salt, teamNamesSuffix.length);
-    return mainName + ' ' + teamNamesSuffix[Number(suffixNameIdx)];
+    const suffixNameIdx = generateRnd(teamId, salt, teamNamesSuffixCount);
+    const statement = await teamNamesDb.prepare('SELECT name FROM team_suffixnames WHERE idx = ?');
+    const result = await statement.get<{ name: string }>(suffixNameIdx.toString());
+    await statement.finalize();
+    if (!result) {
+      throw new Error('Name not found in team_suffixnames');
+    }
+    const suffixName = result.name;
+    return mainName + ' ' + suffixName;
   }
 }
 
@@ -38,4 +103,4 @@ function generateRnd(seed: string, salt: string, maxVal: number): bigint {
   return result % BigInt(maxVal);
 }
 
-export { loadTeamNamesList, generateTeamName, generateRnd }
+export { loadNamesDatabase, generateTeamName, generateRnd }
