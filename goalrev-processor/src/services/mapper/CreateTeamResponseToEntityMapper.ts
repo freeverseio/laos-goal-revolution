@@ -4,12 +4,12 @@ import { DEFAULT_ENCODED_TACTIC } from "../../utils/constants";
 import { PreferredPositionMapper } from "./PreferredPositionMapper";
 
 export class CreateTeamResponseToEntityMapper {
-  static map({response, timezoneIdx, countryIdx, league_idx, team_idx_in_league, leaderboard_position}:
-    {response: CreateTeamResponse, timezoneIdx: number, countryIdx: number, league_idx: number, team_idx_in_league: number, leaderboard_position: number}): Team {
+  static map({response, timezoneIdx, countryIdx, league_idx, team_idx_in_league, leaderboard_position, teamName}:
+    {response: CreateTeamResponse, timezoneIdx: number, countryIdx: number, league_idx: number, team_idx_in_league: number, leaderboard_position: number, teamName: string}): Team {
     return  {
       team_id: response.id,
-      name: response.id + 'Mock Team ',
-      manager_name: 'Mock Manager ' + response.id,
+      name: teamName,
+      manager_name: 'Manager',
       tactic: DEFAULT_ENCODED_TACTIC,
       country: {
         timezone_idx: timezoneIdx,

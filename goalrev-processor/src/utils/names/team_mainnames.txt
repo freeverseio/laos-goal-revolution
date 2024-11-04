@@ -1,0 +1,654 @@
+Serpent
+Shield
+Wolf
+Clock
+Mesa
+Indian
+Fly
+Fishes
+Winged Horse
+Hare
+Archer
+Flying Fish
+Telescope
+Toucan
+Big Bear
+Triangle
+Little Fox
+Twins
+Gold Fish
+Chisel
+Dove
+Crane
+Eridanus
+Hercules
+Southern Cross
+Swan
+Lesser Snake
+Hound Dogs
+Southern Crown
+Northern Crown
+Little Lion
+Wildcat
+Lion
+Lyre
+Unicorn
+Southern Triangle
+Microscope
+Phoenix
+Southern Fish
+Virgin
+Arrow
+Perseus
+Keel
+Great Dog
+Charioteer
+Eagle
+Cepheus
+Altar
+Sea-monster
+Berenice
+Furnace
+Hydra
+Balance
+Goblet
+Lizard
+Dolphin
+Crow
+Dragon
+Crab
+Centaurus
+Cassiopeia
+Paradise
+Chameleon
+Pump
+Goat
+Andromeda
+Herdsman
+Ram
+Scorpion
+Orion
+Hunter
+Octant
+Compass
+Scale
+Peacock
+Sextans
+Sail
+Bull
+Cat
+Dog
+Donkey
+Horse
+Pig
+Rabbit
+Sheep
+Water Buffalo
+African Buffalo
+African Elephant
+African Leopard
+Albatross
+Alligator
+Alpaca
+Anaconda
+Angelfish
+Ant
+Anteater
+Antelope
+Arctic Fox
+Arctic Wolf
+Armadillo
+Baboon
+Barracuda
+Bat
+Bear
+Beetle
+Bird
+Bison
+Blackbird
+Panther
+Black widow
+Blue whale
+Boa
+Bobcat
+Bonobo
+Buffalo
+Bug
+Butterfly
+Camel
+Capybara
+Cardinal
+Caribou
+Cat
+Catshark
+Catfish
+Cheetah
+Clam
+Cobra
+Condor
+Constrictor
+Coral
+Coyote
+Cricket
+Crocodile
+Cuckoo
+Cicada
+Damselfly
+Deer
+Dinosaur
+Dolphin
+Dove
+Dragonfly
+Dragon
+Duck
+Eagle
+Earthworm
+Eel
+Elephant
+Emu
+Falcon
+Ferret
+Firefly
+Fish
+Flamingo
+Flea
+Fowl
+Fox
+Frog
+Gazelle
+Gecko
+Gerbil
+Giant Panda
+Giant Squid
+Monster
+Giraffe
+Goldfish
+Goose
+Gopher
+Gorilla
+Grasshopper
+White shark
+Grizzly Bear
+Guanaco
+Haddock
+Halibut
+Hammerhead Shark
+Hamster
+Hawk
+Hedgehog
+Heron
+Hippopotamus
+Hookworm
+Hornet
+Horse
+Hoverfly
+Hummingbird
+Whale
+Hyena
+Iguana
+Impala
+Jackal
+Jaguar
+Jellyfish
+Junglefowl
+Kangaroo
+Kingfisher
+Kite
+Kiwi
+Koala
+Koi
+Komodo Dragon
+Krill
+Ladybug
+Snail
+Lark
+Leech
+Lemming
+Lemur
+Leopard
+Lion
+Lizard
+Llama
+Lobster
+Locust
+Lynx
+Macaw
+Mackerel
+Mammal
+Manatee
+Mandrill
+Manta Ray
+Marmot
+Marsupial
+Marten
+Mastodon
+Meerkat
+Mink
+Minnow
+Mockingbird
+Mollusk
+Lizard
+Monkey
+Moose
+Mosquito
+Mountain Goat
+Mouse
+Mule
+Muskox
+Ocelot
+Octopus
+Orca
+Otter
+Owl
+Ox
+Panda
+Panther
+Panthera
+Parrot
+Peacock
+Pelican
+Penguin
+Perch
+Pheasant
+Pig
+Pike
+Piranha
+Polar Bear
+Pony
+Porcupine
+Praying Mantis
+Mantis
+Puma
+Python
+Quail
+Rabbit
+Raccoon
+Rat
+Rattlesnake
+Raven
+Ray
+Red Panda
+Reindeer
+Reptile
+Rhinoceros
+Roadrunner
+Rodent
+Rooster
+Sailfish
+Salamander
+Salmon
+Sawfish
+Insect
+Scallop
+Scorpion
+Seahorse
+Sea Lion
+Sea Snail
+Shark
+Sheep
+Shrew
+Shrimp
+Silkworm
+Silverfish
+Skunk
+Sloth
+Slug
+Snail
+Snake
+Snipe
+Snow Leopard
+Sparrow
+Spider
+Spider Monkey
+Squid
+Squirrel
+Starfish
+Trout
+Stingray
+Sturgeon
+Swan
+Swift
+Swordfish
+Swordtail
+Tarantula
+Tasmanian Devil
+Termite
+Tiger
+Tiger Shark
+Tortoise
+Toucan
+Trout
+Tuna
+Turkey
+Turtle
+Tyrannosaurus
+Vampire Bat
+Vampire Squid
+Viper
+Vulture
+Wallaby
+Walrus
+Wasp
+Water Boa
+Water Buffalo
+Whale
+Wildcat
+Wolf
+Wolverine
+Wombat
+Woodpecker
+Worm
+Xerinae
+X-ray Fish
+Yak
+Zebra
+Achilles
+Apollo
+Atalanta
+Atlas
+Balius
+Bias
+Calypso
+Cassandra
+Chaos
+Chimera
+Clio
+Cratus
+Cronos
+Cyclopes
+Daphnaie
+Dafne
+Delos
+Dionysos
+Dionysus
+Doris
+Electra
+Elektra
+Eos
+Erato
+Eros
+Ether
+Euros
+Gaea
+Gaia
+Gaiea
+Galeus
+Ganymedes
+Glaucus
+Gorgons
+Hades
+Harmonia
+Harmony
+Harpies
+Heliades
+Helice
+Helios
+Helius
+Hera
+Herakles
+Hermes
+Hesperia
+Hope
+Hydra
+Hyperion
+Hypnos
+Ion
+Iris
+Kallisto
+Kalypso
+Kerberos
+Keres
+Keto
+Khaos
+Kratos
+Kronos
+Kyklopes
+Linus
+Maliades
+Medousa
+Medusa
+Minos
+Minotaur
+Modesty
+Morpheus
+Morfeo
+Muses
+Nemesis
+Nike
+Nymphs
+Oceanus
+Odysseus
+Olympus
+Orion
+Orpheus
+Orfeo
+Uranos
+Ouranos
+Pandemos
+Pandora
+Pegasos
+Pegasus
+Persa
+Perseo
+Phobos
+Phobus
+Pleiades
+Ploutos
+Plutus
+Poseidon
+Prometheus
+Proteus
+Psyche
+Scamander
+Selene
+Sibyls
+Sphinx
+Thalassa
+Thalia
+Thanatos
+Thea
+Theseus
+Titanes
+Titans
+Triton
+Tritones
+Tyche
+Typhon
+Ulysses
+Urania
+Uranus
+Zelos
+Zelus
+Zephyrs
+Zapphire
+Zeus
+Agent Orange
+Alabama Slammer
+Amaretto Sour
+Amaretto
+French Connection
+Amber Moon
+Amber
+Moon
+Ancient Mariner
+Angel Face
+Aperol Spritz
+Aperol Sunrise
+Aperol
+Apple Martini
+Agua de Sevilla
+Agua de Valencia
+Agua Loca
+Arizona Biltmore
+Astronaut Sunrise
+Astro Pop
+Baby Guinness
+Black Nail
+Black Russian
+Black Velvet
+Blackthorn
+Bloody Aztec
+Bloody Margaret
+Bloody Mary
+Blue Hawaii
+Blue Lagoon
+Blueberry Tea
+Bobby Burns
+Boilermaker
+Boomerang
+Bourbon Lancer
+Bourbon
+Brandy Alexander
+Brandy Sour
+Brandy
+Brass Monkey
+Bronx
+Brooklyn
+Brut Cocktail
+Cocktail
+Bull Shot
+Bushwacker
+Caesar
+Batida
+Caipirinha
+Caipivodka
+Caipiroska
+Caju Amigo
+Cape Cod
+Caribou Lou
+Noble Punch
+Casino
+Champagne Cocktail
+Champagne
+Ruby Dutchess
+Chicago Cocktail
+Chimayó Cocktail
+Chocolate Martini
+Martini
+Churchill
+Cloister
+Clover Club Cocktail
+Cojito
+Cuba Libre
+Cuban Sunset
+Curacao Punch
+Daiquiri
+Doctor Cocktail
+Blue Blazer
+Flaming Volcano
+Florida Sunrise
+French Connection
+Fuzzy Navel
+Gimlet
+Vodka Gimlet
+Vodka
+Gin
+Gin and Tonic
+Gin Fizz
+Gin Pahit
+Gin Sour
+Ginza Mary
+Godfather
+Godmother
+Golden Doublet
+Golden Dream
+Grasshopper
+Green Vesper
+Greyhound
+Grog
+Gunfire
+Harlem Mugger
+Herbsaint
+Pucker Up
+Vodka McGovern
+Paralyzer
+Hurricane
+Irish Coffee
+Jägerbomb
+Jagertee
+Bloody Maria
+Michelada
+Fresh Cucumber Punch
+Island Spice
+Sangria Popsicles
+Sangria
+Wine
+Punch
+Verde Shots
+Jungle Bird
+Jungle Juice
+Kalimotxo
+Calimocho
+Kamikaze
+Lemon Drop
+Lime Rickey
+Brave Bull
+Brandy Manhattan
+Manhattan
+Margarita
+Martini
+Matador
+Michelada
+Mimosa
+Mint Julep
+Kremlin Colonel
+Missouri Mule
+Mojito
+Mojito Blanco
+Moloko Plus
+Monkey GlandIBA
+Moonwalk
+Negroni
+Ouzini
+Painkiller
+Paradise
+Pastis
+Mauresque
+Caribe Sour
+Caribe
+Mexican Mocha
+Piña Colada
+Chi-Chi
+Pink Gin
+Gin
+Pink Lady
+Pisco Sour
+Red Lotus
+Rum
+Sake Bomb
+Salty Dog
+Sazerac
+Hi-fi
+Sea Breeze
+Sherry
+Vermouth
+Sidecar
+Singapore Sling
+Snowball
+Brandy Sour
+Brandy
+Midori Sour
+Tequila Sour
+Tequila
+Spritzer
+Stinger
+Tequila Sunrise
+Tequila Sunset
+Tinto de Verano
+Vampiro
+Whiskey
+Whiskey Smash
+Whiskey Sour
+Whisky Mac
+Wolfram
+Zombie
+Linux
+Python
+Java
+Ethereum
+Bitcoin
+Blockchain
+Hackers
+Monkey Island
+Etherians
+Magicians

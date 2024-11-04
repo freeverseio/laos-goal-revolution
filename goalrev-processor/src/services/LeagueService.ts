@@ -19,6 +19,7 @@ import { MATCHDAYS_PER_ROUND } from "../utils/constants/constants";
 import { CalendarService } from "./CalendarService";
 import { CreateTeamResponseToEntityMapper } from "./mapper/CreateTeamResponseToEntityMapper";
 import { MatchMapper } from "./mapper/MatchMapper";
+import { generateTeamName, loadTeamNamesList } from "../utils/TeamNameUtils";
 
 export class LeagueService {
   private teamRepository: TeamRepository;
@@ -216,6 +217,9 @@ export class LeagueService {
     const firstVerse = await this.verseRepository.getInitialVerse(AppDataSource.manager);
     const nextTeamIdxInTZ =await this.teamRepository.countTeamsByTimezone( timezoneIdx, entityManager);
     const nextLeagueIdx = await this.leagueRepository.countLeaguesByTimezoneAndCountry( timezoneIdx, countryIdx, entityManager);
+
+    // Load the list of names to generate team names later
+    const { teamNamesMain, teamNamesPreffix, teamNamesSuffix } = loadTeamNamesList();
     
     for (let i = 0; i < 4; i++) { // 16 leagues
       // open tx
@@ -232,13 +236,15 @@ export class LeagueService {
           const response = await axios.post(`${process.env.CORE_API_URL}/team/createTeam`, requestBody);
           console.log('Creating Team: ', (j + (i*8)));
           const createTeamResponse = response.data as CreateTeamResponse;
-
+          
+          const teamName = generateTeamName(teamNamesMain, teamNamesPreffix, teamNamesSuffix, createTeamResponse.id);
           const teamMapped = CreateTeamResponseToEntityMapper.map({response: createTeamResponse, 
             timezoneIdx, 
             countryIdx, 
             league_idx: nextLeagueIdx + i, 
             team_idx_in_league: j, 
-            leaderboard_position: j
+            leaderboard_position: j,
+            teamName
           });
 
           const resultTeam = await this.teamRepository.createTeam(teamMapped, transactionManager);
@@ -259,6 +265,7 @@ export class LeagueService {
   async resetTrainings(timezoneIdx: number, countryIdx: number, leagueIdx: number) {
     const entityManager = AppDataSource.manager;
     await this.trainingRepository.resetTrainings(timezoneIdx, countryIdx, leagueIdx, entityManager);
-  }
+  }  
+  
 
 }
