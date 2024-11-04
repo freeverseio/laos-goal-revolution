@@ -81,4 +81,11 @@ export class TeamMapper {
     }));
   }
 
+  static mapMintedPlayersToTeamPlayers(team: Team, tokenIds: string[]): Team {
+    team.players.forEach((player, index) => {
+      player.token_id = tokenIds[index];
+    });
+    return team;
+  }
+
 }

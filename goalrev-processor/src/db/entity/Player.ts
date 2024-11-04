@@ -16,6 +16,9 @@ export class Player {
   @Column({ type: 'text' })
   team_id!: string;
 
+  @Column({ type: 'text' })
+  token_id?: string;
+
   @Column({ type: 'int' })
   defence!: number;
 

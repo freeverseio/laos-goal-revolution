@@ -120,7 +120,13 @@ export class TeamService {
         throw new Error(`Failed to mint team: ${result.errors[0].message}`);
       }
 
-      return TeamMapper.mapMintedPlayersToResponse(team, result.data.mint.tokenIds);
+      const updatedTeam = TeamMapper.mapMintedPlayersToTeamPlayers(team, result.data.mint.tokenIds);
+      await this.teamRepository.save(updatedTeam);
+      return team.players.map((player) => ({
+        id: player.player_id,
+        tokenId: player.token_id!,
+        teamId: team.team_id
+      }));
     } catch (error) {
       throw new Error(`Failed to mint team: ${error}`);
     }

@@ -5,6 +5,12 @@ import { TeamId } from "../../types/leaguegroup";
 
 export class TeamRepository  {
 
+  async save(team: Team): Promise<Team> {
+    const entityManager = AppDataSource.manager;
+    const teamRepository = entityManager.getRepository(Team);
+    return teamRepository.save(team);
+  }
+
   async bulkUpdate(teams: TeamPartialUpdate[], transactionalEntityManager: EntityManager): Promise<void> {
     const teamRepository = transactionalEntityManager.getRepository(Team);
     await teamRepository.save(teams);
