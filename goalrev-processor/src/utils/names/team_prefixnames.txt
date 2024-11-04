@@ -1,0 +1,37 @@
+Athletic
+Sea
+World
+Snow
+Desert
+Sword
+Angry
+Elegant
+Polar
+Vampire
+Water
+East
+West
+Northern
+Southern
+North
+South
+Windy
+Hope
+Ocean
+Brave
+Fast
+Awesome
+Inter
+Magic
+A. C.
+A. F.
+A. Z.
+C. A.
+C. F.
+C. Z.
+F. A.
+F. C.
+F. Z.
+Z. A.
+Z. C.
+Z. F.
