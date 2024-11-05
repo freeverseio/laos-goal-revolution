@@ -1,4 +1,4 @@
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client/core';
 
 export const gqlClient = new ApolloClient({
   uri: process.env.GRAPHQL_ENDPOINT!,
