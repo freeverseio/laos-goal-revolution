@@ -61,7 +61,7 @@ export class TeamMapper {
               value: SkillsUtils.getAge(player.encoded_skills).toString()
             }
           ],
-          image: "ipfs://QmThWWVj3DxyT5FFSFaVDnDAooCFRP1qR4mYGPpexBKxKG"
+          image: "ipfs://QmXEx4oVwoHSeSSLFW5HN6vjgKCh7mCve5Z7VUnb7ha3pj"
         }))
       }
     };
