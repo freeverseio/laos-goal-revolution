@@ -36,7 +36,7 @@ COPY --from=builder --chown=appuser:nodejs /app/dist ./dist
 COPY --from=builder --chown=appuser:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=appuser:nodejs /app/package.json ./package.json
 COPY --from=builder --chown=appuser:nodejs /app/entrypoint.sh ./
-
+COPY --from=builder --chown=appuser:nodejs /app/src/utils/names/names.db ./src/utils/names
 
 # Remove the production environment template and adjust ownership
 RUN chown -R appuser:nodejs /app
