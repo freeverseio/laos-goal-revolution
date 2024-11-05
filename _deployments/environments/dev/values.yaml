@@ -13,4 +13,7 @@ ganacheContractLeagues: "0x630589690929E9cdEFDeF0734717a9eF3Ec7Fcfe"
 ganacheContractPlayAndEvolve: "0x6eD79Aa1c71FD7BdBC515EfdA3Bd4e26394435cC"
 ganacheContractUtils: "0xA94B7f0465E98609391C623d0560C5720a3f2D33"
 playMatchesScheduler: "*/10 * * * * *"
-
+mintPendingTeamsScheduler: "*/30 * * * * *"
+graphqlEndpoint: https://api.laosnetwork.io/graphql
+chainId: "137"
+contractAddress: "0x7404a72f74eed1c9808f6d371bdb2faac362df1d"

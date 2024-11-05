@@ -1,6 +1,15 @@
 import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn, OneToMany, OneToOne, DeepPartial } from "typeorm";
 import { Country, League, Player, Tactics, Training } from "./"; 
 
+
+export enum MintStatus {
+  NOT_MINTED = "not_minted",
+  PENDING = "pending",
+  MINTING = "minting",
+  SUCCESS = "success",
+  FAILED = "failed",
+}
+
 @Entity("teams")
 export class Team {
 
@@ -93,6 +102,16 @@ export class Team {
 
   @Column({ type: 'int', default: 0 })
   promo_timeout!: number;
+
+  @Column({
+    type: "enum",
+    enum: MintStatus,
+  })
+  mint_status!: MintStatus;
+
+  @Column({ type: 'timestamp', default: null })
+  mint_updated_at!: Date | null;
+
 }
 
 export type TeamPartialUpdate = DeepPartial<Team>; 

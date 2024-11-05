@@ -30,6 +30,8 @@ spec:
             cpu: "500m"
         imagePullPolicy: Always
         env:
+          - name: API_PROCESSOR_URL
+            value: "http://goalrev-processor.goalrev.svc.cluster.local:3000"
           - name: POSTGRES_PASSWORD
             valueFrom:
               secretKeyRef:

@@ -1,9 +1,21 @@
 import { AppDataSource } from "../AppDataSource";
-import { EntityManager, In, Repository } from "typeorm";
-import { Team, TeamPartialUpdate } from "../entity/Team";
+import { EntityManager, In, LessThan, Repository } from "typeorm";
+import { MintStatus, Team, TeamPartialUpdate } from "../entity";
 import { TeamId } from "../../types/leaguegroup";
 
 export class TeamRepository  {
+
+  async save(team: Team): Promise<Team> {
+    const entityManager = AppDataSource.manager;
+    const teamRepository = entityManager.getRepository(Team);
+    return teamRepository.save(team);
+  }
+
+  async setMintStatus(teamId: string, mintStatus: MintStatus): Promise<void> {
+    const entityManager = AppDataSource.manager;
+    const teamRepository = entityManager.getRepository(Team);
+    await teamRepository.update(teamId, { mint_status: mintStatus, mint_updated_at: new Date() });
+  }
 
   async bulkUpdate(teams: TeamPartialUpdate[], transactionalEntityManager: EntityManager): Promise<void> {
     const teamRepository = transactionalEntityManager.getRepository(Team);
@@ -13,6 +25,41 @@ export class TeamRepository  {
   async bulkCreate(teams: Team[], transactionalEntityManager: EntityManager): Promise<void> {
     const teamRepository = transactionalEntityManager.getRepository(Team);
     await teamRepository.save(teams);
+  }
+
+  async findPendingTeams(): Promise<Team[]> {
+    return await AppDataSource.transaction(async (transactionalEntityManager: EntityManager) => {
+      const teamRepository = transactionalEntityManager.getRepository(Team);
+      
+      // Calculate the timestamp that is 30 minutes ago from the current time
+      const timeLimitAgo = new Date(Date.now() - 30 * 60 * 1000);
+
+      // Find teams that are either pending or failed, or teams that are in MINTING for more than the time limit
+      const teams = await teamRepository.find({ 
+        where: [
+          { mint_status: In([MintStatus.PENDING, MintStatus.FAILED]) },
+          { mint_status: MintStatus.MINTING, mint_updated_at: LessThan(timeLimitAgo) }
+        ],
+        take: 5
+      });
+      
+      // Extract the IDs of the teams found
+      const teamIds = teams.map(team => team.team_id);
+      
+      // Update the status to MINTING for the teams found, along with the mint_updated_at timestamp
+      if (teamIds.length > 0) {
+        await teamRepository.update(
+          { team_id: In(teamIds) }, 
+          { 
+            mint_status: MintStatus.MINTING,
+            mint_updated_at: new Date() // Set to the current timestamp
+          }
+        );
+      }
+      
+      // Return the found teams (now with updated status)
+      return teams;
+    });
   }
 
   async findTeamsWithPlayersByTimezone(timezoneIdx: number): Promise<Team[]> {
@@ -33,7 +80,7 @@ export class TeamRepository  {
         countryIdx: countryIdx,
         timezoneIdx: timezoneIdx,
       })
-      .orderBy("team.ranking_points", "DESC")
+      .orderBy("CAST(team.ranking_points AS INTEGER)", "DESC")
       .getMany();
     return teams;
   }
@@ -50,6 +97,12 @@ export class TeamRepository  {
       .orderBy("team.team_idx_in_league", "ASC")
       .getMany();
     return teams;
+  }
+
+  async findCompleteTeamByTeamId(teamId: string): Promise<Team | null> {
+    const teamRepository = AppDataSource.getRepository(Team);
+    // find with players
+    return await teamRepository.findOne({ where: { team_id: teamId }, relations: ["players"] });
   }
 
  

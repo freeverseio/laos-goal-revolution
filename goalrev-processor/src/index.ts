@@ -7,11 +7,13 @@ import { LeagueController } from "./controller/LeagueController";
 import { CalendarController } from "./controller/CalendarController";
 import * as cron from 'node-cron';
 import { MatchFactory } from "./factories/MatchFactory";
+import { TeamController } from "./controller/TeamController";
+import { TeamFactory } from "./factories/TeamFactory";
 
 dotenv.config();
 
 const app = createExpressServer({
-  controllers: [MatchController, CalendarController, LeagueController], // register controllers here
+  controllers: [MatchController, CalendarController, LeagueController, TeamController], // register controllers here
 });
 
 let lastPlayMatches = new Date();
@@ -61,6 +63,15 @@ AppDataSource.initialize()
     }
     cron.schedule(playMatchesScheduler, () => {
       playMatches();
+    });
+
+    const mintPendingTeamsScheduler = process.env.MINT_PENDING_TEAMS_SCHEDULER;
+    if (!mintPendingTeamsScheduler) {
+      throw new Error("MINT_PENDING_TEAMS_SCHEDULER is not set");
+    }
+    cron.schedule(mintPendingTeamsScheduler, () => {
+      const teamService = TeamFactory.createTeamService();
+      teamService.mintPendingTeams();
     });
 
     app.listen(process.env.APP_PORT, () => {

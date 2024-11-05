@@ -26,3 +26,13 @@ export interface BirthTraits {
   leftishness: number;
   aggressiveness: number;
 }
+
+export interface MintTeamResponse {
+  players: MintedPlayer[];
+}
+
+export interface MintedPlayer {
+  teamId: string;
+  id: string;
+  tokenId: string;
+}

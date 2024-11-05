@@ -35,6 +35,11 @@ spec:
               secretKeyRef:
                 name: goalrev-private-config
                 key: postgresPassword
+          - name: GRAPHQL_ACCESS_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: goalrev-private-config
+                key: graphqlAccessToken
           - name: DB_HOST
             value: {{ .Values.postgresHost }}
           - name: DB_PORT
@@ -51,6 +56,15 @@ spec:
             value: "./data/ca-certificate.pem"
           - name: PLAY_MATCHES_SCHEDULER
             value: {{ .Values.playMatchesScheduler | quote }}
+          - name: MINT_PENDING_TEAMS_SCHEDULER
+            value: {{ .Values.mintPendingTeamsScheduler | quote }}
+          - name: GRAPHQL_ENDPOINT
+            value: {{ .Values.graphqlEndpoint }}
+          - name: CHAIN_ID
+            value: {{ .Values.chainId | quote }}
+          - name: CONTRACT_ADDRESS
+            value: {{ .Values.contractAddress | quote }}
+
         ports:
         - containerPort: {{ .Values.processorPort }}
       volumes:

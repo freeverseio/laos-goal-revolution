@@ -87,20 +87,38 @@ const playerHistoryGraphByPlayerIdResolver = propName => {
 };
 
 const transferFirstBotToAddrWrapper = propName => {
-    return async (resolve, source, args, context, resolveInfo) => {
-        const { pgClient } = context;
-        var query = {
-            text: `UPDATE teams SET "owner" = $1 WHERE team_id = (SELECT team_id FROM teams t WHERE "owner" = '0x0000000000000000000000000000000000000000' AND timezone_idx = $2 AND country_idx = $3 ORDER BY CAST(ranking_points AS INTEGER) DESC LIMIT 1)`,
-            values: [args.address, args.timezone, args.countryIdxInTimezone],
-        };
-        const resulsqlResult = await pgClient.query(query);
-        let isUdpated = false;
-        if (resulsqlResult && resulsqlResult.rowCount === 1) {
-            isUdpated = true;
-            console.log("Assigned tema to addr: ", args.address);
-        }
-        return true;
-    };
+  return async (resolve, source, args, context, resolveInfo) => {
+      const { pgClient } = context;
+      var query = {
+          text: `
+              UPDATE teams 
+              SET "owner" = $1 ,
+              "mint_status" = 'pending'
+            
+              WHERE team_id = (
+                  SELECT team_id 
+                  FROM teams t 
+                  WHERE "owner" = '0x0000000000000000000000000000000000000000' 
+                  AND timezone_idx = $2 
+                  AND country_idx = $3 
+                  ORDER BY CAST(ranking_points AS INTEGER) DESC 
+                  LIMIT 1
+              )
+              RETURNING team_id;
+          `,
+          values: [args.address, args.timezone, args.countryIdxInTimezone],
+      };
+      
+      const sqlResult = await pgClient.query(query);
+
+      if (sqlResult && sqlResult.rowCount === 1) {
+        console.log("Team updated: ", sqlResult.rows[0].team_id);
+      } else {
+        console.error("Error in transferFirstBotToAddr: ", sqlResult);
+      }
+
+      return true;
+  };
 };
 
 const setMessageWrapper = propName => {
