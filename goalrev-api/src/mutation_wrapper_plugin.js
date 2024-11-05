@@ -111,9 +111,6 @@ const transferFirstBotToAddrWrapper = propName => {
       };
       
       const sqlResult = await pgClient.query(query);
-      
-      let isUpdated = false;
-      let teamId = null;
 
       if (sqlResult && sqlResult.rowCount === 1) {
         console.log("Team updated: ", sqlResult.rows[0].team_id);
