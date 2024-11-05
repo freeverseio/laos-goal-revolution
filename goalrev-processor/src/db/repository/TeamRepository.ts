@@ -1,9 +1,21 @@
 import { AppDataSource } from "../AppDataSource";
 import { EntityManager, In, Repository } from "typeorm";
-import { Team, TeamPartialUpdate } from "../entity/Team";
+import { MintStatus, Team, TeamPartialUpdate } from "../entity";
 import { TeamId } from "../../types/leaguegroup";
 
 export class TeamRepository  {
+
+  async save(team: Team): Promise<Team> {
+    const entityManager = AppDataSource.manager;
+    const teamRepository = entityManager.getRepository(Team);
+    return teamRepository.save(team);
+  }
+
+  async setMintStatus(teamId: string, mintStatus: MintStatus): Promise<void> {
+    const entityManager = AppDataSource.manager;
+    const teamRepository = entityManager.getRepository(Team);
+    await teamRepository.update(teamId, { mint_status: mintStatus });
+  }
 
   async bulkUpdate(teams: TeamPartialUpdate[], transactionalEntityManager: EntityManager): Promise<void> {
     const teamRepository = transactionalEntityManager.getRepository(Team);
@@ -33,7 +45,7 @@ export class TeamRepository  {
         countryIdx: countryIdx,
         timezoneIdx: timezoneIdx,
       })
-      .orderBy("team.ranking_points", "DESC")
+      .orderBy("CAST(team.ranking_points AS INTEGER)", "DESC")
       .getMany();
     return teams;
   }
@@ -50,6 +62,12 @@ export class TeamRepository  {
       .orderBy("team.team_idx_in_league", "ASC")
       .getMany();
     return teams;
+  }
+
+  async findCompleteTeamByTeamId(teamId: string): Promise<Team | null> {
+    const teamRepository = AppDataSource.getRepository(Team);
+    // find with players
+    return await teamRepository.findOne({ where: { team_id: teamId }, relations: ["players"] });
   }
 
  

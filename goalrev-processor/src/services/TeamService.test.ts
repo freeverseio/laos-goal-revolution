@@ -3,6 +3,7 @@ import { Team } from '../db/entity/Team';
 import { MatchEventOutput, MatchEventType, MatchLog } from '../types';
 import { EntityManager } from 'typeorm';
 import { MatchState } from '../db/entity';
+import { TeamRepository } from '../db/repository/TeamRepository';
 
 const mockEntityManager = {
   findOne: jest.fn(),
@@ -10,11 +11,15 @@ const mockEntityManager = {
   update: jest.fn(),
 } as unknown as jest.Mocked<EntityManager>;
 
+const mockTeamRepository = {
+  save: jest.fn(),
+} as unknown as jest.Mocked<TeamRepository>;
+
 describe('TeamService', () => {
   let teamService: TeamService;
 
   beforeEach(() => {
-    teamService = new TeamService();
+    teamService = new TeamService(mockTeamRepository);
     jest.clearAllMocks(); // Clear mocks before each test
   });
 

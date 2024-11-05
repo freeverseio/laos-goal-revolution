@@ -7,11 +7,12 @@ import { LeagueController } from "./controller/LeagueController";
 import { CalendarController } from "./controller/CalendarController";
 import * as cron from 'node-cron';
 import { MatchFactory } from "./factories/MatchFactory";
+import { TeamController } from "./controller/TeamController";
 
 dotenv.config();
 
 const app = createExpressServer({
-  controllers: [MatchController, CalendarController, LeagueController], // register controllers here
+  controllers: [MatchController, CalendarController, LeagueController, TeamController], // register controllers here
 });
 
 let lastPlayMatches = new Date();

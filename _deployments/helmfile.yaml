@@ -41,6 +41,9 @@ helmfiles:
       - processorPort: {{ .Values.processorPort | quote }}
       - apiInternalUrl: {{ .Values.apiInternalUrl }}
       - playMatchesScheduler: {{ .Values.playMatchesScheduler | quote }}
+      - graphqlEndpoint: {{ .Values.graphqlEndpoint }}
+      - chainId: {{ .Values.chainId }}
+      - contractAddress: {{ .Values.contractAddress }}
   - path: "charts/goalrev-core/helmfile.yaml"
     values:
       - namespace: {{ .Values.namespace }}
