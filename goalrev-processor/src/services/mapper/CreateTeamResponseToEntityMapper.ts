@@ -1,11 +1,12 @@
 import { Country, League, MintStatus, Player, Tactics, Team, Training } from "../../db/entity";
+import { PlayerNamesMap } from "../../types";
 import { CreateTeamResponse, Player as PlayerResponse } from "../../types/rest/output/team";
 import { DEFAULT_ENCODED_TACTIC } from "../../utils/constants";
 import { PreferredPositionMapper } from "./PreferredPositionMapper";
 
 export class CreateTeamResponseToEntityMapper {
-  static map({response, timezoneIdx, countryIdx, league_idx, team_idx_in_league, leaderboard_position, teamName}:
-    {response: CreateTeamResponse, timezoneIdx: number, countryIdx: number, league_idx: number, team_idx_in_league: number, leaderboard_position: number, teamName: string}): Team {
+  static map({response, timezoneIdx, countryIdx, league_idx, team_idx_in_league, leaderboard_position, teamName, playerNamesMap}:
+    {response: CreateTeamResponse, timezoneIdx: number, countryIdx: number, league_idx: number, team_idx_in_league: number, leaderboard_position: number, teamName: string, playerNamesMap: PlayerNamesMap}): Team {
     return  {
       team_id: response.id,
       name: teamName,
@@ -20,7 +21,7 @@ export class CreateTeamResponseToEntityMapper {
         country_idx: countryIdx,
         league_idx: league_idx,
       } as League,
-      players: CreateTeamResponseToEntityMapper.mapPlayers(response.players, response.id),
+      players: CreateTeamResponseToEntityMapper.mapPlayers(response.players, response.id, playerNamesMap),
       tactics: CreateTeamResponseToEntityMapper.createDefaultTactics(response.id),
       trainings: CreateTeamResponseToEntityMapper.createDefaultTraining(response.id),
       timezone_idx: timezoneIdx,
@@ -46,14 +47,14 @@ export class CreateTeamResponseToEntityMapper {
     };
   }
 
-  static mapPlayers(players: PlayerResponse[], teamId: string): Player[] {
+  static mapPlayers(players: PlayerResponse[], teamId: string, playerNamesMap: PlayerNamesMap): Player[] {
     return players.map((player, index) => {
       const playerEntity = new Player();
       const preferredPosition = PreferredPositionMapper.getPreferredPosition(player.birthTraits);
       if (preferredPosition instanceof Error) {
         throw new Error(`Failed to get preferred position for player ${player.id}: ${preferredPosition.message}`);
       }
-      playerEntity.name = "name " + player.id;
+      playerEntity.name = playerNamesMap[player.id].name;
       playerEntity.player_id = player.id;
       playerEntity.team_id = teamId;
       playerEntity.defence = player.skills.defence;
@@ -68,8 +69,8 @@ export class CreateTeamResponseToEntityMapper {
       playerEntity.red_card = false; // Set default
       playerEntity.injury_matches_left = 0; // Set default
       playerEntity.tiredness = 0; // Set default or provide input
-      playerEntity.country_of_birth = "ES";
-      playerEntity.race = "Spanish";
+      playerEntity.country_of_birth = playerNamesMap[player.id].countryISO2;
+      playerEntity.race = playerNamesMap[player.id].region;
       playerEntity.yellow_card_1st_half = false; // Set default
       playerEntity.voided = false // Set default
       playerEntity.potential = player.birthTraits.potential;

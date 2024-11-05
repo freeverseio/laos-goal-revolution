@@ -11,7 +11,7 @@ import { MatchRepository } from "../db/repository/MatchRepository";
 import { TeamRepository } from "../db/repository/TeamRepository";
 import { TrainingRepository } from "../db/repository/TrainingRepository";
 import { VerseRepository } from "../db/repository/VerseRepository";
-import { CreateTeamCoreInput, LeagueGroup, Matchday, Schedule, TeamId } from "../types";
+import { CreateTeamCoreInput, LeagueGroup, Matchday, PlayerNamesMap, Schedule, TeamId } from "../types";
 import { RankingPointsInput } from "../types/rest/input/rankingPoints";
 import { CreateTeamResponse } from "../types/rest/output/team";
 import { getMatch1stHalfUTC } from "../utils/calendarUtils";
@@ -19,7 +19,7 @@ import { MATCHDAYS_PER_ROUND } from "../utils/constants/constants";
 import { CalendarService } from "./CalendarService";
 import { CreateTeamResponseToEntityMapper } from "./mapper/CreateTeamResponseToEntityMapper";
 import { MatchMapper } from "./mapper/MatchMapper";
-import { generateTeamName, loadNamesDatabase } from "../utils/TeamNameUtils";
+import { generatePlayerFullName, generateTeamName, loadNamesDatabase } from "../utils/nameUtils";
 
 export class LeagueService {
   private teamRepository: TeamRepository;
@@ -217,9 +217,8 @@ export class LeagueService {
     const firstVerse = await this.verseRepository.getInitialVerse(AppDataSource.manager);
     const nextTeamIdxInTZ =await this.teamRepository.countTeamsByTimezone( timezoneIdx, entityManager);
     const nextLeagueIdx = await this.leagueRepository.countLeaguesByTimezoneAndCountry( timezoneIdx, countryIdx, entityManager);
-
     // Load names database once so we can use it multiple times later
-    const teamNamesDb = await loadNamesDatabase();
+    const namesDb = await loadNamesDatabase();
     
     for (let i = 0; i < 4; i++) { // 16 leagues
       // open tx
@@ -236,15 +235,24 @@ export class LeagueService {
           const response = await axios.post(`${process.env.CORE_API_URL}/team/createTeam`, requestBody);
           console.log('Creating Team: ', (j + (i*8)));
           const createTeamResponse = response.data as CreateTeamResponse;
-          
-          const teamName = await generateTeamName(teamNamesDb, createTeamResponse.id);
+          const teamName = await generateTeamName(namesDb, createTeamResponse.id);
+
+          // generate players names, race and region
+          const playerNamesMap: PlayerNamesMap = {};
+          for (let k = 0; k < createTeamResponse.players.length; k++) {
+            createTeamResponse.players[k];
+            const playerFullName = await generatePlayerFullName(namesDb, createTeamResponse.players[k].id, divisionCreationRound, timezoneIdx, BigInt(countryIdx));
+            playerNamesMap[createTeamResponse.players[k].id] = playerFullName;
+          }
+
           const teamMapped = CreateTeamResponseToEntityMapper.map({response: createTeamResponse, 
             timezoneIdx, 
             countryIdx, 
             league_idx: nextLeagueIdx + i, 
             team_idx_in_league: j, 
             leaderboard_position: j,
-            teamName
+            teamName,            
+            playerNamesMap
           });
 
           const resultTeam = await this.teamRepository.createTeam(teamMapped, transactionManager);
