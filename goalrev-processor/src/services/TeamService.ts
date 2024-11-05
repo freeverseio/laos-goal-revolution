@@ -5,7 +5,7 @@ import { TeamHistoryMapper } from "./mapper/TeamHistoryMapper";
 import { AppDataSource } from "../db/AppDataSource";
 import { TeamRepository } from "../db/repository/TeamRepository";
 import { TeamMapper } from "./mapper/TeamMapper";
-import { gql } from "@apollo/client";
+import { gql } from "@apollo/client/core";
 import { gqlClient } from "./graphql/GqlClient";
 import { MintedPlayer } from "../types/rest/output/team";
 
