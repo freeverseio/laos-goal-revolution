@@ -19,7 +19,7 @@ import { MATCHDAYS_PER_ROUND } from "../utils/constants/constants";
 import { CalendarService } from "./CalendarService";
 import { CreateTeamResponseToEntityMapper } from "./mapper/CreateTeamResponseToEntityMapper";
 import { MatchMapper } from "./mapper/MatchMapper";
-import { generatePlayerFullName, generateTeamName, loadNamesDatabase } from "../utils/NameUtils";
+import { generatePlayerFullName, generateTeamName, loadNamesDatabase } from "../utils/_nameUtils";
 
 export class LeagueService {
   private teamRepository: TeamRepository;
