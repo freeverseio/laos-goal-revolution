@@ -56,6 +56,8 @@ spec:
             value: "./data/ca-certificate.pem"
           - name: PLAY_MATCHES_SCHEDULER
             value: {{ .Values.playMatchesScheduler | quote }}
+          - name: MINT_PENDING_TEAMS_SCHEDULER
+            value: {{ .Values.mintPendingTeamsScheduler | quote }}
           - name: GRAPHQL_ENDPOINT
             value: {{ .Values.graphqlEndpoint }}
           - name: CHAIN_ID
