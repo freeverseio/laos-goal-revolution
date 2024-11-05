@@ -42,6 +42,7 @@ export class CreateTeamResponseToEntityMapper {
       is_zombie: false,
       promo_timeout: 0,
       mint_status: MintStatus.PENDING,
+      mint_updated_at: null,
     };
   }
 

@@ -14,6 +14,7 @@ releases:
       - processorPort: {{ .Values.processorPort }}
       - apiInternalUrl: {{ .Values.apiInternalUrl }}
       - playMatchesScheduler: {{ .Values.playMatchesScheduler | quote }}
+      - mintPendingTeamsScheduler: {{ .Values.mintPendingTeamsScheduler | quote }}
       - graphqlEndpoint: {{ .Values.graphqlEndpoint }}
       - chainId: {{ .Values.chainId }}
       - contractAddress: {{ .Values.contractAddress }}

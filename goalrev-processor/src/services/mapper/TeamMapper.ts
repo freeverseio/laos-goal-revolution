@@ -1,4 +1,4 @@
-import { Team } from "../../db/entity";
+import { MintStatus, Team } from "../../db/entity";
 import { MintTeamMutation } from "../../types/rest/input/team";
 import { MintedPlayer } from "../../types";
 import SkillsUtils from "../../utils/SkillsUtils";
@@ -79,6 +79,7 @@ export class TeamMapper {
     team.players.forEach((player, index) => {
       player.token_id = tokenIds[index];
     });
+    
     return team;
   }
 

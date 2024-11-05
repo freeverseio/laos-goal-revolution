@@ -7,7 +7,7 @@ import { TeamRepository } from "../db/repository/TeamRepository";
 import { TeamMapper } from "./mapper/TeamMapper";
 import { gql } from "@apollo/client";
 import { gqlClient } from "./graphql/GqlClient";
-import { MintedPlayer, MintTeamResponse } from "../types/rest/output/team";
+import { MintedPlayer } from "../types/rest/output/team";
 
 export class TeamService {
   private teamRepository: TeamRepository;
@@ -96,8 +96,18 @@ export class TeamService {
       .execute();
   }
 
+  async mintPendingTeams(): Promise<void> {
+    const pendingTeams = await this.teamRepository.findPendingTeams();
+    const mintPromises = pendingTeams.map(team => 
+      this.mintTeam({
+        address: team.owner,
+        teamId: team.team_id
+      })
+    );
+    await Promise.all(mintPromises); 
+  }
+
   async mintTeam(mintTeamInput: MintTeamInput): Promise<MintedPlayer[]> {
-    this.teamRepository.setMintStatus(mintTeamInput.teamId, MintStatus.PENDING);
     const team = await this.teamRepository.findCompleteTeamByTeamId(mintTeamInput.teamId);
     if (!team) {
       throw new Error("Team not found");
@@ -123,8 +133,10 @@ export class TeamService {
       }
 
       const updatedTeam = TeamMapper.mapMintedPlayersToTeamPlayers(team, result.data.mint.tokenIds);
+      updatedTeam.mint_status = MintStatus.SUCCESS;
+      updatedTeam.mint_updated_at = new Date();
       await this.teamRepository.save(updatedTeam);
-      this.teamRepository.setMintStatus(mintTeamInput.teamId, MintStatus.SUCCESS);
+      
       return team.players.map((player) => ({
         id: player.player_id,
         tokenId: player.token_id!,

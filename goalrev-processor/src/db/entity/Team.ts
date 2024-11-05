@@ -5,6 +5,7 @@ import { Country, League, Player, Tactics, Training } from "./";
 export enum MintStatus {
   NOT_MINTED = "not_minted",
   PENDING = "pending",
+  MINTING = "minting",
   SUCCESS = "success",
   FAILED = "failed",
 }
@@ -107,6 +108,9 @@ export class Team {
     enum: MintStatus,
   })
   mint_status!: MintStatus;
+
+  @Column({ type: 'timestamp', default: null })
+  mint_updated_at!: Date | null;
 
 }
 

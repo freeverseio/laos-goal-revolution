@@ -93,7 +93,9 @@ const transferFirstBotToAddrWrapper = propName => {
       var query = {
           text: `
               UPDATE teams 
-              SET "owner" = $1 
+              SET "owner" = $1 ,
+              "mint_status" = 'pending'
+            
               WHERE team_id = (
                   SELECT team_id 
                   FROM teams t 
@@ -109,19 +111,9 @@ const transferFirstBotToAddrWrapper = propName => {
       };
       
       const sqlResult = await pgClient.query(query);
-      
-      let isUpdated = false;
-      let teamId = null;
 
       if (sqlResult && sqlResult.rowCount === 1) {
-          isUpdated = true;
-          teamId = sqlResult.rows[0].team_id; // Retrieve the team_id from the result
-          console.log("Assigned team to addr: ", args.address, " Team ID: ", teamId);
-          // mint the team
-          axios.put(`${process.env.API_PROCESSOR_URL}/team/mint`, {
-            address: args.address,
-            teamId: teamId
-          });
+        console.log("Team updated: ", sqlResult.rows[0].team_id);
       } else {
         console.error("Error in transferFirstBotToAddr: ", sqlResult);
       }

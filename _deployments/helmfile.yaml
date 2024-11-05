@@ -44,6 +44,7 @@ helmfiles:
       - graphqlEndpoint: {{ .Values.graphqlEndpoint }}
       - chainId: {{ .Values.chainId }}
       - contractAddress: {{ .Values.contractAddress }}
+      - mintPendingTeamsScheduler: {{ .Values.mintPendingTeamsScheduler | quote }}
   - path: "charts/goalrev-core/helmfile.yaml"
     values:
       - namespace: {{ .Values.namespace }}
