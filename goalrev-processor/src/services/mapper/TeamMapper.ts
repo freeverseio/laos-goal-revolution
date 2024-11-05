@@ -1,6 +1,7 @@
 import { Team } from "../../db/entity";
 import { MintTeamMutation } from "../../types/rest/input/team";
 import { MintedPlayer } from "../../types";
+import SkillsUtils from "../../utils/SkillsUtils";
 
 export class TeamMapper {
 
@@ -12,7 +13,7 @@ export class TeamMapper {
         tokens: team.players.map(player => ({
           mintTo: [address],
           name: player.name,
-          description: `GoalRev: A player of the team: ${team.name}`,
+          description: `Player of Goal Revolution`,
           attributes: [
             {
               trait_type: "ID",
@@ -39,10 +40,6 @@ export class TeamMapper {
               value: player.endurance.toString()
             },
             {
-              trait_type: "Shirt Number",
-              value: player.shirt_number.toString()
-            },
-            {
               trait_type: "Preferred Position",
               value: player.preferred_position
             },
@@ -54,20 +51,17 @@ export class TeamMapper {
               trait_type: "Country of Birth",
               value: player.country_of_birth
             },
-            {
-              trait_type: "Race",
-              value: player.race
-            },
+           
             {
               trait_type: "Tiredness",
               value: player.tiredness.toString()
             },
             {
-              trait_type: "Skills",
-              value: player.encoded_skills
+              trait_type: "Age",
+              value: SkillsUtils.getAge(player.encoded_skills).toString()
             }
           ],
-          image: "ipfs://QmPbxeGcXhYQQNgsC6a36dDyYUcHgMLnGKnF8pVFmGsvqi"
+          image: "ipfs://QmThWWVj3DxyT5FFSFaVDnDAooCFRP1qR4mYGPpexBKxKG"
         }))
       }
     };

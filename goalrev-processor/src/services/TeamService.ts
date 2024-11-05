@@ -1,5 +1,5 @@
 import { EntityManager } from "typeorm";
-import { Team } from "../db/entity/Team";
+import { MintStatus, Team } from "../db/entity/Team";
 import { MatchLog, MintTeamInput } from "../types";
 import { TeamHistoryMapper } from "./mapper/TeamHistoryMapper";
 import { AppDataSource } from "../db/AppDataSource";
@@ -97,6 +97,7 @@ export class TeamService {
   }
 
   async mintTeam(mintTeamInput: MintTeamInput): Promise<MintedPlayer[]> {
+    this.teamRepository.setMintStatus(mintTeamInput.teamId, MintStatus.PENDING);
     const team = await this.teamRepository.findCompleteTeamByTeamId(mintTeamInput.teamId);
     if (!team) {
       throw new Error("Team not found");
@@ -117,17 +118,20 @@ export class TeamService {
         }
       });
       if (result.errors) {
+        this.teamRepository.setMintStatus(mintTeamInput.teamId, MintStatus.FAILED);
         throw new Error(`Failed to mint team: ${result.errors[0].message}`);
       }
 
       const updatedTeam = TeamMapper.mapMintedPlayersToTeamPlayers(team, result.data.mint.tokenIds);
       await this.teamRepository.save(updatedTeam);
+      this.teamRepository.setMintStatus(mintTeamInput.teamId, MintStatus.SUCCESS);
       return team.players.map((player) => ({
         id: player.player_id,
         tokenId: player.token_id!,
         teamId: team.team_id
       }));
     } catch (error) {
+      this.teamRepository.setMintStatus(mintTeamInput.teamId, MintStatus.FAILED);
       throw new Error(`Failed to mint team: ${error}`);
     }
 

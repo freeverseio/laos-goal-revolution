@@ -1,4 +1,4 @@
-import { Country, League, Player, Tactics, Team, Training } from "../../db/entity";
+import { Country, League, MintStatus, Player, Tactics, Team, Training } from "../../db/entity";
 import { CreateTeamResponse, Player as PlayerResponse } from "../../types/rest/output/team";
 import { DEFAULT_ENCODED_TACTIC } from "../../utils/constants";
 import { PreferredPositionMapper } from "./PreferredPositionMapper";
@@ -41,6 +41,7 @@ export class CreateTeamResponseToEntityMapper {
       match_log: '0',
       is_zombie: false,
       promo_timeout: 0,
+      mint_status: MintStatus.PENDING,
     };
   }
 
