@@ -1,8 +1,8 @@
 import { Country, League, MintStatus, Player, Tactics, Team, Training } from "../../db/entity";
+import { PlayerNamesMap } from "../../types";
 import { CreateTeamResponse, Player as PlayerResponse } from "../../types/rest/output/team";
 import { DEFAULT_ENCODED_TACTIC } from "../../utils/constants";
 import { PreferredPositionMapper } from "./PreferredPositionMapper";
-import { generatePlayerFullName, NamesDb, PlayerNamesMap } from "../../utils/NameUtils";
 
 export class CreateTeamResponseToEntityMapper {
   static map({response, timezoneIdx, countryIdx, league_idx, team_idx_in_league, leaderboard_position, teamName, playerNamesMap}:

@@ -11,7 +11,7 @@ import { MatchRepository } from "../db/repository/MatchRepository";
 import { TeamRepository } from "../db/repository/TeamRepository";
 import { TrainingRepository } from "../db/repository/TrainingRepository";
 import { VerseRepository } from "../db/repository/VerseRepository";
-import { CreateTeamCoreInput, LeagueGroup, Matchday, Schedule, TeamId } from "../types";
+import { CreateTeamCoreInput, LeagueGroup, Matchday, PlayerNamesMap, Schedule, TeamId } from "../types";
 import { RankingPointsInput } from "../types/rest/input/rankingPoints";
 import { CreateTeamResponse } from "../types/rest/output/team";
 import { getMatch1stHalfUTC } from "../utils/calendarUtils";
@@ -19,7 +19,7 @@ import { MATCHDAYS_PER_ROUND } from "../utils/constants/constants";
 import { CalendarService } from "./CalendarService";
 import { CreateTeamResponseToEntityMapper } from "./mapper/CreateTeamResponseToEntityMapper";
 import { MatchMapper } from "./mapper/MatchMapper";
-import { generatePlayerFullName, generateTeamName, loadNamesDatabase, PlayerNamesMap } from "../utils/NameUtils";
+import { generatePlayerFullName, generateTeamName, loadNamesDatabase } from "../utils/NameUtils";
 
 export class LeagueService {
   private teamRepository: TeamRepository;

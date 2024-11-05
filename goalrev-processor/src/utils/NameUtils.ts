@@ -1,20 +1,7 @@
 import { id } from "ethers";
 import sqlite3 from 'sqlite3';
 import { open, Database as SqliteDatabase } from 'sqlite';
-
-type Database = SqliteDatabase<sqlite3.Database>;
-type NamesDb = {
-  db: Database,
-  nonEmptyCountries: string[],
-  nonEmptyRegions: string[],
-  nNamesPerCountry: { [id: string]: number; },
-  nSurnamesPerRegion: { [id: string]: number; },
-  deployedCountriesSpecs: Map<number, DeployedCountriesSpecs>,
-}
-
-interface CountResult {
-  count: number;
-}
+import { CountEntriesResult, CountResult, Database, DeployedCountriesSpecs, NamesDb } from "../types";
 
 async function loadNamesDatabase(): Promise<NamesDb> {
   const db = await open({
@@ -100,20 +87,6 @@ async function generateTeamName(namesDb: NamesDb, teamId: string) {
 
 // Players
 
-interface CountrySpecs {
-  iso2: string;
-  region: string;
-  namePurity: number;
-  surnamePurity: number;
-}
-
-interface DeployedCountriesSpecs {
-  iso2: string;
-  region: string;
-  namePurity: number;
-  surnamePurity: number;
-}
-
 function readDeployedCountriesSpecs(): Map<number, DeployedCountriesSpecs> {
   const deployedCountriesSpecs: Map<number, DeployedCountriesSpecs> = new Map();
   deployedCountriesSpecs.set(serializeTZandCountryIdx(10, 0n), { iso2: "ES", region: "Spanish", namePurity: 75, surnamePurity: 60 });
@@ -138,18 +111,7 @@ function serializeTZandCountryIdx(tz: number, countryIdxInTZ: bigint): number {
   return Number(BigInt(tz) * 1000000n + countryIdxInTZ);
 }
 
-type CountEntriesResult = {
-  counts: Record<string, number>;
-  nonEmptyRegionsOrCountries: string[];
-};
 
-type PlayerNamesMap =  { 
-  [id: string]: {
-    name: string, 
-    countryISO2: string, 
-    region: string
-  } 
-}
 
 async function countEntriesPerArea(
   db: Database,
@@ -191,7 +153,6 @@ async function countEntriesPerArea(
     throw new Error(`Error fetching entries: ${error}`);
   }
 }
-
 
 async function generateName(namesDb: NamesDb, playerId: string, generation: number, iso2: string, purity: number): Promise<[string, string, Error | null]> {
   const dice = generateRnd(playerId, "aa", 100);
@@ -284,8 +245,6 @@ async function generatePlayerFullName(namesDb: NamesDb, playerId: string, genera
 }
 
 export {
-  NamesDb,
-  PlayerNamesMap,
   loadNamesDatabase,
   generatePlayerFullName,
   generateTeamName
