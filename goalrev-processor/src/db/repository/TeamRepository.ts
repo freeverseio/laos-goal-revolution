@@ -1,9 +1,14 @@
 import { AppDataSource } from "../AppDataSource";
-import { EntityManager, In, LessThan, Repository } from "typeorm";
+import { EntityManager, ILike, In, LessThan, Repository } from "typeorm";
 import { MintStatus, Team, TeamPartialUpdate } from "../entity";
 import { TeamId } from "../../types/leaguegroup";
 
-export class TeamRepository  {
+export class TeamRepository {
+
+  async findById(teamId: string): Promise<Team | null> {
+    const teamRepository = AppDataSource.getRepository(Team);
+    return await teamRepository.findOneBy({ team_id: teamId });
+  }
 
   async save(team: Team): Promise<Team> {
     const entityManager = AppDataSource.manager;
@@ -11,10 +16,10 @@ export class TeamRepository  {
     return teamRepository.save(team);
   }
 
-  async setMintStatus(teamId: string, mintStatus: MintStatus): Promise<void> {
+  async setMintStatus(teamsIds: string[], mintStatus: MintStatus): Promise<void> {
     const entityManager = AppDataSource.manager;
     const teamRepository = entityManager.getRepository(Team);
-    await teamRepository.update(teamId, { mint_status: mintStatus, mint_updated_at: new Date() });
+    await teamRepository.update(teamsIds, { mint_status: mintStatus, mint_updated_at: new Date() });
   }
 
   async bulkUpdate(teams: TeamPartialUpdate[], transactionalEntityManager: EntityManager): Promise<void> {
@@ -27,50 +32,73 @@ export class TeamRepository  {
     await teamRepository.save(teams);
   }
 
-  async findPendingTeams(): Promise<Team[]> {
+  async findPendingTeams(limit: number = 5): Promise<Team[]> {
+    const timeLimitAgo = new Date(Date.now() - 30 * 60 * 1000);
+  
     return await AppDataSource.transaction(async (transactionalEntityManager: EntityManager) => {
       const teamRepository = transactionalEntityManager.getRepository(Team);
-      
-      // Calculate the timestamp that is 30 minutes ago from the current time
-      const timeLimitAgo = new Date(Date.now() - 30 * 60 * 1000);
-
-      // Find teams that are either pending or failed, or teams that are in MINTING for more than the time limit
-      const teams = await teamRepository.find({ 
-        where: [
-          { mint_status: In([MintStatus.PENDING, MintStatus.FAILED]) },
-          { mint_status: MintStatus.MINTING, mint_updated_at: LessThan(timeLimitAgo) }
+  
+      // Step 1: Atomically update teams and retrieve updated rows
+      const updatedTeams = await teamRepository.query(
+        `
+        WITH updated AS (
+          SELECT team_id
+          FROM teams
+          WHERE (mint_status IN ($1, $2) OR (mint_status = $3 AND mint_updated_at < $4))
+          ORDER BY mint_updated_at ASC
+          LIMIT $5
+        )
+        UPDATE teams
+        SET mint_status = $6,
+            mint_updated_at = $7
+        FROM updated
+        WHERE teams.team_id = updated.team_id
+        RETURNING teams.*
+        `,
+        [
+          MintStatus.PENDING,
+          MintStatus.FAILED,
+          MintStatus.MINTING,
+          timeLimitAgo,
+          limit,
+          MintStatus.MINTING,
+          new Date(Date.now())
         ],
-        take: 5
-      });
-      
-      // Extract the IDs of the teams found
-      const teamIds = teams.map(team => team.team_id);
-      
-      // Update the status to MINTING for the teams found, along with the mint_updated_at timestamp
-      if (teamIds.length > 0) {
-        await teamRepository.update(
-          { team_id: In(teamIds) }, 
-          { 
-            mint_status: MintStatus.MINTING,
-            mint_updated_at: new Date() // Set to the current timestamp
-          }
-        );
+    
+      );
+  
+      if (updatedTeams.length === 0 || updatedTeams[0].length === 0) {
+        return [];
       }
-      
-      // Return the found teams (now with updated status)
-      return teams;
+  
+      const teamIds = updatedTeams[0].map((team: any) => team.team_id);
+  
+      // Step 2: Fetch teams with their relations
+      const teamsWithRelations = await teamRepository.find({
+        where: { team_id: In(teamIds) },
+        relations: ["players"],
+      });
+  
+      // Step 3: Update in-memory team objects to reflect new status
+      const now = new Date();
+      teamsWithRelations.forEach((team) => {
+        team.mint_status = MintStatus.MINTING;
+        team.mint_updated_at = now;
+      });
+  
+      return teamsWithRelations;
     });
   }
 
   async findTeamsWithPlayersByTimezone(timezoneIdx: number): Promise<Team[]> {
     const teamRepository = AppDataSource.getRepository(Team);
-    const teams = await teamRepository.find({ 
+    const teams = await teamRepository.find({
       where: { timezone_idx: timezoneIdx },
-      relations: ["players"] 
+      relations: ["players"]
     });
     return teams;
   }
-  
+
   async findTeamsByCountryAndTimezone(countryIdx: number, timezoneIdx: number): Promise<Team[]> {
     const teamRepository = AppDataSource.getRepository(Team);
     const teams = await teamRepository
@@ -105,8 +133,27 @@ export class TeamRepository  {
     return await teamRepository.findOne({ where: { team_id: teamId }, relations: ["players"] });
   }
 
- 
-  
+  async findByOwner(owner: string): Promise<Team | null> {
+    const teamRepository = AppDataSource.getRepository(Team);
+    return await teamRepository.findOneBy({ owner });
+  }
+
+  async findByOwners(owners: string[]): Promise<Team[]> {
+    const teamRepository = AppDataSource.getRepository(Team);
+    const queryBuilder = teamRepository.createQueryBuilder("team");
+
+    // Add multiple OR conditions for each owner, case-insensitive
+    if (owners.length > 0) {
+      queryBuilder.where("team.owner ILIKE :owner0", { owner0: `%${owners[0]}%` });
+
+      for (let i = 1; i < owners.length; i++) {
+        queryBuilder.orWhere(`team.owner ILIKE :owner${i}`, { [`owner${i}`]: `%${owners[i]}%` });
+      }
+    }
+
+    return await queryBuilder.getMany();
+  }
+
   async updateLeagueIdx(teamId: string, leagueIdx: number, transactionalEntityManager: EntityManager): Promise<void> {
     const teamRepository = transactionalEntityManager.getRepository(Team);
     await teamRepository.update(teamId, { league_idx: leagueIdx });
@@ -114,7 +161,7 @@ export class TeamRepository  {
 
   async updateLeagueIdxInBulk(teams: TeamId[], leagueIdx: number, transactionalEntityManager: EntityManager): Promise<void> {
     const teamRepository = transactionalEntityManager.getRepository(Team);
-  
+
     const updatePromises = teams.map((teamId, index) => {
       const teamIdxInLeague = index % 8; // Index between 0 and 7
       return teamRepository.createQueryBuilder()
@@ -135,6 +182,6 @@ export class TeamRepository  {
     const repository = transactionalEntityManager.getRepository(Team);
     return await repository.count({ where: { timezone_idx: timezoneIdx } });
   }
-  
+
 }
 

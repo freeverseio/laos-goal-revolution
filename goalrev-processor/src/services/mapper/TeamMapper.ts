@@ -1,17 +1,18 @@
-import { MintStatus, Team } from "../../db/entity";
+import { MintStatus, Team, Player as PlayerEntity } from "../../db/entity";
 import { MintTeamMutation } from "../../types/rest/input/team";
-import { MintedPlayer } from "../../types";
+import { MintedPlayer, Player, PlayerDto } from "../../types";
 import SkillsUtils from "../../utils/SkillsUtils";
 
 export class TeamMapper {
 
-  static mapTeamPlayersToMintMutation(team: Team, address: string): MintTeamMutation {
+  static mapTeamPlayersToMintMutation(teams: Team[]): MintTeamMutation {
+    const allPlayers = teams.flatMap(team => TeamMapper.mapTeamPlayersToDto(team.players, team.owner));
     return {
       input: {
         chainId: process.env.CHAIN_ID!,
         contractAddress: process.env.CONTRACT_ADDRESS!,
-        tokens: team.players.map(player => ({
-          mintTo: [address],
+        tokens: allPlayers.map(player => ({
+          mintTo: [player.owner],
           name: player.name,
           description: `Player of Goal Revolution`,
           attributes: [
@@ -51,7 +52,7 @@ export class TeamMapper {
               trait_type: "Country of Birth",
               value: player.country_of_birth
             },
-           
+
             {
               trait_type: "Tiredness",
               value: player.tiredness.toString()
@@ -75,12 +76,21 @@ export class TeamMapper {
     }));
   }
 
-  static mapMintedPlayersToTeamPlayers(team: Team, tokenIds: string[]): Team {
-    team.players.forEach((player, index) => {
-      player.token_id = tokenIds[index];
+  static mapMintedPlayersToTeamPlayers(teams: Team[], tokenIds: string[]): Team[] {
+    teams.forEach((team, index) => {
+      team.mint_status = MintStatus.SUCCESS;
+      team.mint_updated_at = new Date();
+      team.players.forEach((player, index) => {
+        player.token_id = tokenIds[index];
+      });
     });
-    
-    return team;
-  }
+    return teams;
+  } 
 
+  static mapTeamPlayersToDto(players: PlayerEntity[], owner: string): PlayerDto[] {
+    return players.map(player => ({
+      ...player,
+      owner
+    }));
+  }
 }

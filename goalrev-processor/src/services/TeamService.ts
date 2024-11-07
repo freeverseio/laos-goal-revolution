@@ -97,23 +97,13 @@ export class TeamService {
   }
 
   async mintPendingTeams(): Promise<void> {
-    const pendingTeams = await this.teamRepository.findPendingTeams();
-    const mintPromises = pendingTeams.map(team => 
-      this.mintTeam({
-        address: team.owner,
-        teamId: team.team_id
-      })
-    );
-    await Promise.all(mintPromises); 
-  }
-
-  async mintTeam(mintTeamInput: MintTeamInput): Promise<MintedPlayer[]> {
-    const team = await this.teamRepository.findCompleteTeamByTeamId(mintTeamInput.teamId);
-    if (!team) {
-      throw new Error("Team not found");
+    const limit = process.env.MINT_PENDING_TEAMS_LIMIT ? parseInt(process.env.MINT_PENDING_TEAMS_LIMIT!) : 5;
+    const teams = await this.teamRepository.findPendingTeams(limit);
+    if (teams.length === 0) {
+      return;
     }
-    const mintTeamMutation = TeamMapper.mapTeamPlayersToMintMutation(team!, mintTeamInput.address);
-    // console.log(JSON.stringify(mintTeamMutation));
+    const mintTeamMutation = TeamMapper.mapTeamPlayersToMintMutation(teams);
+    // console.log('Minting teams:', JSON.stringify(mintTeamMutation));
     try {
       const result = await gqlClient.mutate({
         mutation: gql`
@@ -128,24 +118,15 @@ export class TeamService {
         }
       });
       if (result.errors) {
-        this.teamRepository.setMintStatus(mintTeamInput.teamId, MintStatus.FAILED);
+        this.teamRepository.setMintStatus(teams.map(team => team.team_id), MintStatus.FAILED);
         throw new Error(`Failed to mint team: ${result.errors[0].message}`);
       }
-
-      const updatedTeam = TeamMapper.mapMintedPlayersToTeamPlayers(team, result.data.mint.tokenIds);
-      updatedTeam.mint_status = MintStatus.SUCCESS;
-      updatedTeam.mint_updated_at = new Date();
-      await this.teamRepository.save(updatedTeam);
-      
-      return team.players.map((player) => ({
-        id: player.player_id,
-        tokenId: player.token_id!,
-        teamId: team.team_id
-      }));
+      const updatedTeams = TeamMapper.mapMintedPlayersToTeamPlayers(teams, result.data.mint.tokenIds);
+      const entityManager = AppDataSource.manager;
+      await this.teamRepository.bulkUpdate(updatedTeams, entityManager);
     } catch (error) {
-      this.teamRepository.setMintStatus(mintTeamInput.teamId, MintStatus.FAILED);
+      this.teamRepository.setMintStatus(teams.map(team => team.team_id), MintStatus.FAILED);
       throw new Error(`Failed to mint team: ${error}`);
     }
-
   }
 }

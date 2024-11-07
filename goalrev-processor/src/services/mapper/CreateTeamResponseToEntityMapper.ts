@@ -10,7 +10,7 @@ export class CreateTeamResponseToEntityMapper {
     return  {
       team_id: response.id,
       name: teamName,
-      manager_name: 'Manager',
+      manager_name: '',
       tactic: DEFAULT_ENCODED_TACTIC,
       country: {
         timezone_idx: timezoneIdx,
@@ -42,7 +42,7 @@ export class CreateTeamResponseToEntityMapper {
       match_log: '0',
       is_zombie: false,
       promo_timeout: 0,
-      mint_status: MintStatus.PENDING,
+      mint_status: MintStatus.NOT_MINTED,
       mint_updated_at: null,
     };
   }
