@@ -25,6 +25,41 @@ INSERT INTO timezones (timezone_idx) VALUES (22);
 INSERT INTO timezones (timezone_idx) VALUES (23);
 INSERT INTO timezones (timezone_idx) VALUES (24);
 
+INSERT INTO public.countries (timezone_idx,country_idx) VALUES
+	 (1,0),
+	 (2,0),
+	 (3,0),
+	 (4,0),
+	 (5,0),
+	 (6,0),
+	 (7,0),
+	 (8,0),
+	 (9,0),
+     (9,1),
+	 (10,0),
+	 (11,0),
+	 (12,0),
+	 (13,0),
+	 (14,0),
+	 (15,0),
+	 (16,0),
+	 (17,0),
+	 (18,0),
+	 (19,0),
+	 (20,0),
+	 (21,0),
+	 (22,0),
+	 (23,0);
+
+
+    --  addDivision: create teams for 
+    --  8,0
+    --  9,0
+    --  9,1
+    --  10,0
+    --  11,0
+     
+
 -- only use it to wipe the db 
 delete from matches_histories;
 delete from teams_histories;
