@@ -1,17 +1,18 @@
-import { MintStatus, Team } from "../../db/entity";
+import { MintStatus, Team, Player as PlayerEntity } from "../../db/entity";
 import { MintTeamMutation } from "../../types/rest/input/team";
-import { MintedPlayer } from "../../types";
+import { MintedPlayer, Player, PlayerDto, TokenIndexer, TokenIndexerWithPlayerId } from "../../types";
 import SkillsUtils from "../../utils/SkillsUtils";
 
 export class TeamMapper {
 
-  static mapTeamPlayersToMintMutation(team: Team, address: string): MintTeamMutation {
+  static mapTeamPlayersToMintMutation(teams: Team[]): MintTeamMutation {
+    const allPlayers = teams.flatMap(team => TeamMapper.mapTeamPlayersToDto(team.players, team.owner));
     return {
       input: {
         chainId: process.env.CHAIN_ID!,
         contractAddress: process.env.CONTRACT_ADDRESS!,
-        tokens: team.players.map(player => ({
-          mintTo: [address],
+        tokens: allPlayers.map(player => ({
+          mintTo: [player.owner],
           name: player.name,
           description: `Player of Goal Revolution`,
           attributes: [
@@ -51,7 +52,7 @@ export class TeamMapper {
               trait_type: "Country of Birth",
               value: player.country_of_birth
             },
-           
+
             {
               trait_type: "Tiredness",
               value: player.tiredness.toString()
@@ -74,13 +75,31 @@ export class TeamMapper {
       teamId: team.team_id
     }));
   }
-
-  static mapMintedPlayersToTeamPlayers(team: Team, tokenIds: string[]): Team {
+  static mapTokenIndexerToTeamPlayers(team: Team, tokenIds: TokenIndexer[]): Team {
+    const tokensWithPlayerId = tokenIds.map(token => new TokenIndexerWithPlayerId(token));
     team.players.forEach((player, index) => {
-      player.token_id = tokenIds[index];
+      // find the token with the same playerId
+      const token = tokensWithPlayerId.find(token => token.playerId === player.player_id);
+      player.token_id = token?.tokenId!;
     });
-    
     return team;
   }
+  
+  static mapMintedPlayersToTeamPlayers(teams: Team[], tokenIds: string[]): Team[] {
+    teams.forEach((team, index) => {
+      team.mint_status = MintStatus.SUCCESS;
+      team.mint_updated_at = new Date();
+      team.players.forEach((player, index) => {
+        player.token_id = tokenIds[index];
+      });
+    });
+    return teams;
+  } 
 
+  static mapTeamPlayersToDto(players: PlayerEntity[], owner: string): PlayerDto[] {
+    return players.map(player => ({
+      ...player,
+      owner
+    }));
+  }
 }

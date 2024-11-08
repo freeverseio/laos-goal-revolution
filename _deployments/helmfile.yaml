@@ -40,11 +40,14 @@ helmfiles:
       - processorHost: {{ .Values.processorHost }}
       - processorPort: {{ .Values.processorPort | quote }}
       - apiInternalUrl: {{ .Values.apiInternalUrl }}
-      - playMatchesScheduler: {{ .Values.playMatchesScheduler | quote }}
       - graphqlEndpoint: {{ .Values.graphqlEndpoint }}
       - chainId: {{ .Values.chainId }}
       - contractAddress: {{ .Values.contractAddress }}
+      - playMatchesScheduler: {{ .Values.playMatchesScheduler | quote }}
+      - transferScheduler: {{ .Values.transferScheduler | quote }}
       - mintPendingTeamsScheduler: {{ .Values.mintPendingTeamsScheduler | quote }}
+      - blockMargin: {{ .Values.blockMargin | quote }}
+      - defaultTeamId: {{ .Values.defaultTeamId }}
   - path: "charts/goalrev-core/helmfile.yaml"
     values:
       - namespace: {{ .Values.namespace }}

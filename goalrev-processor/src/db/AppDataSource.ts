@@ -1,5 +1,8 @@
 import { DataSource } from "typeorm";
-import { Match, MatchEvent, Country, Timezone, League, Team, Player, Tactics, Training, Verse, MatchHistory, PlayerHistory, TacticsHistory, TeamHistory } from "./entity";
+import {
+  Match, MatchEvent, Country, Timezone, League, Team, Player, Tactics, Training, Verse, MatchHistory,
+  PlayerHistory, TacticsHistory, TeamHistory, LastTransfer
+} from "./entity";
 import * as dotenv from "dotenv";
 
 dotenv.config();
@@ -15,27 +18,28 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_NAME,
   ssl: isSSLEnabled
     ? {
-        rejectUnauthorized: false,
-        ca: process.env.SSL_CA_CERT || "certs/ca-certificate.crt",
-      }
+      rejectUnauthorized: false,
+      ca: process.env.SSL_CA_CERT || "certs/ca-certificate.crt",
+    }
     : false, // Disable SSL if not enabled
   synchronize: false,  // Set to true if you want to automatically sync schema changes in development
   logging: false,
-  entities: [ 
-    MatchEvent, 
-    Country, 
-    Timezone, 
-    League, 
+  entities: [
+    MatchEvent,
+    Country,
+    Timezone,
+    League,
     Team,
     TeamHistory,
-    Match, 
+    Match,
     MatchHistory,
-    Player, 
+    Player,
     PlayerHistory,
-    Tactics, 
+    Tactics,
     TacticsHistory,
-    Training, 
-    Verse
+    Training,
+    Verse,
+    LastTransfer
   ],
   migrations: [],
   subscribers: [],

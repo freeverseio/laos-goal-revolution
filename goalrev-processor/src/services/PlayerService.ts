@@ -1,8 +1,7 @@
 import { EntityManager } from "typeorm";
-import { Player, Tactics, Team } from "../db/entity";
-import { PlayerHistoryMapper } from "./mapper/PlayerHistoryMapper";
-import { AppDataSource } from "../db/AppDataSource";
+import { Team } from "../db/entity";
 import { PlayerSkill } from "../types/rest/output/team";
+import { PlayerHistoryMapper } from "./mapper/PlayerHistoryMapper";
 
 export class PlayerService {
   /**

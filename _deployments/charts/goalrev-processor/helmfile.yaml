@@ -15,6 +15,9 @@ releases:
       - apiInternalUrl: {{ .Values.apiInternalUrl }}
       - playMatchesScheduler: {{ .Values.playMatchesScheduler | quote }}
       - mintPendingTeamsScheduler: {{ .Values.mintPendingTeamsScheduler | quote }}
+      - transferScheduler: {{ .Values.transferScheduler | quote }}
       - graphqlEndpoint: {{ .Values.graphqlEndpoint }}
       - chainId: {{ .Values.chainId }}
       - contractAddress: {{ .Values.contractAddress }}
+      - blockMargin: {{ .Values.blockMargin | quote }}
+      - defaultTeamId: {{ .Values.defaultTeamId }}

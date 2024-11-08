@@ -42,7 +42,7 @@ export class CreateTeamResponseToEntityMapper {
       match_log: '0',
       is_zombie: false,
       promo_timeout: 0,
-      mint_status: MintStatus.PENDING,
+      mint_status: MintStatus.NOT_MINTED,
       mint_updated_at: null,
     };
   }

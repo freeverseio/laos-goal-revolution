@@ -1,0 +1,25 @@
+export type PlayerDto = {
+  player_id: string;
+  team_id: string;
+  name: string;
+  token_id?: string;
+  defence: number;
+  speed: number;
+  pass: number;
+  shoot: number;
+  endurance: number;
+  shirt_number: number;
+  preferred_position: string;
+  potential: number;
+  day_of_birth: number;
+  encoded_skills: string;
+  encoded_state: string;
+  red_card: boolean;
+  injury_matches_left: number;
+  tiredness: number;
+  country_of_birth: string;
+  race: string;
+  yellow_card_1st_half: boolean;
+  voided: boolean;
+  owner: string;
+};

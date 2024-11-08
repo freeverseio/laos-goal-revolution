@@ -58,12 +58,18 @@ spec:
             value: {{ .Values.playMatchesScheduler | quote }}
           - name: MINT_PENDING_TEAMS_SCHEDULER
             value: {{ .Values.mintPendingTeamsScheduler | quote }}
+          - name: TRANSFER_SCHEDULER
+            value: {{ .Values.transferScheduler | quote }}
           - name: GRAPHQL_ENDPOINT
             value: {{ .Values.graphqlEndpoint }}
           - name: CHAIN_ID
             value: {{ .Values.chainId | quote }}
           - name: CONTRACT_ADDRESS
             value: {{ .Values.contractAddress | quote }}
+          - name: BLOCK_MARGIN
+            value: {{ .Values.blockMargin | quote }}
+          - name: DEFAULT_TEAM_ID
+            value: {{ .Values.defaultTeamId | quote }}
 
         ports:
         - containerPort: {{ .Values.processorPort }}

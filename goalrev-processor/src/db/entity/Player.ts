@@ -72,4 +72,6 @@ export class Player {
 
   @Column({ type: 'boolean', default: false })
   voided!: boolean;
+
 }
+
