@@ -4,6 +4,7 @@ import { MatchEventOutput, MatchEventType, MatchLog } from '../types';
 import { EntityManager } from 'typeorm';
 import { MatchState } from '../db/entity';
 import { TeamRepository } from '../db/repository/TeamRepository';
+import { TokenQuery } from './graphql/TokenQuery';
 
 const mockEntityManager = {
   findOne: jest.fn(),
@@ -19,7 +20,8 @@ describe('TeamService', () => {
   let teamService: TeamService;
 
   beforeEach(() => {
-    teamService = new TeamService(mockTeamRepository);
+    const tokenQuery = new TokenQuery();
+    teamService = new TeamService(mockTeamRepository, tokenQuery);
     jest.clearAllMocks(); // Clear mocks before each test
   });
 
