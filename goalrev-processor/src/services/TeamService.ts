@@ -1,19 +1,21 @@
-import { EntityManager } from "typeorm";
-import { MintStatus, Team } from "../db/entity/Team";
-import { MatchLog, MintTeamInput } from "../types";
-import { TeamHistoryMapper } from "./mapper/TeamHistoryMapper";
-import { AppDataSource } from "../db/AppDataSource";
-import { TeamRepository } from "../db/repository/TeamRepository";
-import { TeamMapper } from "./mapper/TeamMapper";
 import { gql } from "@apollo/client/core";
+import { EntityManager } from "typeorm";
+import { AppDataSource } from "../db/AppDataSource";
+import { MintStatus, Team } from "../db/entity/Team";
+import { TeamRepository } from "../db/repository/TeamRepository";
+import { MatchLog } from "../types";
 import { gqlClient } from "./graphql/GqlClient";
-import { MintedPlayer } from "../types/rest/output/team";
+import { TokenQuery } from "./graphql/TokenQuery";
+import { TeamHistoryMapper } from "./mapper/TeamHistoryMapper";
+import { TeamMapper } from "./mapper/TeamMapper";
 
 export class TeamService {
   private teamRepository: TeamRepository;
+  private tokenQuery: TokenQuery;
 
-  constructor(teamRepository: TeamRepository) {
+  constructor(teamRepository: TeamRepository, tokenQuery: TokenQuery) {
     this.teamRepository = teamRepository;
+    this.tokenQuery = tokenQuery;
   }
 
   async updateTeamData(
@@ -96,12 +98,32 @@ export class TeamService {
       .execute();
   }
 
+  async mintFailedTeams(): Promise<void> {
+    const teams = await this.teamRepository.findFailedTeams(1);
+    if (teams.length === 0) {
+      return;
+    }
+    console.log(`Minting failed teams: ${teams.map(team => team.team_id)}`);
+    const tokens = await this.tokenQuery.fetchTokensByOwner(process.env.CONTRACT_ADDRESS!, teams[0].owner!);
+    if (!tokens || tokens.length === 0 || tokens.length < 5) {
+      this.mintTeams(teams);
+    } else {
+      console.log(`Tokens found for team ${teams[0].team_id}: ${tokens.map(token => token.tokenId)}`);
+      const updatedTeam = TeamMapper.mapTokenIndexerToTeamPlayers(teams[0], tokens);
+      await this.teamRepository.save(updatedTeam);
+    }
+  }
+
   async mintPendingTeams(): Promise<void> {
     const limit = process.env.MINT_PENDING_TEAMS_LIMIT ? parseInt(process.env.MINT_PENDING_TEAMS_LIMIT!) : 5;
     const teams = await this.teamRepository.findPendingTeams(limit);
     if (teams.length === 0) {
       return;
     }
+    return this.mintTeams(teams);
+  }
+
+  async mintTeams(teams: Team[]): Promise<void> {
     const mintTeamMutation = TeamMapper.mapTeamPlayersToMintMutation(teams);
     // console.log('Minting teams:', JSON.stringify(mintTeamMutation));
     try {

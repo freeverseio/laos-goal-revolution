@@ -44,27 +44,25 @@ export class TeamRepository {
         WITH updated AS (
           SELECT team_id
           FROM teams
-          WHERE (mint_status IN ($1, $2) OR (mint_status = $3 AND mint_updated_at < $4))
+          WHERE (mint_status IN ($1) OR (mint_status = $2 AND mint_updated_at < $3))
           ORDER BY mint_updated_at ASC
-          LIMIT $5
+          LIMIT $4
         )
         UPDATE teams
-        SET mint_status = $6,
-            mint_updated_at = $7
+        SET mint_status = $5,
+            mint_updated_at = $6
         FROM updated
         WHERE teams.team_id = updated.team_id
         RETURNING teams.*
         `,
         [
           MintStatus.PENDING,
-          MintStatus.FAILED,
           MintStatus.MINTING,
           timeLimitAgo,
           limit,
           MintStatus.MINTING,
           new Date(Date.now())
         ],
-    
       );
   
       if (updatedTeams.length === 0 || updatedTeams[0].length === 0) {
@@ -88,6 +86,11 @@ export class TeamRepository {
   
       return teamsWithRelations;
     });
+  }
+
+  async findFailedTeams(limit: number = 5): Promise<Team[]> {
+    const teamRepository = AppDataSource.getRepository(Team);
+    return await teamRepository.find({ where: { mint_status: MintStatus.FAILED }, relations: ["players"], take: limit });
   }
 
   async findTeamsWithPlayersByTimezone(timezoneIdx: number): Promise<Team[]> {

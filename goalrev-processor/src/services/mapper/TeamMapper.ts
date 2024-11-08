@@ -1,6 +1,6 @@
 import { MintStatus, Team, Player as PlayerEntity } from "../../db/entity";
 import { MintTeamMutation } from "../../types/rest/input/team";
-import { MintedPlayer, Player, PlayerDto } from "../../types";
+import { MintedPlayer, Player, PlayerDto, TokenIndexer, TokenIndexerWithPlayerId } from "../../types";
 import SkillsUtils from "../../utils/SkillsUtils";
 
 export class TeamMapper {
@@ -75,7 +75,16 @@ export class TeamMapper {
       teamId: team.team_id
     }));
   }
-
+  static mapTokenIndexerToTeamPlayers(team: Team, tokenIds: TokenIndexer[]): Team {
+    const tokensWithPlayerId = tokenIds.map(token => new TokenIndexerWithPlayerId(token));
+    team.players.forEach((player, index) => {
+      // find the token with the same playerId
+      const token = tokensWithPlayerId.find(token => token.playerId === player.player_id);
+      player.token_id = token?.tokenId!;
+    });
+    return team;
+  }
+  
   static mapMintedPlayersToTeamPlayers(teams: Team[], tokenIds: string[]): Team[] {
     teams.forEach((team, index) => {
       team.mint_status = MintStatus.SUCCESS;
