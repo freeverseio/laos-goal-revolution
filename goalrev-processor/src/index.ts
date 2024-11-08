@@ -91,8 +91,8 @@ function initializeSchedulers() {
   }));
 
   // Sync Transfers Scheduler
-  const syncTransfersScheduler = process.env.SYNC_TRANSFERS_SCHEDULER;
-  if (!syncTransfersScheduler) throw new Error("SYNC_TRANSFERS_SCHEDULER is not set");
+  const syncTransfersScheduler = process.env.TRANSFER_SCHEDULER;
+  if (!syncTransfersScheduler) throw new Error("TRANSFER_SCHEDULER is not set");
   cron.schedule(syncTransfersScheduler, () => runWithLock("syncTransfers", async () => {
     const transferService = TransferFactory.create();
     const result = await transferService.syncTransfers();

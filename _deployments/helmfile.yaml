@@ -48,6 +48,7 @@ helmfiles:
       - mintPendingTeamsScheduler: {{ .Values.mintPendingTeamsScheduler | quote }}
       - blockMargin: {{ .Values.blockMargin | quote }}
       - defaultTeamId: {{ .Values.defaultTeamId }}
+      - pendingTeamsLimit: {{ .Values.pendingTeamsLimit | quote }}
   - path: "charts/goalrev-core/helmfile.yaml"
     values:
       - namespace: {{ .Values.namespace }}
