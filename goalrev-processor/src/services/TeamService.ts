@@ -98,10 +98,10 @@ export class TeamService {
       .execute();
   }
 
-  async mintFailedTeams(): Promise<void> {
+  async mintFailedTeams(): Promise<boolean> {
     const teams = await this.teamRepository.findFailedTeams(1);
     if (teams.length === 0) {
-      return;
+      return true;
     }
     console.log(`Minting failed teams: ${teams.map(team => team.team_id)}`);
     const tokens = await this.tokenQuery.fetchTokensByOwner(process.env.CONTRACT_ADDRESS!, teams[0].owner!);
@@ -112,18 +112,19 @@ export class TeamService {
       const updatedTeam = TeamMapper.mapTokenIndexerToTeamPlayers(teams[0], tokens);
       await this.teamRepository.save(updatedTeam);
     }
+    return true;
   }
 
-  async mintPendingTeams(): Promise<void> {
+  async mintPendingTeams(): Promise<boolean> {
     const limit = process.env.MINT_PENDING_TEAMS_LIMIT ? parseInt(process.env.MINT_PENDING_TEAMS_LIMIT!) : 5;
     const teams = await this.teamRepository.findPendingTeams(limit);
     if (teams.length === 0) {
-      return;
+      return true;
     }
     return this.mintTeams(teams);
   }
 
-  async mintTeams(teams: Team[]): Promise<void> {
+  async mintTeams(teams: Team[]): Promise<boolean> {
     const mintTeamMutation = TeamMapper.mapTeamPlayersToMintMutation(teams);
     // console.log('Minting teams:', JSON.stringify(mintTeamMutation));
     try {
@@ -146,6 +147,7 @@ export class TeamService {
       const updatedTeams = TeamMapper.mapMintedPlayersToTeamPlayers(teams, result.data.mint.tokenIds);
       const entityManager = AppDataSource.manager;
       await this.teamRepository.bulkUpdate(updatedTeams, entityManager);
+      return true;
     } catch (error) {
       this.teamRepository.setMintStatus(teams.map(team => team.team_id), MintStatus.FAILED);
       throw new Error(`Failed to mint team: ${error}`);
