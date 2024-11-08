@@ -21,3 +21,4 @@ releases:
       - contractAddress: {{ .Values.contractAddress }}
       - blockMargin: {{ .Values.blockMargin | quote }}
       - defaultTeamId: {{ .Values.defaultTeamId }}
+      - pendingTeamsLimit: {{ .Values.pendingTeamsLimit | quote }}
