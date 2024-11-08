@@ -77,15 +77,6 @@ CREATE TABLE public.shop_items (
 
 -- DROP TABLE public.team_props;
 
-CREATE TABLE public.team_props (
-	team_id text NOT NULL,
-	team_name text NULL,
-	team_manager_name text NULL,
-	mailbox_started_at timestamp NULL,
-	last_time_logged_in timestamp NULL,
-	get_social_id text NULL,
-	CONSTRAINT team_props_pkey PRIMARY KEY (team_id)
-);
 
 
 -- public.timezones definition
