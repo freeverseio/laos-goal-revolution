@@ -70,15 +70,6 @@ CREATE TABLE public.shop_items (
 	CONSTRAINT shop_items_pkey PRIMARY KEY (uuid)
 );
 
-
--- public.team_props definition
-
--- Drop table
-
--- DROP TABLE public.team_props;
-
-
-
 -- public.timezones definition
 
 -- Drop table
