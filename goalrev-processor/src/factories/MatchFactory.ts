@@ -11,6 +11,7 @@ import { TeamRepository } from "../db/repository/TeamRepository";
 import { LeagueFactory } from "./LeagueFactory";
 import { MatchHistoryRepository } from "../db/repository/MatchHistoryRepository";
 import { TacticRepository } from "../db/repository/TacticRepository";
+import { TokenQuery } from "../services/graphql/TokenQuery";
 
 export class MatchFactory {
   
@@ -18,7 +19,8 @@ export class MatchFactory {
     // Instantiate all the dependencies for MatchService
     const playerService = new PlayerService();
     const teamRepository = new TeamRepository();
-    const teamService = new TeamService(teamRepository);
+    const tokenQuery = new TokenQuery();
+    const teamService = new TeamService(teamRepository, tokenQuery);
     const matchEventRepository = new MatchEventRepository();
     const matchEventService = new MatchEventService(matchEventRepository);
     const verseRepository = new VerseRepository();
