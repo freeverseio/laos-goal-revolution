@@ -40,6 +40,11 @@ spec:
               secretKeyRef:
                 name: goalrev-private-config
                 key: graphqlAccessToken
+          - name: RPC_URL
+            valueFrom:
+              secretKeyRef:
+                name: goalrev-private-config
+                key: polygonRpcUrl
           - name: DB_HOST
             value: {{ .Values.postgresHost }}
           - name: DB_PORT
