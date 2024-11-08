@@ -1,4 +1,6 @@
 const {getMessagesResolver, getNumUnreadMessagesResolver} = require("./resolvers/messagesResolver");
+const {updateTeamNameResolver} = require("./resolvers/teamNameResolver");
+const {updateTeamManagerNameResolver} = require("./resolvers/teamManagerNameResolver");
 
 const resolvers = (sql) => {
   return {
@@ -84,7 +86,17 @@ const resolvers = (sql) => {
           console.error("Error in setLastTimeLoggedIn",e);
           throw e;
         }
-      }
+      },
+      setTeamName: async (_, { input: { teamId, name, signature } }, context) => {
+        console.log("setTeamName for team: ",teamId, name, signature);
+        updateTeamNameResolver(context, { teamId, name, signature });
+        return teamId + " - " + name;
+      },
+      setTeamManagerName: async (_, { input: { teamId, name, signature } }, context) => {
+        console.log("setTeamManagerName for team: ",teamId, name, signature);
+        updateTeamManagerNameResolver(context, { teamId, name, signature });
+        return teamId + " - " + name;
+      },
     }
   };
 };

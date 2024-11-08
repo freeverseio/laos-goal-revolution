@@ -10,7 +10,7 @@ export class CreateTeamResponseToEntityMapper {
     return  {
       team_id: response.id,
       name: teamName,
-      manager_name: 'Manager',
+      manager_name: '',
       tactic: DEFAULT_ENCODED_TACTIC,
       country: {
         timezone_idx: timezoneIdx,
