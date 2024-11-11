@@ -20,6 +20,7 @@ import { CalendarService } from "./CalendarService";
 import { CreateTeamResponseToEntityMapper } from "./mapper/CreateTeamResponseToEntityMapper";
 import { MatchMapper } from "./mapper/MatchMapper";
 import { generatePlayerFullName, generateTeamName, loadNamesDatabase } from "../utils/nameUtils";
+import Big from 'big.js';
 
 export class LeagueService {
   private teamRepository: TeamRepository;
@@ -52,11 +53,13 @@ export class LeagueService {
       const team = teams[i];
       const players = team.players;
       const encodedSkills = MatchMapper.calculateTeamSkills(players);
-      const {rankingPoints, prevPerfPoints} = await this.getTeamRankingPoints(team.team_id, encodedSkills, team.leaderboard_position, Number(team.prev_perf_points));
+      const isBot = team.owner === '0x0000000000000000000000000000000000000000';
+      const {rankingPoints, prevPerfPoints} = await this.getTeamRankingPoints(team.team_id, encodedSkills, team.leaderboard_position, Number(team.prev_perf_points), isBot);
       
       partialRankingPoints.push({
         team_id: team.team_id,
         ranking_points: this.normalizeRankingPoints(rankingPoints),
+        ranking_points_real: rankingPoints.toString(),
         prev_perf_points: prevPerfPoints.toString()
       });
     }
@@ -191,12 +194,12 @@ export class LeagueService {
     });
   }
 
-  private async getTeamRankingPoints(teamId: string, encodedSkills: string[], leagueRanking: number, prevPerfPoints: number): Promise<{rankingPoints: string, prevPerfPoints: number}> {
+  private async getTeamRankingPoints(teamId: string, encodedSkills: string[], leagueRanking: number, prevPerfPoints: number, isBot: boolean): Promise<{rankingPoints: string, prevPerfPoints: number}> {
     const requestBody: RankingPointsInput = {
       leagueRanking,
       prevPerfPoints,
       teamId,
-      isBot: false,
+      isBot: isBot,
       skills: encodedSkills,
     }
     const response = await axios.post(`${process.env.CORE_API_URL}/league/computeRankingPoints`, requestBody);
@@ -219,21 +222,25 @@ export class LeagueService {
     const nextLeagueIdx = await this.leagueRepository.countLeaguesByTimezoneAndCountry( timezoneIdx, countryIdx, entityManager);
     // Load names database once so we can use it multiple times later
     const namesDb = await loadNamesDatabase();
+    const numLeaguesToCreate = 16; // 16 leagues
+    const numTeamsPerLeague = 8; // 8 teams per league
+    const MAX_TEAMIDX_IN_COUNTRY = 268435455; /// 268435455 = 2**28 - 1
     
-    for (let i = 0; i < 4; i++) { // 16 leagues
+    for (let i = 0; i < numLeaguesToCreate; i++) { 
       // open tx
       await entityManager.transaction(async (transactionManager: EntityManager) => {
-        for (let j = 0; j < 8; j++) { // 8 teams per league
+        for (let j = 0; j < numTeamsPerLeague; j++) { // N teams per league
           // create 1 team
+          const teamIdxInTZ = (nextTeamIdxInTZ + j + (i*numTeamsPerLeague))
           const requestBody: CreateTeamCoreInput = {
             timezoneIdx,
             countryIdx,
-            teamIdxInTZ: (nextTeamIdxInTZ + j + (i*8)),
+            teamIdxInTZ: teamIdxInTZ,
             deployTimeInUnixEpochSecs: firstVerse.verseTimestamp,
             divisionCreationRound: divisionCreationRound
           }    
           const response = await axios.post(`${process.env.CORE_API_URL}/team/createTeam`, requestBody);
-          console.log('Creating Team: ', (j + (i*8)));
+          console.log('Creating Team: ', (j + (i*numTeamsPerLeague)));
           const createTeamResponse = response.data as CreateTeamResponse;
           const teamName = await generateTeamName(namesDb, createTeamResponse.id);
 
@@ -254,6 +261,9 @@ export class LeagueService {
             teamName,            
             playerNamesMap
           });
+          teamMapped.ranking_points_real = (MAX_TEAMIDX_IN_COUNTRY - teamIdxInTZ).toString();
+          const normalizedValue = new Big(teamMapped.ranking_points_real).div(new Big("48318382080000")).toFixed(0);      
+          teamMapped.ranking_points = normalizedValue;
 
           const resultTeam = await this.teamRepository.createTeam(teamMapped, transactionManager);
           if (!resultTeam) {
@@ -274,6 +284,5 @@ export class LeagueService {
     const entityManager = AppDataSource.manager;
     await this.trainingRepository.resetTrainings(timezoneIdx, countryIdx, leagueIdx, entityManager);
   }  
-  
 
 }

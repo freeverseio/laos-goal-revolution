@@ -38,6 +38,7 @@ export class CreateTeamResponseToEntityMapper {
       goals_against: 0,
       prev_perf_points: '0',
       ranking_points: '0',
+      ranking_points_real: '0',
       training_points: 0,
       match_log: '0',
       is_zombie: false,

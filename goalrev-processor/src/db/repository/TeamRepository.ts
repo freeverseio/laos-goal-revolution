@@ -111,7 +111,7 @@ export class TeamRepository {
         countryIdx: countryIdx,
         timezoneIdx: timezoneIdx,
       })
-      .orderBy("CAST(team.ranking_points AS INTEGER)", "DESC")
+      .orderBy("CAST(team.ranking_points_real AS BIGINT)", "DESC")
       .getMany();
     return teams;
   }
@@ -197,5 +197,16 @@ export class TeamRepository {
   }
 
 
-}
+  async findByIds(teamIds: string[]): Promise<Team[]> {
+    const teamRepository = AppDataSource.getRepository(Team);
 
+    const teams = await teamRepository.find({
+      where: {
+        team_id: In(teamIds),
+      },      
+    });
+
+    return teams;
+  }
+
+}
