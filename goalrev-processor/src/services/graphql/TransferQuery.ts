@@ -36,7 +36,7 @@ export class TransferQuery {
     try {
       while (!stopLoop) {
         const query = this.createQuery(limit, offset); // Create a query with the current offset
-
+        console.log('query', query.loc?.source.body);
         const response = await gqlClient.query({
           query,
         });
