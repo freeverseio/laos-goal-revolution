@@ -37,7 +37,7 @@ export class TransferService {
     const tokenIds = transfers.map(transfer => transfer.tokenId);
     const players = await this.playerRepository.findPlayersByTokenIds(tokenIds);
     if (transfers.length > 0 && !players || players.length === 0) {
-      throw new Error('Players not found');
+      throw new Error('Players not found for tokenIds: ' + tokenIds.join(', '));
     }
     
     if (tokenIds.length > players.length) {
@@ -80,7 +80,7 @@ export class TransferService {
           console.log(`Skipping transfer ${transfer.tokenId} to ${transfer.to} at block ${transfer.blockNumber} as it is too recent`);
         }
       } else {
-        console.log(`Player ${transfer.tokenId} not found`);
+        console.log(`Player ${transfer.tokenId} not found: `);
         throw new Error(`Player ${transfer.tokenId} not found`);
       }
       if (lastTransfer) {
