@@ -39,11 +39,11 @@ export class TransferQuery {
         console.log('query', query.loc?.source.body);
         const response = await gqlClient.query({
           query,
+          fetchPolicy: 'no-cache',
         });
 
         // Accessing the data
         let transfers: Transfer[] = response.data.polygon.transfers;
-
         // If no more transfers, break the loop
         if (transfers.length === 0 || transfers.length < limit) {
           console.log('No more transfers available.');
@@ -60,7 +60,7 @@ export class TransferQuery {
             stopLoop = true;
             break;
           }
-
+          
           // Add the transfer to the map if the block number is greater than the targetBlockNumber
           if (transfer.blockNumber > targetBlockNumber) {
             transferMap[transfer.txHash] = {
@@ -80,6 +80,7 @@ export class TransferQuery {
           offset += 30;
         }
       }
+      console.log('transferMap', transferMap);
       // inverse order of the map
       return this.sortTransfersByBlockNumber(Object.values(transferMap));
     } catch (error) {
