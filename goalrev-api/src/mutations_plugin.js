@@ -8,21 +8,6 @@ module.exports = makeExtendSchemaPlugin(build => {
   return {
     typeDefs: gql`
       extend type Mutation {
-        createSpecialPlayer(
-          playerId: String!,
-          name: String!,
-          defence: Int!,
-          speed: Int!,
-          pass: Int!,
-          shoot: Int!,
-          endurance: Int!,
-          preferredPosition: String!,
-          potential: Int!,
-          dayOfBirth: Int!
-        ): Boolean,
-        deleteSpecialPlayer(
-          playerId: String!
-        ): Boolean
         setLastTimeLoggedIn(teamId: ID!): Boolean
         transferFirstBotToAddr(timezone: Int!, countryIdxInTimezone: ID!, address: String!): Boolean
         setMessage(input: SetMessageInput!): ID!
