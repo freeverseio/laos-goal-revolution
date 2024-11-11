@@ -57,6 +57,7 @@ export class TokenQuery {
       const query = this.createQuery(contractAddress, tokenId); // Create a query with the current variables
       const response = await gqlClient.query({
         query,
+        fetchPolicy: 'no-cache',
       });
 
       // Accessing the data
@@ -74,6 +75,7 @@ export class TokenQuery {
       const query = this.createQueryByOwner(contractAddress, owner);
       const response = await gqlClient.query({
         query,
+        fetchPolicy: 'no-cache',
       });
       const tokens: TokenIndexer[] = response.data.polygon.tokens.edges.map((edge: any) => edge.node);
       return tokens;
