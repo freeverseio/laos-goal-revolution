@@ -224,7 +224,6 @@ export class LeagueService {
     const namesDb = await loadNamesDatabase();
     const numLeaguesToCreate = 16; // 16 leagues
     const numTeamsPerLeague = 8; // 8 teams per league
-    const totalTeamsAfterAddDivisions = nextTeamIdxInTZ + (numLeaguesToCreate * numTeamsPerLeague);
     const MAX_TEAMIDX_IN_COUNTRY = 268435455; /// 268435455 = 2**28 - 1
     
     for (let i = 0; i < numLeaguesToCreate; i++) { 
