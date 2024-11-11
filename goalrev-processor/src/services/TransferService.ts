@@ -100,7 +100,7 @@ export class TransferService {
 
   private async getFreeShirtNumber(teamId: string): Promise<number> {
     const shirtNumbers = await this.teamRepository.getShirtNumbers(teamId);
-    for (let i = PLAYERS_PER_TEAM_MAX; i > 0; i--) {
+    for (let i = PLAYERS_PER_TEAM_MAX-1; i >= 0; i--) {
       if (!shirtNumbers.includes(i)) {
         return i;
       }

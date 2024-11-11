@@ -37,19 +37,13 @@ const transferService = new TransferService(transferQueryMock, transferRepositor
 describe('TransferService', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.spyOn(console, 'log').mockImplementation(() => {});
+    jest.spyOn(console, 'error').mockImplementation(() => {});
   });
 
 
   describe('processTransfers', () => {
-    xit('should throw an error if a player is not found', async () => {
-      RpcUtils.getLatestBlockNumber = jest.fn().mockResolvedValue(200);
-      transferRepositoryMock.getLatestBlockNumber = jest.fn().mockResolvedValue(100);
-      playerRepositoryMock.findPlayersByTokenIds = jest.fn().mockResolvedValue([]);
-
-      const transfers: Transfer[] = [{ tokenId: '1', to: 'address', from: 'address', blockNumber: 50 } as Transfer];
-
-      await expect(transferService.processTransfers(transfers)).rejects.toThrow('Player 1 not found');
-    });
+   
 
     it('should assign a player to the correct team if the team is found', async () => {
       RpcUtils.getLatestBlockNumber = jest.fn().mockResolvedValue(200);
@@ -82,11 +76,11 @@ describe('TransferService', () => {
       const teamId = 'team123';
 
       const result = await transferService['getFreeShirtNumber'](teamId);
-      expect(result).toBe(25);
+      expect(result).toBe(24);
     });
 
     it('should return a free shirt number if available', async () => {
-      mockTeamRepository.getShirtNumbers = jest.fn().mockResolvedValue([1, 2, 3, 4, 5, 21, 22, 23, 24, 25]);
+      mockTeamRepository.getShirtNumbers = jest.fn().mockResolvedValue([0,1, 2, 3, 4, 5, 21, 22, 23, 24]);
       const teamId = 'team123';
       const result = await transferService['getFreeShirtNumber'](teamId);
       expect(result).toBe(20);
@@ -94,13 +88,24 @@ describe('TransferService', () => {
 
     it('should return IN_TRANSIT_SHIRTNUM if no free shirt number is available', async () => {
       let shirtNumbers = [];
-      for (let i = 1; i <= PLAYERS_PER_TEAM_MAX; i++) {
+      for (let i = 0; i < PLAYERS_PER_TEAM_MAX; i++) {
         shirtNumbers.push(i);
       }
       mockTeamRepository.getShirtNumbers = jest.fn().mockResolvedValue(shirtNumbers);
       const teamId = 'team123';
       const result = await transferService['getFreeShirtNumber'](teamId);
       expect(result).toBe(IN_TRANSIT_SHIRTNUM);
+    });
+
+    it('should return 0 if no shirt numbers are available', async () => {
+      let shirtNumbers = [];
+      for (let i = 1; i < PLAYERS_PER_TEAM_MAX; i++) {
+        shirtNumbers.push(i);
+      }
+      mockTeamRepository.getShirtNumbers = jest.fn().mockResolvedValue(shirtNumbers);
+      const teamId = 'team123';
+      const result = await transferService['getFreeShirtNumber'](teamId);
+      expect(result).toBe(0);
     });
   });
 });

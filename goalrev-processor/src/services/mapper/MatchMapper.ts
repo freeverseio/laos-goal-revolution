@@ -101,7 +101,7 @@ export class MatchMapper {
       playerMap.set(player.shirt_number, player);
     });
     let skills = [];
-    for (let i = 1; i <= PLAYERS_PER_TEAM_MAX; i++) {
+    for (let i = 0; i < PLAYERS_PER_TEAM_MAX; i++) {
       if (!playerMap.has(i)) {
         skills.push("0");
       } else {

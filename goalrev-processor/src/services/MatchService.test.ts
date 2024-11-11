@@ -140,6 +140,7 @@ describe('MatchService', () => {
   beforeEach(() => {    
     jest.clearAllMocks(); // Clear all previous mocks
     jest.spyOn(console, 'log').mockImplementation(() => {});
+    jest.spyOn(console, 'error').mockImplementation(() => {});
     jest.spyOn(console, 'time').mockImplementation(() => {});
 
     matchService = new MatchService(
