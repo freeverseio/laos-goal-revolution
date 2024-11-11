@@ -1,6 +1,6 @@
 import { AppDataSource } from "../AppDataSource";
 import { EntityManager, ILike, In, LessThan, Repository } from "typeorm";
-import { MintStatus, Team, TeamPartialUpdate } from "../entity";
+import { MintStatus, Player, Team, TeamPartialUpdate } from "../entity";
 import { TeamId } from "../../types/leaguegroup";
 
 export class TeamRepository {
@@ -185,6 +185,17 @@ export class TeamRepository {
     const repository = transactionalEntityManager.getRepository(Team);
     return await repository.count({ where: { timezone_idx: timezoneIdx } });
   }
+
+  async getShirtNumbers(teamId: string): Promise<number[]> {
+    const playerRepository = AppDataSource.getRepository(Player);
+    const shirtNumbers = await playerRepository.createQueryBuilder("player")
+      .select("player.shirt_number", "shirt_number")
+      .where("player.team_id = :teamId AND player.voided = false", { teamId })
+      .getRawMany();
+
+    return shirtNumbers.map(row => row.shirt_number);
+  }
+
 
 }
 

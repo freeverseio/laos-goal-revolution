@@ -75,8 +75,8 @@ export class TeamMapper {
       teamId: team.team_id
     }));
   }
-  static mapTokenIndexerToTeamPlayers(team: Team, tokenIds: TokenIndexer[]): Team {
-    const tokensWithPlayerId = tokenIds.map(token => new TokenIndexerWithPlayerId(token));
+  static mapTokenIndexerToTeamPlayers(team: Team, tokenFromIndexer: TokenIndexer[]): Team {
+    const tokensWithPlayerId = tokenFromIndexer.map(token => new TokenIndexerWithPlayerId(token));
     team.players.forEach((player, index) => {
       // find the token with the same playerId
       const token = tokensWithPlayerId.find(token => token.playerId === player.player_id);

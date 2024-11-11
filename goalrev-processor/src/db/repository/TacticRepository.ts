@@ -1,5 +1,5 @@
 import { EntityManager } from "typeorm";
-import { Tactics, Team, TacticsHistory } from "../entity/";
+import { Tactics, TacticsHistory, Team } from "../entity/";
 
 export class TacticRepository {
 
@@ -128,5 +128,6 @@ export class TacticRepository {
       throw new Error("Insert failed");
     }
   }
+
 
 }

@@ -29,7 +29,11 @@ export class TokenQuery {
     return gql`
       query MyQuery {
         polygon {
-          tokens(where: {contractAddress: "${contractAddress}", owner: "${owner}"}) {
+          tokens(
+            orderBy: CREATED_AT_DESC
+            pagination: {first: 25}
+            where: {contractAddress: "${contractAddress}", owner: "${owner}"}
+          ) {
             totalCount
             edges {
               node {
