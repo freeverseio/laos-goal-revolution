@@ -17,7 +17,7 @@ mintPendingTeamsScheduler: "*/30 * * * * *"
 transferScheduler: "*/50 * * * * *"
 graphqlEndpoint: https://api.laosnetwork.io/graphql
 chainId: "137"
-contractAddress: "0x7404a72f74eed1c9808f6d371bdb2faac362df1d"
+contractAddress: "0x1fc0b17a5ca075345fbf9701475a7fc25b8a16c5"
 blockMargin: "10"
 defaultTeamId: "999"
 pendingTeamsLimit: "5"
