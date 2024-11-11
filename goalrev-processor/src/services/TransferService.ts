@@ -24,6 +24,10 @@ export class TransferService {
   async syncTransfers() {
     const targetBlockNumber = await this.transferRepository.getLatestBlockNumber();
     const transfers = await this.transferQuery.fetchTransfers(targetBlockNumber, 0, 20);
+    if (transfers.length === 0) {
+      console.log(`No transfers found for block ${targetBlockNumber}`);
+      return true;
+    }
     await this.processTransfers(transfers);
     return true;
   }
