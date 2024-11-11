@@ -13,3 +13,4 @@ comment on table tactics_histories is E'@omit create,update,delete';
 comment on table trainings_histories is E'@omit create,update,delete';
 comment on table team_props_histories is E'@omit create,update,delete'
 comment on table last_transfer is E'@omit create,update,delete';
+comment on function recalculate_leaderboard_position(p_timezone_idx INT, p_country_idx INT, p_league_idx INT) is E'@omit execute';
