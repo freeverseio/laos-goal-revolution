@@ -37,11 +37,18 @@ export class TransferService {
 
     const latestBlockNumber = await RpcUtils.getLatestBlockNumber();
     const blockMargin = process.env.BLOCK_MARGIN ? parseInt(process.env.BLOCK_MARGIN) : 100;
+    console.log('RPC latest block number', latestBlockNumber);
 
     const tokenIds = transfers.map(transfer => transfer.tokenId);
     const players = await this.playerRepository.findPlayersByTokenIds(tokenIds);
+    
     if (transfers.length > 0 && !players || players.length === 0) {
-      throw new Error('Players not found for tokenIds: ' + tokenIds.join(', '));
+      console.log('Players not found for tokenIds: ' + tokenIds.join(', '));
+      lastTransfer = transfers[transfers.length - 1];
+      if (lastTransfer && lastTransfer.blockNumber < latestBlockNumber - blockMargin) {
+        await this.transferRepository.updateLatestBlockNumber(lastTransfer!.blockNumber, lastTransfer!.txHash, new Date(lastTransfer!.timestamp), AppDataSource.manager);
+      }
+      return;
     }
     
     if (tokenIds.length > players.length) {
@@ -60,14 +67,16 @@ export class TransferService {
     // Update the players based on the transfer
     for (const transfer of transfers) {
       const player = players.find(p => p.token_id === transfer.tokenId);
-      if (player) {
+      if (player ) {
         // leave some buffer for reorgs
         if (transfer.blockNumber < latestBlockNumber - blockMargin) {
           const team = teamMap.get(transfer.to.toLowerCase());
           if (team) {
-            player.team = team;
-            player.team_id = team.team_id;
-            player.shirt_number = await this.getFreeShirtNumber(team.team_id);
+            if (team.owner !== transfer.to) {
+              player.team = team;
+              player.team_id = team.team_id;
+              player.shirt_number = await this.getFreeShirtNumber(team.team_id);
+            }
             lastTransfer = transfer;
           } else {
             console.log(`Team for ${transfer.to} not found. Assigning to default team`);
@@ -85,7 +94,9 @@ export class TransferService {
         }
       } else {
         console.log(`Player ${transfer.tokenId} not found: `);
-        throw new Error(`Player ${transfer.tokenId} not found`);
+        lastTransfer = transfer;
+        await this.transferRepository.updateLatestBlockNumber(lastTransfer!.blockNumber, lastTransfer!.txHash, new Date(lastTransfer!.timestamp), AppDataSource.manager);
+        return;
       }
       if (lastTransfer) {
         const entityManager = AppDataSource.manager;
@@ -95,6 +106,9 @@ export class TransferService {
         });
       }
     }
+
+
+
   }
 
   private async getTeamsByOwners(owners: string[]): Promise<Team[]> {
