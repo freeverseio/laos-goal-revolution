@@ -50,8 +50,8 @@ export class TransferQuery {
           stopLoop = true;
         }
 
-        // Filter out transfers where `from` and `to` are equal
-        transfers = transfers.filter(transfer => transfer.from !== transfer.to);
+        // Filter out transfers where `from` and `to` are equal and `from` is not the zero address
+        transfers = transfers.filter(transfer => transfer.from !== transfer.to && transfer.from !== "0x0000000000000000000000000000000000000000");
 
         // Iterate over the filtered transfers
         for (const transfer of transfers) {

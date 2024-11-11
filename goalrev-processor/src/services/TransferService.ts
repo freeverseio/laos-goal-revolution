@@ -4,6 +4,7 @@ import { PlayerRepository } from "../db/repository/PlayerRepository";
 import { TeamRepository } from "../db/repository/TeamRepository";
 import { TransferRepository } from "../db/repository/TransferRepository";
 import { Transfer } from "../types/graphql/transfer";
+import { IN_TRANSIT_SHIRTNUM, PLAYERS_PER_TEAM_MAX } from "../utils/constants/constants";
 import { RpcUtils } from "./blockchain/RpcUtils";
 import { TransferQuery } from "./graphql/TransferQuery";
 
@@ -35,6 +36,10 @@ export class TransferService {
 
     const tokenIds = transfers.map(transfer => transfer.tokenId);
     const players = await this.playerRepository.findPlayersByTokenIds(tokenIds);
+    if (transfers.length > 0 && !players || players.length === 0) {
+      throw new Error('Players not found');
+    }
+    
     if (tokenIds.length > players.length) {
       // TODO: handle this case
       // get asset from indexer by tokenId
@@ -57,6 +62,8 @@ export class TransferService {
           const team = teamMap.get(transfer.to.toLowerCase());
           if (team) {
             player.team = team;
+            player.team_id = team.team_id;
+            player.shirt_number = await this.getFreeShirtNumber(team.team_id);
             lastTransfer = transfer;
           } else {
             console.log(`Team for ${transfer.to} not found. Assigning to default team`);
@@ -64,6 +71,8 @@ export class TransferService {
             const defaultTeam = await this.teamRepository.findById(process.env.DEFAULT_TEAM_ID!);
             if (defaultTeam) {
               player.team = defaultTeam;
+              player.team_id = defaultTeam.team_id;
+              player.shirt_number = await this.getFreeShirtNumber(defaultTeam.team_id);
               lastTransfer = transfer;
             }
           }
@@ -89,4 +98,13 @@ export class TransferService {
     return teams;
   }
 
+  private async getFreeShirtNumber(teamId: string): Promise<number> {
+    const shirtNumbers = await this.teamRepository.getShirtNumbers(teamId);
+    for (let i = PLAYERS_PER_TEAM_MAX; i > 0; i--) {
+      if (!shirtNumbers.includes(i)) {
+        return i;
+      }
+    }
+    return IN_TRANSIT_SHIRTNUM;
+  }
 }

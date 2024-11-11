@@ -105,7 +105,7 @@ export class TeamService {
     }
     console.log(`Minting failed teams: ${teams.map(team => team.team_id)}`);
     const tokens = await this.tokenQuery.fetchTokensByOwner(process.env.CONTRACT_ADDRESS!, teams[0].owner!);
-    if (!tokens || tokens.length === 0 || tokens.length < 5) {
+    if (!tokens || tokens.length === 0 ) {
       this.mintTeams(teams);
     } else {
       console.log(`Tokens found for team ${teams[0].team_id}: ${tokens.map(token => token.tokenId)}`);

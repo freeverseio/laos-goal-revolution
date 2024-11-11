@@ -78,26 +78,29 @@ async function playMatches() {
 function initializeSchedulers() {
   // Play Matches Scheduler
   const playMatchesScheduler = process.env.PLAY_MATCHES_SCHEDULER;
-  if (!playMatchesScheduler) throw new Error("PLAY_MATCHES_SCHEDULER is not set");
-  cron.schedule(playMatchesScheduler, () => runWithLock("playMatches", playMatches));
+  if (playMatchesScheduler && playMatchesScheduler !== "*/0 * * * * *" && playMatchesScheduler !== "") {
+    cron.schedule(playMatchesScheduler, () => runWithLock("playMatches", playMatches));
+  }
 
   // Mint Pending Teams Scheduler
   const mintPendingTeamsScheduler = process.env.MINT_PENDING_TEAMS_SCHEDULER;
-  if (!mintPendingTeamsScheduler) throw new Error("MINT_PENDING_TEAMS_SCHEDULER is not set");
-  cron.schedule(mintPendingTeamsScheduler, () => runWithLock("mintPendingTeams", async () => {
+  if (mintPendingTeamsScheduler && mintPendingTeamsScheduler !== "*/0 * * * * *" && mintPendingTeamsScheduler !== "") {
+    cron.schedule(mintPendingTeamsScheduler, () => runWithLock("mintPendingTeams", async () => {
     const teamService = TeamFactory.createTeamService();
     const result = await teamService.mintPendingTeams();
-    console.log(`[mintPendingTeams] Result: ${result}`);
-  }));
+      console.log(`[mintPendingTeams] Result: ${result}`);
+    }));
+  }
 
   // Sync Transfers Scheduler
   const syncTransfersScheduler = process.env.TRANSFER_SCHEDULER;
-  if (!syncTransfersScheduler) throw new Error("TRANSFER_SCHEDULER is not set");
-  cron.schedule(syncTransfersScheduler, () => runWithLock("syncTransfers", async () => {
-    const transferService = TransferFactory.create();
+  if (syncTransfersScheduler && syncTransfersScheduler !== "*/0 * * * * *" && syncTransfersScheduler !== "") {
+    cron.schedule(syncTransfersScheduler, () => runWithLock("syncTransfers", async () => {
+      const transferService = TransferFactory.create();
     const result = await transferService.syncTransfers();
     console.log(`[syncTransfers] Result: ${result}`);
-  }));
+    }));
+  }
 }
 
 /**

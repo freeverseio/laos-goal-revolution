@@ -1,7 +1,10 @@
 import { EntityManager } from "typeorm";
 import { Tactics, Team, TacticsHistory } from "../entity/";
+import { Alignment } from "../../types";
 
 export class TacticRepository {
+
+
 
 
   // Get tactics by timezone
@@ -128,5 +131,6 @@ export class TacticRepository {
       throw new Error("Insert failed");
     }
   }
+
 
 }
