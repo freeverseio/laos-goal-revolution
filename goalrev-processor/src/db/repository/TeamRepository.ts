@@ -111,7 +111,7 @@ export class TeamRepository {
         countryIdx: countryIdx,
         timezoneIdx: timezoneIdx,
       })
-      .orderBy("CAST(team.ranking_points AS INTEGER)", "DESC")
+      .orderBy("CAST(team.ranking_points_real AS BIGINT)", "DESC")
       .getMany();
     return teams;
   }

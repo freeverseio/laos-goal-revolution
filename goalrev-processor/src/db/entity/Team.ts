@@ -88,6 +88,9 @@ export class Team {
   @Column({ type: 'text', default: '0' })
   ranking_points!: string;
 
+  @Column({ type: 'text', default: '0' })
+  ranking_points_real!: string;
+
   @Column({ type: 'int', default: 0 })
   training_points!: number;
 

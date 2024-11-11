@@ -85,21 +85,21 @@ function initializeSchedulers() {
   // Mint Pending Teams Scheduler
   const mintPendingTeamsScheduler = process.env.MINT_PENDING_TEAMS_SCHEDULER;
   if (mintPendingTeamsScheduler && mintPendingTeamsScheduler !== "*/0 * * * * *" && mintPendingTeamsScheduler !== "") {
-    cron.schedule(mintPendingTeamsScheduler, () => runWithLock("mintPendingTeams", async () => {
-    const teamService = TeamFactory.createTeamService();
-    const result = await teamService.mintPendingTeams();
-      console.log(`[mintPendingTeams] Result: ${result}`);
-    }));
+    // cron.schedule(mintPendingTeamsScheduler, () => runWithLock("mintPendingTeams", async () => {
+    // const teamService = TeamFactory.createTeamService();
+    // const result = await teamService.mintPendingTeams();
+    //   console.log(`[mintPendingTeams] Result: ${result}`);
+    // }));
   }
 
   // Sync Transfers Scheduler
   const syncTransfersScheduler = process.env.TRANSFER_SCHEDULER;
   if (syncTransfersScheduler && syncTransfersScheduler !== "*/0 * * * * *" && syncTransfersScheduler !== "") {
-    cron.schedule(syncTransfersScheduler, () => runWithLock("syncTransfers", async () => {
-      const transferService = TransferFactory.create();
-    const result = await transferService.syncTransfers();
-    console.log(`[syncTransfers] Result: ${result}`);
-    }));
+    // cron.schedule(syncTransfersScheduler, () => runWithLock("syncTransfers", async () => {
+    //   const transferService = TransferFactory.create();
+    // const result = await transferService.syncTransfers();
+    // console.log(`[syncTransfers] Result: ${result}`);
+    // }));
   }
 }
 
