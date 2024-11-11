@@ -1,10 +1,7 @@
 import { EntityManager } from "typeorm";
-import { Tactics, Team, TacticsHistory } from "../entity/";
-import { Alignment } from "../../types";
+import { Tactics, TacticsHistory, Team } from "../entity/";
 
 export class TacticRepository {
-
-
 
 
   // Get tactics by timezone
