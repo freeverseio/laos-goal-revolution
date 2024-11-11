@@ -1,4 +1,5 @@
  const PLAYERS_PER_TEAM_MAX = 25;
+ const IN_TRANSIT_SHIRTNUM = 26; // If a team acquires more than 25 players, the extra ones remain with shirtNum
  const PLAYERS_PER_TEAM_MIN = 11;
  const NO_SUBSTITUTES = 11;
  const NO_LINEUP = PLAYERS_PER_TEAM_MAX; 
@@ -13,6 +14,7 @@
 export {
     PLAYERS_PER_TEAM_MAX,
     PLAYERS_PER_TEAM_MIN,
+    IN_TRANSIT_SHIRTNUM,
     NO_SUBSTITUTES,
     NO_LINEUP,
     VERSES_PER_ROUND,
