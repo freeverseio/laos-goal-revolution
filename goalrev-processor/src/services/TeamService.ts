@@ -153,4 +153,26 @@ export class TeamService {
       throw new Error(`Failed to mint team: ${error}`);
     }
   }
+
+  async getTeamBotStatuses(
+    homeTeamId: string,
+    awayTeamId: string
+  ): Promise<{ isHomeTeamBot: boolean; isAwayTeamBot: boolean }> {
+    let isHomeTeamBot = false;
+    let isAwayTeamBot = false;
+    const teams = await this.teamRepository.findByIds([homeTeamId, awayTeamId]);
+    for (const team of teams) {
+      if (team.team_id === homeTeamId) {
+        isHomeTeamBot = team.owner === '0x0000000000000000000000000000000000000000';
+      }else if (team.team_id === awayTeamId) {
+        isAwayTeamBot = team.owner === '0x0000000000000000000000000000000000000000';
+      }
+    }  
+  
+    return {
+      isHomeTeamBot: isHomeTeamBot,
+      isAwayTeamBot: isAwayTeamBot
+    };
+  }
+
 }

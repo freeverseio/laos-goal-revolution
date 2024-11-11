@@ -197,5 +197,16 @@ export class TeamRepository {
   }
 
 
-}
+  async findByIds(teamIds: string[]): Promise<Team[]> {
+    const teamRepository = AppDataSource.getRepository(Team);
 
+    const teams = await teamRepository.find({
+      where: {
+        team_id: In(teamIds),
+      },      
+    });
+
+    return teams;
+  }
+
+}

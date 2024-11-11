@@ -170,7 +170,8 @@ export class MatchService {
       await entityManager.transaction(async (transactionManager: EntityManager) => {
         const is1stHalf = match.state === MatchState.BEGIN;
         const is2ndHalf = match.state === MatchState.HALF;
-        const requestBody = this.buildRequestBody(match, seedMatch, is1stHalf);
+        const { isHomeTeamBot, isAwayTeamBot } = await this.teamService.getTeamBotStatuses(match.homeTeam!.team_id, match.visitorTeam!.team_id);
+        const requestBody = this.buildRequestBody(match, seedMatch, is1stHalf, isHomeTeamBot, isAwayTeamBot);
 
         if (!is1stHalf && !is2ndHalf) {
           console.warn(`Match with [matchIdx, matchDayIdx, timezoneIdx, leagueIdx] [${match.match_idx}, ${match.match_day_idx}, ${match.timezone_idx}, ${match.league_idx}] is not in the BEGIN or HALF state, skipping`);
@@ -225,7 +226,7 @@ export class MatchService {
     return "ok";
   }
 
-  buildRequestBody(match: Match, seed: string, is1stHalf: boolean): PlayMatchRequest {
+  buildRequestBody(match: Match, seed: string, is1stHalf: boolean, isBotHome: boolean, isBotAway: boolean): PlayMatchRequest {
     return {
       verseSeed: seed,
       matchStartTime: Number(match.start_epoch),
@@ -245,7 +246,7 @@ export class MatchService {
         { encodedMatchLog: match.homeTeam!.match_log },
         { encodedMatchLog: match.visitorTeam!.match_log }
       ],
-      matchBools: [match.state === MatchState.HALF, true, false, false, false],
+      matchBools: [match.state === MatchState.HALF, true, false, isBotHome, isBotAway],
       trainings: [
         MatchMapper.mapTrainingToRequest(match.homeTeam!.trainings, match.homeTeam!.training_points),  // Home team training
         MatchMapper.mapTrainingToRequest(match.visitorTeam!.trainings, match.visitorTeam!.training_points) // Visitor team training
