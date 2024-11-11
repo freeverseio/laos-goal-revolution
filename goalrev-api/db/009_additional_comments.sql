@@ -12,3 +12,4 @@ comment on table shop_items is E'@omit create,update,delete';
 comment on table tactics_histories is E'@omit create,update,delete';
 comment on table trainings_histories is E'@omit create,update,delete';
 comment on table team_props_histories is E'@omit create,update,delete'
+comment on table last_transfer is E'@omit create,update,delete';
