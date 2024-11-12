@@ -222,7 +222,7 @@ export class LeagueService {
     const nextLeagueIdx = await this.leagueRepository.countLeaguesByTimezoneAndCountry( timezoneIdx, countryIdx, entityManager);
     // Load names database once so we can use it multiple times later
     const namesDb = await loadNamesDatabase();
-    const numLeaguesToCreate = 16; // 16 leagues
+    const numLeaguesToCreate = 4; // 16 leagues
     const numTeamsPerLeague = 8; // 8 teams per league
     const MAX_TEAMIDX_IN_COUNTRY = 268435455; /// 268435455 = 2**28 - 1
     
