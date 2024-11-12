@@ -1,10 +1,10 @@
 namespace: goalrev
 apiHost: goalrevapi.gorengine.com
 apiInternalUrl: http://goalrev-core.goalrev.svc.cluster.local:3001
-postgresHost: db-postgresql-ams3-02994-do-user-14140340-0.j.db.ondigitalocean.com
-postgresDb: defaultdb
+postgresHost: dev-db-do-user-4813238-0.j.db.ondigitalocean.com
+postgresDb: goalrev
 postgresPort: "25060"
-postgresUser: "doadmin"
+postgresUser: "goalrev"
 processorHost: goalrev-processor.gorengine.com
 processorPort: "3000"
 coreAppPort: "3001"

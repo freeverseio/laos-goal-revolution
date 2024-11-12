@@ -1,7 +1,7 @@
 ALTER TABLE players 
 ADD COLUMN token_id TEXT DEFAULT NULL;
 
-ALTER TABLE teams DROP COLUMN mint_status;
+--ALTER TABLE teams DROP COLUMN mint_status;
 
 CREATE TYPE public."mint_status_type" AS ENUM (
 	'not_minted',
