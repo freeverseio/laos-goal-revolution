@@ -118,3 +118,14 @@ export class Team {
 }
 
 export type TeamPartialUpdate = DeepPartial<Team>; 
+
+export interface TeamPartialUpdateMint {
+  team_id: string;
+  mint_status?: MintStatus;
+  mint_updated_at?: Date;
+  players?: PlayerPartialUpdateMint[];
+} 
+export interface PlayerPartialUpdateMint {
+  player_id: string;
+  token_id?: string;
+}

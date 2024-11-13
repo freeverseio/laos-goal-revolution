@@ -2,7 +2,6 @@ import axios from "axios";
 import { AppDataSource } from "../db/AppDataSource";
 
 import { EntityManager } from "typeorm";
-import { TeamPartialUpdate } from "../db/entity";
 import { Country } from "../db/entity/Country";
 import { Verse } from "../db/entity/Verse";
 import { LeagueRepository } from "../db/repository/LeagueRepository";
@@ -48,7 +47,7 @@ export class LeagueService {
 
   async computeTeamRankingPointsForTimezone(timezoneIdx: number): Promise<void> {
     const teams = await this.teamRepository.findTeamsWithPlayersByTimezone(timezoneIdx);
-    const partialRankingPoints: TeamPartialUpdate[] = [];
+    const partialRankingPoints: { team_id: string; ranking_points: string; ranking_points_real: string; prev_perf_points: string }[] = [];
     for (let i = 0; i < teams.length; i++) {
       const team = teams[i];
       const players = team.players;
@@ -65,7 +64,7 @@ export class LeagueService {
     }
     const entityManager = AppDataSource.manager;
     await entityManager.transaction(async (transactionalEntityManager) => {
-      await this.teamRepository.bulkUpdate(partialRankingPoints, transactionalEntityManager);
+      await this.teamRepository.bulkUpdateRankingPoints(partialRankingPoints, transactionalEntityManager);
     });
   }
 

@@ -1,6 +1,6 @@
-import { MintStatus, Team, Player as PlayerEntity } from "../../db/entity";
+import { MintStatus, Team, Player as PlayerEntity, TeamPartialUpdateMint } from "../../db/entity";
 import { MintTeamMutation } from "../../types/rest/input/team";
-import { MintedPlayer, Player, PlayerDto, TokenIndexer, TokenIndexerWithPlayerId } from "../../types";
+import { MintedPlayer, PlayerDto, TokenIndexer, TokenIndexerWithPlayerId } from "../../types";
 import SkillsUtils from "../../utils/SkillsUtils";
 
 export class TeamMapper {
@@ -84,17 +84,22 @@ export class TeamMapper {
     });
     return team;
   }
-  
-  static mapMintedPlayersToTeamPlayers(teams: Team[], tokenIds: string[]): Team[] {
-    teams.forEach((team, index) => {
-      team.mint_status = MintStatus.SUCCESS;
-      team.mint_updated_at = new Date();
-      team.players.forEach((player, index) => {
-        player.token_id = tokenIds[index];
-      });
+
+  static mapMintedPlayersToTeamPlayers(teams: Team[], tokenIds: string[]): TeamPartialUpdateMint[] {
+    return teams.map((team) => {
+      const teamUpdate: TeamPartialUpdateMint = {
+        team_id: team.team_id,
+        mint_status: MintStatus.SUCCESS,
+        mint_updated_at: new Date(),
+        players: team.players.map((player, index) => ({
+          player_id: player.player_id,
+          token_id: tokenIds[index] 
+        }))
+      };
+      return teamUpdate;
     });
-    return teams;
-  } 
+  }
+  
 
   static mapTeamPlayersToDto(players: PlayerEntity[], owner: string): PlayerDto[] {
     return players.map(player => ({
