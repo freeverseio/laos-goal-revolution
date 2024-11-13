@@ -116,43 +116,6 @@ export class TeamRepository {
       .execute();
   }
 
-  // async bulkUpdateMint(
-  //   teams: TeamPartialUpdateMint[],
-  //   transactionalEntityManager: EntityManager
-  // ): Promise<void> {
-  //   const teamRepository = transactionalEntityManager.getRepository(Team);
-  //   const playerRepository = transactionalEntityManager.getRepository(Player);
-  
-  //   // Loop over each team in the input array
-  //   for (const team of teams) {
-  //     // Update the team record with only the specified fields
-  //     await teamRepository
-  //       .createQueryBuilder()
-  //       .update(Team)
-  //       .set({
-  //         mint_status: team.mint_status,
-  //         mint_updated_at: team.mint_updated_at,
-  //       })
-  //       .where("team_id = :teamId", { teamId: team.team_id })
-  //       .execute();
-  
-  //     // If the team has related players to update
-  //     if (team.players) {
-  //       for (const player of team.players) {
-  //         await playerRepository
-  //           .createQueryBuilder()
-  //           .update(Player)
-  //           .set({
-  //             token_id: player.token_id,
-  //           })
-  //           .where("player_id = :playerId", { playerId: player.player_id })
-  //           .execute();
-  //       }
-  //     }
-  //   }
-  // }
-  
-
   async bulkCreate(teams: Team[], transactionalEntityManager: EntityManager): Promise<void> {
     const teamRepository = transactionalEntityManager.getRepository(Team);
     await teamRepository.save(teams);
