@@ -19,4 +19,4 @@ comment on column trainings.team_id is E'@omit update';
 comment on table trainings_histories is E'@omit create,update,delete';
 comment on table team_props is E'@omit create,delete';
 comment on column team_props.team_id is E'@omit update';
-comment on table team_props_histories is E'@omit create,update,delete'
+comment on table teams_props_histories is E'@omit create,update,delete'

@@ -1,2 +1,3 @@
 _deployments/charts/secrets/db-cert.yaml
 _deployments/charts/secrets/docker-secret.yaml
+goalrev-api/certs/ca-certificate.crt
