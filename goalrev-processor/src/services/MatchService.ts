@@ -55,8 +55,10 @@ export class MatchService {
 
   async playMatches(): Promise<any> {
     const info = await this.calendarService.getCalendarInfo();
+    // minus one hour
+   // info.timestamp = info.timestamp! - 3600;
 
-    // Check if timestamp to play is in the future
+    // // Check if timestamp to play is in the future
     if (this.checkTimestampInFuture(info.timestamp!)) {      
       return {
         verseNumber: info.verseNumber,
@@ -191,6 +193,8 @@ export class MatchService {
         }
         match.state = is1stHalf ? MatchState.HALF : MatchState.END;
         matchHistory.state = match.state;
+        match.homeTeam!.tactic = playOutput.encodedTactics ? playOutput.encodedTactics[0] : "";
+        match.visitorTeam!.tactic = playOutput.encodedTactics ? playOutput.encodedTactics[1] : "";
 
         await this.teamService.updateTeamData(playOutput.matchLogs[0], playOutput.matchLogs[1], match.homeTeam!, verseNumber, is1stHalf, true, transactionManager);
         await this.teamService.updateTeamData(playOutput.matchLogs[1], playOutput.matchLogs[0], match.visitorTeam!, verseNumber, is1stHalf, false, transactionManager);
@@ -198,13 +202,13 @@ export class MatchService {
         await this.playerService.updateSkills(match.homeTeam!, playOutput.updatedSkills[0], verseNumber, transactionManager);
         await this.playerService.updateSkills(match.visitorTeam!, playOutput.updatedSkills[1], verseNumber, transactionManager);
 
-       
+         // update tactics history
+        await this.tacticsRepository.insertTacticHistory(TacticsHistoryMapper.mapToTacticsHistory(match.homeTeam!.tactics, verseNumber), transactionManager);
+        await this.tacticsRepository.insertTacticHistory(TacticsHistoryMapper.mapToTacticsHistory(match.visitorTeam!.tactics, verseNumber), transactionManager);
+        
         if (is2ndHalf) {
           match.home_teamsumskills = playOutput.matchLogs[0].teamSumSkills;
           match.visitor_teamsumskills = playOutput.matchLogs[1].teamSumSkills;
-           // update tactics history
-          await this.tacticsRepository.insertTacticHistory(TacticsHistoryMapper.mapToTacticsHistory(match.homeTeam!.tactics, verseNumber), transactionManager);
-          await this.tacticsRepository.insertTacticHistory(TacticsHistoryMapper.mapToTacticsHistory(match.visitorTeam!.tactics, verseNumber), transactionManager);
         }
 
         // // Save the match using the repository

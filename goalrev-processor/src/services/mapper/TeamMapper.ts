@@ -85,20 +85,37 @@ export class TeamMapper {
     return team;
   }
 
+
   static mapMintedPlayersToTeamPlayers(teams: Team[], tokenIds: string[]): TeamPartialUpdateMint[] {
     return teams.map((team) => {
-      const teamUpdate: TeamPartialUpdateMint = {
+      let teamMintStatus = MintStatus.SUCCESS;
+  
+      const playersWithTokens = team.players.map((player, index) => {
+        const tokenId = tokenIds[index];
+  
+        if (tokenIds.includes(tokenId)) {
+          return {
+            player_id: player.player_id,
+            token_id: tokenId,
+          };
+        } else {
+          teamMintStatus = MintStatus.FAILED;
+          return {
+            player_id: player.player_id,
+          };
+        }
+      });
+  
+      return {
         team_id: team.team_id,
-        mint_status: MintStatus.SUCCESS,
+        mint_status: teamMintStatus,
         mint_updated_at: new Date(),
-        players: team.players.map((player, index) => ({
-          player_id: player.player_id,
-          token_id: tokenIds[index] 
-        }))
+        players: playersWithTokens,
       };
-      return teamUpdate;
     });
   }
+  
+
   
 
   static mapTeamPlayersToDto(players: PlayerEntity[], owner: string): PlayerDto[] {

@@ -41,7 +41,7 @@ export default class DecodeMatchEvents {
     // set event type
     matchEvent.type = MatchEventType.ATTACK;
     // set minute
-    const minute = (Math.floor(numEvent * 45 / ROUNDS_PER_MATCH) > 0 ? Math.floor(numEvent * 45 / ROUNDS_PER_MATCH) : 1) + (is2ndHalf ? 45 : 0);
+    const minute = (Math.floor(numEvent * 45 / ROUNDS_PER_MATCH) > 0 ? Math.floor(numEvent * 45 / ROUNDS_PER_MATCH) : 1) + (is2ndHalf ? 145 : 0);
     matchEvent.minute = minute.toString();
     // set manage to shoot
     matchEvent.manage_to_shoot = managesToShoot === '1';
@@ -110,7 +110,7 @@ export default class DecodeMatchEvents {
 
         if (outOfGamePlayer !== '14' && outOfGameType !== '0') { // '14' means no player affected
           const primaryPlayer = this.getShirtNumberFromIdx(outOfGamePlayer, teamType === TeamType.HOME);
-          const outOfGameMinute = Math.floor(parseInt(outOfGameRound) * (45 / ROUNDS_PER_MATCH)) + (is2ndHalf ? 45 : 0);
+          const outOfGameMinute = Math.floor(parseInt(outOfGameRound) * (45 / ROUNDS_PER_MATCH)) + (is2ndHalf ? 145 : 0);
 
           let typeOfEvent: MatchEventType;
           switch (outOfGameType) {
@@ -156,7 +156,7 @@ export default class DecodeMatchEvents {
           }
 
           // Generate a pseudo-random minute for the yellow card, ensuring it doesn't exceed `maxMinute`
-          yellowMinute = this.generateRandomMinute(i, yellowCardPlayer, maxMinute) + (is2ndHalf ? 45 : 0);
+          yellowMinute = this.generateRandomMinute(i, yellowCardPlayer, maxMinute) + (is2ndHalf ? 145 : 0);
 
           injuryAndCardsEvents.push({
             minute: yellowMinute.toString(),
