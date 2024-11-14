@@ -204,6 +204,7 @@ describe('MatchService', () => {
         `${process.env.CORE_API_URL}/match/play1stHalf`,
         expect.any(Object)
       );
+      
       expect(mockMatchRepository.saveMatch).toHaveBeenCalledWith(mockMatch, mockEntityManager);
       expect(response).toBe('ok');
     });

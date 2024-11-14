@@ -36,7 +36,7 @@ export class TransferQuery {
     try {
       while (!stopLoop) {
         const query = this.createQuery(limit, offset); // Create a query with the current offset
-        console.log('query', query.loc?.source.body);
+        // console.log('query', query.loc?.source.body);
         const response = await gqlClient.query({
           query,
           fetchPolicy: 'no-cache',
@@ -80,7 +80,6 @@ export class TransferQuery {
           offset += 30;
         }
       }
-      console.log('transferMap', transferMap);
       // inverse order of the map
       return this.sortTransfersByBlockNumber(Object.values(transferMap));
     } catch (error) {
