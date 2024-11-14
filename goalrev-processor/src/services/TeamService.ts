@@ -153,7 +153,7 @@ export class TeamService {
       }
       const updatedTeams = TeamMapper.mapMintedPlayersToTeamPlayers(teams, result.data.mint.tokenIds);
       const entityManager = AppDataSource.manager;
-      await this.teamRepository.bulkUpdate(updatedTeams, entityManager);
+      await this.teamRepository.bulkUpdateMint(updatedTeams, entityManager);
       return true;
     } catch (error) {
       this.teamRepository.setMintStatus(teams.map(team => team.team_id), MintStatus.FAILED);
