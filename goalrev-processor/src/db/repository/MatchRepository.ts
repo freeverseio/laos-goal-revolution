@@ -1,6 +1,8 @@
 import { EntityManager } from "typeorm";
 import { AppDataSource } from "../AppDataSource";
 import { Match, MatchState } from "../entity/Match";
+import { MatchHistoryMapper } from "../../services/mapper/MatchHistoryMapper";
+import { MatchHistory } from "../entity/MatchHistory";
 
 export class MatchRepository {
 
@@ -79,9 +81,12 @@ export class MatchRepository {
         seed: '',
         state_extra: '',
       });
-
+      // TODO save match history
+      const matchHistory = MatchHistoryMapper.mapMatchHistory(match, 0, '');
       // Save the match, performing an upsert
       await repository.save(match);
+      const matchHistoryRepository = AppDataSource.getRepository(MatchHistory);
+      await matchHistoryRepository.save(matchHistory);
     } catch (error) {
       console.error("Error resetting match:", error);
       throw new Error("Reset match failed");

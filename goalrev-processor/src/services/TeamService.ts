@@ -21,6 +21,7 @@ export class TeamService {
   async updateTeamData(
     matchLog: MatchLog,
     matchLogOpponent: MatchLog,
+
     team: Team,
     verseNumber: number,
     is1stHalf: boolean,
@@ -32,9 +33,7 @@ export class TeamService {
     if (!is1stHalf) {
       team.goals_forward += matchLog.numberOfGoals;
       team.goals_against += matchLogOpponent.numberOfGoals;
-      const teamHistory = TeamHistoryMapper.mapToTeamHistory(team!, verseNumber);
-      // Save the updated team back to the database
-      await entityManager.save(teamHistory);
+     
 
       // Update training points
       team.training_points = matchLog.trainingPoints;
@@ -62,6 +61,10 @@ export class TeamService {
           break;
       }
     }
+
+    const teamHistory = TeamHistoryMapper.mapToTeamHistory(team!, verseNumber);
+    // Save the updated team back to the database
+    await entityManager.save(teamHistory);
     //update rellevant columns in DB
     await entityManager.update(Team, team.team_id, {
       match_log: team.match_log,
@@ -71,7 +74,8 @@ export class TeamService {
       w: team.w,
       d: team.d,
       l: team.l,
-      points: team.points
+      points: team.points,
+      tactic: team.tactic
     });
   }
 
@@ -143,6 +147,9 @@ export class TeamService {
       if (result.errors) {
         this.teamRepository.setMintStatus(teams.map(team => team.team_id), MintStatus.FAILED);
         throw new Error(`Failed to mint team: ${result.errors[0].message}`);
+      }
+      if (result.data.mint.tokenIds.length === 0) {
+        throw new Error(`Failed to mint team: No token ids returned`);
       }
       const updatedTeams = TeamMapper.mapMintedPlayersToTeamPlayers(teams, result.data.mint.tokenIds);
       const entityManager = AppDataSource.manager;

@@ -90,7 +90,12 @@ export class TeamMapper {
       team.mint_status = MintStatus.SUCCESS;
       team.mint_updated_at = new Date();
       team.players.forEach((player, index) => {
-        player.token_id = tokenIds[index];
+        // check if tokenId exists
+        if (tokenIds.includes(player.token_id!)) {
+          player.token_id = tokenIds[index];
+        } else {
+          team.mint_status = MintStatus.FAILED;
+        }
       });
     });
     return teams;
