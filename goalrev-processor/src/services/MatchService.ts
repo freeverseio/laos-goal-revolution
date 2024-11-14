@@ -167,7 +167,7 @@ export class MatchService {
   async playMatch(match: Match, seed: string, verseNumber: number) {
     const seedMatch = crypto.createHash('sha256').update(`${seed}${match.homeTeam!.team_id}${match.visitorTeam!.team_id}`).digest('hex');
     const entityManager = AppDataSource.manager; // Use EntityManager for transactions
-    const matchHistory = MatchHistoryMapper.mapMatchHistory(match, verseNumber, seedMatch);
+    
     try {
       await entityManager.transaction(async (transactionManager: EntityManager) => {
         const is1stHalf = match.state === MatchState.BEGIN;
@@ -192,7 +192,6 @@ export class MatchService {
           match.seed = seedMatch;
         }
         match.state = is1stHalf ? MatchState.HALF : MatchState.END;
-        matchHistory.state = match.state;
         match.homeTeam!.tactic = playOutput.encodedTactics ? playOutput.encodedTactics[0] : "";
         match.visitorTeam!.tactic = playOutput.encodedTactics ? playOutput.encodedTactics[1] : "";
 
@@ -210,7 +209,7 @@ export class MatchService {
           match.home_teamsumskills = playOutput.matchLogs[0].teamSumSkills;
           match.visitor_teamsumskills = playOutput.matchLogs[1].teamSumSkills;
         }
-
+        const matchHistory = MatchHistoryMapper.mapMatchHistory(match, verseNumber, seedMatch);
         // // Save the match using the repository
         await this.matchRepository.saveMatch(match, transactionManager);
         await this.matchHistoryRepository.insertMatchHistory(matchHistory, transactionManager);
