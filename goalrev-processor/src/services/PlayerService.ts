@@ -38,7 +38,7 @@ export class PlayerService {
 
         // save player history
         const playerHistory = PlayerHistoryMapper.mapToPlayerHistory(player, verseNumber);
-        await this.playerRepository.savePlayerHistory(playerHistory);
+        await this.playerRepository.savePlayerHistory(playerHistory, entityManager);
         await this.playerRepository.updatePartial(playerSkills[i].playerId, {
           defence: playerSkills[i].defence,
           speed: playerSkills[i].speed,
@@ -46,7 +46,7 @@ export class PlayerService {
           shoot: playerSkills[i].shoot,
           endurance: playerSkills[i].endurance,
           encoded_skills: playerSkills[i].encodedSkills,
-        });
+        }, entityManager);
       }
     }
   }

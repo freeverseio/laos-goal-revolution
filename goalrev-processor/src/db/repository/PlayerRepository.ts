@@ -18,13 +18,13 @@ export class PlayerRepository {
     return await playerRepository.findBy({ token_id: In(tokenIds) });
   }
 
-  async updatePartial(player_id: string, player: PlayerPartialUpdate): Promise<void> {
-    const playerRepository = AppDataSource.getRepository(Player);
+  async updatePartial(player_id: string, player: PlayerPartialUpdate, entityManager: EntityManager): Promise<void> {
+    const playerRepository = entityManager.getRepository(Player);
     await playerRepository.update(player_id, player);
   }
 
-  async savePlayerHistory(playerHistory: PlayerHistory): Promise<void> {
-    const playerHistoryRepository = AppDataSource.getRepository(PlayerHistory);
+  async savePlayerHistory(playerHistory: PlayerHistory, entityManager: EntityManager): Promise<void> {
+    const playerHistoryRepository = entityManager.getRepository(PlayerHistory);
     await playerHistoryRepository.save(playerHistory);
   }
 }
