@@ -44,7 +44,7 @@ export const AppDataSource = new DataSource({
   migrations: [],
   subscribers: [],
   extra: {
-    max: 10, // Set the maximum number of connections in the pool
+    max: 20, // Set the maximum number of connections in the pool
     min: 5,  // Set the minimum number of connections in the pool
   },
 });
