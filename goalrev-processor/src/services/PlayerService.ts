@@ -1,9 +1,17 @@
 import { EntityManager } from "typeorm";
-import { Team } from "../db/entity";
+import { Player, Team } from "../db/entity";
 import { PlayerSkill } from "../types/rest/output/team";
 import { PlayerHistoryMapper } from "./mapper/PlayerHistoryMapper";
+import { PlayerRepository } from "../db/repository/PlayerRepository";
 
 export class PlayerService {
+
+  private playerRepository: PlayerRepository;
+
+  constructor(playerRepository: PlayerRepository) {
+    this.playerRepository = playerRepository;
+  }
+
   /**
    * Updates the skills of players based on the given player skills array.
    * @param tactics - The team tactics containing the player IDs.
@@ -18,13 +26,8 @@ export class PlayerService {
       // Find the player by their ID 
       // do not use transaction for this
       const player = team.players.find(p => p.player_id === playerSkills[i].playerId);
-      if (!player) {
-        return;
-      }
+     
       if (player) {
-        // save player history
-        const playerHistory = PlayerHistoryMapper.mapToPlayerHistory(player, verseNumber);
-        await entityManager.save(playerHistory);
         // Update the player's skills
         player.defence = playerSkills[i].defence;
         player.speed = playerSkills[i].speed;
@@ -33,8 +36,17 @@ export class PlayerService {
         player.endurance = playerSkills[i].endurance;
         player.encoded_skills = playerSkills[i].encodedSkills;
 
-        // Save the updated player
-        await entityManager.save(player);
+        // save player history
+        const playerHistory = PlayerHistoryMapper.mapToPlayerHistory(player, verseNumber);
+        await this.playerRepository.savePlayerHistory(playerHistory);
+        await this.playerRepository.updatePartial(playerSkills[i].playerId, {
+          defence: playerSkills[i].defence,
+          speed: playerSkills[i].speed,
+          pass: playerSkills[i].pass,
+          shoot: playerSkills[i].shoot,
+          endurance: playerSkills[i].endurance,
+          encoded_skills: playerSkills[i].encodedSkills,
+        });
       }
     }
   }

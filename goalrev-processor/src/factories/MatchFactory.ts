@@ -12,12 +12,14 @@ import { LeagueFactory } from "./LeagueFactory";
 import { MatchHistoryRepository } from "../db/repository/MatchHistoryRepository";
 import { TacticRepository } from "../db/repository/TacticRepository";
 import { TokenQuery } from "../services/graphql/TokenQuery";
+import { PlayerRepository } from "../db/repository/PlayerRepository";
 
 export class MatchFactory {
   
   static createMatchService(): MatchService {
     // Instantiate all the dependencies for MatchService
-    const playerService = new PlayerService();
+    const playerRepository = new PlayerRepository();
+    const playerService = new PlayerService(playerRepository);
     const teamRepository = new TeamRepository();
     const tokenQuery = new TokenQuery();
     const teamService = new TeamService(teamRepository, tokenQuery);

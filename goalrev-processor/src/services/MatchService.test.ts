@@ -16,6 +16,7 @@ import { VerseRepository } from '../db/repository/VerseRepository';
 import { LeagueService } from './LeagueService';
 import { MatchHistoryRepository } from '../db/repository/MatchHistoryRepository';
 import { TacticRepository } from '../db/repository/TacticRepository';
+import { PlayerRepository } from '../db/repository/PlayerRepository';
 
 // Mock axios and the repository
 jest.mock('axios');
@@ -77,6 +78,11 @@ jest.mock('../db/repository/TacticRepository');
 const mockTacticRepository = {
   insertTacticHistory: jest.fn(),
 } as unknown as TacticRepository;
+
+jest.mock('../db/repository/PlayerRepository');
+const mockPlayerRepository = {
+  savePlayerHistory: jest.fn(),
+} as unknown as PlayerRepository;
 
 // Mock for EntityManager
 const mockEntityManager = {
