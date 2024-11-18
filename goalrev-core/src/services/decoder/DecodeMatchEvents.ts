@@ -16,7 +16,7 @@ export default class DecodeMatchEvents {
     this.matchLogs = matchLogs;
   }
 
-  decode(is2ndHalf: boolean, seed: string): MatchEvent[] {
+  decode(is2ndHalf: boolean): MatchEvent[] {
     this.matchEvents = [];
     const events = this.matchLogsAndEvents.slice(2);
     for (let i = 0; i < events.length; i += 5) {
@@ -180,7 +180,6 @@ export default class DecodeMatchEvents {
   private getRandomMinute(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
-
 
 
 }

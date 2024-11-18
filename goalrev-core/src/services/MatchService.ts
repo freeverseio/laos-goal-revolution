@@ -97,7 +97,7 @@ export class MatchService {
       tacticsAway: tactics[1],
     }, decodedMatchLogs);
 
-    const matchEvents: MatchEvent[] = matchEventsDecoder.decode(false, `0x${verseSeed}`);
+    const matchEvents: MatchEvent[] = matchEventsDecoder.decode(false);
     
     return {
       updatedSkills,
@@ -160,7 +160,7 @@ export class MatchService {
       tacticsAway: tactics[1],
     }, decodedMatchLogs);
 
-    const matchEvents: MatchEvent[] = matchEventsDecoder.decode(true, `0x${verseSeed}`);
+    const matchEvents: MatchEvent[] = matchEventsDecoder.decode(true);
   
     return {
       updatedSkills,

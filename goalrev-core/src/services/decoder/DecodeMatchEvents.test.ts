@@ -45,7 +45,7 @@ describe('DecodeMatchEvents', () => {
   });
 
   it('should decode match events correctly', () => {
-    const matchEvents = decodeMatchEvents.decode(false, '0x1431378c4beb3ecfb7c7766503974453fd4afe524716f909f78710bf0392b4d2');
+    const matchEvents = decodeMatchEvents.decode(false);
 
 
     expect(matchEvents[0].minute).toBeDefined();
@@ -68,7 +68,7 @@ describe('DecodeMatchEvents', () => {
     ];
     decodeMatchEvents = new DecodeMatchEvents(matchLogsAndEvents, matchTeams, matchLogs);
 
-    const matchEvents = decodeMatchEvents.decode(false, '0xabcdef1234567890');
+    const matchEvents = decodeMatchEvents.decode(false);
     expect(matchEvents[0].primary_shirt_number).toBeUndefined();
     expect(matchEvents[0].secondary_shirt_number).toBe(PENALTY_CODE);
   });
@@ -81,13 +81,13 @@ describe('DecodeMatchEvents', () => {
     ];
     decodeMatchEvents = new DecodeMatchEvents(matchLogsAndEvents, matchTeams, matchLogs);
 
-    const matchEvents = decodeMatchEvents.decode(false, '0xabcdef1234567890');
+    const matchEvents = decodeMatchEvents.decode(false);
     expect(matchEvents[0].secondary_shirt_number).toBeUndefined();
   });
 
   // New tests to handle addCardsAndInjuries cases
   it('should handle yellow cards correctly', () => {
-    const matchEvents = decodeMatchEvents.decode(false, '0xabcdef1234567890');
+    const matchEvents = decodeMatchEvents.decode(false);
     console.log("Generated Events:", matchEvents); // Add this to inspect generated events
 
     const yellowCardEvents = matchEvents.filter(event => event.type === MatchEventType.YELLOW_CARD);
@@ -101,7 +101,7 @@ describe('DecodeMatchEvents', () => {
   });
 
   it('should handle injuries correctly', () => {
-    const matchEvents = decodeMatchEvents.decode(false, '0xabcdef1234567890');
+    const matchEvents = decodeMatchEvents.decode(false);
 
     const injuryEvents = matchEvents.filter(event =>
       event.type === MatchEventType.INJURY_SOFT || event.type === MatchEventType.INJURY_HARD
@@ -115,7 +115,7 @@ describe('DecodeMatchEvents', () => {
   });
 
   test('should handle red cards correctly', () => {
-    const matchEvents = decodeMatchEvents.decode(false, '0xabcdef1234567890');
+    const matchEvents = decodeMatchEvents.decode(false);
 
     const redCardEvents = matchEvents.filter(event => event.type === MatchEventType.RED_CARD);
     expect(redCardEvents.length).toBeGreaterThan(0);
