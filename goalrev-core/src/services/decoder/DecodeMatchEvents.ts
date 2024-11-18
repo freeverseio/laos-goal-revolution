@@ -1,6 +1,7 @@
 
 import { MatchEvent, MatchEventType, MatchLog, MatchTeams, TeamType } from "../../types/";
 import { PENALTY_CODE, ROUNDS_PER_MATCH } from "../../utils/constants";
+import { EventScheduler } from "./EventScheduler";
 
 export default class DecodeMatchEvents {
   private matchLogsAndEvents: string[];
@@ -26,7 +27,8 @@ export default class DecodeMatchEvents {
     }
     let matchEvents = this.matchEvents.map((event, index) => this.decodeEvent(index, event, is2ndHalf));
     matchEvents = matchEvents.concat(this.addCardsAndInjuries(is2ndHalf));
-    return matchEvents;
+    const eventScheduler = new EventScheduler(matchEvents, is2ndHalf);
+    return eventScheduler.schedule();
   }
 
   private decodeEvent(numEvent: number, event: [string, string, string, string, string], is2ndHalf: boolean): MatchEvent {
@@ -154,9 +156,10 @@ export default class DecodeMatchEvents {
             const outOfGameMinute = Math.floor(parseInt(outOfGameRound) * (45 / ROUNDS_PER_MATCH));
             maxMinute = outOfGameMinute > 1 ? outOfGameMinute - 1 : maxMinute;
           }
-
+          
           // Generate a pseudo-random minute for the yellow card, ensuring it doesn't exceed `maxMinute`
-          yellowMinute = this.generateRandomMinute(i, yellowCardPlayer, maxMinute) + (is2ndHalf ? 145 : 0);
+          yellowMinute = this.getRandomMinute(1, maxMinute);
+          yellowMinute = yellowMinute + (is2ndHalf ? 145 : 0);
 
           injuryAndCardsEvents.push({
             minute: yellowMinute.toString(),
@@ -174,11 +177,9 @@ export default class DecodeMatchEvents {
     return injuryAndCardsEvents;
   }
 
-
-  private generateRandomMinute(seed: number, player: string, maxMinute: number): number {
-    const salt = `c${player}`;
-    const pseudoRandomValue = parseInt(salt.split('').reduce((acc, char) => acc + char.charCodeAt(0), seed.toString()), 36);
-    return Math.floor((pseudoRandomValue % maxMinute) + 1);
+  private getRandomMinute(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
+
 
 }
