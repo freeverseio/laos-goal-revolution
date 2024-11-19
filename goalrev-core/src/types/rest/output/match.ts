@@ -4,6 +4,7 @@ export interface PlayOutput {
   updatedSkills?: [PlayerSkill[], PlayerSkill[]]; 
   matchLogs?: [MatchLog, MatchLog];
   matchEvents?: MatchEvent[]; 
+  encodedTactics?: [string, string];
   err: string; // Error code
 }
 

@@ -1,5 +1,5 @@
 import { EntityManager, In } from "typeorm";
-import { Player } from "../entity";
+import { Player, PlayerPartialUpdate, PlayerHistory } from "../entity";
 import { AppDataSource } from "../AppDataSource";
 
 export class PlayerRepository {
@@ -16,6 +16,16 @@ export class PlayerRepository {
   async findPlayersByTokenIds(tokenIds: string[]): Promise<Player[]> {
     const playerRepository = AppDataSource.getRepository(Player);
     return await playerRepository.findBy({ token_id: In(tokenIds) });
+  }
+
+  async updatePartial(player_id: string, player: PlayerPartialUpdate, entityManager: EntityManager): Promise<void> {
+    const playerRepository = entityManager.getRepository(Player);
+    await playerRepository.update(player_id, player);
+  }
+
+  async savePlayerHistory(playerHistory: PlayerHistory, entityManager: EntityManager): Promise<void> {
+    const playerHistoryRepository = entityManager.getRepository(PlayerHistory);
+    await playerHistoryRepository.save(playerHistory);
   }
 }
 

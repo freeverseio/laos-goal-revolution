@@ -1,6 +1,6 @@
-import { MintStatus, Team, Player as PlayerEntity } from "../../db/entity";
+import { MintStatus, Team, Player as PlayerEntity, TeamPartialUpdateMint } from "../../db/entity";
 import { MintTeamMutation } from "../../types/rest/input/team";
-import { MintedPlayer, Player, PlayerDto, TokenIndexer, TokenIndexerWithPlayerId } from "../../types";
+import { MintedPlayer, PlayerDto, TokenIndexer, TokenIndexerWithPlayerId } from "../../types";
 import SkillsUtils from "../../utils/SkillsUtils";
 
 export class TeamMapper {
@@ -75,8 +75,8 @@ export class TeamMapper {
       teamId: team.team_id
     }));
   }
-  static mapTokenIndexerToTeamPlayers(team: Team, tokenIds: TokenIndexer[]): Team {
-    const tokensWithPlayerId = tokenIds.map(token => new TokenIndexerWithPlayerId(token));
+  static mapTokenIndexerToTeamPlayers(team: Team, tokenFromIndexer: TokenIndexer[]): Team {
+    const tokensWithPlayerId = tokenFromIndexer.map(token => new TokenIndexerWithPlayerId(token));
     team.players.forEach((player, index) => {
       // find the token with the same playerId
       const token = tokensWithPlayerId.find(token => token.playerId === player.player_id);
@@ -84,17 +84,39 @@ export class TeamMapper {
     });
     return team;
   }
+
+
+  static mapMintedPlayersToTeamPlayers(teams: Team[], tokenIds: string[]): TeamPartialUpdateMint[] {
+    return teams.map((team) => {
+      let teamMintStatus = MintStatus.SUCCESS;
   
-  static mapMintedPlayersToTeamPlayers(teams: Team[], tokenIds: string[]): Team[] {
-    teams.forEach((team, index) => {
-      team.mint_status = MintStatus.SUCCESS;
-      team.mint_updated_at = new Date();
-      team.players.forEach((player, index) => {
-        player.token_id = tokenIds[index];
+      const playersWithTokens = team.players.map((player, index) => {
+        const tokenId = tokenIds[index];
+  
+        if (tokenIds.includes(tokenId)) {
+          return {
+            player_id: player.player_id,
+            token_id: tokenId,
+          };
+        } else {
+          teamMintStatus = MintStatus.FAILED;
+          return {
+            player_id: player.player_id,
+          };
+        }
       });
+  
+      return {
+        team_id: team.team_id,
+        mint_status: teamMintStatus,
+        mint_updated_at: new Date(),
+        players: playersWithTokens,
+      };
     });
-    return teams;
-  } 
+  }
+  
+
+  
 
   static mapTeamPlayersToDto(players: PlayerEntity[], owner: string): PlayerDto[] {
     return players.map(player => ({

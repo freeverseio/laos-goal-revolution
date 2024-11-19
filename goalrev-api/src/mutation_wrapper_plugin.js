@@ -101,7 +101,7 @@ const transferFirstBotToAddrWrapper = propName => {
                   WHERE "owner" = '0x0000000000000000000000000000000000000000' 
                   AND timezone_idx = $2 
                   AND country_idx = $3 
-                  ORDER BY CAST(ranking_points AS INTEGER) DESC 
+                  ORDER BY CAST(ranking_points_real AS BIGINT) DESC 
                   LIMIT 1
               )
               RETURNING team_id;

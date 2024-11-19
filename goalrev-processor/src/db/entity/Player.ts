@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn } from "typeorm";
+import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn, DeepPartial } from "typeorm";
 import { Team } from "./Team"; // Assuming you have a Team entity
 
 @Entity('players')
@@ -75,3 +75,4 @@ export class Player {
 
 }
 
+export type PlayerPartialUpdate = DeepPartial<Player>; 

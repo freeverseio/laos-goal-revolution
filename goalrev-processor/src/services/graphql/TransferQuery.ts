@@ -36,22 +36,22 @@ export class TransferQuery {
     try {
       while (!stopLoop) {
         const query = this.createQuery(limit, offset); // Create a query with the current offset
-
+        // console.log('query', query.loc?.source.body);
         const response = await gqlClient.query({
           query,
+          fetchPolicy: 'no-cache',
         });
 
         // Accessing the data
         let transfers: Transfer[] = response.data.polygon.transfers;
-
         // If no more transfers, break the loop
         if (transfers.length === 0 || transfers.length < limit) {
           console.log('No more transfers available.');
           stopLoop = true;
         }
 
-        // Filter out transfers where `from` and `to` are equal
-        transfers = transfers.filter(transfer => transfer.from !== transfer.to);
+        // Filter out transfers where `from` and `to` are equal and `from` is not the zero address
+        transfers = transfers.filter(transfer => transfer.from !== transfer.to && transfer.from !== "0x0000000000000000000000000000000000000000");
 
         // Iterate over the filtered transfers
         for (const transfer of transfers) {
@@ -60,7 +60,7 @@ export class TransferQuery {
             stopLoop = true;
             break;
           }
-
+          
           // Add the transfer to the map if the block number is greater than the targetBlockNumber
           if (transfer.blockNumber > targetBlockNumber) {
             transferMap[transfer.txHash] = {

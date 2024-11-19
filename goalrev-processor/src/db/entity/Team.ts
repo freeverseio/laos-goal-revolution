@@ -88,6 +88,9 @@ export class Team {
   @Column({ type: 'text', default: '0' })
   ranking_points!: string;
 
+  @Column({ type: 'text', default: '0' })
+  ranking_points_real!: string;
+
   @Column({ type: 'int', default: 0 })
   training_points!: number;
 
@@ -115,3 +118,14 @@ export class Team {
 }
 
 export type TeamPartialUpdate = DeepPartial<Team>; 
+
+export interface TeamPartialUpdateMint {
+  team_id: string;
+  mint_status?: MintStatus;
+  mint_updated_at?: Date;
+  players?: PlayerPartialUpdateMint[];
+} 
+export interface PlayerPartialUpdateMint {
+  player_id: string;
+  token_id?: string;
+}

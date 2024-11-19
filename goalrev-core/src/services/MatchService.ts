@@ -78,7 +78,6 @@ export class MatchService {
       encodedTrainings
     );
 
-   
     const parsedResult = MatchMapper.mapPlayHalfAndEvolveResult(result);
     
     if (parsedResult.err != "0") {
@@ -104,6 +103,7 @@ export class MatchService {
       updatedSkills,
       matchLogs: decodedMatchLogs,
       matchEvents,
+      encodedTactics: [encodedTactics[0], encodedTactics[1]],
       err: parsedResult.err.toString(),
     };
   }
@@ -166,6 +166,7 @@ export class MatchService {
       updatedSkills,
       matchLogs: decodedMatchLogs,
       matchEvents,
+      encodedTactics: [encodedTactics[0], encodedTactics[1]],
       err: parsedResult.err.toString(),
     };
   }

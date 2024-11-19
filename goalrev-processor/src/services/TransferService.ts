@@ -4,6 +4,7 @@ import { PlayerRepository } from "../db/repository/PlayerRepository";
 import { TeamRepository } from "../db/repository/TeamRepository";
 import { TransferRepository } from "../db/repository/TransferRepository";
 import { Transfer } from "../types/graphql/transfer";
+import { IN_TRANSIT_SHIRTNUM, PLAYERS_PER_TEAM_MAX } from "../utils/constants/constants";
 import { RpcUtils } from "./blockchain/RpcUtils";
 import { TransferQuery } from "./graphql/TransferQuery";
 
@@ -23,6 +24,10 @@ export class TransferService {
   async syncTransfers() {
     const targetBlockNumber = await this.transferRepository.getLatestBlockNumber();
     const transfers = await this.transferQuery.fetchTransfers(targetBlockNumber, 0, 20);
+    if (transfers.length === 0) {
+      console.log(`No transfers found for block ${targetBlockNumber}`);
+      return true;
+    }
     await this.processTransfers(transfers);
     return true;
   }
@@ -32,9 +37,20 @@ export class TransferService {
 
     const latestBlockNumber = await RpcUtils.getLatestBlockNumber();
     const blockMargin = process.env.BLOCK_MARGIN ? parseInt(process.env.BLOCK_MARGIN) : 100;
+    console.log('RPC latest block number', latestBlockNumber);
 
     const tokenIds = transfers.map(transfer => transfer.tokenId);
     const players = await this.playerRepository.findPlayersByTokenIds(tokenIds);
+    
+    if (transfers.length > 0 && !players || players.length === 0) {
+      console.log('Players not found for tokenIds: ' + tokenIds.join(', '));
+      lastTransfer = transfers[transfers.length - 1];
+      if (lastTransfer && lastTransfer.blockNumber < latestBlockNumber - blockMargin) {
+        await this.transferRepository.updateLatestBlockNumber(lastTransfer!.blockNumber, lastTransfer!.txHash, new Date(lastTransfer!.timestamp), AppDataSource.manager);
+      }
+      return;
+    }
+    
     if (tokenIds.length > players.length) {
       // TODO: handle this case
       // get asset from indexer by tokenId
@@ -51,12 +67,16 @@ export class TransferService {
     // Update the players based on the transfer
     for (const transfer of transfers) {
       const player = players.find(p => p.token_id === transfer.tokenId);
-      if (player) {
+      if (player ) {
         // leave some buffer for reorgs
         if (transfer.blockNumber < latestBlockNumber - blockMargin) {
           const team = teamMap.get(transfer.to.toLowerCase());
           if (team) {
-            player.team = team;
+            if (team.owner !== transfer.to) {
+              player.team = team;
+              player.team_id = team.team_id;
+              player.shirt_number = await this.getFreeShirtNumber(team.team_id);
+            }
             lastTransfer = transfer;
           } else {
             console.log(`Team for ${transfer.to} not found. Assigning to default team`);
@@ -64,6 +84,8 @@ export class TransferService {
             const defaultTeam = await this.teamRepository.findById(process.env.DEFAULT_TEAM_ID!);
             if (defaultTeam) {
               player.team = defaultTeam;
+              player.team_id = defaultTeam.team_id;
+              player.shirt_number = await this.getFreeShirtNumber(defaultTeam.team_id);
               lastTransfer = transfer;
             }
           }
@@ -71,8 +93,10 @@ export class TransferService {
           console.log(`Skipping transfer ${transfer.tokenId} to ${transfer.to} at block ${transfer.blockNumber} as it is too recent`);
         }
       } else {
-        console.log(`Player ${transfer.tokenId} not found`);
-        throw new Error(`Player ${transfer.tokenId} not found`);
+        console.log(`Player ${transfer.tokenId} not found: `);
+        lastTransfer = transfer;
+        await this.transferRepository.updateLatestBlockNumber(lastTransfer!.blockNumber, lastTransfer!.txHash, new Date(lastTransfer!.timestamp), AppDataSource.manager);
+        return;
       }
       if (lastTransfer) {
         const entityManager = AppDataSource.manager;
@@ -82,6 +106,9 @@ export class TransferService {
         });
       }
     }
+
+
+
   }
 
   private async getTeamsByOwners(owners: string[]): Promise<Team[]> {
@@ -89,4 +116,13 @@ export class TransferService {
     return teams;
   }
 
+  private async getFreeShirtNumber(teamId: string): Promise<number> {
+    const shirtNumbers = await this.teamRepository.getShirtNumbers(teamId);
+    for (let i = PLAYERS_PER_TEAM_MAX-1; i >= 0; i--) {
+      if (!shirtNumbers.includes(i)) {
+        return i;
+      }
+    }
+    return IN_TRANSIT_SHIRTNUM;
+  }
 }

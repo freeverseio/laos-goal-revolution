@@ -1,10 +1,10 @@
 namespace: goalrev
 apiHost: goalrevapi.gorengine.com
 apiInternalUrl: http://goalrev-core.goalrev.svc.cluster.local:3001
-postgresHost: db-postgresql-ams3-02994-do-user-14140340-0.j.db.ondigitalocean.com
-postgresDb: defaultdb
+postgresHost: dev-db-do-user-4813238-0.j.db.ondigitalocean.com
+postgresDb: goalrev
 postgresPort: "25060"
-postgresUser: "doadmin"
+postgresUser: "goalrev"
 processorHost: goalrev-processor.gorengine.com
 processorPort: "3000"
 coreAppPort: "3001"
@@ -17,7 +17,7 @@ mintPendingTeamsScheduler: "*/30 * * * * *"
 transferScheduler: "*/50 * * * * *"
 graphqlEndpoint: https://api.laosnetwork.io/graphql
 chainId: "137"
-contractAddress: "0x7404a72f74eed1c9808f6d371bdb2faac362df1d"
+contractAddress: "0x1fc0b17a5ca075345fbf9701475a7fc25b8a16c5"
 blockMargin: "10"
 defaultTeamId: "999"
 pendingTeamsLimit: "5"

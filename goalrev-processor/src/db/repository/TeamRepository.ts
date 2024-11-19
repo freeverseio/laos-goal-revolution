@@ -1,6 +1,6 @@
 import { AppDataSource } from "../AppDataSource";
-import { EntityManager, ILike, In, LessThan, Repository } from "typeorm";
-import { MintStatus, Team, TeamPartialUpdate } from "../entity";
+import { EntityManager, In } from "typeorm";
+import { MintStatus, Player, Team, TeamPartialUpdateMint } from "../entity";
 import { TeamId } from "../../types/leaguegroup";
 
 export class TeamRepository {
@@ -22,9 +22,98 @@ export class TeamRepository {
     await teamRepository.update(teamsIds, { mint_status: mintStatus, mint_updated_at: new Date() });
   }
 
-  async bulkUpdate(teams: TeamPartialUpdate[], transactionalEntityManager: EntityManager): Promise<void> {
+  // async bulkUpdate(teams: TeamPartialUpdate[], transactionalEntityManager: EntityManager): Promise<void> {
+  //   const teamRepository = transactionalEntityManager.getRepository(Team);
+  //   await teamRepository.save(teams);
+  // }
+
+  async bulkUpdateRankingPoints(
+    partialRankingPoints: { team_id: string; ranking_points: string; ranking_points_real: string; prev_perf_points: string }[],
+    transactionalEntityManager: EntityManager
+  ): Promise<void> {
+    if (partialRankingPoints.length === 0) return;
+  
     const teamRepository = transactionalEntityManager.getRepository(Team);
-    await teamRepository.save(teams);
+    
+    // Create the CASE expressions for each column
+    const rankingPointsCases = partialRankingPoints
+      .map(rp => `WHEN team_id = '${rp.team_id}' THEN '${rp.ranking_points}'`)
+      .join(' ');
+  
+    const rankingPointsRealCases = partialRankingPoints
+      .map(rp => `WHEN team_id = '${rp.team_id}' THEN '${rp.ranking_points_real}'`)
+      .join(' ');
+  
+    const prevPerfPointsCases = partialRankingPoints
+      .map(rp => `WHEN team_id = '${rp.team_id}' THEN '${rp.prev_perf_points}'`)
+      .join(' ');
+  
+    // Get all team IDs
+    const teamIds = partialRankingPoints.map(rp => rp.team_id);
+  
+    // Create and execute a single update query
+    await teamRepository
+      .createQueryBuilder()
+      .update(Team)
+      .set({
+        ranking_points: () => `CASE ${rankingPointsCases} ELSE ranking_points END`,
+        ranking_points_real: () => `CASE ${rankingPointsRealCases} ELSE ranking_points_real END`,
+        prev_perf_points: () => `CASE ${prevPerfPointsCases} ELSE prev_perf_points END`
+      })
+      .where("team_id IN (:...teamIds)", { teamIds })
+      .execute();
+  }
+
+  async bulkUpdateMint(
+    teams: TeamPartialUpdateMint[],
+    transactionalEntityManager: EntityManager
+  ): Promise<void> {
+    const teamRepository = transactionalEntityManager.getRepository(Team);
+    const playerRepository = transactionalEntityManager.getRepository(Player);
+  
+    // Create the CASE expressions for the team updates
+    const teamUpdateCases = teams
+      .map((team) => `WHEN team_id = '${team.team_id}' THEN '${team.mint_status}'`)
+      .join(' ');
+  
+    const teamUpdateDateCases = teams
+      .map((team) => `WHEN team_id = '${team.team_id}' THEN '${team.mint_updated_at!.toISOString()}'`)
+      .join(' ');
+  
+    // Get all team IDs
+    const teamIds = teams.map((team) => team.team_id);
+  
+    // Create and execute a single update query for the teams
+    await teamRepository
+      .createQueryBuilder()
+      .update(Team)
+      .set({
+        mint_status: () => `CASE ${teamUpdateCases} ELSE mint_status END`,
+        mint_updated_at: () => `CASE ${teamUpdateDateCases} ELSE mint_updated_at END`,
+      })
+      .where("team_id IN (:...teamIds)", { teamIds })
+      .execute();
+  
+    // Create the CASE expressions for the player updates
+    const playerUpdateCases = teams
+      .filter((team) => team.players)
+      .flatMap((team) =>
+        team.players!.map((player) => `WHEN player_id = '${player.player_id}' THEN '${player.token_id}'`)
+      )
+      .join(' ');
+  
+    // Get all player IDs
+    const playerIds = teams.flatMap((team) => team.players?.map((player) => player.player_id) || []);
+  
+    // Create and execute a single update query for the players
+    await playerRepository
+      .createQueryBuilder()
+      .update(Player)
+      .set({
+        token_id: () => `CASE ${playerUpdateCases} ELSE token_id END`,
+      })
+      .where("player_id IN (:...playerIds)", { playerIds })
+      .execute();
   }
 
   async bulkCreate(teams: Team[], transactionalEntityManager: EntityManager): Promise<void> {
@@ -111,7 +200,7 @@ export class TeamRepository {
         countryIdx: countryIdx,
         timezoneIdx: timezoneIdx,
       })
-      .orderBy("CAST(team.ranking_points AS INTEGER)", "DESC")
+      .orderBy("CAST(team.ranking_points_real AS BIGINT)", "DESC")
       .getMany();
     return teams;
   }
@@ -186,5 +275,27 @@ export class TeamRepository {
     return await repository.count({ where: { timezone_idx: timezoneIdx } });
   }
 
-}
+  async getShirtNumbers(teamId: string): Promise<number[]> {
+    const playerRepository = AppDataSource.getRepository(Player);
+    const shirtNumbers = await playerRepository.createQueryBuilder("player")
+      .select("player.shirt_number", "shirt_number")
+      .where("player.team_id = :teamId AND player.voided = false", { teamId })
+      .getRawMany();
 
+    return shirtNumbers.map(row => row.shirt_number);
+  }
+
+
+  async findByIds(teamIds: string[]): Promise<Team[]> {
+    const teamRepository = AppDataSource.getRepository(Team);
+
+    const teams = await teamRepository.find({
+      where: {
+        team_id: In(teamIds),
+      },      
+    });
+
+    return teams;
+  }
+
+}

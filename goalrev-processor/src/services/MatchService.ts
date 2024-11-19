@@ -55,8 +55,10 @@ export class MatchService {
 
   async playMatches(): Promise<any> {
     const info = await this.calendarService.getCalendarInfo();
+    // minus one hour
+   // info.timestamp = info.timestamp! - 3600;
 
-    // Check if timestamp to play is in the future
+    // // Check if timestamp to play is in the future
     if (this.checkTimestampInFuture(info.timestamp!)) {      
       return {
         verseNumber: info.verseNumber,
@@ -165,12 +167,13 @@ export class MatchService {
   async playMatch(match: Match, seed: string, verseNumber: number) {
     const seedMatch = crypto.createHash('sha256').update(`${seed}${match.homeTeam!.team_id}${match.visitorTeam!.team_id}`).digest('hex');
     const entityManager = AppDataSource.manager; // Use EntityManager for transactions
-    const matchHistory = MatchHistoryMapper.mapMatchHistory(match, verseNumber, seedMatch);
+    
     try {
       await entityManager.transaction(async (transactionManager: EntityManager) => {
         const is1stHalf = match.state === MatchState.BEGIN;
         const is2ndHalf = match.state === MatchState.HALF;
-        const requestBody = this.buildRequestBody(match, seedMatch, is1stHalf);
+        const { isHomeTeamBot, isAwayTeamBot } = await this.teamService.getTeamBotStatuses(match.homeTeam!.team_id, match.visitorTeam!.team_id);
+        const requestBody = this.buildRequestBody(match, seedMatch, is1stHalf, isHomeTeamBot, isAwayTeamBot);
 
         if (!is1stHalf && !is2ndHalf) {
           console.warn(`Match with [matchIdx, matchDayIdx, timezoneIdx, leagueIdx] [${match.match_idx}, ${match.match_day_idx}, ${match.timezone_idx}, ${match.league_idx}] is not in the BEGIN or HALF state, skipping`);
@@ -189,7 +192,8 @@ export class MatchService {
           match.seed = seedMatch;
         }
         match.state = is1stHalf ? MatchState.HALF : MatchState.END;
-        matchHistory.state = match.state;
+        match.homeTeam!.tactic = playOutput.encodedTactics ? playOutput.encodedTactics[0] : "";
+        match.visitorTeam!.tactic = playOutput.encodedTactics ? playOutput.encodedTactics[1] : "";
 
         await this.teamService.updateTeamData(playOutput.matchLogs[0], playOutput.matchLogs[1], match.homeTeam!, verseNumber, is1stHalf, true, transactionManager);
         await this.teamService.updateTeamData(playOutput.matchLogs[1], playOutput.matchLogs[0], match.visitorTeam!, verseNumber, is1stHalf, false, transactionManager);
@@ -197,15 +201,15 @@ export class MatchService {
         await this.playerService.updateSkills(match.homeTeam!, playOutput.updatedSkills[0], verseNumber, transactionManager);
         await this.playerService.updateSkills(match.visitorTeam!, playOutput.updatedSkills[1], verseNumber, transactionManager);
 
-       
+         // update tactics history
+        await this.tacticsRepository.insertTacticHistory(TacticsHistoryMapper.mapToTacticsHistory(match.homeTeam!.tactics, verseNumber), transactionManager);
+        await this.tacticsRepository.insertTacticHistory(TacticsHistoryMapper.mapToTacticsHistory(match.visitorTeam!.tactics, verseNumber), transactionManager);
+        
         if (is2ndHalf) {
           match.home_teamsumskills = playOutput.matchLogs[0].teamSumSkills;
           match.visitor_teamsumskills = playOutput.matchLogs[1].teamSumSkills;
-           // update tactics history
-          await this.tacticsRepository.insertTacticHistory(TacticsHistoryMapper.mapToTacticsHistory(match.homeTeam!.tactics, verseNumber), transactionManager);
-          await this.tacticsRepository.insertTacticHistory(TacticsHistoryMapper.mapToTacticsHistory(match.visitorTeam!.tactics, verseNumber), transactionManager);
         }
-
+        const matchHistory = MatchHistoryMapper.mapMatchHistory(match, verseNumber, seedMatch);
         // // Save the match using the repository
         await this.matchRepository.saveMatch(match, transactionManager);
         await this.matchHistoryRepository.insertMatchHistory(matchHistory, transactionManager);
@@ -225,7 +229,7 @@ export class MatchService {
     return "ok";
   }
 
-  buildRequestBody(match: Match, seed: string, is1stHalf: boolean): PlayMatchRequest {
+  buildRequestBody(match: Match, seed: string, is1stHalf: boolean, isBotHome: boolean, isBotAway: boolean): PlayMatchRequest {
     return {
       verseSeed: seed,
       matchStartTime: Number(match.start_epoch),
@@ -245,7 +249,7 @@ export class MatchService {
         { encodedMatchLog: match.homeTeam!.match_log },
         { encodedMatchLog: match.visitorTeam!.match_log }
       ],
-      matchBools: [match.state === MatchState.HALF, true, false, false, false],
+      matchBools: [match.state === MatchState.HALF, true, false, isBotHome, isBotAway],
       trainings: [
         MatchMapper.mapTrainingToRequest(match.homeTeam!.trainings, match.homeTeam!.training_points),  // Home team training
         MatchMapper.mapTrainingToRequest(match.visitorTeam!.trainings, match.visitorTeam!.training_points) // Visitor team training

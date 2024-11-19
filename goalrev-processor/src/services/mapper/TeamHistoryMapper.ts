@@ -21,6 +21,7 @@ export class TeamHistoryMapper {
     teamHistory.goals_against = team.goals_against;
     teamHistory.prev_perf_points = team.prev_perf_points;
     teamHistory.ranking_points = team.ranking_points;
+    teamHistory.ranking_points_real = team.ranking_points_real;
     teamHistory.training_points = team.training_points;
     teamHistory.tactic = team.tactic;
     teamHistory.match_log = team.match_log;

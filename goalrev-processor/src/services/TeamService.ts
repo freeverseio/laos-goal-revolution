@@ -21,6 +21,7 @@ export class TeamService {
   async updateTeamData(
     matchLog: MatchLog,
     matchLogOpponent: MatchLog,
+
     team: Team,
     verseNumber: number,
     is1stHalf: boolean,
@@ -32,9 +33,7 @@ export class TeamService {
     if (!is1stHalf) {
       team.goals_forward += matchLog.numberOfGoals;
       team.goals_against += matchLogOpponent.numberOfGoals;
-      const teamHistory = TeamHistoryMapper.mapToTeamHistory(team!, verseNumber);
-      // Save the updated team back to the database
-      await entityManager.save(teamHistory);
+     
 
       // Update training points
       team.training_points = matchLog.trainingPoints;
@@ -62,6 +61,10 @@ export class TeamService {
           break;
       }
     }
+
+    const teamHistory = TeamHistoryMapper.mapToTeamHistory(team!, verseNumber);
+    // Save the updated team back to the database
+    await entityManager.save(teamHistory);
     //update rellevant columns in DB
     await entityManager.update(Team, team.team_id, {
       match_log: team.match_log,
@@ -71,7 +74,8 @@ export class TeamService {
       w: team.w,
       d: team.d,
       l: team.l,
-      points: team.points
+      points: team.points,
+      tactic: team.tactic
     });
   }
 
@@ -105,7 +109,7 @@ export class TeamService {
     }
     console.log(`Minting failed teams: ${teams.map(team => team.team_id)}`);
     const tokens = await this.tokenQuery.fetchTokensByOwner(process.env.CONTRACT_ADDRESS!, teams[0].owner!);
-    if (!tokens || tokens.length === 0 || tokens.length < 5) {
+    if (!tokens || tokens.length === 0 ) {
       this.mintTeams(teams);
     } else {
       console.log(`Tokens found for team ${teams[0].team_id}: ${tokens.map(token => token.tokenId)}`);
@@ -144,9 +148,12 @@ export class TeamService {
         this.teamRepository.setMintStatus(teams.map(team => team.team_id), MintStatus.FAILED);
         throw new Error(`Failed to mint team: ${result.errors[0].message}`);
       }
+      if (result.data.mint.tokenIds.length === 0) {
+        throw new Error(`Failed to mint team: No token ids returned`);
+      }
       const updatedTeams = TeamMapper.mapMintedPlayersToTeamPlayers(teams, result.data.mint.tokenIds);
       const entityManager = AppDataSource.manager;
-      await this.teamRepository.bulkUpdate(updatedTeams, entityManager);
+      await this.teamRepository.bulkUpdateMint(updatedTeams, entityManager);
 
       // broadcast players minted
       let assetsBroadcasted = 0;
@@ -197,4 +204,25 @@ export class TeamService {
     return broadcastedPlayers;
 
   }
+  async getTeamBotStatuses(
+    homeTeamId: string,
+    awayTeamId: string
+  ): Promise<{ isHomeTeamBot: boolean; isAwayTeamBot: boolean }> {
+    let isHomeTeamBot = false;
+    let isAwayTeamBot = false;
+    const teams = await this.teamRepository.findByIds([homeTeamId, awayTeamId]);
+    for (const team of teams) {
+      if (team.team_id === homeTeamId) {
+        isHomeTeamBot = team.owner === '0x0000000000000000000000000000000000000000';
+      }else if (team.team_id === awayTeamId) {
+        isAwayTeamBot = team.owner === '0x0000000000000000000000000000000000000000';
+      }
+    }  
+  
+    return {
+      isHomeTeamBot: isHomeTeamBot,
+      isAwayTeamBot: isAwayTeamBot
+    };
+  }
+
 }

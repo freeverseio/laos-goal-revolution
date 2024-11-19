@@ -1,5 +1,6 @@
 import { EntityManager } from "typeorm";
-import { Tactics, Team, TacticsHistory } from "../entity/";
+import { Tactics, TacticsHistory, Team } from "../entity/";
+import { Alignment } from "../../types/alignment";
 
 export class TacticRepository {
 
@@ -128,5 +129,22 @@ export class TacticRepository {
       throw new Error("Insert failed");
     }
   }
+
+  async updateTacticForTransferedPlayer(alignments: Alignment[], entityManager: EntityManager): Promise<void> {
+    // Construct a single query string with multiple UPDATE statements
+    let queryString = "";
+    for (const alignment of alignments) {
+      queryString += `UPDATE tactics SET shirt_${alignment.shirt_number} = 25 WHERE team_id = '${alignment.team_id}'; `;
+    }
+  
+    try {
+      // Execute the entire batch of updates as a single query
+      await entityManager.query(queryString);
+    } catch (error) {
+      console.error("Error updating tactics for transferred players:", error);
+      throw new Error("Batch update failed");
+    }
+  }
+
 
 }
