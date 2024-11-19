@@ -154,6 +154,18 @@ export class TeamService {
       const updatedTeams = TeamMapper.mapMintedPlayersToTeamPlayers(teams, result.data.mint.tokenIds);
       const entityManager = AppDataSource.manager;
       await this.teamRepository.bulkUpdateMint(updatedTeams, entityManager);
+
+      // broadcast players minted
+      let assetsBroadcasted = 0;
+      try {
+        assetsBroadcasted = await this.broadcastPlayersMinted(result.data.mint.tokenIds);
+        if (assetsBroadcasted !== result.data.mint.tokenIds.length) {
+          console.error(`Minted but failed to broadcast some players minted. Brodcasted ${assetsBroadcasted}/${result.data.mint.tokenIds.length}` );
+        }
+      } catch (error) {
+        console.error(`Minted but failed to broadcast some players. Brodcasted ${assetsBroadcasted}/${result.data.mint.tokenIds.length}. Error: ${error}`);
+      }
+
       return true;
     } catch (error) {
       this.teamRepository.setMintStatus(teams.map(team => team.team_id), MintStatus.FAILED);
@@ -161,6 +173,37 @@ export class TeamService {
     }
   }
 
+  async broadcastPlayersMinted(tokenIds: string[]): Promise<number> {
+    let broadcastedPlayers: number = 0;
+    for (let i = 0; i < tokenIds.length; i++) {
+      const tokenId = tokenIds[i];
+      
+      const broadcastMutationInput = {
+        chainId: process.env.CHAIN_ID!,
+        ownershipContractAddress: process.env.CONTRACT_ADDRESS!,
+        tokenId: tokenId,      
+      };
+      console.log(`Broadcasting Player Minted ${i+1}/${tokenIds.length}: ${broadcastMutationInput.tokenId}`);
+      const result = await gqlClient.mutate({
+        mutation: gql`
+          mutation BroadcastPlayersMinted($input: BroadcastInput!) {
+            broadcast(input: $input) {
+              tokenId
+              success 
+            }
+          }
+        `,
+        variables: {
+          input: broadcastMutationInput,
+        }
+      });
+      broadcastedPlayers++;
+      console.log(`broadcasted Player Minted: ${broadcastMutationInput.tokenId} success: ${result.data.broadcast.success}`);
+    }
+
+    return broadcastedPlayers;
+
+  }
   async getTeamBotStatuses(
     homeTeamId: string,
     awayTeamId: string
