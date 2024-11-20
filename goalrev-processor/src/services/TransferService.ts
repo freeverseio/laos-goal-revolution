@@ -105,9 +105,8 @@ export class TransferService {
         }
         if (lastTransfer && playerId) {
           const entityManager = AppDataSource.manager;
-            const transactionalEntityManager = AppDataSource.manager;
-            await this.playerRepository.updatePartial(playerId, playerPartialUpdate, transactionalEntityManager);
-            await this.transferRepository.updateLatestBlockNumber(lastTransfer!.blockNumber, lastTransfer!.txHash, new Date(lastTransfer!.timestamp), transactionalEntityManager);
+          await this.playerRepository.updatePartial(playerId, playerPartialUpdate, entityManager);
+          await this.transferRepository.updateLatestBlockNumber(lastTransfer!.blockNumber, lastTransfer!.txHash, new Date(lastTransfer!.timestamp), transactionalEntityManager);
         }
       }
     } catch (error) {
