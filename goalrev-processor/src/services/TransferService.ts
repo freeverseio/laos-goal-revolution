@@ -114,6 +114,8 @@ export class TransferService {
           } catch (error) {
             await queryRunner.rollbackTransaction();
             throw error;
+          } finally {
+            await queryRunner.release();
           }
         }
       }
