@@ -64,7 +64,7 @@ export class TransferService {
       const uniqueToAddressesArray = uniqueToAddresses as string[];
       const teams = await this.getTeamsByOwners(uniqueToAddressesArray);
       const teamMap = new Map(teams.map(team => [team.owner.toLowerCase(), team]));
-
+      const queryRunner = AppDataSource.createQueryRunner();
       // Update the players based on the transfer
       for (const transfer of transfers) {
         const player = players.find(p => p.token_id === transfer.tokenId);
@@ -104,10 +104,17 @@ export class TransferService {
           return;
         }
         if (lastTransfer && playerId) {
-          const entityManager = AppDataSource.manager;
-            const transactionalEntityManager = AppDataSource.manager;
+          await queryRunner.startTransaction();
+          try {
+            // Get the entity managers associated with the queryRunner
+            const transactionalEntityManager = queryRunner.manager;
             await this.playerRepository.updatePartial(playerId, playerPartialUpdate, transactionalEntityManager);
             await this.transferRepository.updateLatestBlockNumber(lastTransfer!.blockNumber, lastTransfer!.txHash, new Date(lastTransfer!.timestamp), transactionalEntityManager);
+            await queryRunner.commitTransaction();
+          } catch (error) {
+            await queryRunner.rollbackTransaction();
+            throw error;
+          }
         }
       }
     } catch (error) {
