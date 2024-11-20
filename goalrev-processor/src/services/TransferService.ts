@@ -105,6 +105,7 @@ export class TransferService {
         }
         if (lastTransfer && playerId) {
           await queryRunner.startTransaction();
+          
           try {
             // Get the entity managers associated with the queryRunner
             const transactionalEntityManager = queryRunner.manager;
