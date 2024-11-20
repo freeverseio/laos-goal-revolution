@@ -116,7 +116,6 @@ export class TransferService {
                 transactionalEntityManager
             );
             await queryRunner.commitTransaction();
-
           } catch (error) {
               console.error('Error caught during transaction:', error);
               await queryRunner.rollbackTransaction();
