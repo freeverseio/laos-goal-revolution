@@ -64,7 +64,6 @@ export class TransferService {
       const uniqueToAddressesArray = uniqueToAddresses as string[];
       const teams = await this.getTeamsByOwners(uniqueToAddressesArray);
       const teamMap = new Map(teams.map(team => [team.owner.toLowerCase(), team]));
-
       // Update the players based on the transfer
       for (const transfer of transfers) {
         const player = players.find(p => p.token_id === transfer.tokenId);
@@ -104,9 +103,30 @@ export class TransferService {
           return;
         }
         if (lastTransfer && playerId) {
-          const entityManager = AppDataSource.manager;
-          await this.playerRepository.updatePartial(playerId, playerPartialUpdate, entityManager);
-          await this.transferRepository.updateLatestBlockNumber(lastTransfer!.blockNumber, lastTransfer!.txHash, new Date(lastTransfer!.timestamp), entityManager);
+          const queryRunner = AppDataSource.createQueryRunner();
+          await queryRunner.startTransaction();
+          try {
+            console.log(`[syncTransfers] Updating player ${playerId} with ${JSON.stringify(playerPartialUpdate)}`);
+            const transactionalEntityManager = queryRunner.manager;
+            await this.playerRepository.updatePartial(playerId, playerPartialUpdate, transactionalEntityManager);
+            await this.transferRepository.updateLatestBlockNumber(
+                lastTransfer!.blockNumber,
+                lastTransfer!.txHash,
+                new Date(lastTransfer!.timestamp),
+                transactionalEntityManager
+            );
+            await queryRunner.commitTransaction();
+          } catch (error) {
+              console.error('Error caught during transaction:', error);
+              await queryRunner.rollbackTransaction();
+
+          } finally {
+              if (!queryRunner.isReleased) {
+                  await queryRunner.release();
+              } else {
+                  console.warn('QueryRunner already released before explicit release.');
+              }
+          }
         }
       }
     } catch (error) {
