@@ -1,5 +1,5 @@
 import { AppDataSource } from "../db/AppDataSource";
-import { Team } from "../db/entity";
+import { PlayerPartialUpdate, Team } from "../db/entity";
 import { PlayerRepository } from "../db/repository/PlayerRepository";
 import { TeamRepository } from "../db/repository/TeamRepository";
 import { TransferRepository } from "../db/repository/TransferRepository";
@@ -33,82 +33,87 @@ export class TransferService {
   }
 
   async processTransfers(transfers: Transfer[]): Promise<void> {
-    let lastTransfer: Transfer | null = null;
+    try {
+      let lastTransfer: Transfer | null = null;
 
-    const latestBlockNumber = await RpcUtils.getLatestBlockNumber();
-    const blockMargin = process.env.BLOCK_MARGIN ? parseInt(process.env.BLOCK_MARGIN) : 100;
-    console.log('RPC latest block number', latestBlockNumber);
+      const latestBlockNumber = await RpcUtils.getLatestBlockNumber();
+      const blockMargin = process.env.BLOCK_MARGIN ? parseInt(process.env.BLOCK_MARGIN) : 100;
+      console.log('RPC latest block number', latestBlockNumber);
 
-    const tokenIds = transfers.map(transfer => transfer.tokenId);
-    const players = await this.playerRepository.findPlayersByTokenIds(tokenIds);
-    
-    if (transfers.length > 0 && !players || players.length === 0) {
-      console.log('Players not found for tokenIds: ' + tokenIds.join(', '));
-      lastTransfer = transfers[transfers.length - 1];
-      if (lastTransfer && lastTransfer.blockNumber < latestBlockNumber - blockMargin) {
-        await this.transferRepository.updateLatestBlockNumber(lastTransfer!.blockNumber, lastTransfer!.txHash, new Date(lastTransfer!.timestamp), AppDataSource.manager);
-      }
-      return;
-    }
-    
-    if (tokenIds.length > players.length) {
-      // TODO: handle this case
-      // get asset from indexer by tokenId
-      // get db with asset id
-      // update player tokenId
-    }
-
-    const uniqueToAddresses = [...new Set(transfers.map(transfer => transfer.to))];
-    uniqueToAddresses.push(...new Set(transfers.map(transfer => transfer.from)));
-    const uniqueToAddressesArray = uniqueToAddresses as string[];
-    const teams = await this.getTeamsByOwners(uniqueToAddressesArray);
-    const teamMap = new Map(teams.map(team => [team.owner.toLowerCase(), team]));
-
-    // Update the players based on the transfer
-    for (const transfer of transfers) {
-      const player = players.find(p => p.token_id === transfer.tokenId);
-      if (player ) {
-        // leave some buffer for reorgs
-        if (transfer.blockNumber < latestBlockNumber - blockMargin) {
-          const team = teamMap.get(transfer.to.toLowerCase());
-          if (team) {
-            if (team.owner !== transfer.to) {
-              player.team = team;
-              player.team_id = team.team_id;
-              player.shirt_number = await this.getFreeShirtNumber(team.team_id);
-            }
-            lastTransfer = transfer;
-          } else {
-            console.log(`Team for ${transfer.to} not found. Assigning to default team`);
-            // assign to default team
-            const defaultTeam = await this.teamRepository.findById(process.env.DEFAULT_TEAM_ID!);
-            if (defaultTeam) {
-              player.team = defaultTeam;
-              player.team_id = defaultTeam.team_id;
-              player.shirt_number = await this.getFreeShirtNumber(defaultTeam.team_id);
-              lastTransfer = transfer;
-            }
-          }
-        } else {
-          console.log(`Skipping transfer ${transfer.tokenId} to ${transfer.to} at block ${transfer.blockNumber} as it is too recent`);
+      const tokenIds = transfers.map(transfer => transfer.tokenId);
+      const players = await this.playerRepository.findPlayersByTokenIds(tokenIds);
+      
+      if (transfers.length > 0 && !players || players.length === 0) {
+        console.log('Players not found for tokenIds: ' + tokenIds.join(', '));
+        lastTransfer = transfers[transfers.length - 1];
+        if (lastTransfer && lastTransfer.blockNumber < latestBlockNumber - blockMargin) {
+          await this.transferRepository.updateLatestBlockNumber(lastTransfer!.blockNumber, lastTransfer!.txHash, new Date(lastTransfer!.timestamp), AppDataSource.manager);
         }
-      } else {
-        console.log(`Player ${transfer.tokenId} not found: `);
-        lastTransfer = transfer;
-        await this.transferRepository.updateLatestBlockNumber(lastTransfer!.blockNumber, lastTransfer!.txHash, new Date(lastTransfer!.timestamp), AppDataSource.manager);
         return;
       }
-      if (lastTransfer) {
-        const entityManager = AppDataSource.manager;
-        entityManager.transaction(async transactionalEntityManager => {
-          await this.playerRepository.bulkUpdate(players, transactionalEntityManager);
-          await this.transferRepository.updateLatestBlockNumber(lastTransfer!.blockNumber, lastTransfer!.txHash, new Date(lastTransfer!.timestamp), transactionalEntityManager);
-        });
+      
+      if (tokenIds.length > players.length) {
+        // TODO: handle this case
+        // get asset from indexer by tokenId
+        // get db with asset id
+        // update player tokenId
       }
+
+      const uniqueToAddresses = [...new Set(transfers.map(transfer => transfer.to))];
+      uniqueToAddresses.push(...new Set(transfers.map(transfer => transfer.from)));
+      const uniqueToAddressesArray = uniqueToAddresses as string[];
+      const teams = await this.getTeamsByOwners(uniqueToAddressesArray);
+      const teamMap = new Map(teams.map(team => [team.owner.toLowerCase(), team]));
+
+      // Update the players based on the transfer
+      for (const transfer of transfers) {
+        const player = players.find(p => p.token_id === transfer.tokenId);
+        const playerId = player?.player_id;
+        let playerPartialUpdate: PlayerPartialUpdate = {};
+        if (player) {
+          // leave some buffer for reorgs
+          if (transfer.blockNumber < latestBlockNumber - blockMargin) {
+            const team = teamMap.get(transfer.to.toLowerCase());
+            if (team) {
+              if (team.owner !== transfer.to) {                
+                playerPartialUpdate = {
+                  team_id: team.team_id,                
+                  shirt_number: await this.getFreeShirtNumber(team.team_id)
+                };              
+              }
+              lastTransfer = transfer;
+            } else {
+              console.log(`Team for ${transfer.to} not found. Assigning to default team`);
+              // assign to default team
+              const defaultTeam = await this.teamRepository.findById(process.env.DEFAULT_TEAM_ID!);
+              if (defaultTeam) {
+                playerPartialUpdate = {
+                  team_id: defaultTeam.team_id,                
+                  shirt_number: await this.getFreeShirtNumber(defaultTeam.team_id)
+                };
+                lastTransfer = transfer;
+              }
+            }
+          } else {
+            console.log(`Skipping transfer ${transfer.tokenId} to ${transfer.to} at block ${transfer.blockNumber} as it is too recent`);
+          }
+        } else {
+          console.log(`Player ${transfer.tokenId} not found: `);
+          lastTransfer = transfer;
+          await this.transferRepository.updateLatestBlockNumber(lastTransfer!.blockNumber, lastTransfer!.txHash, new Date(lastTransfer!.timestamp), AppDataSource.manager);
+          return;
+        }
+        if (lastTransfer && playerId) {
+          const entityManager = AppDataSource.manager;
+          await this.playerRepository.updatePartial(playerId, playerPartialUpdate, entityManager);
+          await this.transferRepository.updateLatestBlockNumber(lastTransfer!.blockNumber, lastTransfer!.txHash, new Date(lastTransfer!.timestamp), transactionalEntityManager);
+        }
+      }
+    } catch (error) {
+      console.error('Error processing transfers:', error);
+      throw error;
     }
-
-
-
+    
   }
 
   private async getTeamsByOwners(owners: string[]): Promise<Team[]> {
