@@ -16,6 +16,7 @@ releases:
       - playMatchesScheduler: {{ .Values.playMatchesScheduler | quote }}
       - mintPendingTeamsScheduler: {{ .Values.mintPendingTeamsScheduler | quote }}
       - transferScheduler: {{ .Values.transferScheduler | quote }}
+      - broadcastPlayersPendingScheduler: {{ .Values.broadcastPlayersPendingScheduler | quote }}
       - graphqlEndpoint: {{ .Values.graphqlEndpoint }}
       - chainId: {{ .Values.chainId }}
       - contractAddress: {{ .Values.contractAddress }}

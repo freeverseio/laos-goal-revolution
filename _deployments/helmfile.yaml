@@ -46,6 +46,7 @@ helmfiles:
       - playMatchesScheduler: {{ .Values.playMatchesScheduler | quote }}
       - transferScheduler: {{ .Values.transferScheduler | quote }}
       - mintPendingTeamsScheduler: {{ .Values.mintPendingTeamsScheduler | quote }}
+      - broadcastPlayersPendingScheduler: {{ .Values.broadcastPlayersPendingScheduler | quote }}
       - blockMargin: {{ .Values.blockMargin | quote }}
       - defaultTeamId: {{ .Values.defaultTeamId }}
       - pendingTeamsLimit: {{ .Values.pendingTeamsLimit | quote }}

@@ -1,6 +1,12 @@
 import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn, DeepPartial } from "typeorm";
 import { Team } from "./Team"; // Assuming you have a Team entity
 
+export enum BroadcastStatus {
+  PENDING = "pending",
+  SUCCESS = "success",
+  FAILED = "failed",
+}
+
 @Entity('players')
 export class Player {
   @PrimaryColumn({ type: 'text' })
@@ -72,6 +78,12 @@ export class Player {
 
   @Column({ type: 'boolean', default: false })
   voided!: boolean;
+
+  @Column({
+    type: "enum",
+    enum: BroadcastStatus,
+  })
+  broadcast_status?: BroadcastStatus;
 
 }
 
