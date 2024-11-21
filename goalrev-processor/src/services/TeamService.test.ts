@@ -1,11 +1,10 @@
-import { TeamService } from './TeamService';
-import { Team } from '../db/entity/Team';
-import { MatchEventOutput, MatchEventType, MatchLog } from '../types';
 import { EntityManager } from 'typeorm';
-import { MatchState } from '../db/entity';
+import { Team } from '../db/entity/Team';
 import { TeamRepository } from '../db/repository/TeamRepository';
-import { TokenQuery } from './graphql/TokenQuery';
+import { MatchEventOutput, MatchEventType, MatchLog } from '../types';
 import { gqlClient } from './graphql/GqlClient';
+import { TokenQuery } from './graphql/TokenQuery';
+import { TeamService } from './TeamService';
 
 jest.mock('./graphql/GqlClient'); // Mock the gqlClient
 
@@ -24,6 +23,7 @@ describe('TeamService', () => {
 
   beforeEach(() => {
     jest.spyOn(console, 'error').mockImplementation(() => {});
+    jest.spyOn(console, 'log').mockImplementation(() => {});
     const tokenQuery = new TokenQuery();
     teamService = new TeamService(mockTeamRepository, tokenQuery);
     jest.clearAllMocks(); // Clear mocks before each test
