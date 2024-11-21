@@ -10,6 +10,8 @@ describe('TransferQuery', () => {
   let transferQuery: TransferQuery;
 
   beforeEach(() => {
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+    jest.spyOn(console, 'log').mockImplementation(() => {});
     transferQuery = new TransferQuery();
     jest.clearAllMocks();
   });
