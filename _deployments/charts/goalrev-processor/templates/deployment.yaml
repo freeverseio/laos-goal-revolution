@@ -65,6 +65,8 @@ spec:
             value: {{ .Values.mintPendingTeamsScheduler | quote }}
           - name: TRANSFER_SCHEDULER
             value: {{ .Values.transferScheduler | quote }}
+          - name: BROADCAST_PLAYERS_PENDING_SCHEDULER
+            value: {{ .Values.broadcastPlayersPendingScheduler | quote }}
           - name: GRAPHQL_ENDPOINT
             value: {{ .Values.graphqlEndpoint }}
           - name: CHAIN_ID

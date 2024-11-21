@@ -1,4 +1,4 @@
-import { MintStatus, Team, Player as PlayerEntity, TeamPartialUpdateMint } from "../../db/entity";
+import { MintStatus, Team, Player as PlayerEntity, TeamPartialUpdateMint, BroadcastStatus } from "../../db/entity";
 import { MintTeamMutation } from "../../types/rest/input/team";
 import { MintedPlayer, PlayerDto, TokenIndexer, TokenIndexerWithPlayerId } from "../../types";
 import SkillsUtils from "../../utils/SkillsUtils";
@@ -89,14 +89,13 @@ export class TeamMapper {
   static mapMintedPlayersToTeamPlayers(teams: Team[], tokenIds: string[]): TeamPartialUpdateMint[] {
     return teams.map((team) => {
       let teamMintStatus = MintStatus.SUCCESS;
-  
       const playersWithTokens = team.players.map((player, index) => {
         const tokenId = tokenIds[index];
-  
         if (tokenIds.includes(tokenId)) {
           return {
             player_id: player.player_id,
             token_id: tokenId,
+            broadcast_status: BroadcastStatus.PENDING,
           };
         } else {
           teamMintStatus = MintStatus.FAILED;

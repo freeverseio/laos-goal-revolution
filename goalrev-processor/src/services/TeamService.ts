@@ -128,6 +128,7 @@ export class TeamService {
     return this.mintTeams(teams);
   }
 
+
   async mintTeams(teams: Team[]): Promise<boolean> {
     const mintTeamMutation = TeamMapper.mapTeamPlayersToMintMutation(teams);
     // console.log('Minting teams:', JSON.stringify(mintTeamMutation));
@@ -154,18 +155,7 @@ export class TeamService {
       const updatedTeams = TeamMapper.mapMintedPlayersToTeamPlayers(teams, result.data.mint.tokenIds);
       const entityManager = AppDataSource.manager;
       await this.teamRepository.bulkUpdateMint(updatedTeams, entityManager);
-
-      // broadcast players minted
-      let assetsBroadcasted = 0;
-      try {
-        assetsBroadcasted = await this.broadcastPlayersMinted(result.data.mint.tokenIds);
-        if (assetsBroadcasted !== result.data.mint.tokenIds.length) {
-          console.error(`Minted but failed to broadcast some players minted. Brodcasted ${assetsBroadcasted}/${result.data.mint.tokenIds.length}` );
-        }
-      } catch (error) {
-        console.error(`Minted but failed to broadcast some players. Brodcasted ${assetsBroadcasted}/${result.data.mint.tokenIds.length}. Error: ${error}`);
-      }
-
+     
       return true;
     } catch (error) {
       this.teamRepository.setMintStatus(teams.map(team => team.team_id), MintStatus.FAILED);
@@ -173,67 +163,7 @@ export class TeamService {
     }
   }
 
-  async broadcastPlayersMinted(tokenIds: string[]): Promise<number> {
-    const maxRetries = 3;
-    let broadcastedPlayers: number = 0;
   
-    for (let index = 0; index < tokenIds.length; index++) {
-      const tokenId = tokenIds[index];
-      console.log(`Broadcasting Player Minted ${index + 1}/${tokenIds.length}: ${tokenId}`);
-      const success = await this.attemptBroadcast(tokenId, maxRetries);
-      if (success) {
-        broadcastedPlayers++;
-      }
-      else {
-        // wait 30 seconds before continuing
-        await new Promise(resolve => setTimeout(resolve, 30000));
-      }
-    }
-  
-    if (broadcastedPlayers !== tokenIds.length) {
-      console.error(`Minted but failed to broadcast some players minted. Broadcasted ${broadcastedPlayers}/${tokenIds.length}`);
-    }
-  
-    return broadcastedPlayers;
-  }
-  
-  private async attemptBroadcast(tokenId: string, maxRetries: number, attempts: number = 0): Promise<boolean> {
-    const broadcastMutationInput = {
-      chainId: process.env.CHAIN_ID!,
-      ownershipContractAddress: process.env.CONTRACT_ADDRESS!,
-      tokenId: tokenId,
-    };
-  
-    try {
-      const result = await this.executeBroadcastMutation(broadcastMutationInput);
-  
-      if (result.data && result.data.broadcast && result.data.broadcast.success) {
-        console.log(`Broadcasted Player Minted: ${broadcastMutationInput.tokenId}`);
-        return true;
-      } else {
-        throw new Error(`Broadcast failed for tokenId ${tokenId}`);
-      }
-    } catch (error) {
-      console.error(`Attempt failed for broadcasting tokenId ${tokenId}: ${error}`);
-      return false;
-    }
-  }
-  
-  private async executeBroadcastMutation(broadcastMutationInput: { chainId: string; ownershipContractAddress: string; tokenId: string; }): Promise<any> {
-    return gqlClient.mutate({
-      mutation: gql`
-        mutation BroadcastPlayersMinted($input: BroadcastInput!) {
-          broadcast(input: $input) {
-            tokenId
-            success
-          }
-        }
-      `,
-      variables: {
-        input: broadcastMutationInput,
-      },
-    });
-  }
   
 
   async getTeamBotStatuses(

@@ -14,6 +14,7 @@ import { MatchFactory } from "./factories/MatchFactory";
 import { TeamFactory } from "./factories/TeamFactory";
 import { TransferFactory } from "./factories/TransferFactory";
 import { LockState } from "./types";
+import { PlayerFactory } from "./factories/PlayerFactory";
 
 // Initialize environment variables
 dotenv.config();
@@ -61,7 +62,7 @@ async function playMatches() {
 
   if (result && result.verseTimestamp) {
     console.log(`verseNumber: ${result.verseNumber}, timezoneIdx: ${result.timezoneIdx}, matchDay ${result.matchDay}, halfTime: ${result.halfTime}, verseTimestamp to Date: ` +
-                new Date(result.verseTimestamp * 1000).toLocaleString('en-GB', { timeZone: 'Europe/Madrid' }));
+      new Date(result.verseTimestamp * 1000).toLocaleString('en-GB', { timeZone: 'Europe/Madrid' }));
     console.log(`message: ${result.message}`);
   }
 
@@ -84,9 +85,19 @@ function initializeSchedulers() {
   const mintPendingTeamsScheduler = process.env.MINT_PENDING_TEAMS_SCHEDULER;
   if (mintPendingTeamsScheduler && mintPendingTeamsScheduler !== "*/0 * * * * *" && mintPendingTeamsScheduler !== "") {
     cron.schedule(mintPendingTeamsScheduler, () => runWithLock("mintPendingTeams", async () => {
-    const teamService = TeamFactory.createTeamService();
-    const result = await teamService.mintPendingTeams();
+      const teamService = TeamFactory.createTeamService();
+      const result = await teamService.mintPendingTeams();
       console.log(`[mintPendingTeams] Result: ${result}`);
+    }));
+  }
+
+  // Broadcast Players Pending Scheduler
+  const broadcastPlayersPendingScheduler = process.env.BROADCAST_PLAYERS_PENDING_SCHEDULER;
+  if (broadcastPlayersPendingScheduler && broadcastPlayersPendingScheduler !== "*/0 * * * * *" && broadcastPlayersPendingScheduler !== "") {
+    cron.schedule(broadcastPlayersPendingScheduler, () => runWithLock("broadcastPlayersPending", async () => {
+      const playerService = PlayerFactory.createPlayerService();
+      const result = await playerService.broadcastPlayersPending();
+      console.log(`[broadcastPlayersPending] Result: ${result}`);
     }));
   }
 
@@ -95,8 +106,8 @@ function initializeSchedulers() {
   if (syncTransfersScheduler && syncTransfersScheduler !== "*/0 * * * * *" && syncTransfersScheduler !== "") {
     cron.schedule(syncTransfersScheduler, () => runWithLock("syncTransfers", async () => {
       const transferService = TransferFactory.create();
-    const result = await transferService.syncTransfers();
-    console.log(`[syncTransfers] Result: ${result}`);
+      const result = await transferService.syncTransfers();
+      console.log(`[syncTransfers] Result: ${result}`);
     }));
   }
 }

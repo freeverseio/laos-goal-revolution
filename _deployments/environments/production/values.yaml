@@ -11,6 +11,7 @@ ganacheContractUtils: "0xA94B7f0465E98609391C623d0560C5720a3f2D33"
 playMatchesScheduler: "*/10 * * * * *"
 mintPendingTeamsScheduler: "*/30 * * * * *"
 transferScheduler: "*/50 * * * * *"
+broadcastPlayersPendingScheduler: "*/10 * * * *"
 graphqlEndpoint: https://api.laosnetwork.io/graphql
 chainId: "137"
 contractAddress: ""

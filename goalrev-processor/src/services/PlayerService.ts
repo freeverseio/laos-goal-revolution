@@ -1,8 +1,11 @@
 import { EntityManager } from "typeorm";
-import { Player, Team } from "../db/entity";
+import { BroadcastStatus, Player, Team } from "../db/entity";
 import { PlayerSkill } from "../types/rest/output/team";
 import { PlayerHistoryMapper } from "./mapper/PlayerHistoryMapper";
 import { PlayerRepository } from "../db/repository/PlayerRepository";
+import { gql } from "@apollo/client";
+import { gqlClient } from "./graphql/GqlClient";
+import { AppDataSource } from "../db/AppDataSource";
 
 export class PlayerService {
 
@@ -49,5 +52,73 @@ export class PlayerService {
         }, entityManager);
       }
     }
+  }
+
+  async broadcastPlayersPending(): Promise<number> {
+    const playersPending = await this.playerRepository.findPlayersPending();
+    const tokenIds = playersPending.map(player => player.token_id).filter(tokenId => tokenId !== undefined) as string[];
+    const maxRetries = 3;
+    let broadcastedPlayers: number = 0;
+    const entityManager = AppDataSource.manager;
+  
+    for (let index = 0; index < tokenIds.length; index++) {
+      const tokenId = tokenIds[index];
+      console.log(`Broadcasting Player Minted ${index + 1}/${tokenIds.length}: ${tokenId}`);
+      const success = await this.attemptBroadcast(tokenId, maxRetries);
+      await this.playerRepository.updateBroadcastStatus([tokenId], BroadcastStatus.SUCCESS, entityManager);
+      if (success) {
+        broadcastedPlayers++;
+      } else {
+        await this.playerRepository.updateBroadcastStatus([tokenId], BroadcastStatus.FAILED, entityManager);
+        // if it fails, break the loop because otherwise we will get a nounce error
+        break;
+      }
+    }
+    
+    if (broadcastedPlayers !== tokenIds.length) {
+      console.error(`Minted but failed to broadcast some players minted. Broadcasted ${broadcastedPlayers}/${tokenIds.length}`);
+    }
+  
+    return broadcastedPlayers;
+  }
+  
+  private async attemptBroadcast(tokenId: string, maxRetries: number, attempts: number = 0): Promise<boolean> {
+    const broadcastMutationInput = {
+      chainId: process.env.CHAIN_ID!,
+      ownershipContractAddress: process.env.CONTRACT_ADDRESS!,
+      tokenId: tokenId,
+    };
+  
+    try {
+      const result = await this.executeBroadcastMutation(broadcastMutationInput);
+  
+      if (!result.errors && (result.data && result.data.broadcast && result.data.broadcast.success)) {
+        console.log(`Broadcast success: ${broadcastMutationInput.tokenId}`);
+        return true;
+      } else {
+        // concat error messages result.errors
+        let errorMessage = result.errors?.map((error: any) => error.message).join(', ');
+        throw new Error(`Broadcast failed for tokenId ${tokenId}. Error: ${errorMessage}`);
+      }
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }
+  
+  private async executeBroadcastMutation(broadcastMutationInput: { chainId: string; ownershipContractAddress: string; tokenId: string; }): Promise<any> {
+    return gqlClient.mutate({
+      mutation: gql`
+        mutation BroadcastPlayersMinted($input: BroadcastInput!) {
+          broadcast(input: $input) {
+            tokenId
+            success
+          }
+        }
+      `,
+      variables: {
+        input: broadcastMutationInput,
+      },
+    });
   }
 }
