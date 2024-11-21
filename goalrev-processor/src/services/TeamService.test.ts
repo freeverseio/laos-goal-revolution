@@ -170,25 +170,4 @@ describe('TeamService', () => {
   });
 
   
-  // describe('broadcastPlayersMinted', () => {
-  //   it('should successfully broadcast players minted', async () => {
-  //     (gqlClient.mutate as jest.Mock).mockResolvedValue({
-  //       data: {
-  //         broadcast: {
-  //           success: true,
-  //           tokenId: "10524557615468411906022060882295722425347575855803285350732116992720137948447",
-  //         },
-  //       },
-  //     });
-
-  //     const tokenIds = [
-  //       "10524557615468411906022060882295722425347575855803285350732116992720137948447",
-  //     ];
-
-  //     const result = await teamService.broadcastPlayersPending(tokenIds);
-
-  //     expect(result).toBe(1); // One player should be broadcasted
-  //     expect(gqlClient.mutate).toHaveBeenCalledTimes(1);
-  //   });
-  // });
 });
