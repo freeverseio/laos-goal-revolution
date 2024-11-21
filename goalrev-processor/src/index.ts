@@ -66,10 +66,8 @@ async function playMatches() {
   }
 
   const timeElapsed = new Date().getTime() - locks["playMatches"].lastRunTime.getTime();
-  const seconds = (timeElapsed / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-  console.log(`Time elapsed to play matches: ${hours}:${minutes}:${seconds} (h:m:s)`);
+  const seconds = Math.floor(timeElapsed / 1000);
+  console.log(`Time elapsed to play matches: ${Math.floor(seconds / 3600)}:${Math.floor((seconds % 3600) / 60).toString().padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')} (h:mm:ss)`);
 }
 
 /**
