@@ -184,6 +184,10 @@ export class TeamService {
       if (success) {
         broadcastedPlayers++;
       }
+      else {
+        // wait 30 seconds before continuing
+        await new Promise(resolve => setTimeout(resolve, 30000));
+      }
     }
   
     if (broadcastedPlayers !== tokenIds.length) {
@@ -210,14 +214,8 @@ export class TeamService {
         throw new Error(`Broadcast failed for tokenId ${tokenId}`);
       }
     } catch (error) {
-      console.error(`Attempt ${attempts + 1} failed for broadcasting tokenId ${tokenId}: ${error}`);
-      if (attempts < maxRetries - 1) {
-        await new Promise((resolve) => setTimeout(resolve, 1000 * (attempts + 1)));
-        return this.attemptBroadcast(tokenId, maxRetries, attempts + 1);
-      } else {
-        console.error(`Failed to broadcast tokenId ${tokenId} after ${maxRetries} attempts`);
-        return false;
-      }
+      console.error(`Attempt failed for broadcasting tokenId ${tokenId}: ${error}`);
+      return false;
     }
   }
   

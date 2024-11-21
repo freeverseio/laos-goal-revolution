@@ -190,40 +190,5 @@ describe('TeamService', () => {
       expect(result).toBe(1); // One player should be broadcasted
       expect(gqlClient.mutate).toHaveBeenCalledTimes(1);
     });
-
-    it('should retry on failure and eventually succeed', async () => {
-      (gqlClient.mutate as jest.Mock)
-        .mockRejectedValueOnce(new Error('GraphQL error'))
-        .mockResolvedValueOnce({
-          data: {
-            broadcast: {
-              success: true,
-              tokenId: "10524557615468411906022060882295722425347575855803285350732116992720137948447",
-            },
-          },
-        });
-
-      const tokenIds = [
-        "10524557615468411906022060882295722425347575855803285350732116992720137948447",
-      ];
-
-      const result = await teamService.broadcastPlayersMinted(tokenIds);
-
-      expect(result).toBe(1); // One player should be broadcasted
-      expect(gqlClient.mutate).toHaveBeenCalledTimes(2); // Two attempts were made
-    });
-
-    it('should fail after exceeding max retries', async () => {
-      (gqlClient.mutate as jest.Mock).mockRejectedValue(new Error('GraphQL error'));
-
-      const tokenIds = [
-        "10524557615468411906022060882295722425347575855803285350732116992720137948447",
-      ];
-
-      const result = await teamService.broadcastPlayersMinted(tokenIds);
-
-      expect(result).toBe(0); // No players should be broadcasted
-      expect(gqlClient.mutate).toHaveBeenCalledTimes(3); // Three attempts were made
-    });
   });
 });
