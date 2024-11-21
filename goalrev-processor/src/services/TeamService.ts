@@ -175,35 +175,76 @@ export class TeamService {
 
   async broadcastPlayersMinted(tokenIds: string[]): Promise<number> {
     let broadcastedPlayers: number = 0;
+    const maxRetries = 3;
+  
     for (let i = 0; i < tokenIds.length; i++) {
       const tokenId = tokenIds[i];
-      
+  
       const broadcastMutationInput = {
         chainId: process.env.CHAIN_ID!,
         ownershipContractAddress: process.env.CONTRACT_ADDRESS!,
-        tokenId: tokenId,      
+        tokenId: tokenId,
       };
-      console.log(`Broadcasting Player Minted ${i+1}/${tokenIds.length}: ${broadcastMutationInput.tokenId}`);
-      const result = await gqlClient.mutate({
-        mutation: gql`
-          mutation BroadcastPlayersMinted($input: BroadcastInput!) {
-            broadcast(input: $input) {
-              tokenId
-              success 
-            }
+      console.log(
+        `Broadcasting Player Minted ${i + 1}/${tokenIds.length}: ${broadcastMutationInput.tokenId}`
+      );
+  
+      let success = false;
+      let attempts = 0;
+  
+      while (!success && attempts < maxRetries) {
+        try {
+          const result = await gqlClient.mutate({
+            mutation: gql`
+              mutation BroadcastPlayersMinted($input: BroadcastInput!) {
+                broadcast(input: $input) {
+                  tokenId
+                  success
+                }
+              }
+            `,
+            variables: {
+              input: broadcastMutationInput,
+            },
+          });
+  
+          if (result.errors) {
+            throw new Error(
+              `GraphQL errors: ${result.errors.map((e: any) => e.message).join(', ')}`
+            );
           }
-        `,
-        variables: {
-          input: broadcastMutationInput,
+  
+          if (result.data && result.data.broadcast && result.data.broadcast.success) {
+            success = true;
+            broadcastedPlayers++;
+            console.log(
+              `Broadcasted Player Minted: ${broadcastMutationInput.tokenId}`
+            );
+          } else {
+            throw new Error(`Broadcast failed for tokenId ${tokenId}`);
+          }
+        } catch (error) {
+          console.error(`Error: ${error}`);
+          attempts++;
+          console.error(
+            `Attempt ${attempts} failed for broadcasting tokenId ${tokenId}: ${error}`
+          );
+          if (attempts >= maxRetries) {
+            console.error(
+              `Failed to broadcast tokenId ${tokenId} after ${maxRetries} attempts`
+            );
+            break;
+          } else {
+            await new Promise((resolve) => setTimeout(resolve, 1000 * attempts));
+          }
         }
-      });
-      broadcastedPlayers++;
-      console.log(`broadcasted Player Minted: ${broadcastMutationInput.tokenId} success: ${result.data.broadcast.success}`);
+      }
     }
-
+  
     return broadcastedPlayers;
-
   }
+
+
   async getTeamBotStatuses(
     homeTeamId: string,
     awayTeamId: string
