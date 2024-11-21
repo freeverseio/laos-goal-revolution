@@ -177,15 +177,14 @@ export class TeamService {
     const maxRetries = 3;
     let broadcastedPlayers: number = 0;
   
-    // Create an array of promises to broadcast all tokenIds in parallel
-    const broadcastPromises = tokenIds.map((tokenId, index) => {
+    for (let index = 0; index < tokenIds.length; index++) {
+      const tokenId = tokenIds[index];
       console.log(`Broadcasting Player Minted ${index + 1}/${tokenIds.length}: ${tokenId}`);
-      return this.attemptBroadcast(tokenId, maxRetries);
-    });
-  
-    // Execute all broadcasts in parallel and wait for completion
-    const results = await Promise.all(broadcastPromises);
-    broadcastedPlayers = results.filter((success) => success).length;
+      const success = await this.attemptBroadcast(tokenId, maxRetries);
+      if (success) {
+        broadcastedPlayers++;
+      }
+    }
   
     if (broadcastedPlayers !== tokenIds.length) {
       console.error(`Minted but failed to broadcast some players minted. Broadcasted ${broadcastedPlayers}/${tokenIds.length}`);
