@@ -3,7 +3,7 @@ import { BroadcastStatus, Player, Team } from "../db/entity";
 import { PlayerSkill } from "../types/rest/output/team";
 import { PlayerHistoryMapper } from "./mapper/PlayerHistoryMapper";
 import { PlayerRepository } from "../db/repository/PlayerRepository";
-import { gql } from "@apollo/client";
+import { gql } from "@apollo/client/core";
 import { gqlClient } from "./graphql/GqlClient";
 import { AppDataSource } from "../db/AppDataSource";
 
