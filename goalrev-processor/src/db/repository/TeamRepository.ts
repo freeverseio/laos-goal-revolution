@@ -95,10 +95,17 @@ export class TeamRepository {
       .execute();
   
     // Create the CASE expressions for the player updates
-    const playerUpdateCases = teams
+    const playerTokenUpdateCases = teams
       .filter((team) => team.players)
       .flatMap((team) =>
         team.players!.map((player) => `WHEN player_id = '${player.player_id}' THEN '${player.token_id}'`)
+      )
+      .join(' ');
+  
+    const playerBroadcastStatusCases = teams
+      .filter((team) => team.players)
+      .flatMap((team) =>
+        team.players!.map((player) => `WHEN player_id = '${player.player_id}' THEN '${player.broadcast_status}'`)
       )
       .join(' ');
   
@@ -110,12 +117,13 @@ export class TeamRepository {
       .createQueryBuilder()
       .update(Player)
       .set({
-        token_id: () => `CASE ${playerUpdateCases} ELSE token_id END`,
+        token_id: () => `CASE ${playerTokenUpdateCases} ELSE token_id END`,
+        broadcast_status: () => `CASE ${playerBroadcastStatusCases} ELSE broadcast_status END`,
       })
       .where("player_id IN (:...playerIds)", { playerIds })
       .execute();
   }
-
+  
   async bulkCreate(teams: Team[], transactionalEntityManager: EntityManager): Promise<void> {
     const teamRepository = transactionalEntityManager.getRepository(Team);
     await teamRepository.save(teams);
