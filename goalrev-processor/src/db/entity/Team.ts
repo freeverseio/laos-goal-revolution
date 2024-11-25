@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn, OneToMany, OneToOne, DeepPartial } from "typeorm";
-import { Country, League, Player, Tactics, Training } from "./"; 
+import { BroadcastStatus, Country, League, Player, Tactics, Training } from "./"; 
 
 
 export enum MintStatus {
@@ -128,4 +128,5 @@ export interface TeamPartialUpdateMint {
 export interface PlayerPartialUpdateMint {
   player_id: string;
   token_id?: string;
+  broadcast_status?: BroadcastStatus;
 }
