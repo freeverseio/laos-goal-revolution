@@ -1,9 +1,13 @@
 namespace: goalrev
-laosHost: goalrevapi.gorengine.com
-postgresHost: db-postgresql-ams3-02994-do-user-14140340-0.j.db.ondigitalocean.co
-postgresDb: defaultdb
+apiHost: goalrevapi.goalrev.com
+apiInternalUrl: http://goalrev-core.goalrev.svc.cluster.local:3001
+postgresHost: pro-db-do-user-4813238-0.h.db.ondigitalocean.com
+postgresDb: goalrev
 postgresPort: "25060"
-postgresUser: "doadmin"
+postgresUser: "goalrev"
+processorHost: goalrev-processor.goalrev.com
+processorPort: "3000"
+coreAppPort: "3001"
 ganacheRpcUrl: http://goalrev-ganache.goalrev.svc.cluster.local:8545/
 ganacheContractLeagues: "0x630589690929E9cdEFDeF0734717a9eF3Ec7Fcfe"
 ganacheContractPlayAndEvolve: "0x6eD79Aa1c71FD7BdBC515EfdA3Bd4e26394435cC"
@@ -14,7 +18,7 @@ transferScheduler: "*/50 * * * * *"
 broadcastPlayersPendingScheduler: "*/10 * * * *"
 graphqlEndpoint: https://api.laosnetwork.io/graphql
 chainId: "137"
-contractAddress: ""
+contractAddress: "0x433adbbc8dd351767af48ffd8e06ef4178b1fae5"
 blockMargin: "10"
 defaultTeamId: "999"
 pendingTeamsLimit: "5"
