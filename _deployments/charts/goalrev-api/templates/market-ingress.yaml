@@ -2,8 +2,10 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: marketplace-redirect
-  namespace: protostar
+  namespace: goalrev
   annotations:
+    nginx.ingress.kubernetes.io/server-snippet: |
+      return 301 https://goalrevolution.sequence.market/$request_uri;
     kubernetes.io/ingress.class: nginx        
     cert-manager.io/cluster-issuer: letsencrypt-freeverse
     nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"
