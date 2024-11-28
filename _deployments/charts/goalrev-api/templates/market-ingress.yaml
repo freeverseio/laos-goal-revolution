@@ -1,0 +1,12 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: marketplace-redirect
+  namespace: protostar
+  annotations:
+    nginx.ingress.kubernetes.io/server-snippet: |
+      return 301 https://goalrevolution.sequence.market/$request_uri;
+    kubernetes.io/ingress.class: nginx                                                                                                                                          
+spec:
+  rules:
+    - host: marketplace.goalrev.com
