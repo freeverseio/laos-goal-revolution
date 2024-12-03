@@ -104,7 +104,6 @@ export class LeagueService {
     //  Process each country and group teams into leagues
     for (const country of countries) {
       const leaguesForCountry = await this.getLeagueGroupsByCountry(country);
-
       if (leaguesForCountry) {
         leagueGroups.push(leaguesForCountry);
       }
@@ -124,7 +123,6 @@ export class LeagueService {
   private async getLeagueGroupsByCountry(country: Country): Promise<LeagueGroup | null> {
     // Fetch teams for the current country and timezone
     const teams = await this.teamRepository.findTeamsByCountryAndTimezone(country.country_idx, country.timezone_idx);
-
     if (teams.length <= 0) {
       return null; // No teams, skip this country
     }
@@ -156,7 +154,7 @@ export class LeagueService {
 
   async getActualRoundOfLeague(timezoneIdx: number): Promise<number> {
     const verses = await this.verseRepository.countVersesByTimezone(timezoneIdx);
-    return Math.max(Math.ceil(verses / MATCHDAYS_PER_ROUND) - 1, 0);
+    return Math.max(Math.floor(verses / (MATCHDAYS_PER_ROUND*2)), 0);
   }
 
   private async saveLeagueSchedules(leagueGroup: LeagueGroup, firstVerse: Verse): Promise<Schedule[]> {
