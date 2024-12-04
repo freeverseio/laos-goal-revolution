@@ -55,8 +55,6 @@ export class MatchService {
 
   async playMatches(): Promise<any> {
     const info = await this.calendarService.getCalendarInfo();
-    // minus one hour
-   // info.timestamp = info.timestamp! - 3600;
 
     // // Check if timestamp to play is in the future
     if (this.checkTimestampInFuture(info.timestamp!)) {      

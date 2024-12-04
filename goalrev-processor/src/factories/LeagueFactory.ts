@@ -16,6 +16,7 @@ export class LeagueFactory {
         const calendarService = new CalendarService(verseRepository);
         const leagueRepository = new LeagueRepository();
         const trainingRepository = new TrainingRepository();
-        return new LeagueService(teamRepository, matchRepository, verseRepository, matchEventRepository, leagueRepository, trainingRepository);
+        
+        return new LeagueService(teamRepository, matchRepository, verseRepository, matchEventRepository, leagueRepository, trainingRepository, calendarService);
     }
 } 
