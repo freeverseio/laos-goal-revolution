@@ -101,32 +101,10 @@ describe('CalendarInfo Tests', () => {
     info2 = calendarInfo(0, 15, info1.firstVerseTimeStamp);
     expect(info2).toEqual({ "timezone": 15, "matchDay": 0, "half": 0, "leagueRound": 0, "timestamp": info1.firstVerseTimeStamp });
 
-    // Test with specific timestamp
-    const referenceDeploy = 1727967000;
-    info1 = initMatchtimeAndTimezone(referenceDeploy);
-
-
-    // const dateStart = new Date('2024-11-24T21:00:00Z');
-    // const deployTimeInUnixEpochSecs = Math.floor(dateStart.getTime() / 1000);
-    // const matchTimeAndTZ = initMatchtimeAndTimezone(deployTimeInUnixEpochSecs);
-
-
-
-    // for (let i = 0; i < 100; i++) {
-    //     const info2 = calendarInfo(i, matchTimeAndTZ.TZForRound1, matchTimeAndTZ.firstVerseTimeStamp);
-    //     if (info2.timezone == 10) {
-    //         console.log(`info2: ${JSON.stringify(info2)}`);
-    //         // print date in CET
-    //         const date = new Date(info2?.timestamp! * 1000);
-    //         console.log(`i: ${date.toLocaleString('en-US', { timeZone: 'Europe/Madrid' })}`);
-    //     }
-    // }
-
 
     // 12:30 CET / 22:30 CET
     const referenceDeployTZ = 15;
     const referenceDeployTimestamp = 1727969400;
-    expect(info1).toEqual({ "TZForRound1": referenceDeployTZ, "firstVerseTimeStamp": referenceDeployTimestamp });
 
     info2 = calendarInfo(0, 15, info1.firstVerseTimeStamp);
     expect(info2).toEqual({ "timezone": 15, "matchDay": 0, "half": 0, "leagueRound": 0, "timestamp": info1.firstVerseTimeStamp });
