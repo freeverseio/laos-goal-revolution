@@ -28,14 +28,16 @@ export class LeagueService {
   private matchEventRepository: MatchEventRepository;
   private leagueRepository: LeagueRepository;
   private trainingRepository: TrainingRepository;
-
+  private calendarService: CalendarService;
+  
   constructor(
     teamRepository: TeamRepository, 
     matchRepository: MatchRepository, 
     verseRepository: VerseRepository, 
     matchEventRepository: MatchEventRepository, 
     leagueRepository: LeagueRepository, 
-    trainingRepository: TrainingRepository
+    trainingRepository: TrainingRepository,
+    calendarService: CalendarService
   ) {
     this.teamRepository = teamRepository;
     this.matchRepository = matchRepository;
@@ -43,6 +45,7 @@ export class LeagueService {
     this.matchEventRepository = matchEventRepository;
     this.leagueRepository = leagueRepository;
     this.trainingRepository = trainingRepository;
+    this.calendarService = calendarService;
   }
 
   async computeTeamRankingPointsForTimezone(timezoneIdx: number): Promise<void> {
@@ -152,10 +155,6 @@ export class LeagueService {
     return pendingMatches <= 0;
   }
 
-  async getActualRoundOfLeague(timezoneIdx: number): Promise<number> {
-    const verses = await this.verseRepository.countVersesByTimezone(timezoneIdx);
-    return Math.max(Math.floor(verses / (MATCHDAYS_PER_ROUND*2)), 0);
-  }
 
   private async saveLeagueSchedules(leagueGroup: LeagueGroup, firstVerse: Verse): Promise<Schedule[]> {
     let schedules: Schedule[] = [];
@@ -181,11 +180,12 @@ export class LeagueService {
   }
 
   private async saveLeagueSchedule(league_idx: number, timezone: number, country: Country, leagueSchedule: Matchday[], firstVerse: Verse, transactionalEntityManager: EntityManager) {
-    const actualRound = await this.getActualRoundOfLeague(timezone);
+    const currentRound = await this.calendarService.getCurrentRound(timezone);
+    const nextRound = currentRound + 1;
     leagueSchedule.forEach((matchday, matchday_idx) => {
       matchday.forEach((match, match_idx) => {
         this.matchEventRepository.deleteAllMatchEvents(timezone, country.country_idx, league_idx, matchday_idx, match_idx, transactionalEntityManager);
-        const matchStartUTC = getMatch1stHalfUTC(timezone, actualRound, matchday_idx, firstVerse.timezoneIdx, Number(firstVerse.verseTimestamp) );
+        const matchStartUTC = getMatch1stHalfUTC(timezone, nextRound, matchday_idx, firstVerse.timezoneIdx, Number(firstVerse.verseTimestamp) );
         this.matchRepository.resetMatch(timezone, country.country_idx, league_idx, matchday_idx, match_idx, match.home, match.away, matchStartUTC, transactionalEntityManager);
       });
     });

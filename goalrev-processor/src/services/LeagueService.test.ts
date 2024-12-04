@@ -69,7 +69,7 @@ describe("LeagueService", () => {
     // Mocking the manager for the AppDataSource
     (AppDataSource.manager as any) = entityManager;
 
-    leagueService = new LeagueService(teamRepository, matchRepository, verseRepository, matchEventRepository, leagueRepository, trainingRepository);
+    leagueService = new LeagueService(teamRepository, matchRepository, verseRepository, matchEventRepository, leagueRepository, trainingRepository, calendarService);
   });
 
   describe("getNewLeaguesByCountry", () => {
@@ -95,71 +95,6 @@ describe("LeagueService", () => {
   });
 
   
-
-  describe("getActualRoundOfLeague", () => {
-    it("should calculate the current round of a league based on verses", async () => {
-      verseRepository.countVersesByTimezone.mockResolvedValueOnce(28);
-
-      const result = await leagueService.getActualRoundOfLeague(1);
-      expect(verseRepository.countVersesByTimezone).toHaveBeenCalledWith(1);
-      expect(result).toBe(1);
-    });
-
-    it("should calculate the current round of a league based on verses", async () => {
-      verseRepository.countVersesByTimezone.mockResolvedValueOnce(1);
-
-      const result = await leagueService.getActualRoundOfLeague(1);
-      expect(verseRepository.countVersesByTimezone).toHaveBeenCalledWith(1);
-      expect(result).toBe(0);
-    });
-
-    it("should calculate the current round of a league based on verses", async () => {
-      verseRepository.countVersesByTimezone.mockResolvedValueOnce(88);
-
-      const result = await leagueService.getActualRoundOfLeague(1);
-      expect(verseRepository.countVersesByTimezone).toHaveBeenCalledWith(1);
-      expect(result).toBe(3);
-    });
-
-    it("should calculate the current round of a league based on verses", async () => {
-      verseRepository.countVersesByTimezone.mockResolvedValueOnce(56);
-
-      const result = await leagueService.getActualRoundOfLeague(10);
-      expect(verseRepository.countVersesByTimezone).toHaveBeenCalledWith(10);
-      expect(result).toBe(2);
-    });
-
-    it("should calculate the current round of a league based on verses", async () => {
-      verseRepository.countVersesByTimezone.mockResolvedValueOnce(84);
-
-      const result = await leagueService.getActualRoundOfLeague(10);
-      expect(verseRepository.countVersesByTimezone).toHaveBeenCalledWith(10);
-      expect(result).toBe(3);
-    });
-
-    it("should calculate the current round of a league based on verses", async () => {
-      verseRepository.countVersesByTimezone.mockResolvedValueOnce(29);
-
-      const result = await leagueService.getActualRoundOfLeague(1);
-      expect(verseRepository.countVersesByTimezone).toHaveBeenCalledWith(1);
-      expect(result).toBe(1);
-    });
-
-    it("should calculate the current round of a league based on verses", async () => {
-      verseRepository.countVersesByTimezone.mockResolvedValueOnce(14);
-
-      const result = await leagueService.getActualRoundOfLeague(1);
-      expect(verseRepository.countVersesByTimezone).toHaveBeenCalledWith(1);
-      expect(result).toBe(0);
-    });
-    it("should calculate the current round of a league based on verses", async () => {
-      verseRepository.countVersesByTimezone.mockResolvedValueOnce(0);
-
-      const result = await leagueService.getActualRoundOfLeague(1);
-      expect(verseRepository.countVersesByTimezone).toHaveBeenCalledWith(1);
-      expect(result).toBe(0);
-    });
-  });
 
 
   describe("addDivision", () => {

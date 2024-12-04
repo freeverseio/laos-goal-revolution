@@ -1,6 +1,6 @@
 import { AppDataSource } from "../db/AppDataSource";
 import { Matchday, TimeZoneData } from "../types";
-import { calendarInfo } from "../utils/calendarUtils";
+import { calendarInfo, getCurrentRound } from "../utils/calendarUtils";
 import { VerseRepository } from "../db/repository/VerseRepository";
 
 
@@ -27,6 +27,13 @@ export class CalendarService {
       ...info,
       verseNumber: nextVerseNumber
     };
+  }
+
+  async getCurrentRound(timezone: number): Promise<number> {
+    const entityManager = AppDataSource.manager;
+    const lastVerse = await this.verseRepository.getLastVerse(entityManager);
+    const firstVerse = await this.verseRepository.getInitialVerse(entityManager);
+    return getCurrentRound(timezone, Number(firstVerse!.timezoneIdx), Number(lastVerse!.verseNumber));
   }
 
   async getCalendarInfoAtVerse(verse: number): Promise<TimeZoneData> {
