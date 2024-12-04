@@ -87,6 +87,7 @@ export class PlayerService {
       chainId: process.env.CHAIN_ID!,
       ownershipContractAddress: process.env.CONTRACT_ADDRESS!,
       tokenId: tokenId,
+      type: "MINT",
     };
   
     try {
@@ -106,7 +107,7 @@ export class PlayerService {
     }
   }
   
-  private async executeBroadcastMutation(broadcastMutationInput: { chainId: string; ownershipContractAddress: string; tokenId: string; }): Promise<any> {
+  private async executeBroadcastMutation(broadcastMutationInput: { chainId: string; ownershipContractAddress: string; tokenId: string; type: string; }): Promise<any> {
     return gqlClient.mutate({
       mutation: gql`
         mutation BroadcastPlayersMinted($input: BroadcastInput!) {
