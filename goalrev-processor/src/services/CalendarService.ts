@@ -1,7 +1,9 @@
 import { AppDataSource } from "../db/AppDataSource";
 import { Matchday, TimeZoneData } from "../types";
-import { calendarInfo, getCurrentRound } from "../utils/calendarUtils";
+import { calendarInfo, getCurrentRound, getMatch1stHalfUTC } from "../utils/calendarUtils";
 import { VerseRepository } from "../db/repository/VerseRepository";
+import { Verse } from "../db/entity/Verse";
+import { EntityManager } from "typeorm";
 
 
 export class CalendarService {
@@ -29,11 +31,17 @@ export class CalendarService {
     };
   }
 
-  async getCurrentRound(timezone: number): Promise<number> {
-    const entityManager = AppDataSource.manager;
-    const lastVerse = await this.verseRepository.getLastVerse(entityManager);
+  async getVerses(entityManager: EntityManager): Promise<{firstVerse: Verse, lastVerse: Verse}> {
     const firstVerse = await this.verseRepository.getInitialVerse(entityManager);
-    return getCurrentRound(timezone, Number(firstVerse!.timezoneIdx), Number(lastVerse!.verseNumber));
+    const lastVerse = await this.verseRepository.getLastVerse(entityManager);
+    return {firstVerse, lastVerse};
+  }
+
+
+  getMatchStartTimeUTC(timezone: number,  matchday_idx: number, firstVerse: Verse, lastVerse: Verse): number {
+    const currentRound = getCurrentRound(timezone, Number(firstVerse!.timezoneIdx), Number(lastVerse!.verseNumber));
+    const nextRound = currentRound + 1;
+    return getMatch1stHalfUTC(timezone, nextRound, matchday_idx, firstVerse.timezoneIdx, Number(firstVerse.verseTimestamp) );
   }
 
   async getCalendarInfoAtVerse(verse: number): Promise<TimeZoneData> {
