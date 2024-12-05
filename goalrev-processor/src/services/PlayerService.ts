@@ -57,20 +57,20 @@ export class PlayerService {
   async broadcastPlayersPending(): Promise<number> {
     const playersPending = await this.playerRepository.findPlayersPending();
     const tokenIds = playersPending.map(player => player.token_id).filter(tokenId => tokenId !== undefined) as string[];
-    const maxRetries = 3;
     let broadcastedPlayers: number = 0;
     const entityManager = AppDataSource.manager;
   
-    for (let index = 0; index < tokenIds.length; index++) {
-      const tokenId = tokenIds[index];
-      console.log(`Broadcasting Player Minted ${index + 1}/${tokenIds.length}: ${tokenId}`);
-      const success = await this.attemptBroadcast(tokenId, maxRetries);
-      await this.playerRepository.updateBroadcastStatus([tokenId], BroadcastStatus.SUCCESS, entityManager);
+    // Batch processing 18 tokenIds at a time
+    for (let i = 0; i < tokenIds.length; i += 18) {
+      const batchTokenIds = tokenIds.slice(i, i + 18);
+      console.log(`Broadcasting ${batchTokenIds.length} Players Minted ${i + batchTokenIds.length}/${tokenIds.length}: ${batchTokenIds}`);      
+      const success = await this.attemptBroadcast(batchTokenIds);
       if (success) {
-        broadcastedPlayers++;
+        await this.playerRepository.updateBroadcastStatus(batchTokenIds, BroadcastStatus.SUCCESS, entityManager);
+        broadcastedPlayers += batchTokenIds.length;
       } else {
-        await this.playerRepository.updateBroadcastStatus([tokenId], BroadcastStatus.FAILED, entityManager);
-        // if it fails, break the loop because otherwise we will get a nounce error
+        await this.playerRepository.updateBroadcastStatus(batchTokenIds, BroadcastStatus.FAILED, entityManager);
+        // if it fails, break the loop because otherwise we may get a nonce error
         break;
       }
     }
@@ -82,24 +82,24 @@ export class PlayerService {
     return broadcastedPlayers;
   }
   
-  private async attemptBroadcast(tokenId: string, maxRetries: number, attempts: number = 0): Promise<boolean> {
-    const broadcastMutationInput = {
+  private async attemptBroadcast(tokenIds: string[]): Promise<boolean> {
+    const broadcastBatchMutationInput = {
       chainId: process.env.CHAIN_ID!,
       ownershipContractAddress: process.env.CONTRACT_ADDRESS!,
-      tokenId: tokenId,
+      tokenIds: tokenIds,
       type: "MINT",
     };
   
     try {
-      const result = await this.executeBroadcastMutation(broadcastMutationInput);
+      const result = await this.executeBroadcastBatchMutation(broadcastBatchMutationInput);
   
-      if (!result.errors && (result.data && result.data.broadcast && result.data.broadcast.success)) {
-        console.log(`Broadcast success: ${broadcastMutationInput.tokenId}`);
+      if (!result.errors && (result.data && result.data.broadcastBatch && result.data.broadcastBatch.success)) {
+        console.log(`Broadcast success: ${broadcastBatchMutationInput.tokenIds}`);
         return true;
       } else {
         // concat error messages result.errors
         let errorMessage = result.errors?.map((error: any) => error.message).join(', ');
-        throw new Error(`Broadcast failed for tokenId ${tokenId}. Error: ${errorMessage}`);
+        throw new Error(`Broadcast failed for tokenIds ${tokenIds}. Error: ${errorMessage}`);
       }
     } catch (error) {
       console.error(error);
@@ -107,18 +107,18 @@ export class PlayerService {
     }
   }
   
-  private async executeBroadcastMutation(broadcastMutationInput: { chainId: string; ownershipContractAddress: string; tokenId: string; type: string; }): Promise<any> {
+  private async executeBroadcastBatchMutation(broadcastBatchMutationInput: { chainId: string; ownershipContractAddress: string; tokenIds: string[]; type: string; }): Promise<any> {
     return gqlClient.mutate({
       mutation: gql`
-        mutation BroadcastPlayersMinted($input: BroadcastInput!) {
-          broadcast(input: $input) {
-            tokenId
+        mutation BroadcastBatchPlayersMinted($input: BroadcastBatchInput!) {
+          broadcastBatch(input: $input) {
+            tokenIds
             success
           }
         }
       `,
       variables: {
-        input: broadcastMutationInput,
+        input: broadcastBatchMutationInput,
       },
     });
   }
