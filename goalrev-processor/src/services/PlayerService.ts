@@ -12,7 +12,7 @@ export class PlayerService {
   private playerRepository: PlayerRepository;
 
   constructor(playerRepository: PlayerRepository) {
-    this.playerRepository = playerRepository;
+    this.playerRepository = playerRepository;    
   }
 
   /**
@@ -55,22 +55,55 @@ export class PlayerService {
   }
 
   async broadcastPlayersPending(): Promise<number> {
+    const BROADCAST_BATCH_SIZE_ON_CHAIN = process.env.BROADCAST_BATCH_SIZE_ON_CHAIN ? Number(process.env.BROADCAST_BATCH_SIZE_ON_CHAIN) : 1000;
+    const BROADCAST_BATCH_SIZE_DB = process.env.BROADCAST_BATCH_SIZE_DB ? Number(process.env.BROADCAST_BATCH_SIZE_DB) : 200;
+
     const playersPending = await this.playerRepository.findPlayersPending();
     const tokenIds = playersPending.map(player => player.token_id).filter(tokenId => tokenId !== undefined) as string[];
     let broadcastedPlayers: number = 0;
     const entityManager = AppDataSource.manager;
+    let errorUpdatingDB = false;
   
-    // Batch processing 18 tokenIds at a time
-    for (let i = 0; i < tokenIds.length; i += 18) {
-      const batchTokenIds = tokenIds.slice(i, i + 18);
+    // Batch processing this.BROADCAST_BATCH_SIZE_ON_CHAIN tokenIds at a time
+    for (let i = 0; i < tokenIds.length; i += BROADCAST_BATCH_SIZE_ON_CHAIN) {
+      const batchTokenIds = tokenIds.slice(i, i + BROADCAST_BATCH_SIZE_ON_CHAIN);
       console.log(`Broadcasting ${batchTokenIds.length} Players Minted ${i + batchTokenIds.length}/${tokenIds.length}: ${batchTokenIds}`);      
       const success = await this.attemptBroadcast(batchTokenIds);
       if (success) {
-        await this.playerRepository.updateBroadcastStatus(batchTokenIds, BroadcastStatus.SUCCESS, entityManager);
-        broadcastedPlayers += batchTokenIds.length;
+        for (let j = 0; j < batchTokenIds.length; j += BROADCAST_BATCH_SIZE_DB) {
+          const statusUpdateBatch = batchTokenIds.slice(j, j + BROADCAST_BATCH_SIZE_DB);
+          try {
+            await this.playerRepository.updateBroadcastStatus(statusUpdateBatch, BroadcastStatus.SUCCESS, entityManager);
+            broadcastedPlayers += statusUpdateBatch.length;
+
+          } catch (error) {
+            console.error(`Error updating broadcast status for batch starting at index ${j}:`, error);
+            console.error(`First tokenId of this DB batch: ${statusUpdateBatch[0]}`);
+            errorUpdatingDB = true;
+            break;
+          }
+        }
+
       } else {
-        await this.playerRepository.updateBroadcastStatus(batchTokenIds, BroadcastStatus.FAILED, entityManager);
-        // if it fails, break the loop because otherwise we may get a nonce error
+        for (let j = 0; j < batchTokenIds.length; j += BROADCAST_BATCH_SIZE_DB) {
+          const statusUpdateBatch = batchTokenIds.slice(j, j + BROADCAST_BATCH_SIZE_DB);
+          try {
+            await this.playerRepository.updateBroadcastStatus(statusUpdateBatch, BroadcastStatus.FAILED, entityManager);
+            broadcastedPlayers += statusUpdateBatch.length;
+
+          } catch (error) {
+            console.error(`Error updating broadcast status for batch starting at index ${j}:`, error);
+            console.error(`First tokenId of this DB batch: ${statusUpdateBatch[0]}`);
+            errorUpdatingDB = true;
+            break;
+          }
+        }
+
+        // since it failed, break the loop because otherwise we may get a nonce error
+        break;
+      }
+
+      if (errorUpdatingDB) {
         break;
       }
     }
