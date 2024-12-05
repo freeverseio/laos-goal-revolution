@@ -50,6 +50,8 @@ helmfiles:
       - blockMargin: {{ .Values.blockMargin | quote }}
       - defaultTeamId: {{ .Values.defaultTeamId }}
       - pendingTeamsLimit: {{ .Values.pendingTeamsLimit | quote }}
+      - broadcastBatchSizeOnChain: {{ .Values.broadcastBatchSizeOnChain }}
+      - broadcastBatchSizeDb: {{ .Values.broadcastBatchSizeDb }}
   - path: "charts/goalrev-core/helmfile.yaml"
     values:
       - namespace: {{ .Values.namespace }}
