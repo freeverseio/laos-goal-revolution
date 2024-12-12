@@ -73,9 +73,9 @@ spec:
           - name: BLOCK_MARGIN
             value: {{ .Values.blockMargin | quote }}
           - name: DEFAULT_TEAM_ID
-            value: {{ .Values.defaultTeamId | quote }}
+            value: {{ .Values.defaultTeamId }}
           - name: MINT_PENDING_TEAMS_LIMIT
-            value: {{ .Values.pendingTeamsLimit | quote }}
+            value: {{ .Values.pendingTeamsLimit }}
         ports:
         - containerPort: {{ .Values.processorPort }}
       volumes:
