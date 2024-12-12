@@ -25,3 +25,5 @@ releases:
       - pendingTeamsLimit: {{ .Values.pendingTeamsLimit | quote }}
       - broadcastBatchSizeOnChain: {{ .Values.broadcastBatchSizeOnChain }}
       - broadcastBatchSizeDb: {{ .Values.broadcastBatchSizeDb }}
+      - evolveBatchSizeOnChain: {{ .Values.evolveBatchSizeOnChain }}
+      - evolveBatchSizeDb: {{ .Values.evolveBatchSizeDb }}

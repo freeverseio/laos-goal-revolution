@@ -196,8 +196,8 @@ export class MatchService {
         await this.teamService.updateTeamData(playOutput.matchLogs[0], playOutput.matchLogs[1], match.homeTeam!, verseNumber, is1stHalf, true, transactionManager);
         await this.teamService.updateTeamData(playOutput.matchLogs[1], playOutput.matchLogs[0], match.visitorTeam!, verseNumber, is1stHalf, false, transactionManager);
         //  // Update skills, teams, and events within the transaction
-        await this.playerService.updateSkills(match.homeTeam!, playOutput.updatedSkills[0], verseNumber, transactionManager);
-        await this.playerService.updateSkills(match.visitorTeam!, playOutput.updatedSkills[1], verseNumber, transactionManager);
+        await this.playerService.updateSkills(match.homeTeam!, playOutput.updatedSkills[0], verseNumber, isHomeTeamBot, transactionManager);
+        await this.playerService.updateSkills(match.visitorTeam!, playOutput.updatedSkills[1], verseNumber, isAwayTeamBot, transactionManager);
 
          // update tactics history
         await this.tacticsRepository.insertTacticHistory(TacticsHistoryMapper.mapToTacticsHistory(match.homeTeam!.tactics, verseNumber), transactionManager);
