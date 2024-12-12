@@ -77,7 +77,7 @@ spec:
           - name: MINT_PENDING_TEAMS_LIMIT
             value: {{ .Values.pendingTeamsLimit | quote }}
         ports:
-        - containerPort: {{ .Values.processorPort }}
+        - containerPort: {{ .Values.processorPort }} 
       volumes:
       - name: db-certificate
         secret:
