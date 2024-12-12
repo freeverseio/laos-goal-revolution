@@ -21,9 +21,6 @@ spec:
           requests:
             memory: "256Mi"
             cpu: "100m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
         imagePullPolicy: Always
         env:
           - name: APP_PORT
