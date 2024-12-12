@@ -77,9 +77,9 @@ spec:
           - name: MINT_PENDING_TEAMS_LIMIT
             value: {{ .Values.pendingTeamsLimit | quote }}
           - name: BROADCAST_BATCH_SIZE_ON_CHAIN
-            value: {{ .Values.broadcastBatchSizeOnChain }}
+            value: {{ .Values.broadcastBatchSizeOnChain | quote }}
           - name: BROADCAST_BATCH_SIZE_DB
-            value: {{ .Values.broadcastBatchSizeDb }}
+            value: {{ .Values.broadcastBatchSizeDb | quote }}
         ports:
         - containerPort: {{ .Values.processorPort }}
       volumes:
