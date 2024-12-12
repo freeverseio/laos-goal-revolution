@@ -154,4 +154,17 @@ describe('CalendarInfo Tests', () => {
     });
 
   });
+
+  describe('getMatchStartTimeUTC', () => {
+    test('should return tinitMatchtimeAndTimezone', () => {
+          // Test with specific timestamp
+    const dateStart = new Date('2024-12-08T21:00:00Z');
+    const deployTimeInUnixEpochSecs = Math.floor(dateStart.getTime() / 1000);
+    const matchTimeAndTZ = initMatchtimeAndTimezone(deployTimeInUnixEpochSecs);
+      console.log(matchTimeAndTZ);
+      console.log(new Date(matchTimeAndTZ.firstVerseTimeStamp * 1000 ));
+    expect(matchTimeAndTZ).not.toBeNull();
+
+    });
+  });
 });

@@ -6,7 +6,8 @@
     "build": "tsc",
     "start": "ts-node-dev src/index.ts",
     "typeorm": "ts-node ./node_modules/typeorm/cli",
-    "test": "jest"
+    "test": "jest",
+    "test:calendar": "jest src/utils/calendarUtils.test.ts"
   },
   "keywords": [],
   "author": "",

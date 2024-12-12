@@ -98,7 +98,7 @@ export class MatchService {
     }
 
     // Process matches in batches of 8
-    await this.processInBatches(matches, 8, seed, info.verseNumber!, (match, seed, verseNumber) => this.playMatch(match, seed, verseNumber));
+    await this.processInBatches(matches, 16, seed, info.verseNumber!, (match, seed, verseNumber) => this.playMatch(match, seed, verseNumber));
 
     // compute league leaderboard
     if (info.half == 1) {
