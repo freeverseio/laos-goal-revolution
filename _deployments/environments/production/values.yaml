@@ -18,7 +18,7 @@ transferScheduler: "*/50 * * * * *"
 broadcastPlayersPendingScheduler: "*/10 * * * *"
 graphqlEndpoint: https://api.laosnetwork.io/graphql
 chainId: "137"
-contractAddress: "0x433adbbc8dd351767af48ffd8e06ef4178b1fae5"
+contractAddress: "0x9f16fc5a49afa724407225e97edb8775fe4eb9fb"
 blockMargin: "10"
 defaultTeamId: "999"
 pendingTeamsLimit: "5"
