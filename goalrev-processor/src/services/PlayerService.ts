@@ -40,7 +40,7 @@ export class PlayerService {
         player.shoot = playerSkills[i].shoot;
         player.endurance = playerSkills[i].endurance;
         player.encoded_skills = playerSkills[i].encodedSkills;
-        if (!isBot) {
+        if (!isBot && player.token_id !== null) {
           player.evolve_status = EvolveStatus.PENDING;
         }
 
@@ -55,7 +55,7 @@ export class PlayerService {
           endurance: playerSkills[i].endurance,
           encoded_skills: playerSkills[i].encodedSkills
         }
-        if (!isBot) {
+        if (!isBot && player.token_id !== null) {
           playerPartialUpdate.evolve_status = player.evolve_status;
         }
 
@@ -163,6 +163,7 @@ export class PlayerService {
       variables: {
         input: broadcastBatchMutationInput,
       },
+      fetchPolicy: 'no-cache',
     });
   }
 
@@ -180,7 +181,7 @@ export class PlayerService {
 
       const batchPlayers = playersPendingToEvolve.slice(i, i + EVOLVE_BATCH_SIZE_ON_CHAIN);
       console.log(`Evolving ${batchPlayers.length} Players ${i + batchPlayers.length}/${playersPendingToEvolve.length}.`);
-      const success = await this.attemptevolveBatchPlayers(batchPlayers);
+      const success = await this.attemptEvolveBatchPlayers(batchPlayers);
       const entityManager = AppDataSource.manager;
 
       if (success) {
@@ -241,36 +242,35 @@ export class PlayerService {
     }
 
     if (evolvedPlayers !== playersPendingToEvolve.length) {
-      console.error(`Fail to evolve Players. Evolving ${evolvedPlayers}/${playersPendingToEvolve.length}`);
+      console.error(`Fail to evolve all Players. Evolving ${evolvedPlayers}/${playersPendingToEvolve.length}`);
     }
 
     return evolvedPlayers;
   }
 
-  async attemptevolveBatchPlayers(players: Player[]): Promise<boolean> {
+  async attemptEvolveBatchPlayers(players: Player[]): Promise<boolean> {
     const evolveplayersMutation = PlayerMapper.mapPlayersToEvolveMutation(players);
     try {
       const result = await gqlClient.mutate({
         mutation: gql`
           mutation EvolveBatchPlayers($input: EvolveBatchInput!) {
             evolveBatch(input: $input) {
-              tokens {
-                tokenId
-              }
+              success
             }
           }
         `,
         variables: {
           input: evolveplayersMutation.input
-        }
+        },
+        fetchPolicy: 'no-cache',
       });
-      if (result.errors) {
+      if (result?.errors) {
         throw new Error(`Failed to EvolveBatchPlayers: ${result.errors[0].message}`);
       }
-      if (result.data.evolveBatch.tokens.length === 0) {
-        throw new Error(`Failed to evolve Players: No token ids returned`);
+      if (result?.data?.evolveBatch?.success === true) {
+        return true;
       }
-      return true;
+      throw new Error(`Failed to evolve Players: success !== true`);
 
     } catch (error) {
       console.error(error);

@@ -84,7 +84,7 @@ function initializeSchedulers() {
   // Mint Pending Teams Scheduler
   const mintPendingTeamsScheduler = process.env.MINT_PENDING_TEAMS_SCHEDULER;
   if (mintPendingTeamsScheduler && mintPendingTeamsScheduler !== "*/0 * * * * *" && mintPendingTeamsScheduler !== "") {
-    cron.schedule(mintPendingTeamsScheduler, () => runWithLock("mintPendingTeams", async () => {
+    cron.schedule(mintPendingTeamsScheduler, () => runWithLock("mintPendingTeamsAndEvolvePlayers", async () => {
       const teamService = TeamFactory.createTeamService();
       const result = await teamService.mintPendingTeams();
       console.log(`[mintPendingTeams] Result: ${result}`);
@@ -95,16 +95,6 @@ function initializeSchedulers() {
       console.log(`[evolvePlayersPending] Result: ${resultEvolve}`);
     }));
   }
-
-  // Evolve Players Pending Scheduler
-  // const evolvePlayersPendingScheduler = process.env.EVOLVE_PLAYERS_PENDING_SCHEDULER;
-  // if (evolvePlayersPendingScheduler && evolvePlayersPendingScheduler !== "*/0 * * * * *" && evolvePlayersPendingScheduler !== "") {
-  //   cron.schedule(evolvePlayersPendingScheduler, () => runWithLock("evolvePlayersPending", async () => {
-  //     const playerService = PlayerFactory.createPlayerService();
-  //     const result = await playerService.evolvePlayersPending();
-  //     console.log(`[evolvePlayersPending] Result: ${result}`);
-  //   }));
-  // }
 
   // Broadcast Players Pending Scheduler
   const broadcastPlayersPendingScheduler = process.env.BROADCAST_PLAYERS_PENDING_SCHEDULER;

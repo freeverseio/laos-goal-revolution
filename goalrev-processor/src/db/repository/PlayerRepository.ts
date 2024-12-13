@@ -1,4 +1,4 @@
-import { EntityManager, In } from "typeorm";
+import { EntityManager, In, IsNull, Not } from "typeorm";
 import { Player, PlayerPartialUpdate, PlayerHistory, BroadcastStatus, EvolveStatus } from "../entity";
 import { AppDataSource } from "../AppDataSource";
 
@@ -55,7 +55,10 @@ export class PlayerRepository {
   async findPlayersPendingToEvolve(): Promise<Player[]> {
     const playerRepository = AppDataSource.getRepository(Player);
     return await playerRepository.find({
-      where: { evolve_status: In([EvolveStatus.PENDING, EvolveStatus.FAILED]) },
+      where: {
+        evolve_status: In([EvolveStatus.PENDING, EvolveStatus.FAILED]),
+        token_id: Not(IsNull())
+       },
       order: { evolve_status: 'DESC' }
     });
   }
