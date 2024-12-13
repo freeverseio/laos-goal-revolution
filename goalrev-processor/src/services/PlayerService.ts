@@ -16,14 +16,6 @@ export class PlayerService {
     this.playerRepository = playerRepository;
   }
 
-  /**
-   * Updates the skills of players based on the given player skills array.
-   * @param tactics - The team tactics containing the player IDs.
-   * @param playerSkills - An array of player skills, where each element corresponds to a shirt number in tactics.
-   * @param verseNumber - The verse number.
-   * @param isBot - A boolean indicating whether the team is a bot or not.
-   * @param entityManager - The transaction-scoped EntityManager instance.
-   */
   async updateSkills(team: Team, playerSkills: PlayerSkill[], verseNumber: number, isBot: boolean, entityManager: EntityManager): Promise<void> {
 
     // Update each player based on their player ID and corresponding PlayerSkill
