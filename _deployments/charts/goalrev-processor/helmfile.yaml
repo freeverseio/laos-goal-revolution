@@ -23,7 +23,7 @@ releases:
       - blockMargin: {{ .Values.blockMargin | quote }}
       - defaultTeamId: {{ .Values.defaultTeamId }}
       - pendingTeamsLimit: {{ .Values.pendingTeamsLimit | quote }}
-      - broadcastBatchSizeOnChain: {{ .Values.broadcastBatchSizeOnChain }}
-      - broadcastBatchSizeDb: {{ .Values.broadcastBatchSizeDb }}
-      - evolveBatchSizeOnChain: {{ .Values.evolveBatchSizeOnChain }}
-      - evolveBatchSizeDb: {{ .Values.evolveBatchSizeDb }}
+      - broadcastBatchSizeOnChain: {{ .Values.broadcastBatchSizeOnChain | quote }}
+      - broadcastBatchSizeDb: {{ .Values.broadcastBatchSizeDb | quote }}
+      - evolveBatchSizeOnChain: {{ .Values.evolveBatchSizeOnChain | quote }}
+      - evolveBatchSizeDb: {{ .Values.evolveBatchSizeDb | quote }}
