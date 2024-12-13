@@ -80,6 +80,10 @@ spec:
             value: {{ .Values.broadcastBatchSizeOnChain | quote }}
           - name: BROADCAST_BATCH_SIZE_DB
             value: {{ .Values.broadcastBatchSizeDb | quote }}
+          - name: EVOLVE_BATCH_SIZE_ON_CHAIN
+            value: {{ .Values.evolveBatchSizeOnChain | quote }}
+          - name: EVOLVE_BATCH_SIZE_DB
+            value: {{ .Values.evolveBatchSizeDb | quote }}
         ports:
         - containerPort: {{ .Values.processorPort }}
       volumes:

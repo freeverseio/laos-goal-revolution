@@ -1,5 +1,5 @@
-import { EntityManager, In } from "typeorm";
-import { Player, PlayerPartialUpdate, PlayerHistory, BroadcastStatus } from "../entity";
+import { EntityManager, In, IsNull, Not } from "typeorm";
+import { Player, PlayerPartialUpdate, PlayerHistory, BroadcastStatus, EvolveStatus } from "../entity";
 import { AppDataSource } from "../AppDataSource";
 
 export class PlayerRepository {
@@ -23,6 +23,14 @@ export class PlayerRepository {
     await playerRepository.update(player_id, player);
   }
 
+  async updatePartialPlayersBulk(tokenIds: string[], player: PlayerPartialUpdate, entityManager: EntityManager): Promise<void> {
+    const playerRepository = entityManager.getRepository(Player);
+    await playerRepository.update(
+      { player_id: In(tokenIds) },
+      player
+    );
+  }
+
   async savePlayerHistory(playerHistory: PlayerHistory, entityManager: EntityManager): Promise<void> {
     const playerHistoryRepository = entityManager.getRepository(PlayerHistory);
     await playerHistoryRepository.save(playerHistory);
@@ -43,5 +51,16 @@ export class PlayerRepository {
       order: { broadcast_status: 'DESC' }
     });
   }
-}
 
+  async findPlayersPendingToEvolve(): Promise<Player[]> {
+    const playerRepository = AppDataSource.getRepository(Player);
+    return await playerRepository.find({
+      where: {
+        evolve_status: In([EvolveStatus.PENDING, EvolveStatus.FAILED]),
+        token_id: Not(IsNull())
+       },
+      order: { evolve_status: 'DESC' }
+    });
+  }
+
+}

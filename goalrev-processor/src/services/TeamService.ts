@@ -131,7 +131,6 @@ export class TeamService {
 
   async mintTeams(teams: Team[]): Promise<boolean> {
     const mintTeamMutation = TeamMapper.mapTeamPlayersToMintMutation(teams);
-    // console.log('Minting teams:', JSON.stringify(mintTeamMutation));
     try {
       const result = await gqlClient.mutate({
         mutation: gql`
@@ -162,9 +161,6 @@ export class TeamService {
       throw new Error(`Failed to mint team: ${error}`);
     }
   }
-
-  
-  
 
   async getTeamBotStatuses(
     homeTeamId: string,
