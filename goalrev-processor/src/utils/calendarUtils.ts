@@ -88,7 +88,8 @@ function normalizeTZ(tz: number): number {
     return 1 + ((24 + tz - 1) % 24);
 }
 
-// Returns the round at which a league is (the first league played is round 0, the next league is round 1, etc.)
+// Returns the round at which a league is 
+// (the first league played is round 0, the next league is round 1, etc.)
 export const getCurrentRound = (tz: number, TZForRound1: number, verse: number): number => {
     if (verse < VERSES_PER_ROUND) return 0;
     const round = Math.floor(verse / VERSES_PER_ROUND);
@@ -99,6 +100,18 @@ export const getCurrentRound = (tz: number, TZForRound1: number, verse: number):
         return round;
     }
 }
+
+export const hasMatchBeenPlayedForTZ = (tz: number, TZForRound1: number, verse: number): boolean => {
+  const deltaN = (tz >= TZForRound1) 
+      ? (tz - TZForRound1) 
+      : ((tz + 24) - TZForRound1);
+
+  // Calculate the start verse for the first match in this timezone
+  const firstVerseInTZ = 4 * deltaN;
+
+  // Determine whether the verse falls after matches began in this timezone
+  return verse >= firstVerseInTZ;
+};
 
 // Returns the Unix timestamp in UTC (seconds) corresponding to the start of a match's first half 
 // Inputs:
