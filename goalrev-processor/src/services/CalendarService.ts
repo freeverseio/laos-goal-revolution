@@ -40,8 +40,7 @@ export class CalendarService {
 
   getMatchStartTimeUTC(timezone: number,  matchday_idx: number, firstVerse: Verse, lastVerse: Verse): number {
     const currentRound = getCurrentRound(timezone, Number(firstVerse!.timezoneIdx), Number(lastVerse!.verseNumber));
-    const nextRound = currentRound + 1;
-    return getMatch1stHalfUTC(timezone, nextRound, matchday_idx, firstVerse.timezoneIdx, Number(firstVerse.verseTimestamp) );
+    return getMatch1stHalfUTC(timezone, currentRound, matchday_idx, firstVerse.timezoneIdx, Number(firstVerse.verseTimestamp) );
   }
 
   async getCalendarInfoAtVerse(verse: number): Promise<TimeZoneData> {
