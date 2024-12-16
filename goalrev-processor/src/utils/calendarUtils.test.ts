@@ -1,4 +1,4 @@
-import { initMatchtimeAndTimezone, calendarInfo, getCurrentRound, hasMatchBeenPlayedForTZ } from './calendarUtils'; // Make sure to import your actual module
+import { initMatchtimeAndTimezone, calendarInfo, getCurrentRound, hasMatchBeenPlayedForTZ } from './calendarUtils'; 
 
 describe('CalendarInfo Tests', () => {
   const NULL_TIMEZONE = 0;
