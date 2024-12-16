@@ -1,4 +1,4 @@
-import { initMatchtimeAndTimezone, calendarInfo, getCurrentRound } from './calendarUtils'; // Make sure to import your actual module
+import { initMatchtimeAndTimezone, calendarInfo, getCurrentRound, hasMatchBeenPlayedForTZ } from './calendarUtils'; 
 
 describe('CalendarInfo Tests', () => {
   const NULL_TIMEZONE = 0;
@@ -123,6 +123,11 @@ describe('CalendarInfo Tests', () => {
 
   describe('getCurrentRound', () => {
     test('should return the current round for tz 10 in verse 1396', () => {
+      const currentRound = getCurrentRound(10, 21, 10);
+      expect(currentRound).toEqual(0);
+    });
+
+    test('should return the current round for tz 10 in verse 1396', () => {
       const currentRound = getCurrentRound(10, 21, 1396);
       expect(currentRound).toEqual(2);
     });
@@ -153,6 +158,25 @@ describe('CalendarInfo Tests', () => {
       expect(currentRound).toEqual(3);
     });
 
+ 
+
+  });
+
+  describe('hasMatchBeenPlayed', () => {
+    test('should return true if the match has been played', () => {
+      const hasPlayed = hasMatchBeenPlayedForTZ(10, 21, 52);
+      expect(hasPlayed).toEqual(true);
+    });
+
+    test('should return true if the match has been played', () => {
+      const hasPlayed = hasMatchBeenPlayedForTZ(10, 21, 680);
+      expect(hasPlayed).toEqual(true);
+    });
+
+    test('should return false if the match has not been played', () => {
+      const hasPlayed = hasMatchBeenPlayedForTZ(10, 21, 51);
+      expect(hasPlayed).toEqual(false);
+    });
   });
 
   describe('getMatchStartTimeUTC', () => {
@@ -163,7 +187,7 @@ describe('CalendarInfo Tests', () => {
     const matchTimeAndTZ = initMatchtimeAndTimezone(deployTimeInUnixEpochSecs);
       console.log(matchTimeAndTZ);
       console.log(new Date(matchTimeAndTZ.firstVerseTimeStamp * 1000 ));
-    expect(matchTimeAndTZ).not.toBeNull();
+      expect(matchTimeAndTZ).not.toBeNull();
 
     });
   });

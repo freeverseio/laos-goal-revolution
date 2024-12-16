@@ -1,6 +1,6 @@
 import { AppDataSource } from "../db/AppDataSource";
 import { Matchday, TimeZoneData } from "../types";
-import { calendarInfo, getCurrentRound, getMatch1stHalfUTC } from "../utils/calendarUtils";
+import { calendarInfo, getCurrentRound, getMatch1stHalfUTC, hasMatchBeenPlayedForTZ } from "../utils/calendarUtils";
 import { VerseRepository } from "../db/repository/VerseRepository";
 import { Verse } from "../db/entity/Verse";
 import { EntityManager } from "typeorm";
@@ -39,8 +39,13 @@ export class CalendarService {
 
 
   getMatchStartTimeUTC(timezone: number,  matchday_idx: number, firstVerse: Verse, lastVerse: Verse): number {
+    const hasPlayed = hasMatchBeenPlayedForTZ(timezone, Number(firstVerse!.timezoneIdx), Number(lastVerse!.verseNumber));
     const currentRound = getCurrentRound(timezone, Number(firstVerse!.timezoneIdx), Number(lastVerse!.verseNumber));
-    return getMatch1stHalfUTC(timezone, currentRound, matchday_idx, firstVerse.timezoneIdx, Number(firstVerse.verseTimestamp) );
+    // if no matches have been played for this timezone, 
+    // the current round is 0 but also the next round (the round to play) is 0. 
+    // this only happens after a wipeout
+    const nextRound = hasPlayed ? currentRound + 1 : currentRound;
+    return getMatch1stHalfUTC(timezone, nextRound, matchday_idx, firstVerse.timezoneIdx, Number(firstVerse.verseTimestamp) );
   }
 
   async getCalendarInfoAtVerse(verse: number): Promise<TimeZoneData> {
