@@ -59,7 +59,7 @@ export class TransferService {
       console.log('RPC latest block number', latestBlockNumber);
 
       // Set broadcast_status=success for all transfers events of goal rev players
-      // (because in that case braodcastMint does not be call)
+      // (because those players should not be called later with braodcastMint)
       await this.setBroadcastStatusToSuccess(transfers);
 
       const realPlayerTransfers = transfers.filter(transfer => !this.isMintEventOrSelfTransfer(transfer));
