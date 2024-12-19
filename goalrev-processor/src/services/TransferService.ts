@@ -1,5 +1,5 @@
 import { AppDataSource } from "../db/AppDataSource";
-import { PlayerPartialUpdate, Team } from "../db/entity";
+import { BroadcastStatus, PlayerPartialUpdate, Team } from ";
 import { PlayerRepository } from "../db/repository/PlayerRepository";
 import { TeamRepository } from "../db/repository/TeamRepository";
 import { TransferRepository } from "../db/repository/TransferRepository";
@@ -32,6 +32,24 @@ export class TransferService {
     return true;
   }
 
+  private isMintEvent(transfer: Transfer): boolean {
+    return transfer.from !== transfer.to && transfer.from !== "0x0000000000000000000000000000000000000000";
+  }
+  
+  private async setBroadcastStatusToSuccess(tokenIds: string[]) {
+    try {
+      const entityManager = AppDataSource.manager;
+      const tokenIdArray = Array.from(tokenIds); // Convert to array
+      const batchSize = process.env.BROADCAST_BATCH_SIZE_DB ? parseInt(process.env.BROADCAST_BATCH_SIZE_DB) : 200;
+      for (let i = 0; i < tokenIdArray.length; i += batchSize) {
+        const batch = tokenIdArray.slice(i, i + batchSize);
+        await this.playerRepository.updateBroadcastStatus(batch, BroadcastStatus.SUCCESS, entityManager);
+      }
+    } catch (error) {
+      console.error(`Error in Sync transfers updating broadcast status to success`, error);
+    }
+  }
+
   async processTransfers(transfers: Transfer[]): Promise<void> {
     try {
       let lastTransfer: Transfer | null = null;
@@ -40,7 +58,13 @@ export class TransferService {
       const blockMargin = process.env.BLOCK_MARGIN ? parseInt(process.env.BLOCK_MARGIN) : 100;
       console.log('RPC latest block number', latestBlockNumber);
 
-      const tokenIds = transfers.map(transfer => transfer.tokenId);
+      const mints = transfers.filter(transfer => this.isMintEvent(transfer));
+      const mintedTokenIDs = mints.map(mint => mint.tokenId);
+
+      await this.setBroadcastStatusToSuccess(mintedTokenIDs);
+
+      const realPlayerTransfers = transfers.filter(transfer => !this.isMintEvent(transfer));
+      const tokenIds = realPlayerTransfers.map(transfer => transfer.tokenId);
       const players = await this.playerRepository.findPlayersByTokenIds(tokenIds);
       
       if (transfers.length > 0 && !players || players.length === 0) {
