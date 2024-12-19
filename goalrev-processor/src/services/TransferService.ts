@@ -36,10 +36,10 @@ export class TransferService {
     return transfer.from === transfer.to || transfer.from === "0x0000000000000000000000000000000000000000";
   }
   
-  private async setBroadcastStatusToSuccess(tokenIds: string[]) {
+  private async setBroadcastStatusToSuccess(transfers: Transfer[]) {
     try {
       const entityManager = AppDataSource.manager;
-      const tokenIdArray = Array.from(tokenIds); // Convert to array
+      const tokenIdArray = Array.from(transfers.map(transfer => transfer.tokenId));
       const batchSize = process.env.BROADCAST_BATCH_SIZE_DB ? parseInt(process.env.BROADCAST_BATCH_SIZE_DB) : 200;
       for (let i = 0; i < tokenIdArray.length; i += batchSize) {
         const batch = tokenIdArray.slice(i, i + batchSize);
@@ -58,10 +58,7 @@ export class TransferService {
       const blockMargin = process.env.BLOCK_MARGIN ? parseInt(process.env.BLOCK_MARGIN) : 100;
       console.log('RPC latest block number', latestBlockNumber);
 
-      const mints = transfers.filter(transfer => this.isMintEvent(transfer));
-      const mintedTokenIDs = mints.map(mint => mint.tokenId);
-
-      await this.setBroadcastStatusToSuccess(mintedTokenIDs);
+      await this.setBroadcastStatusToSuccess(transfers);
 
       const realPlayerTransfers = transfers.filter(transfer => !this.isMintEvent(transfer));
       const tokenIds = realPlayerTransfers.map(transfer => transfer.tokenId);
