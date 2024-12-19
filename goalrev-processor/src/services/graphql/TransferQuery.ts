@@ -28,9 +28,10 @@ export class TransferQuery {
 
 
   // Method to fetch transfers until a certain block number is found or no more results
-  async fetchTransfers(targetBlockNumber: number, initialOffset = 0, limit = 30): Promise<Transfer[]> {
+  async fetchTransfers(targetBlockNumber: number, initialOffset = 0, limit = 30): Promise<{transfers: Transfer[], tokenIds: Set<string>}> { 
     let offset = initialOffset;
     let transferMap: { [key: string]: Transfer } = {};
+    let tokenIds: Set<string> = new Set();
     let stopLoop = false;
 
     try {
@@ -49,6 +50,11 @@ export class TransferQuery {
           console.log('No more transfers available.');
           stopLoop = true;
         }
+
+        // Retrieve tokenIds trasnferred to set later broadcast_status=success (BroadcastMint can be done only if never transferred before)
+        transfers.forEach(transfer => {
+          tokenIds.add(transfer.tokenId);
+        });
 
         // Filter out transfers where `from` and `to` are equal and `from` is not the zero address
         transfers = transfers.filter(transfer => transfer.from !== transfer.to && transfer.from !== "0x0000000000000000000000000000000000000000");
@@ -80,8 +86,11 @@ export class TransferQuery {
           offset += 30;
         }
       }
-      // inverse order of the map
-      return this.sortTransfersByBlockNumber(Object.values(transferMap));
+      // transfers are sorted in inverse order of the map
+      return {
+        transfers: this.sortTransfersByBlockNumber(Object.values(transferMap)),
+        tokenIds
+      }
     } catch (error) {
       console.error('Error fetching transfers:', error);
       throw new Error('Could not fetch transfers.');

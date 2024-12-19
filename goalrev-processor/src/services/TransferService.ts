@@ -1,5 +1,5 @@
 import { AppDataSource } from "../db/AppDataSource";
-import { PlayerPartialUpdate, Team } from "../db/entity";
+import { BroadcastStatus, PlayerPartialUpdate, Team } from "../db/entity";
 import { PlayerRepository } from "../db/repository/PlayerRepository";
 import { TeamRepository } from "../db/repository/TeamRepository";
 import { TransferRepository } from "../db/repository/TransferRepository";
@@ -23,7 +23,24 @@ export class TransferService {
 
   async syncTransfers() {
     const targetBlockNumber = await this.transferRepository.getLatestBlockNumber();
-    const transfers = await this.transferQuery.fetchTransfers(targetBlockNumber, 0, 20);
+    const { transfers, tokenIds } = await this.transferQuery.fetchTransfers(targetBlockNumber, 0, 20);
+
+    // update broadcast for all assets already transferred
+    if (tokenIds?.size > 0) {
+      try {
+        const entityManager = AppDataSource.manager;
+        const tokenIdArray = Array.from(tokenIds); // Convert to array
+        const batchSize = process.env.BROADCAST_BATCH_SIZE_DB ? parseInt(process.env.BROADCAST_BATCH_SIZE_DB) : 200;
+        for (let i = 0; i < tokenIdArray.length; i += batchSize) {
+          const batch = tokenIdArray.slice(i, i + batchSize);
+          await this.playerRepository.updateBroadcastStatus(batch, BroadcastStatus.SUCCESS, entityManager);
+        }
+      } catch (error) {
+        console.error(`Error in Sync transfers updating broadcast status to success`, error);
+      }
+    }   
+
+    // process valid transfers
     if (transfers.length === 0) {
       console.log(`No transfers found for block ${targetBlockNumber}`);
       return true;

@@ -48,7 +48,7 @@ describe('TransferQuery', () => {
     });
 
     const targetBlockNumber = 12345678;
-    const result = await transferQuery.fetchTransfers(targetBlockNumber, 0, 10);
+    const { transfers:result } = await transferQuery.fetchTransfers(targetBlockNumber, 0, 10);
 
     // Assertions
     expect(gqlClient.query).toHaveBeenCalledTimes(1);
@@ -66,7 +66,7 @@ describe('TransferQuery', () => {
     });
 
     const targetBlockNumber = 12345678;
-    const result = await transferQuery.fetchTransfers(targetBlockNumber);
+    const { transfers: result} = await transferQuery.fetchTransfers(targetBlockNumber);
 
     // Assertions
     expect(gqlClient.query).toHaveBeenCalledTimes(1);
@@ -124,7 +124,7 @@ describe('TransferQuery', () => {
       });
 
     const targetBlockNumber = 12345679;
-    const result = await transferQuery.fetchTransfers(targetBlockNumber, 0, 2);
+    const { transfers:result } = await transferQuery.fetchTransfers(targetBlockNumber, 0, 2);
 
     // Assertions
     expect(gqlClient.query).toHaveBeenCalledTimes(2);
@@ -238,7 +238,7 @@ describe('TransferQuery', () => {
       });
 
     const targetBlockNumber = 12345673;
-    const result = await transferQuery.fetchTransfers(targetBlockNumber, 0, 3);
+    const { transfers:result } = await transferQuery.fetchTransfers(targetBlockNumber, 0, 3);
 
     // Assertions
     expect(gqlClient.query).toHaveBeenCalledTimes(3);
