@@ -67,9 +67,9 @@ export class TransferService {
       const tokenIds = realPlayerTransfers.map(transfer => transfer.tokenId);
       const players = await this.playerRepository.findPlayersByTokenIds(tokenIds);
       
-      if (transfers.length > 0 && !players || players.length === 0) {
+      if (realPlayerTransfers.length > 0 && !players || players.length === 0) {
         console.log('Players not found for tokenIds: ' + tokenIds.join(', '));
-        lastTransfer = transfers[transfers.length - 1];
+        lastTransfer = realPlayerTransfers[realPlayerTransfers.length - 1];
         if (lastTransfer && lastTransfer.blockNumber < latestBlockNumber - blockMargin) {
           await this.transferRepository.updateLatestBlockNumber(lastTransfer!.blockNumber, lastTransfer!.txHash, new Date(lastTransfer!.timestamp), AppDataSource.manager);
         }
