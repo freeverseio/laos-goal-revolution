@@ -50,10 +50,7 @@ export class TransferQuery {
           stopLoop = true;
         }
 
-        // Filter out transfers where `from` and `to` are equal and `from` is not the zero address
-        transfers = transfers.filter(transfer => transfer.from !== transfer.to && transfer.from !== "0x0000000000000000000000000000000000000000");
-
-        // Iterate over the filtered transfers
+        // Iterate over all transfers
         for (const transfer of transfers) {
           // If the current block number is equal to the targetBlockNumber, stop querying but do not add it
           if (transfer.blockNumber === targetBlockNumber) {

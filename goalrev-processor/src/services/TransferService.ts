@@ -1,5 +1,5 @@
 import { AppDataSource } from "../db/AppDataSource";
-import { PlayerPartialUpdate, Team } from "../db/entity";
+import { BroadcastStatus, PlayerPartialUpdate, Team } from "../db/entity";
 import { PlayerRepository } from "../db/repository/PlayerRepository";
 import { TeamRepository } from "../db/repository/TeamRepository";
 import { TransferRepository } from "../db/repository/TransferRepository";
@@ -32,6 +32,24 @@ export class TransferService {
     return true;
   }
 
+  private isMintEventOrSelfTransfer(transfer: Transfer): boolean {
+    return transfer.from === transfer.to || transfer.from === "0x0000000000000000000000000000000000000000";
+  }
+
+  private async setBroadcastStatusToSuccess(transfers: Transfer[]) {
+    try {
+      const entityManager = AppDataSource.manager;
+      const tokenIdArray = transfers.map(transfer => transfer.tokenId);
+      const batchSize = process.env.BROADCAST_BATCH_SIZE_DB ? parseInt(process.env.BROADCAST_BATCH_SIZE_DB) : 200;
+      for (let i = 0; i < tokenIdArray.length; i += batchSize) {
+        const batch = tokenIdArray.slice(i, i + batchSize);
+        await this.playerRepository.updateBroadcastStatus(batch, BroadcastStatus.SUCCESS, entityManager);
+      }
+    } catch (error) {
+      console.error(`Error in Sync transfers updating broadcast status to success`, error);
+    }
+  }
+
   async processTransfers(transfers: Transfer[]): Promise<void> {
     try {
       let lastTransfer: Transfer | null = null;
@@ -40,18 +58,25 @@ export class TransferService {
       const blockMargin = process.env.BLOCK_MARGIN ? parseInt(process.env.BLOCK_MARGIN) : 100;
       console.log('RPC latest block number', latestBlockNumber);
 
-      const tokenIds = transfers.map(transfer => transfer.tokenId);
+      // Set broadcast_status=success for all transfers events of goal rev players
+      // The broadcast of a previsouly transferred player would revert otherwise
+      // If a player has been traded without broadcasting, it will appear in marketplaces
+      // without the need to broadcast.
+      await this.setBroadcastStatusToSuccess(transfers);
+
+      const realPlayerTransfers = transfers.filter(transfer => !this.isMintEventOrSelfTransfer(transfer));
+      const tokenIds = realPlayerTransfers.map(transfer => transfer.tokenId);
       const players = await this.playerRepository.findPlayersByTokenIds(tokenIds);
-      
-      if (transfers.length > 0 && !players || players.length === 0) {
+
+      if (realPlayerTransfers.length > 0 && !players || players.length === 0) {
         console.log('Players not found for tokenIds: ' + tokenIds.join(', '));
-        lastTransfer = transfers[transfers.length - 1];
+        lastTransfer = realPlayerTransfers[realPlayerTransfers.length - 1];
         if (lastTransfer && lastTransfer.blockNumber < latestBlockNumber - blockMargin) {
           await this.transferRepository.updateLatestBlockNumber(lastTransfer!.blockNumber, lastTransfer!.txHash, new Date(lastTransfer!.timestamp), AppDataSource.manager);
         }
         return;
       }
-      
+
       if (tokenIds.length > players.length) {
         // TODO: handle this case
         // get asset from indexer by tokenId
@@ -74,11 +99,11 @@ export class TransferService {
           if (transfer.blockNumber < latestBlockNumber - blockMargin) {
             const team = teamMap.get(transfer.to.toLowerCase());
             if (team) {
-              if (team.owner !== transfer.to) {                
+              if (team.owner !== transfer.to) {
                 playerPartialUpdate = {
-                  team_id: team.team_id,                
+                  team_id: team.team_id,
                   shirt_number: await this.getFreeShirtNumber(team.team_id)
-                };              
+                };
               }
               lastTransfer = transfer;
             } else {
@@ -87,7 +112,7 @@ export class TransferService {
               const defaultTeam = await this.teamRepository.findById(process.env.DEFAULT_TEAM_ID!);
               if (defaultTeam) {
                 playerPartialUpdate = {
-                  team_id: defaultTeam.team_id,                
+                  team_id: defaultTeam.team_id,
                   shirt_number: await this.getFreeShirtNumber(defaultTeam.team_id)
                 };
                 lastTransfer = transfer;
@@ -110,22 +135,22 @@ export class TransferService {
             const transactionalEntityManager = queryRunner.manager;
             await this.playerRepository.updatePartial(playerId, playerPartialUpdate, transactionalEntityManager);
             await this.transferRepository.updateLatestBlockNumber(
-                lastTransfer!.blockNumber,
-                lastTransfer!.txHash,
-                new Date(lastTransfer!.timestamp),
-                transactionalEntityManager
+              lastTransfer!.blockNumber,
+              lastTransfer!.txHash,
+              new Date(lastTransfer!.timestamp),
+              transactionalEntityManager
             );
             await queryRunner.commitTransaction();
           } catch (error) {
-              console.error('Error caught during transaction:', error);
-              await queryRunner.rollbackTransaction();
+            console.error('Error caught during transaction:', error);
+            await queryRunner.rollbackTransaction();
 
           } finally {
-              if (!queryRunner.isReleased) {
-                  await queryRunner.release();
-              } else {
-                  console.warn('QueryRunner already released before explicit release.');
-              }
+            if (!queryRunner.isReleased) {
+              await queryRunner.release();
+            } else {
+              console.warn('QueryRunner already released before explicit release.');
+            }
           }
         }
       }
@@ -133,7 +158,7 @@ export class TransferService {
       console.error('Error processing transfers:', error);
       throw error;
     }
-    
+
   }
 
   private async getTeamsByOwners(owners: string[]): Promise<Team[]> {
@@ -143,7 +168,7 @@ export class TransferService {
 
   private async getFreeShirtNumber(teamId: string): Promise<number> {
     const shirtNumbers = await this.teamRepository.getShirtNumbers(teamId);
-    for (let i = PLAYERS_PER_TEAM_MAX-1; i >= 0; i--) {
+    for (let i = PLAYERS_PER_TEAM_MAX - 1; i >= 0; i--) {
       if (!shirtNumbers.includes(i)) {
         return i;
       }
