@@ -84,13 +84,13 @@ export class TransferService {
         // update player tokenId
       }
 
-      const uniqueToAddresses = [...new Set(transfers.map(transfer => transfer.to))];
-      uniqueToAddresses.push(...new Set(transfers.map(transfer => transfer.from)));
+      const uniqueToAddresses = [...new Set(realPlayerTransfers.map(transfer => transfer.to))];
+      uniqueToAddresses.push(...new Set(realPlayerTransfers.map(transfer => transfer.from)));
       const uniqueToAddressesArray = uniqueToAddresses as string[];
       const teams = await this.getTeamsByOwners(uniqueToAddressesArray);
       const teamMap = new Map(teams.map(team => [team.owner.toLowerCase(), team]));
       // Update the players based on the transfer
-      for (const transfer of transfers) {
+      for (const transfer of realPlayerTransfers) {
         const player = players.find(p => p.token_id === transfer.tokenId);
         const playerId = player?.player_id;
         let playerPartialUpdate: PlayerPartialUpdate = {};
