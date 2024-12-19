@@ -59,7 +59,9 @@ export class TransferService {
       console.log('RPC latest block number', latestBlockNumber);
 
       // Set broadcast_status=success for all transfers events of goal rev players
-      // (because those players should not be called later with braodcastMint)
+      // The broadcast of a previsouly transferred player would revert otherwise
+      // If a player has been traded without broadcasting, it will appear in marketplaces
+      // without the need to broadcast.
       await this.setBroadcastStatusToSuccess(transfers);
 
       const realPlayerTransfers = transfers.filter(transfer => !this.isMintEventOrSelfTransfer(transfer));
