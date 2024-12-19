@@ -33,7 +33,7 @@ export class TransferService {
   }
 
   private isMintEvent(transfer: Transfer): boolean {
-    return transfer.from !== transfer.to && transfer.from !== "0x0000000000000000000000000000000000000000";
+    return transfer.from === transfer.to || transfer.from === "0x0000000000000000000000000000000000000000";
   }
   
   private async setBroadcastStatusToSuccess(tokenIds: string[]) {
