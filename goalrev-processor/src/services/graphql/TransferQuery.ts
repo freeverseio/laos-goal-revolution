@@ -50,7 +50,7 @@ export class TransferQuery {
           stopLoop = true;
         }
 
-        // Iterate over the filtered transfers
+        // Iterate over all transfers
         for (const transfer of transfers) {
           // If the current block number is equal to the targetBlockNumber, stop querying but do not add it
           if (transfer.blockNumber === targetBlockNumber) {
