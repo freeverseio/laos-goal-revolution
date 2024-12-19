@@ -39,7 +39,7 @@ export class TransferService {
   private async setBroadcastStatusToSuccess(transfers: Transfer[]) {
     try {
       const entityManager = AppDataSource.manager;
-      const tokenIdArray = Array.from(transfers.map(transfer => transfer.tokenId));
+      const tokenIdArray = transfers.map(transfer => transfer.tokenId);
       const batchSize = process.env.BROADCAST_BATCH_SIZE_DB ? parseInt(process.env.BROADCAST_BATCH_SIZE_DB) : 200;
       for (let i = 0; i < tokenIdArray.length; i += batchSize) {
         const batch = tokenIdArray.slice(i, i + batchSize);
