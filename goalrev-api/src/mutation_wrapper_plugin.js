@@ -1,6 +1,7 @@
 const { makeWrapResolversPlugin } = require("graphile-utils");
 const { checkTrainingGroup, checkTrainingSpecialPlayer } = require('./training');
 const { checkTactics2ndHalf, checkTacticsGeneric } = require("./tactics");
+const { completePlayerTransitWrapper } = require("./transfer");
 
 const updateTrainingByTeamIdWrapper = propName => {
     return async (resolve, source, args, context, resolveInfo) => {
@@ -210,6 +211,7 @@ module.exports = makeWrapResolversPlugin({
         transferFirstBotToAddr: transferFirstBotToAddrWrapper(),
         setMessage: setMessageWrapper(),
         setMessageRead: setMessageReadWrapper(),
+        completePlayerTransit: completePlayerTransitWrapper(),
     },
     Player: {
         playerHistoryGraphByPlayerId: playerHistoryGraphByPlayerIdResolver(),
