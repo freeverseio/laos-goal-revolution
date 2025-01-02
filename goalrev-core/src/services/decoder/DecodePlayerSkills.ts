@@ -1,4 +1,5 @@
 import { PlayerSkill } from "../../types";
+import { SK_DEF, SK_END, SK_PAS, SK_SHO, SK_SPE } from "../../utils/constants";
 
 export default class DecodePlayerSkills {
   static getSkill(encodedSkills: string, skillIdx: number): number {
@@ -9,11 +10,11 @@ export default class DecodePlayerSkills {
   static decode(encodedSkills: string): PlayerSkill {
     return {
       playerId: DecodePlayerSkills.getPlayerIdFromSkills(encodedSkills).toString(),
-      defence: DecodePlayerSkills.getSkill(encodedSkills, 0).toString(),
-      speed: DecodePlayerSkills.getSkill(encodedSkills, 1).toString(),
-      pass: DecodePlayerSkills.getSkill(encodedSkills, 2).toString(),
-      shoot: DecodePlayerSkills.getSkill(encodedSkills, 3).toString(),
-      endurance: DecodePlayerSkills.getSkill(encodedSkills, 4).toString(),
+      defence: DecodePlayerSkills.getSkill(encodedSkills, SK_DEF).toString(),
+      speed: DecodePlayerSkills.getSkill(encodedSkills, SK_SPE).toString(),
+      pass: DecodePlayerSkills.getSkill(encodedSkills, SK_PAS).toString(),
+      shoot: DecodePlayerSkills.getSkill(encodedSkills, SK_SHO).toString(),
+      endurance: DecodePlayerSkills.getSkill(encodedSkills, SK_END).toString(),
       encodedSkills: encodedSkills.toString(),
     };
   }
