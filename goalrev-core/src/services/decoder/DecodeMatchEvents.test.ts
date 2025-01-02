@@ -88,7 +88,6 @@ describe('DecodeMatchEvents', () => {
   // New tests to handle addCardsAndInjuries cases
   it('should handle yellow cards correctly', () => {
     const matchEvents = decodeMatchEvents.decode(false);
-    console.log("Generated Events:", matchEvents); // Add this to inspect generated events
 
     const yellowCardEvents = matchEvents.filter(event => event.type === MatchEventType.YELLOW_CARD);
     expect(yellowCardEvents.length).toBeGreaterThan(0); // Check if yellow cards are generated

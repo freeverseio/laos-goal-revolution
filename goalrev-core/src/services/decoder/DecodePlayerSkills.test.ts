@@ -21,10 +21,10 @@ describe('DecodePlayerSkills', () => {
     const encodedSkills = "13113566945151332165817391379934887555794724631714026444777635841";
     const expected: PlayerSkill = {
       playerId: "8796093022207",
-      defence: "49153",
+      shoot: "49153",
       speed: "65523",
       pass: "65532",
-      shoot: "65480",
+      defence: "65480",
       endurance: "65080",
       encodedSkills,
     };
