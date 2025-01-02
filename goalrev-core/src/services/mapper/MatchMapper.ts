@@ -1,4 +1,5 @@
 import { MatchLog, Play1stHalfAndEvolveResult, PlayerSkill, PlayOutput } from "../../types";
+import { SK_DEF, SK_END, SK_PAS, SK_SHO, SK_SPE } from "../../utils/constants";
 import { DecodeMatchLog } from "../decoder/DecodeMatchLog";
 import DecodePlayerSkills from "../decoder/DecodePlayerSkills";
 
@@ -18,19 +19,19 @@ export class MatchMapper {
     try {
       return [encodedSkills[0].map((skill: any) => ({
         playerId: DecodePlayerSkills.getPlayerIdFromSkills(skill).toString(),
-        defence: DecodePlayerSkills.getSkill(skill, 0).toString(),
-        speed: DecodePlayerSkills.getSkill(skill, 1).toString(),
-        pass: DecodePlayerSkills.getSkill(skill, 2).toString(),
-        shoot: DecodePlayerSkills.getSkill(skill, 3).toString(),
-        endurance: DecodePlayerSkills.getSkill(skill, 4).toString(),
+        defence: DecodePlayerSkills.getSkill(skill, SK_DEF).toString(),
+        speed: DecodePlayerSkills.getSkill(skill, SK_SPE).toString(),
+        pass: DecodePlayerSkills.getSkill(skill, SK_PAS).toString(),
+        shoot: DecodePlayerSkills.getSkill(skill, SK_SHO).toString(),
+        endurance: DecodePlayerSkills.getSkill(skill, SK_END).toString(),
         encodedSkills: `${skill}`
       })), encodedSkills[1].map((skill: any) => ({
         playerId: DecodePlayerSkills.getPlayerIdFromSkills(skill).toString(),
-        defence: DecodePlayerSkills.getSkill(skill, 0).toString(),
-        speed: DecodePlayerSkills.getSkill(skill, 1).toString(),
-        pass: DecodePlayerSkills.getSkill(skill, 2).toString(),
-        shoot: DecodePlayerSkills.getSkill(skill, 3).toString(),
-        endurance: DecodePlayerSkills.getSkill(skill, 4).toString(),
+        defence: DecodePlayerSkills.getSkill(skill, SK_DEF).toString(),
+        speed: DecodePlayerSkills.getSkill(skill, SK_SPE).toString(),
+        pass: DecodePlayerSkills.getSkill(skill, SK_PAS).toString(),
+        shoot: DecodePlayerSkills.getSkill(skill, SK_SHO).toString(),
+        endurance: DecodePlayerSkills.getSkill(skill, SK_END).toString(),
         encodedSkills: `${skill}`
       }))];
     } catch (error) {
