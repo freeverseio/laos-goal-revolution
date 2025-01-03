@@ -14,6 +14,7 @@ module.exports = makeExtendSchemaPlugin(build => {
         setMessageRead(id: ID!): Boolean
         setTeamName(input: SetTeamNameInput!): ID!
         setTeamManagerName(input: SetTeamManagerNameInput!): ID!
+        completePlayerTransit(input: CompletePlayerTransitInput!): ID!
       }
       
       extend type Query {
@@ -72,6 +73,10 @@ module.exports = makeExtendSchemaPlugin(build => {
       
       extend type Player {
         playerHistoryGraphByPlayerId(first: Int!): PlayerHistoryGraph
+      }
+
+      input CompletePlayerTransitInput {
+        playerId: ID!
       }
       `,
       
