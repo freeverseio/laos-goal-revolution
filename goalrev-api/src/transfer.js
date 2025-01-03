@@ -21,7 +21,7 @@ const getFreeShirtNumber = async ({pgClient, teamId}) => {
       }
     }
   } else {
-    console.info("Not possible retrie available shirt numbers for teamId: ", teamId);
+    console.info("Not possible to retrieve shirt numbers for teamId: ", teamId);
   }
   return IN_TRANSIT_SHIRTNUM;
 };
