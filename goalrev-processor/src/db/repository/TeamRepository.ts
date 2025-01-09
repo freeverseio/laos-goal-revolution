@@ -208,6 +208,7 @@ export class TeamRepository {
         countryIdx: countryIdx,
         timezoneIdx: timezoneIdx,
       })
+      .orderBy("team.is_zombie", "ASC") // exclude zombies
       .orderBy("CAST(team.ranking_points_real AS BIGINT)", "DESC")
       .getMany();
     return teams;
