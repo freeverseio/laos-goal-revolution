@@ -1,6 +1,7 @@
 import axios from "axios";
 import { AppDataSource } from "../db/AppDataSource";
 
+import Big from 'big.js';
 import { EntityManager } from "typeorm";
 import { Country } from "../db/entity/Country";
 import { Verse } from "../db/entity/Verse";
@@ -13,13 +14,10 @@ import { VerseRepository } from "../db/repository/VerseRepository";
 import { CreateTeamCoreInput, LeagueGroup, Matchday, PlayerNamesMap, Schedule, TeamId } from "../types";
 import { RankingPointsInput } from "../types/rest/input/rankingPoints";
 import { CreateTeamResponse } from "../types/rest/output/team";
-import { getMatch1stHalfUTC } from "../utils/calendarUtils";
-import { MATCHDAYS_PER_ROUND } from "../utils/constants/constants";
+import { generatePlayerFullName, generateTeamName, loadNamesDatabase } from "../utils/nameUtils";
 import { CalendarService } from "./CalendarService";
 import { CreateTeamResponseToEntityMapper } from "./mapper/CreateTeamResponseToEntityMapper";
 import { MatchMapper } from "./mapper/MatchMapper";
-import { generatePlayerFullName, generateTeamName, loadNamesDatabase } from "../utils/nameUtils";
-import Big from 'big.js';
 
 export class LeagueService {
   private teamRepository: TeamRepository;
@@ -87,6 +85,10 @@ export class LeagueService {
       console.log(" -Leagues not finished for timezone: ", timezoneIdx);
       return [];
     }
+    // set teams to zombies
+    const numDays = process.env.NUM_DAYS_TO_SET_TEAMS_TO_ZOMBIES ? parseInt(process.env.NUM_DAYS_TO_SET_TEAMS_TO_ZOMBIES) : 5;
+    await this.teamRepository.setTeamsToZombies(timezoneIdx, numDays);
+    
     const entityManager = AppDataSource.manager;
     const verses = await this.calendarService.getVerses(entityManager);
     const leagueGroups = await this.getNewLeaguesForTimezone(timezoneIdx);

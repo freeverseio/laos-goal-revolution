@@ -32,25 +32,25 @@ export class TeamRepository {
     transactionalEntityManager: EntityManager
   ): Promise<void> {
     if (partialRankingPoints.length === 0) return;
-  
+
     const teamRepository = transactionalEntityManager.getRepository(Team);
-    
+
     // Create the CASE expressions for each column
     const rankingPointsCases = partialRankingPoints
       .map(rp => `WHEN team_id = '${rp.team_id}' THEN '${rp.ranking_points}'`)
       .join(' ');
-  
+
     const rankingPointsRealCases = partialRankingPoints
       .map(rp => `WHEN team_id = '${rp.team_id}' THEN '${rp.ranking_points_real}'`)
       .join(' ');
-  
+
     const prevPerfPointsCases = partialRankingPoints
       .map(rp => `WHEN team_id = '${rp.team_id}' THEN '${rp.prev_perf_points}'`)
       .join(' ');
-  
+
     // Get all team IDs
     const teamIds = partialRankingPoints.map(rp => rp.team_id);
-  
+
     // Create and execute a single update query
     await teamRepository
       .createQueryBuilder()
@@ -70,19 +70,19 @@ export class TeamRepository {
   ): Promise<void> {
     const teamRepository = transactionalEntityManager.getRepository(Team);
     const playerRepository = transactionalEntityManager.getRepository(Player);
-  
+
     // Create the CASE expressions for the team updates
     const teamUpdateCases = teams
       .map((team) => `WHEN team_id = '${team.team_id}' THEN '${team.mint_status}'`)
       .join(' ');
-  
+
     const teamUpdateDateCases = teams
       .map((team) => `WHEN team_id = '${team.team_id}' THEN '${team.mint_updated_at!.toISOString()}'`)
       .join(' ');
-  
+
     // Get all team IDs
     const teamIds = teams.map((team) => team.team_id);
-  
+
     // Create and execute a single update query for the teams
     await teamRepository
       .createQueryBuilder()
@@ -93,7 +93,7 @@ export class TeamRepository {
       })
       .where("team_id IN (:...teamIds)", { teamIds })
       .execute();
-  
+
     // Create the CASE expressions for the player updates
     const playerTokenUpdateCases = teams
       .filter((team) => team.players)
@@ -101,17 +101,17 @@ export class TeamRepository {
         team.players!.map((player) => `WHEN player_id = '${player.player_id}' THEN '${player.token_id}'`)
       )
       .join(' ');
-  
+
     const playerBroadcastStatusCases = teams
       .filter((team) => team.players)
       .flatMap((team) =>
         team.players!.map((player) => `WHEN player_id = '${player.player_id}' THEN '${player.broadcast_status}'`)
       )
       .join(' ');
-  
+
     // Get all player IDs
     const playerIds = teams.flatMap((team) => team.players?.map((player) => player.player_id) || []);
-  
+
     // Create and execute a single update query for the players
     await playerRepository
       .createQueryBuilder()
@@ -123,7 +123,7 @@ export class TeamRepository {
       .where("player_id IN (:...playerIds)", { playerIds })
       .execute();
   }
-  
+
   async bulkCreate(teams: Team[], transactionalEntityManager: EntityManager): Promise<void> {
     const teamRepository = transactionalEntityManager.getRepository(Team);
     await teamRepository.save(teams);
@@ -131,10 +131,10 @@ export class TeamRepository {
 
   async findPendingTeams(limit: number = 5): Promise<Team[]> {
     const timeLimitAgo = new Date(Date.now() - 30 * 60 * 1000);
-  
+
     return await AppDataSource.transaction(async (transactionalEntityManager: EntityManager) => {
       const teamRepository = transactionalEntityManager.getRepository(Team);
-  
+
       // Step 1: Atomically update teams and retrieve updated rows
       const updatedTeams = await teamRepository.query(
         `
@@ -161,26 +161,26 @@ export class TeamRepository {
           new Date(Date.now())
         ],
       );
-  
+
       if (updatedTeams.length === 0 || updatedTeams[0].length === 0) {
         return [];
       }
-  
+
       const teamIds = updatedTeams[0].map((team: any) => team.team_id);
-  
+
       // Step 2: Fetch teams with their relations
       const teamsWithRelations = await teamRepository.find({
         where: { team_id: In(teamIds) },
         relations: ["players"],
       });
-  
+
       // Step 3: Update in-memory team objects to reflect new status
       const now = new Date();
       teamsWithRelations.forEach((team) => {
         team.mint_status = MintStatus.MINTING;
         team.mint_updated_at = now;
       });
-  
+
       return teamsWithRelations;
     });
   }
@@ -208,8 +208,8 @@ export class TeamRepository {
         countryIdx: countryIdx,
         timezoneIdx: timezoneIdx,
       })
-      .orderBy("team.is_zombie", "ASC") // exclude zombies
-      .orderBy("CAST(team.ranking_points_real AS BIGINT)", "DESC")
+      .orderBy("team.is_zombie", "ASC") // Zombies appear last
+      .addOrderBy("CAST(team.ranking_points_real AS BIGINT)", "DESC") // Sort by ranking points
       .getMany();
     return teams;
   }
@@ -301,10 +301,38 @@ export class TeamRepository {
     const teams = await teamRepository.find({
       where: {
         team_id: In(teamIds),
-      },      
+      },
     });
 
     return teams;
   }
+
+
+  async setTeamsToZombies(timezoneIdx: number, numDays: number = 5): Promise<void> {
+    const entityManager = AppDataSource.manager;
+    await entityManager.query(
+      `
+      UPDATE teams
+      SET is_zombie = true
+      WHERE teams."owner" != '0x0000000000000000000000000000000000000000'
+        AND teams.timezone_idx = $1
+        AND (
+          EXISTS (
+            SELECT 1
+            FROM team_props tp
+            WHERE tp.team_id = teams.team_id
+              AND (
+                (tp.last_time_logged_in IS NOT NULL AND tp.last_time_logged_in <= NOW() - INTERVAL '${numDays} days')
+                OR (tp.last_time_logged_in IS NULL AND teams.mint_updated_at <= NOW() - INTERVAL '${numDays} days')
+              )
+          )
+          OR (
+            teams.team_id NOT IN (SELECT team_id FROM team_props)
+            AND teams.mint_updated_at <= NOW() - INTERVAL '${numDays} days'
+          )
+        );
+      `, [timezoneIdx]);
+  }
+
 
 }
