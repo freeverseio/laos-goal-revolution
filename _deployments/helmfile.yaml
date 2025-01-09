@@ -54,6 +54,7 @@ helmfiles:
       - broadcastBatchSizeDb: {{ .Values.broadcastBatchSizeDb | quote  }}
       - evolveBatchSizeOnChain: {{ .Values.evolveBatchSizeOnChain | quote  }}
       - evolveBatchSizeDb: {{ .Values.evolveBatchSizeDb | quote  }}
+      - numDaysToSetTeamsToZombies: {{ .Values.numDaysToSetTeamsToZombies | quote  }}
   - path: "charts/goalrev-core/helmfile.yaml"
     values:
       - namespace: {{ .Values.namespace }}

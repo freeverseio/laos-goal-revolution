@@ -84,6 +84,8 @@ spec:
             value: {{ .Values.evolveBatchSizeOnChain | quote }}
           - name: EVOLVE_BATCH_SIZE_DB
             value: {{ .Values.evolveBatchSizeDb | quote }}
+          - name: NUM_DAYS_TO_SET_TEAMS_TO_ZOMBIES
+            value: {{ .Values.numDaysToSetTeamsToZombies | quote }}
         ports:
         - containerPort: {{ .Values.processorPort }}
       volumes:
