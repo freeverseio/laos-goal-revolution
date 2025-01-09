@@ -13,3 +13,4 @@ export * from "./Training";
 export * from "./Verse";
 export * from "./MatchHistory";
 export * from "./LastTransfer";
+export * from "./TeamProps";

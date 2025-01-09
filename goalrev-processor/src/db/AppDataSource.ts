@@ -1,6 +1,6 @@
 import { DataSource } from "typeorm";
 import {
-  Match, MatchEvent, Country, Timezone, League, Team, Player, Tactics, Training, Verse, MatchHistory,
+  Match, MatchEvent, Country, Timezone, League, Team, TeamProps, Player, Tactics, Training, Verse, MatchHistory,
   PlayerHistory, TacticsHistory, TeamHistory, LastTransfer
 } from "./entity";
 import * as dotenv from "dotenv";
@@ -31,6 +31,7 @@ export const AppDataSource = new DataSource({
     League,
     Team,
     TeamHistory,
+    TeamProps,
     Match,
     MatchHistory,
     Player,
