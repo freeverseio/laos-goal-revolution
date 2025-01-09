@@ -122,7 +122,7 @@ export class PlayerService {
       chainId: process.env.CHAIN_ID!,
       ownershipContractAddress: process.env.CONTRACT_ADDRESS!,
       tokenIds: tokenIds,
-      type: "MINT",
+      type: "SELF",
     };
 
     try {
