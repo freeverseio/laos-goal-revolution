@@ -56,11 +56,7 @@ export class PlayerMapper {
               value: player.country_of_birth
             },
 
-            {
-              trait_type: "Tiredness",
-              value: player.tiredness.toString()
-            },
-
+           
             {
               trait_type: "Age",
               value: SkillsUtils.getAge(player.encoded_skills).toString()
