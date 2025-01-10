@@ -27,3 +27,4 @@ releases:
       - broadcastBatchSizeDb: {{ .Values.broadcastBatchSizeDb | quote }}
       - evolveBatchSizeOnChain: {{ .Values.evolveBatchSizeOnChain | quote }}
       - evolveBatchSizeDb: {{ .Values.evolveBatchSizeDb | quote }}
+      - numDaysToSetTeamsToZombies: {{ .Values.numDaysToSetTeamsToZombies | quote }}
