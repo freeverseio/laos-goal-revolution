@@ -44,6 +44,10 @@ export class PlayerMapper {
               value: player.preferred_position
             },
             {
+              trait_type: "Level",
+              value: PlayerMapper.calculateLevel(player).toString()
+            },
+            {
               trait_type: "Potential",
               value: player.potential.toString()
             },
@@ -52,10 +56,7 @@ export class PlayerMapper {
               value: player.country_of_birth
             },
 
-            {
-              trait_type: "Tiredness",
-              value: player.tiredness.toString()
-            },
+           
             {
               trait_type: "Age",
               value: SkillsUtils.getAge(player.encoded_skills).toString()
@@ -65,6 +66,14 @@ export class PlayerMapper {
         }))
       }
     };
+  }
+
+  static calculateLevel(player: Player): number {
+    if(!player) {
+      return 0;
+    }
+    const level = Math.ceil(player.defence /1000) + Math.ceil(player.speed /1000) + Math.ceil(player.pass /1000) + Math.ceil(player.shoot /1000) + Math.ceil(player.endurance /1000);
+    return level;
   }
 
 }
