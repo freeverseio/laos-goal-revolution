@@ -91,11 +91,14 @@ function initializeSchedulers() {
 
       // Evolve Players Pending Scheduler
       const playerService = PlayerFactory.createPlayerService();
-      const resultEvolve = await playerService.evolvePlayersPending();
+      const resultEvolve = await playerService.evolvePlayersPending(() => {
+        locks["mintPendingTeamsAndEvolvePlayers"].lastRunTime = new Date();
+        console.log('[evolvePlayersPending] mintPendingTeamsAndEvolvePlayers.updateLockTime: ', new Date().toISOString());
+      });
       console.log(`[evolvePlayersPending] Result: ${resultEvolve}`);
     }));
   }
-
+  
   // Broadcast Players Pending Scheduler
   const broadcastPlayersPendingScheduler = process.env.BROADCAST_PLAYERS_PENDING_SCHEDULER;
   if (broadcastPlayersPendingScheduler && broadcastPlayersPendingScheduler !== "*/0 * * * * *" && broadcastPlayersPendingScheduler !== "") {

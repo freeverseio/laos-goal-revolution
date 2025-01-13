@@ -159,7 +159,7 @@ export class PlayerService {
     });
   }
 
-  async evolvePlayersPending(): Promise<number> {
+  async evolvePlayersPending(updateLockTime: () => void): Promise<number> {
     const EVOLVE_BATCH_SIZE_ON_CHAIN = process.env.EVOLVE_BATCH_SIZE_ON_CHAIN ? Number(process.env.EVOLVE_BATCH_SIZE_ON_CHAIN) : 500;
     const EVOLVE_BATCH_SIZE_DB = process.env.EVOLVE_BATCH_SIZE_DB ? Number(process.env.EVOLVE_BATCH_SIZE_DB) : 200;
 
@@ -170,9 +170,10 @@ export class PlayerService {
 
     // Batch processing this.EVOLVE_BATCH_SIZE_ON_CHAIN tokenIds at a time
     for (let i = 0; i < playersPendingToEvolve.length; i += EVOLVE_BATCH_SIZE_ON_CHAIN) {
+      updateLockTime(); // keep it alive
 
       const batchPlayers = playersPendingToEvolve.slice(i, i + EVOLVE_BATCH_SIZE_ON_CHAIN);
-      console.log(`Evolving ${batchPlayers.length} Players ${i + batchPlayers.length}/${playersPendingToEvolve.length}.`);
+      console.log(`[evolvePlayersPending] Evolving ${batchPlayers.length} Players ${i + batchPlayers.length}/${playersPendingToEvolve.length}.`);
       const success = await this.attemptEvolveBatchPlayers(batchPlayers);
       const entityManager = AppDataSource.manager;
 
@@ -192,8 +193,8 @@ export class PlayerService {
               }
 
             } catch (error) {
-              console.error(`Error updating evolved_status in DB in batch starting at index ${j}:`, error);
-              console.error(`First tokenId of this DB batch: ${statusUpdateBatch[0]}`);
+              console.error(`[evolvePlayersPending] Error updating evolved_status in DB in batch starting at index ${j}:`, error);
+              console.error(`[evolvePlayersPending] First tokenId of this DB batch: ${statusUpdateBatch[0]}`);
               errorUpdatingDB = true;
               break;
             }
@@ -215,8 +216,8 @@ export class PlayerService {
               }
 
             } catch (error) {
-              console.error(`Error updating evolved_status in DB in batch starting at index ${j}:`, error);
-              console.error(`First tokenId of this DB batch: ${statusUpdateBatch[0]}`);
+              console.error(`[evolvePlayersPending] Error updating evolved_status in DB in batch starting at index ${j}:`, error);
+              console.error(`[evolvePlayersPending] First tokenId of this DB batch: ${statusUpdateBatch[0]}`);
               errorUpdatingDB = true;
               break;
             }
@@ -234,7 +235,7 @@ export class PlayerService {
     }
 
     if (evolvedPlayers !== playersPendingToEvolve.length) {
-      console.error(`Fail to evolve all Players. Evolving ${evolvedPlayers}/${playersPendingToEvolve.length}`);
+      console.error(`[evolvePlayersPending] Fail to evolve all Players. Evolving ${evolvedPlayers}/${playersPendingToEvolve.length}`);
     }
 
     return evolvedPlayers;
@@ -257,12 +258,12 @@ export class PlayerService {
         fetchPolicy: 'no-cache',
       });
       if (result?.errors) {
-        throw new Error(`Failed to EvolveBatchPlayers: ${result.errors[0].message}`);
+        throw new Error(`[evolvePlayersPending] Failed to EvolveBatchPlayers: ${result.errors[0].message}`);
       }
       if (result?.data?.evolveBatch?.success === true) {
         return true;
       }
-      throw new Error(`Failed to evolve Players: success !== true`);
+      throw new Error(`[evolvePlayersPending] Failed to evolve Players: success !== true`);
 
     } catch (error) {
       console.error(error);
