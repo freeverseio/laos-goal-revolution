@@ -119,17 +119,17 @@ export class TeamService {
     return true;
   }
 
-  async mintPendingTeams(): Promise<boolean> {
+  async mintPendingTeams(): Promise<number> {
     const limit = process.env.MINT_PENDING_TEAMS_LIMIT ? parseInt(process.env.MINT_PENDING_TEAMS_LIMIT!) : 5;
     const teams = await this.teamRepository.findPendingTeams(limit);
     if (teams.length === 0) {
-      return true;
+      return 0;
     }
     return this.mintTeams(teams);
   }
 
 
-  async mintTeams(teams: Team[]): Promise<boolean> {
+  async mintTeams(teams: Team[]): Promise<number> {
     const mintTeamMutation = TeamMapper.mapTeamPlayersToMintMutation(teams);
     try {
       const result = await gqlClient.mutate({
@@ -155,7 +155,7 @@ export class TeamService {
       const entityManager = AppDataSource.manager;
       await this.teamRepository.bulkUpdateMint(updatedTeams, entityManager);
      
-      return true;
+      return result.data.mint.tokenIds.length;
     } catch (error) {
       this.teamRepository.setMintStatus(teams.map(team => team.team_id), MintStatus.FAILED);
       throw new Error(`Failed to mint team: ${error}`);

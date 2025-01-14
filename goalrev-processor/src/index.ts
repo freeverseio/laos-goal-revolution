@@ -71,6 +71,20 @@ async function playMatches() {
   console.log(`Time elapsed to play matches: ${Math.floor(seconds / 3600)}:${Math.floor((seconds % 3600) / 60).toString().padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')} (h:mm:ss)`);
 }
 
+async function mintPendingTeams() {
+  const teamService = TeamFactory.createTeamService();
+  const result = await teamService.mintPendingTeams();
+  console.log(`[mintPendingTeams] Result: ${result}`);
+  return result > 0;
+}
+
+async function evolvePlayersPending() {
+  const playerService = PlayerFactory.createPlayerService();
+  const resultEvolve = await playerService.evolvePlayersPending();
+  console.log(`[evolvePlayersPending] Result: ${resultEvolve}`);
+  return resultEvolve > 0;
+}
+
 /**
  * Initializes scheduled tasks based on environment variables
  */
@@ -85,17 +99,23 @@ function initializeSchedulers() {
   const mintPendingTeamsScheduler = process.env.MINT_PENDING_TEAMS_SCHEDULER;
   if (mintPendingTeamsScheduler && mintPendingTeamsScheduler !== "*/0 * * * * *" && mintPendingTeamsScheduler !== "") {
     cron.schedule(mintPendingTeamsScheduler, () => runWithLock("mintPendingTeamsAndEvolvePlayers", async () => {
-      const teamService = TeamFactory.createTeamService();
-      const result = await teamService.mintPendingTeams();
-      console.log(`[mintPendingTeams] Result: ${result}`);
+      while (true) {
+        const teamsMinted = await mintPendingTeams();
+        if (teamsMinted){
+          // Extend lock time and trigger mintPendingTeams again
+          locks["mintPendingTeamsAndEvolvePlayers"].lastRunTime = new Date();
 
-      // Evolve Players Pending Scheduler
-      const playerService = PlayerFactory.createPlayerService();
-      const resultEvolve = await playerService.evolvePlayersPending(() => {
-        locks["mintPendingTeamsAndEvolvePlayers"].lastRunTime = new Date();
-        console.log('[evolvePlayersPending] mintPendingTeamsAndEvolvePlayers.updateLockTime: ', new Date().toISOString());
-      });
-      console.log(`[evolvePlayersPending] Result: ${resultEvolve}`);
+        } else {
+          const playerEvolved = await evolvePlayersPending(); 
+          if (playerEvolved) {
+            // Extend lock time and trigger mintPendingTeams again
+            locks["mintPendingTeamsAndEvolvePlayers"].lastRunTime = new Date();
+
+          }else {
+            break; // No teams or players pending to process -> exit loop
+          }
+        }
+      }      
     }));
   }
   

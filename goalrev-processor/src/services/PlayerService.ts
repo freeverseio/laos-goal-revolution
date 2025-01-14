@@ -159,79 +159,62 @@ export class PlayerService {
     });
   }
 
-  async evolvePlayersPending(updateLockTime: () => void): Promise<number> {
+  async evolvePlayersPending(): Promise<number> {
     const EVOLVE_BATCH_SIZE_ON_CHAIN = process.env.EVOLVE_BATCH_SIZE_ON_CHAIN ? Number(process.env.EVOLVE_BATCH_SIZE_ON_CHAIN) : 500;
     const EVOLVE_BATCH_SIZE_DB = process.env.EVOLVE_BATCH_SIZE_DB ? Number(process.env.EVOLVE_BATCH_SIZE_DB) : 200;
 
     // Find players Pending or Failed
-    const playersPendingToEvolve = await this.playerRepository.findPlayersPendingToEvolve();
+    const playersPendingToEvolve = await this.playerRepository.findPlayersPendingToEvolve(EVOLVE_BATCH_SIZE_ON_CHAIN);
     let evolvedPlayers: number = 0;
-    let errorUpdatingDB = false;
 
     // Batch processing this.EVOLVE_BATCH_SIZE_ON_CHAIN tokenIds at a time
-    for (let i = 0; i < playersPendingToEvolve.length; i += EVOLVE_BATCH_SIZE_ON_CHAIN) {
-      updateLockTime(); // keep it alive
-
-      const batchPlayers = playersPendingToEvolve.slice(i, i + EVOLVE_BATCH_SIZE_ON_CHAIN);
-      console.log(`[evolvePlayersPending] Evolving ${batchPlayers.length} Players ${i + batchPlayers.length}/${playersPendingToEvolve.length}.`);
-      const success = await this.attemptEvolveBatchPlayers(batchPlayers);
-      const entityManager = AppDataSource.manager;
-
-      if (success) {
-        await entityManager.transaction(async (transactionManager: EntityManager) => {
-          for (let j = 0; j < batchPlayers.length; j += EVOLVE_BATCH_SIZE_DB) {
-            const statusUpdateBatch = batchPlayers.slice(j, j + EVOLVE_BATCH_SIZE_DB);
-            try {
-              const playerPartialUpdate: PlayerPartialUpdate = {
-                evolve_status: EvolveStatus.SUCCESS,
-                evolved_at: new Date()
-              };
-              const playerIds = statusUpdateBatch.map(player => player.player_id);             
-              if (playerIds.length > 0) {
-                await this.playerRepository.updatePartialPlayersBulk(playerIds, playerPartialUpdate, transactionManager);
-                evolvedPlayers += statusUpdateBatch.length;
-              }
-
-            } catch (error) {
-              console.error(`[evolvePlayersPending] Error updating evolved_status in DB in batch starting at index ${j}:`, error);
-              console.error(`[evolvePlayersPending] First tokenId of this DB batch: ${statusUpdateBatch[0]}`);
-              errorUpdatingDB = true;
-              break;
+    console.log(`[evolvePlayersPending] Evolving ${playersPendingToEvolve.length} Players ${playersPendingToEvolve.length}/${playersPendingToEvolve.length}.`);
+    const success = await this.attemptEvolveBatchPlayers(playersPendingToEvolve);
+    const entityManager = AppDataSource.manager;
+    if (success) {
+      await entityManager.transaction(async (transactionManager: EntityManager) => {
+        for (let j = 0; j < playersPendingToEvolve.length; j += EVOLVE_BATCH_SIZE_DB) {
+          const statusUpdateBatch = playersPendingToEvolve.slice(j, j + EVOLVE_BATCH_SIZE_DB);
+          try {
+            const playerPartialUpdate: PlayerPartialUpdate = {
+              evolve_status: EvolveStatus.SUCCESS,
+              evolved_at: new Date()
+            };
+            const playerIds = statusUpdateBatch.map(player => player.player_id);             
+            if (playerIds.length > 0) {
+              await this.playerRepository.updatePartialPlayersBulk(playerIds, playerPartialUpdate, transactionManager);
+              evolvedPlayers += statusUpdateBatch.length;
             }
+
+          } catch (error) {
+            console.error(`[evolvePlayersPending] Error updating evolved_status in DB in batch starting at index ${j}:`, error);
+            console.error(`[evolvePlayersPending] First tokenId of this DB batch: ${statusUpdateBatch[0]}`);
+            break;
           }
-        });
+        }
+      });
 
-      } else {
-        await entityManager.transaction(async (transactionManager: EntityManager) => {
-          for (let j = 0; j < batchPlayers.length; j += EVOLVE_BATCH_SIZE_DB) {
-            const statusUpdateBatch = batchPlayers.slice(j, j + EVOLVE_BATCH_SIZE_DB);
-            try {
-              const playerPartialUpdate: PlayerPartialUpdate = {
-                evolve_status: EvolveStatus.FAILED
-              };
-              const playerIds = statusUpdateBatch.map(player => player.player_id);
-              if (playerIds.length > 0) {
-                await this.playerRepository.updatePartialPlayersBulk(playerIds, playerPartialUpdate, transactionManager);
-                evolvedPlayers += statusUpdateBatch.length;              
-              }
-
-            } catch (error) {
-              console.error(`[evolvePlayersPending] Error updating evolved_status in DB in batch starting at index ${j}:`, error);
-              console.error(`[evolvePlayersPending] First tokenId of this DB batch: ${statusUpdateBatch[0]}`);
-              errorUpdatingDB = true;
-              break;
+    } else {
+      await entityManager.transaction(async (transactionManager: EntityManager) => {
+        for (let j = 0; j < playersPendingToEvolve.length; j += EVOLVE_BATCH_SIZE_DB) {
+          const statusUpdateBatch = playersPendingToEvolve.slice(j, j + EVOLVE_BATCH_SIZE_DB);
+          try {
+            const playerPartialUpdate: PlayerPartialUpdate = {
+              evolve_status: EvolveStatus.FAILED
+            };
+            const playerIds = statusUpdateBatch.map(player => player.player_id);
+            if (playerIds.length > 0) {
+              await this.playerRepository.updatePartialPlayersBulk(playerIds, playerPartialUpdate, transactionManager);
+              evolvedPlayers += statusUpdateBatch.length;              
             }
+
+          } catch (error) {
+            console.error(`[evolvePlayersPending] Error updating evolved_status in DB in batch starting at index ${j}:`, error);
+            console.error(`[evolvePlayersPending] First tokenId of this DB batch: ${statusUpdateBatch[0]}`);
+            break;
           }
-
-        });
-
-        // since it failed, break the loop because otherwise we may get a nonce error
-        break;
-      }
-
-      if (errorUpdatingDB) {
-        break;
-      }
+        }
+      });
     }
 
     if (evolvedPlayers !== playersPendingToEvolve.length) {

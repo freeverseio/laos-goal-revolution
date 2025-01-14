@@ -52,14 +52,15 @@ export class PlayerRepository {
     });
   }
 
-  async findPlayersPendingToEvolve(): Promise<Player[]> {
+  async findPlayersPendingToEvolve(limit: number = 500): Promise<Player[]> {
     const playerRepository = AppDataSource.getRepository(Player);
     return await playerRepository.find({
       where: {
         evolve_status: In([EvolveStatus.PENDING, EvolveStatus.FAILED]),
         token_id: Not(IsNull())
        },
-      order: { evolve_status: 'DESC' }
+      order: { evolve_status: 'DESC' },
+      take: limit
     });
   }
 
