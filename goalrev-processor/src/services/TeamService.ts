@@ -119,17 +119,17 @@ export class TeamService {
     return true;
   }
 
-  async mintPendingTeams(): Promise<boolean> {
-    const limit = process.env.MINT_PENDING_TEAMS_LIMIT ? parseInt(process.env.MINT_PENDING_TEAMS_LIMIT!) : 5;
-    const teams = await this.teamRepository.findPendingTeams(limit);
+  async mintTeamsPending(): Promise<number> {
+    const MINT_PENDING_TEAMS_LIMIT = process.env.MINT_PENDING_TEAMS_LIMIT ? parseInt(process.env.MINT_PENDING_TEAMS_LIMIT!) : 5;
+    const teams = await this.teamRepository.findPendingTeams(MINT_PENDING_TEAMS_LIMIT);
     if (teams.length === 0) {
-      return true;
+      return 0;
     }
     return this.mintTeams(teams);
   }
 
 
-  async mintTeams(teams: Team[]): Promise<boolean> {
+  async mintTeams(teams: Team[]): Promise<number> {
     const mintTeamMutation = TeamMapper.mapTeamPlayersToMintMutation(teams);
     try {
       const result = await gqlClient.mutate({
@@ -148,7 +148,7 @@ export class TeamService {
       // Handle GraphQL-level errors
       if (result.errors) {
         console.error(`Failed to mint team: ${result.errors[0].message}`);
-        return false;
+        return 0;
       }
     
       // Handle unexpected empty response
@@ -160,11 +160,9 @@ export class TeamService {
       const updatedTeams = TeamMapper.mapMintedPlayersToTeamPlayers(teams, result.data.mint.tokenIds);
       const entityManager = AppDataSource.manager;
       await this.teamRepository.bulkUpdateMint(updatedTeams, entityManager);
-    
-      return true;
-    
+     
+      return result.data.mint.tokenIds.length;
     } catch (error: any) {
-      // Handle other errors
       this.teamRepository.setMintStatus(teams.map(team => team.team_id), MintStatus.FAILED);
       throw new Error(`Failed to mint team: ${error.message}`);
     }

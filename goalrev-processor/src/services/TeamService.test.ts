@@ -208,7 +208,7 @@ describe('mintTeams', () => {
 
     const result = await teamService.mintTeams(mockTeams);
 
-    expect(result).toBe(true);
+    expect(result).toBe(2);
   });
 
   it('should handle GraphQL errors and NOT set mint status to FAILED', async () => {
@@ -224,7 +224,7 @@ describe('mintTeams', () => {
       MintStatus.FAILED
     );
     
-    expect(result).toBe(false);
+    expect(result).toBe(0);
   });
 
   it('should handle timeout errors and set mint status to FAILED', async () => {
