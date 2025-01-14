@@ -1,10 +1,11 @@
 import { EntityManager } from 'typeorm';
-import { Team } from '../db/entity/Team';
+import { MintStatus, Team } from '../db/entity/Team';
 import { TeamRepository } from '../db/repository/TeamRepository';
 import { MatchEventOutput, MatchEventType, MatchLog } from '../types';
 import { gqlClient } from './graphql/GqlClient';
 import { TokenQuery } from './graphql/TokenQuery';
 import { TeamService } from './TeamService';
+import { TeamMapper } from './mapper/TeamMapper';
 
 jest.mock('./graphql/GqlClient'); // Mock the gqlClient
 
@@ -16,6 +17,8 @@ const mockEntityManager = {
 
 const mockTeamRepository = {
   save: jest.fn(),
+  bulkUpdateMint: jest.fn(),
+  setMintStatus: jest.fn(),
 } as unknown as jest.Mocked<TeamRepository>;
 
 describe('TeamService', () => {
@@ -167,6 +170,75 @@ describe('TeamService', () => {
 
     // Ensure that save was called with updated team
     expect(mockEntityManager.update).toHaveBeenCalledTimes(1);
+  });
+
+  
+});
+
+describe('mintTeams', () => {
+  let teamService: TeamService;
+
+  const mockTeams: Team[] = [
+    { team_id: '1', players: [] } as unknown as Team,
+    { team_id: '2', players: []  } as unknown as Team,
+  ];
+  
+  const mockTeamMutation = {
+    input: { teams: mockTeams },
+  };
+
+  beforeEach(() => {
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+    jest.spyOn(console, 'log').mockImplementation(() => {});
+    const tokenQuery = new TokenQuery();
+    teamService = new TeamService(mockTeamRepository, tokenQuery);
+    jest.clearAllMocks(); // Clear mocks before each test
+  });
+
+  it('should mint teams successfully and update the repository', async () => {
+    jest.spyOn(gqlClient, 'mutate').mockResolvedValue({
+      data: {
+        mint: {
+          tokenIds: ['token1', 'token2'],
+        },
+      },
+      errors: undefined,
+      });
+    jest.spyOn(mockTeamRepository, 'bulkUpdateMint').mockResolvedValue(undefined);
+
+    const result = await teamService.mintTeams(mockTeams);
+
+    expect(result).toBe(true);
+  });
+
+  it('should handle GraphQL errors and NOT set mint status to FAILED', async () => {
+    jest.spyOn(gqlClient, 'mutate').mockResolvedValue({
+      data: null,
+      errors: [{ message: 'GraphQL error' }],
+    });
+    jest.spyOn(mockTeamRepository, 'setMintStatus').mockResolvedValue(undefined);
+
+    const result = await teamService.mintTeams(mockTeams);
+    expect(mockTeamRepository.setMintStatus).not.toHaveBeenCalledWith(
+      ['1', '2'],
+      MintStatus.FAILED
+    );
+    
+    expect(result).toBe(false);
+  });
+
+  it('should handle timeout errors and set mint status to FAILED', async () => {
+    jest.spyOn(gqlClient, 'mutate').mockRejectedValue({
+      message: 'Request timeout',
+      networkError: { name: 'TimeoutError' },
+    });
+    jest.spyOn(mockTeamRepository, 'setMintStatus').mockResolvedValue(undefined);
+
+    await expect(teamService.mintTeams(mockTeams)).rejects.toThrow('Failed to mint team: Request timeout');
+    expect(mockTeamRepository.setMintStatus).toHaveBeenCalledWith(
+      ['1', '2'],
+      MintStatus.FAILED
+    );
   });
 
   
