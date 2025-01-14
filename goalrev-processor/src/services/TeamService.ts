@@ -120,8 +120,8 @@ export class TeamService {
   }
 
   async mintTeamsPending(): Promise<number> {
-    const limit = process.env.MINT_PENDING_TEAMS_LIMIT ? parseInt(process.env.MINT_PENDING_TEAMS_LIMIT!) : 5;
-    const teams = await this.teamRepository.findPendingTeams(limit);
+    const MINT_PENDING_TEAMS_LIMIT = process.env.MINT_PENDING_TEAMS_LIMIT ? parseInt(process.env.MINT_PENDING_TEAMS_LIMIT!) : 5;
+    const teams = await this.teamRepository.findPendingTeams(MINT_PENDING_TEAMS_LIMIT);
     if (teams.length === 0) {
       return 0;
     }
