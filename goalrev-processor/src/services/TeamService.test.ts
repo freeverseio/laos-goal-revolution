@@ -211,7 +211,7 @@ describe('mintTeams', () => {
     expect(result).toBe(true);
   });
 
-  it('should handle GraphQL errors and set mint status to FAILED', async () => {
+  it('should handle GraphQL errors and NOT set mint status to FAILED', async () => {
     jest.spyOn(gqlClient, 'mutate').mockResolvedValue({
       data: null,
       errors: [{ message: 'GraphQL error' }],
@@ -225,6 +225,20 @@ describe('mintTeams', () => {
     );
     
     expect(result).toBe(false);
+  });
+
+  it('should handle timeout errors and set mint status to TIMEOUT', async () => {
+    jest.spyOn(gqlClient, 'mutate').mockRejectedValue({
+      message: 'Request timeout',
+      networkError: { name: 'TimeoutError' },
+    });
+    jest.spyOn(mockTeamRepository, 'setMintStatus').mockResolvedValue(undefined);
+
+    await expect(teamService.mintTeams(mockTeams)).rejects.toThrow('Failed to mint team: Request timeout');
+    expect(mockTeamRepository.setMintStatus).toHaveBeenCalledWith(
+      ['1', '2'],
+      MintStatus.FAILED
+    );
   });
 
   

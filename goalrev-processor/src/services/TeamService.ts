@@ -166,7 +166,7 @@ export class TeamService {
     } catch (error: any) {
       // Handle other errors
       this.teamRepository.setMintStatus(teams.map(team => team.team_id), MintStatus.FAILED);
-      throw new Error(`Failed to mint team: ${error}`);
+      throw new Error(`Failed to mint team: ${error.message}`);
     }
   }
 
