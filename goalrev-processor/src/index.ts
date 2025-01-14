@@ -104,17 +104,17 @@ function initializeSchedulers() {
         if (teamsMinted){
           // Extend lock time and trigger mintTeamsPending again
           locks["mintTeamsPendingAndEvolvePlayers"].lastRunTime = new Date();
-
-        } else {
-          const playersEvolved = await evolvePlayersPending(); 
-          if (playersEvolved) {
-            // Extend lock time and trigger mintTeamsPending again
-            locks["mintTeamsPendingAndEvolvePlayers"].lastRunTime = new Date();
-
-          }else {
-            break; // No teams or players pending to process -> exit loop
-          }
+          continue;
         }
+
+        const playersEvolved = await evolvePlayersPending(); 
+        if (playersEvolved) {
+          // Extend lock time and trigger mintTeamsPending again
+          locks["mintTeamsPendingAndEvolvePlayers"].lastRunTime = new Date();
+          continue;
+        }
+        
+        break; // No teams or players pending to process -> exit loop
       }      
     }));
   }
