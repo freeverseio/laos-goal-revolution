@@ -70,7 +70,7 @@ export class PlayerService {
       const entityManager = AppDataSource.manager;
       const batchTokenIds = tokenIds.slice(i, i + BROADCAST_BATCH_SIZE_ON_CHAIN);
       console.log(`Broadcasting ${batchTokenIds.length} Players Minted ${i + batchTokenIds.length}/${tokenIds.length}: ${batchTokenIds}`);
-      const success = await this.attemptBroadcast(batchTokenIds);
+      const success = await this.broadcastBatch(batchTokenIds);
       if (success) {
         for (let j = 0; j < batchTokenIds.length; j += BROADCAST_BATCH_SIZE_DB) {
           const statusUpdateBatch = batchTokenIds.slice(j, j + BROADCAST_BATCH_SIZE_DB);
@@ -117,7 +117,7 @@ export class PlayerService {
     return broadcastedPlayers;
   }
 
-  private async attemptBroadcast(tokenIds: string[]): Promise<boolean> {
+  private async broadcastBatch(tokenIds: string[]): Promise<boolean> {
     const broadcastBatchMutationInput = {
       chainId: process.env.CHAIN_ID!,
       ownershipContractAddress: process.env.CONTRACT_ADDRESS!,
@@ -169,7 +169,7 @@ export class PlayerService {
 
     // Batch processing this.EVOLVE_BATCH_SIZE_ON_CHAIN tokenIds at a time
     console.log(`[evolvePlayersPending] Evolving ${playersPendingToEvolve.length} Players ${playersPendingToEvolve.length}/${playersPendingToEvolve.length}.`);
-    const success = await this.attemptEvolveBatchPlayers(playersPendingToEvolve);
+    const success = await this.evolveBatchPlayers(playersPendingToEvolve);
     const entityManager = AppDataSource.manager;
     if (success) {
       await entityManager.transaction(async (transactionManager: EntityManager) => {
@@ -224,7 +224,7 @@ export class PlayerService {
     return evolvedPlayers;
   }
 
-  async attemptEvolveBatchPlayers(players: Player[]): Promise<boolean> {
+  async evolveBatchPlayers(players: Player[]): Promise<boolean> {
     const evolveplayersMutation = PlayerMapper.mapPlayersToEvolveMutation(players);
     try {
       const result = await gqlClient.mutate({
