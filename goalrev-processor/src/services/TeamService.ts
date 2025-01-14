@@ -144,23 +144,30 @@ export class TeamService {
           input: mintTeamMutation.input
         }
       });
+    
+      // Handle GraphQL-level errors
       if (result.errors) {
-        this.teamRepository.setMintStatus(teams.map(team => team.team_id), MintStatus.FAILED);
-        throw new Error(`Failed to mint team: ${result.errors[0].message}`);
+        console.error(`Failed to mint team: ${result.errors[0].message}`);
+        return 0;
       }
+    
+      // Handle unexpected empty response
       if (result.data.mint.tokenIds.length === 0) {
         throw new Error(`Failed to mint team: No token ids returned`);
       }
+    
+      // Handle success
       const updatedTeams = TeamMapper.mapMintedPlayersToTeamPlayers(teams, result.data.mint.tokenIds);
       const entityManager = AppDataSource.manager;
       await this.teamRepository.bulkUpdateMint(updatedTeams, entityManager);
      
       return result.data.mint.tokenIds.length;
-    } catch (error) {
+    } catch (error: any) {
       this.teamRepository.setMintStatus(teams.map(team => team.team_id), MintStatus.FAILED);
-      throw new Error(`Failed to mint team: ${error}`);
+      throw new Error(`Failed to mint team: ${error.message}`);
     }
   }
+
 
   async getTeamBotStatuses(
     homeTeamId: string,
