@@ -106,8 +106,8 @@ function initializeSchedulers() {
           locks["mintTeamsPendingAndEvolvePlayers"].lastRunTime = new Date();
 
         } else {
-          const playerEvolved = await evolvePlayersPending(); 
-          if (playerEvolved) {
+          const playersEvolved = await evolvePlayersPending(); 
+          if (playersEvolved) {
             // Extend lock time and trigger mintTeamsPending again
             locks["mintTeamsPendingAndEvolvePlayers"].lastRunTime = new Date();
 
