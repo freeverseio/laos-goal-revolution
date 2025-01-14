@@ -71,10 +71,10 @@ async function playMatches() {
   console.log(`Time elapsed to play matches: ${Math.floor(seconds / 3600)}:${Math.floor((seconds % 3600) / 60).toString().padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')} (h:mm:ss)`);
 }
 
-async function mintPendingTeams() {
+async function mintTeamsPending() {
   const teamService = TeamFactory.createTeamService();
-  const result = await teamService.mintPendingTeams();
-  console.log(`[mintPendingTeams] Result: ${result}`);
+  const result = await teamService.mintTeamsPending();
+  console.log(`[mintTeamsPending] Result: ${result}`);
   return result > 0;
 }
 
@@ -96,20 +96,20 @@ function initializeSchedulers() {
   }
 
   // Mint Pending Teams Scheduler
-  const mintPendingTeamsScheduler = process.env.MINT_PENDING_TEAMS_SCHEDULER;
-  if (mintPendingTeamsScheduler && mintPendingTeamsScheduler !== "*/0 * * * * *" && mintPendingTeamsScheduler !== "") {
-    cron.schedule(mintPendingTeamsScheduler, () => runWithLock("mintPendingTeamsAndEvolvePlayers", async () => {
+  const mintTeamsPendingScheduler = process.env.MINT_PENDING_TEAMS_SCHEDULER;
+  if (mintTeamsPendingScheduler && mintTeamsPendingScheduler !== "*/0 * * * * *" && mintTeamsPendingScheduler !== "") {
+    cron.schedule(mintTeamsPendingScheduler, () => runWithLock("mintTeamsPendingAndEvolvePlayers", async () => {
       while (true) {
-        const teamsMinted = await mintPendingTeams();
+        const teamsMinted = await mintTeamsPending();
         if (teamsMinted){
-          // Extend lock time and trigger mintPendingTeams again
-          locks["mintPendingTeamsAndEvolvePlayers"].lastRunTime = new Date();
+          // Extend lock time and trigger mintTeamsPending again
+          locks["mintTeamsPendingAndEvolvePlayers"].lastRunTime = new Date();
 
         } else {
           const playerEvolved = await evolvePlayersPending(); 
           if (playerEvolved) {
-            // Extend lock time and trigger mintPendingTeams again
-            locks["mintPendingTeamsAndEvolvePlayers"].lastRunTime = new Date();
+            // Extend lock time and trigger mintTeamsPending again
+            locks["mintTeamsPendingAndEvolvePlayers"].lastRunTime = new Date();
 
           }else {
             break; // No teams or players pending to process -> exit loop
