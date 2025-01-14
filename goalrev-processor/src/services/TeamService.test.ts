@@ -227,7 +227,7 @@ describe('mintTeams', () => {
     expect(result).toBe(false);
   });
 
-  it('should handle timeout errors and set mint status to TIMEOUT', async () => {
+  it('should handle timeout errors and set mint status to FAILED', async () => {
     jest.spyOn(gqlClient, 'mutate').mockRejectedValue({
       message: 'Request timeout',
       networkError: { name: 'TimeoutError' },
