@@ -165,8 +165,11 @@ export class PlayerService {
 
     // Find players Pending or Failed
     const playersPendingToEvolve = await this.playerRepository.findPlayersPendingToEvolve(EVOLVE_BATCH_SIZE_ON_CHAIN);
-    let evolvedPlayers: number = 0;
+    if (playersPendingToEvolve.length === 0) {     
+      return 0; // No players to evolve
+    }
 
+    let evolvedPlayers: number = 0;
     // Batch processing this.EVOLVE_BATCH_SIZE_ON_CHAIN tokenIds at a time
     console.log(`[evolvePlayersPending] Evolving ${playersPendingToEvolve.length} Players ${playersPendingToEvolve.length}/${playersPendingToEvolve.length}.`);
     const success = await this.evolveBatchPlayers(playersPendingToEvolve);
