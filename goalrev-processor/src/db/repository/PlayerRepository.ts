@@ -1,5 +1,5 @@
-import { EntityManager, In, IsNull, Not } from "typeorm";
-import { Player, PlayerPartialUpdate, PlayerHistory, BroadcastStatus, EvolveStatus } from "../entity";
+import { EntityManager, In } from "typeorm";
+import { Player, PlayerPartialUpdate, PlayerHistory, BroadcastStatus } from "../entity";
 import { AppDataSource } from "../AppDataSource";
 
 export class PlayerRepository {
@@ -54,14 +54,15 @@ export class PlayerRepository {
 
   async findPlayersPendingToEvolve(limit: number = 500): Promise<Player[]> {
     const playerRepository = AppDataSource.getRepository(Player);
-    return await playerRepository.find({
-      where: {
-        evolve_status: In([EvolveStatus.PENDING, EvolveStatus.FAILED]),
-        token_id: Not(IsNull())
-       },
-      order: { evolve_status: 'DESC' },
-      take: limit
-    });
+    const thirtyMinutesAgo = new Date(Date.now() - 30 * 60 * 1000); // updated at least 30min ago 
+    return await playerRepository
+      .createQueryBuilder('player')
+      .where('player.token_id IS NOT NULL')
+      .andWhere('player.updated_at < :thirtyMinutesAgo', { thirtyMinutesAgo })
+      .andWhere('(player.evolved_at IS NULL OR (player.evolved_at < player.updated_at))')
+      .orderBy('player.updated_at', 'ASC')
+      .take(limit)
+      .getMany();
   }
 
 }

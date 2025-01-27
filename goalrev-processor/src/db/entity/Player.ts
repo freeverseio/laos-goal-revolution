@@ -7,12 +7,6 @@ export enum BroadcastStatus {
   FAILED = "failed",
 }
 
-export enum EvolveStatus {
-  PENDING = "pending",
-  SUCCESS = "success",
-  FAILED = "failed",
-}
-
 @Entity('players')
 export class Player {
   @PrimaryColumn({ type: 'text' })
@@ -91,14 +85,11 @@ export class Player {
   })
   broadcast_status?: BroadcastStatus;
 
-  @Column({
-    type: "enum",
-    enum: EvolveStatus,
-  })
-  evolve_status?: EvolveStatus;
-
   @Column({ type: 'timestamp', nullable: true })
   evolved_at?: Date;
+
+  @Column({ type: 'timestamp', nullable: true })
+  updated_at?: Date;
 
 }
 
