@@ -1,5 +1,5 @@
 import { EntityManager } from "typeorm";
-import { BroadcastStatus, EvolveStatus, Player, PlayerPartialUpdate, Team } from "../db/entity";
+import { BroadcastStatus, Player, PlayerPartialUpdate, Team } from "../db/entity";
 import { PlayerSkill } from "../types/rest/output/team";
 import { PlayerHistoryMapper } from "./mapper/PlayerHistoryMapper";
 import { PlayerRepository } from "../db/repository/PlayerRepository";
@@ -32,9 +32,7 @@ export class PlayerService {
         player.shoot = playerSkills[i].shoot;
         player.endurance = playerSkills[i].endurance;
         player.encoded_skills = playerSkills[i].encodedSkills;
-        if (!isBot && player.token_id !== null) {
-          player.evolve_status = EvolveStatus.PENDING;
-        }
+        player.updated_at = new Date();
 
         // save player history
         const playerHistory = PlayerHistoryMapper.mapToPlayerHistory(player, verseNumber);
@@ -46,10 +44,8 @@ export class PlayerService {
           shoot: playerSkills[i].shoot,
           endurance: playerSkills[i].endurance,
           encoded_skills: playerSkills[i].encodedSkills
-        }
-        if (!isBot && player.token_id !== null) {
-          playerPartialUpdate.evolve_status = player.evolve_status;
-        }
+        };        
+        playerPartialUpdate.updated_at = player.updated_at;
 
         await this.playerRepository.updatePartial(playerSkills[i].playerId, playerPartialUpdate, entityManager);
       }
@@ -180,7 +176,6 @@ export class PlayerService {
           const statusUpdateBatch = playersPendingToEvolve.slice(j, j + EVOLVE_BATCH_SIZE_DB);
           try {
             const playerPartialUpdate: PlayerPartialUpdate = {
-              evolve_status: EvolveStatus.SUCCESS,
               evolved_at: new Date()
             };
             const playerIds = statusUpdateBatch.map(player => player.player_id);             
@@ -195,30 +190,8 @@ export class PlayerService {
             break;
           }
         }
-      });
-
-    } else {
-      await entityManager.transaction(async (transactionManager: EntityManager) => {
-        for (let j = 0; j < playersPendingToEvolve.length; j += EVOLVE_BATCH_SIZE_DB) {
-          const statusUpdateBatch = playersPendingToEvolve.slice(j, j + EVOLVE_BATCH_SIZE_DB);
-          try {
-            const playerPartialUpdate: PlayerPartialUpdate = {
-              evolve_status: EvolveStatus.FAILED
-            };
-            const playerIds = statusUpdateBatch.map(player => player.player_id);
-            if (playerIds.length > 0) {
-              await this.playerRepository.updatePartialPlayersBulk(playerIds, playerPartialUpdate, transactionManager);
-              evolvedPlayers += statusUpdateBatch.length;              
-            }
-
-          } catch (error) {
-            console.error(`[evolvePlayersPending] Error updating evolved_status in DB in batch starting at index ${j}:`, error);
-            console.error(`[evolvePlayersPending] First tokenId of this DB batch: ${statusUpdateBatch[0]}`);
-            break;
-          }
-        }
-      });
-    }
+      });   
+    } // else do nothing since evolve status it is not tracked anymore in the DB
 
     if (evolvedPlayers !== playersPendingToEvolve.length) {
       console.error(`[evolvePlayersPending] Fail to evolve all Players. Evolving ${evolvedPlayers}/${playersPendingToEvolve.length}`);
