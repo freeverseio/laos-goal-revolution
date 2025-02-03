@@ -28,7 +28,7 @@ const app = createExpressServer({
 const locks: { [key: string]: LockState } = {};
 
 
-async function runWithLock(taskName: string, task: () => Promise<void>, lockDurationMinutes = 10) {
+async function runWithLock(taskName: string, task: () => Promise<void>, lockDurationMinutes: number = 10) {
   const lock = locks[taskName] || { isRunning: false, lastRunTime: new Date(0) };
   const now = new Date();
   const lockExpired = new Date(now.getTime() - lockDurationMinutes * 60 * 1000);
@@ -92,7 +92,7 @@ function initializeSchedulers() {
   // Play Matches Scheduler
   const playMatchesScheduler = process.env.PLAY_MATCHES_SCHEDULER;
   if (playMatchesScheduler && playMatchesScheduler !== "*/0 * * * * *" && playMatchesScheduler !== "") {
-    cron.schedule(playMatchesScheduler, () => runWithLock("playMatches", playMatches));
+    cron.schedule(playMatchesScheduler, () => runWithLock("playMatches", playMatches, 5760)); // 4 days
   }
 
   // Mint Pending Teams Scheduler
