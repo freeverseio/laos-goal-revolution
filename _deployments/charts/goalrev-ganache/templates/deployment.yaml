@@ -21,9 +21,6 @@ spec:
           requests:
             memory: "1024Mi"
             cpu: "300m"
-          limits:
-            memory: "2056Mi"
-            cpu: "900m"
         imagePullPolicy: Always        
       imagePullSecrets:
       - name: docker-secret
